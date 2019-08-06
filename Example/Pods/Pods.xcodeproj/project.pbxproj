@@ -23,7 +23,8 @@
 		88449DB322F9663700C55902 /* StringTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 88449DB122F9663700C55902 /* StringTool.h */; };
 		88449DB722F9665200C55902 /* UploadImageTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 88449DB522F9665200C55902 /* UploadImageTool.h */; };
 		88449DB822F9665200C55902 /* UploadImageTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 88449DB622F9665200C55902 /* UploadImageTool.m */; };
-		88449DBB22F9667E00C55902 /* CommonDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 88449DBA22F9667E00C55902 /* CommonDef.h */; };
+		88449DBE22F9698F00C55902 /* FlappyIM.h in Headers */ = {isa = PBXBuildFile; fileRef = 88449DBC22F9698F00C55902 /* FlappyIM.h */; };
+		88449DBF22F9698F00C55902 /* FlappyIM.m in Sources */ = {isa = PBXBuildFile; fileRef = 88449DBD22F9698F00C55902 /* FlappyIM.m */; };
 		8EAB60EF2D967A902AE7E711C5748D42 /* flappyim-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B9E1A10B3C396B074494D5819D27B53A /* flappyim-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BF68CFD35AFA68C7B8D5880F5049E073 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		C4D3311B63DFFCBC7BAC9EC43E3898FD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
@@ -75,7 +76,8 @@
 		88449DB122F9663700C55902 /* StringTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringTool.h; sourceTree = "<group>"; };
 		88449DB522F9665200C55902 /* UploadImageTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadImageTool.h; sourceTree = "<group>"; };
 		88449DB622F9665200C55902 /* UploadImageTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadImageTool.m; sourceTree = "<group>"; };
-		88449DBA22F9667E00C55902 /* CommonDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDef.h; sourceTree = "<group>"; };
+		88449DBC22F9698F00C55902 /* FlappyIM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlappyIM.h; sourceTree = "<group>"; };
+		88449DBD22F9698F00C55902 /* FlappyIM.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlappyIM.m; sourceTree = "<group>"; };
 		8A212568FADE8B66EF1025FC28B28A97 /* Pods-flappyim_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-flappyim_Tests-umbrella.h"; sourceTree = "<group>"; };
 		8ACF03BD41DA3A52E3F846FEE210CAF1 /* Pods-flappyim_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-flappyim_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		94B5E1FFE5FCEBFEED3F9F51040E86C6 /* Pods-flappyim_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-flappyim_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -191,7 +193,6 @@
 		88449DA422F965FF00C55902 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
-				88449DB922F9667300C55902 /* New Group */,
 				88449DB422F9664800C55902 /* UploadImage */,
 				88449DAF22F9662D00C55902 /* StringTool */,
 				88449DAA22F9661A00C55902 /* DateTool */,
@@ -236,20 +237,14 @@
 			path = UploadImage;
 			sourceTree = "<group>";
 		};
-		88449DB922F9667300C55902 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-				88449DBA22F9667E00C55902 /* CommonDef.h */,
-			);
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		AC5AD44AF647248C0E902E649C364367 /* flappyim */ = {
 			isa = PBXGroup;
 			children = (
 				88449DA422F965FF00C55902 /* Tool */,
 				88449D9F22F965AC00C55902 /* Async */,
 				29CB8DEB2C81B279A86C95DF1551873E /* ReplaceMe.m */,
+				88449DBC22F9698F00C55902 /* FlappyIM.h */,
+				88449DBD22F9698F00C55902 /* FlappyIM.m */,
 				30308AF456710A97E22DECD021CC926F /* Pod */,
 				5CF947901F8FE7B8F58730A412D2A3D2 /* Support Files */,
 			);
@@ -335,7 +330,7 @@
 			files = (
 				88449DA922F9661200C55902 /* JsonTool.h in Headers */,
 				8EAB60EF2D967A902AE7E711C5748D42 /* flappyim-umbrella.h in Headers */,
-				88449DBB22F9667E00C55902 /* CommonDef.h in Headers */,
+				88449DBE22F9698F00C55902 /* FlappyIM.h in Headers */,
 				88449DAD22F9662400C55902 /* DateTimeTool.h in Headers */,
 				88449DB322F9663700C55902 /* StringTool.h in Headers */,
 				88449DB722F9665200C55902 /* UploadImageTool.h in Headers */,
@@ -466,6 +461,7 @@
 				88449DB222F9663700C55902 /* StringTool.m in Sources */,
 				88449DAE22F9662400C55902 /* DateTimeTool.m in Sources */,
 				88449DA322F965B800C55902 /* HBAsynTask.m in Sources */,
+				88449DBF22F9698F00C55902 /* FlappyIM.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

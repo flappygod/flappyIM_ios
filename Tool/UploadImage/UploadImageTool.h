@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LXHttpRequest.h"
 
 //错误请求数据
 typedef void(^ErrorBlock) (NSException *);

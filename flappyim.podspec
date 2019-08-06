@@ -42,6 +42,7 @@ TODO: Add long description of the pod here.
 
   s.frameworks = 'UIKit'
   s.dependency 'AFNetworking', '~> 3.2.1'
+  s.dependency 'CocoaAsyncSocket', '~> 7.6.3'
   
 
 
