@@ -7,6 +7,7 @@
 //
 
 #import "flappyViewController.h"
+#import <flappyim/FlappyIM.h>
 
 
 @interface flappyViewController ()
@@ -18,6 +19,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [FlappyIM sharedSingleton].
+    
 	// Do any additional setup after loading the view, typically from a nib.
 }
 

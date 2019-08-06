@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "FlappyIM.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
 FOUNDATION_EXPORT const unsigned char flappyimVersionString[];

@@ -2,7 +2,7 @@
   "name": "flappyim",
   "version": "0.1.0",
   "summary": "A short description of flappyim.",
-  "description": "TODO: Add long description of the pod here.",
+  "description": "flappyIM  for  IOS",
   "homepage": "https://github.com/4c641e4c592086a8d563f6d22d5a3011013286f9/flappyim",
   "license": {
     "type": "MIT",
@@ -18,5 +18,15 @@
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "flappyim/Classes/**/*"
+  "source_files": "flappyim/Classes/**/*",
+  "public_header_files": "flappyim/Classes/Public/*.h",
+  "frameworks": "UIKit",
+  "dependencies": {
+    "AFNetworking": [
+      "~> 3.2.1"
+    ],
+    "CocoaAsyncSocket": [
+      "~> 7.6.3"
+    ]
+  }
 }

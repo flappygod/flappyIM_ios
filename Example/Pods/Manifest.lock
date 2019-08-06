@@ -1,15 +1,40 @@
 PODS:
-  - flappyim (0.1.0)
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
+    - AFNetworking/NSURLSession
+  - CocoaAsyncSocket (7.6.3)
+  - flappyim (0.1.0):
+    - AFNetworking (~> 3.2.1)
+    - CocoaAsyncSocket (~> 7.6.3)
 
 DEPENDENCIES:
   - flappyim (from `../`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - CocoaAsyncSocket
 
 EXTERNAL SOURCES:
   flappyim:
     :path: "../"
 
 SPEC CHECKSUMS:
-  flappyim: 88681e1ea8d0e7c261172ce47c4e506f1a1b9d59
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
+  flappyim: 55a26d8081e4857c1e89fddb3f9109b02acfd005
 
 PODFILE CHECKSUM: feb42ff4229e00a2f94b2e56c132068f957e7df0
 
