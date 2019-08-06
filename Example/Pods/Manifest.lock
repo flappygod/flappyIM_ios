@@ -18,6 +18,8 @@ PODS:
   - flappyim (0.1.0):
     - AFNetworking (~> 3.2.1)
     - CocoaAsyncSocket (~> 7.6.3)
+    - MJExtension (~> 3.1.0)
+  - MJExtension (3.1.0)
 
 DEPENDENCIES:
   - flappyim (from `../`)
@@ -26,6 +28,7 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AFNetworking
     - CocoaAsyncSocket
+    - MJExtension
 
 EXTERNAL SOURCES:
   flappyim:
@@ -34,7 +37,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
-  flappyim: 810426ba0d3ecf84f2d253a66d95b605b810031d
+  flappyim: 93bd72d9f7ff1efc23157c70a87ffe319c29f7d2
+  MJExtension: 6b69b3bef2864fd550ce1a184eda219e321209d2
 
 PODFILE CHECKSUM: feb42ff4229e00a2f94b2e56c132068f957e7df0
 

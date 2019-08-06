@@ -19,18 +19,32 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[FlappyIM shareInstance] createAccount:@"105"
-                                andUserName:@"小胖"
-                                andUserHead:@"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=400062461,2874561526&fm=26&gp=0.jpg"
-                                 andSuccess:^(id _Nullable data) {
-                                     NSLog(@"成功收到请求");
-                                 }
-                                 andFailure:^(NSError * error, NSInteger code) {
-                                     
-                                 }];
     
+    //创建登录
+    UITapGestureRecognizer* gs=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(login)];
+    [self.view addGestureRecognizer:gs];
     // Do any additional setup after loading the view, typically from a nib.
 }
+
+
+//登录
+-(void)login{
+    [[FlappyIM shareInstance] login:@"105" andSuccess:^(id data) {
+        //登录成功
+        NSDictionary* dic=data;
+        
+        
+        NSString* serverIP=dic[@"serverIP"];
+        NSString* serverPort=dic[@"serverPort"];
+        NSString* serverTopic=dic[@"serverTopic"];
+        NSString* serverGroup=dic[@"serverGroup"];
+        
+        
+    } andFailure:^(NSError * error, NSInteger code) {
+        
+    }];
+}
+
 
 - (void)didReceiveMemoryWarning
 {

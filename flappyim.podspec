@@ -42,6 +42,7 @@ Pod::Spec.new do |s|
   s.frameworks = 'UIKit','Foundation'
   s.dependency 'AFNetworking', '~> 3.2.1'
   s.dependency 'CocoaAsyncSocket', '~> 7.6.3'
+  s.dependency 'MJExtension', '~> 3.1.0'
   
 
 

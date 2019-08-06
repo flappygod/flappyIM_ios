@@ -30,6 +30,9 @@
     ],
     "CocoaAsyncSocket": [
       "~> 7.6.3"
+    ],
+    "MJExtension": [
+      "~> 3.1.0"
     ]
   }
 }

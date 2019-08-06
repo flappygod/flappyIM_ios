@@ -9,6 +9,14 @@
 #define ApiConfig_h
 
 
+
+//当前的设备类型
+#define  DEVICE_TYPE   @"IOS"
+
+
+
+
+
 //基础地址
 #define BaseUrl @"http://49.234.106.91"
 
