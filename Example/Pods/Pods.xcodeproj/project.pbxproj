@@ -13,10 +13,6 @@
 		22A24F435F592F212436B3FCD6F14DEF /* Pods-flappyim_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DCD6E8AB9A9CC3969BF51AD675AFB84F /* Pods-flappyim_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27BDF562754BB858FDCD21AC709BC830 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		533042096A473AB10B5EA7C764F132A2 /* ReplaceMe.m in Sources */ = {isa = PBXBuildFile; fileRef = 29CB8DEB2C81B279A86C95DF1551873E /* ReplaceMe.m */; };
-		88449D9B22F965A200C55902 /* LXHttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 88449D9722F965A100C55902 /* LXHttpRequest.m */; };
-		88449D9C22F965A200C55902 /* LXHttpRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 88449D9822F965A100C55902 /* LXHttpRequest.h */; };
-		88449D9D22F965A200C55902 /* LXHttpsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 88449D9922F965A100C55902 /* LXHttpsRequest.m */; };
-		88449D9E22F965A200C55902 /* LXHttpsRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 88449D9A22F965A200C55902 /* LXHttpsRequest.h */; };
 		88449DA222F965B800C55902 /* HBAsynTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 88449DA022F965B800C55902 /* HBAsynTask.h */; };
 		88449DA322F965B800C55902 /* HBAsynTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 88449DA122F965B800C55902 /* HBAsynTask.m */; };
 		88449DA822F9661200C55902 /* JsonTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 88449DA622F9661200C55902 /* JsonTool.m */; };
@@ -69,10 +65,6 @@
 		6EEB5ED76F0F893DC089EABAC94D4EC9 /* flappyim.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = flappyim.podspec; sourceTree = "<group>"; tabWidth = 2; };
 		7C715A182732A10688B3FCE5527BDA60 /* Pods-flappyim_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-flappyim_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		865B99DB6ED1BC3C3599085A6A477545 /* Pods-flappyim_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-flappyim_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		88449D9722F965A100C55902 /* LXHttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LXHttpRequest.m; sourceTree = "<group>"; };
-		88449D9822F965A100C55902 /* LXHttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LXHttpRequest.h; sourceTree = "<group>"; };
-		88449D9922F965A100C55902 /* LXHttpsRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LXHttpsRequest.m; sourceTree = "<group>"; };
-		88449D9A22F965A200C55902 /* LXHttpsRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LXHttpsRequest.h; sourceTree = "<group>"; };
 		88449DA022F965B800C55902 /* HBAsynTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAsynTask.h; sourceTree = "<group>"; };
 		88449DA122F965B800C55902 /* HBAsynTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAsynTask.m; sourceTree = "<group>"; };
 		88449DA622F9661200C55902 /* JsonTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JsonTool.m; sourceTree = "<group>"; };
@@ -187,17 +179,6 @@
 			path = "Example/Pods/Target Support Files/flappyim";
 			sourceTree = "<group>";
 		};
-		88449D9622F9657600C55902 /* Http */ = {
-			isa = PBXGroup;
-			children = (
-				88449D9822F965A100C55902 /* LXHttpRequest.h */,
-				88449D9722F965A100C55902 /* LXHttpRequest.m */,
-				88449D9A22F965A200C55902 /* LXHttpsRequest.h */,
-				88449D9922F965A100C55902 /* LXHttpsRequest.m */,
-			);
-			path = Http;
-			sourceTree = "<group>";
-		};
 		88449D9F22F965AC00C55902 /* Async */ = {
 			isa = PBXGroup;
 			children = (
@@ -268,7 +249,6 @@
 			children = (
 				88449DA422F965FF00C55902 /* Tool */,
 				88449D9F22F965AC00C55902 /* Async */,
-				88449D9622F9657600C55902 /* Http */,
 				29CB8DEB2C81B279A86C95DF1551873E /* ReplaceMe.m */,
 				30308AF456710A97E22DECD021CC926F /* Pod */,
 				5CF947901F8FE7B8F58730A412D2A3D2 /* Support Files */,
@@ -353,7 +333,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88449D9C22F965A200C55902 /* LXHttpRequest.h in Headers */,
 				88449DA922F9661200C55902 /* JsonTool.h in Headers */,
 				8EAB60EF2D967A902AE7E711C5748D42 /* flappyim-umbrella.h in Headers */,
 				88449DBB22F9667E00C55902 /* CommonDef.h in Headers */,
@@ -361,7 +340,6 @@
 				88449DB322F9663700C55902 /* StringTool.h in Headers */,
 				88449DB722F9665200C55902 /* UploadImageTool.h in Headers */,
 				88449DA222F965B800C55902 /* HBAsynTask.h in Headers */,
-				88449D9E22F965A200C55902 /* LXHttpsRequest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,13 +459,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88449D9B22F965A200C55902 /* LXHttpRequest.m in Sources */,
 				038A29537B3EE557F0047BF4ECB89EA3 /* flappyim-dummy.m in Sources */,
 				533042096A473AB10B5EA7C764F132A2 /* ReplaceMe.m in Sources */,
 				88449DA822F9661200C55902 /* JsonTool.m in Sources */,
 				88449DB822F9665200C55902 /* UploadImageTool.m in Sources */,
 				88449DB222F9663700C55902 /* StringTool.m in Sources */,
-				88449D9D22F965A200C55902 /* LXHttpsRequest.m in Sources */,
 				88449DAE22F9662400C55902 /* DateTimeTool.m in Sources */,
 				88449DA322F965B800C55902 /* HBAsynTask.m in Sources */,
 			);
