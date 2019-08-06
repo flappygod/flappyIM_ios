@@ -1,0 +1,22 @@
+{
+  "name": "flappyim",
+  "version": "0.1.0",
+  "summary": "A short description of flappyim.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/4c641e4c592086a8d563f6d22d5a3011013286f9/flappyim",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "4c641e4c592086a8d563f6d22d5a3011013286f9": "327603258@qq.com"
+  },
+  "source": {
+    "git": "https://github.com/4c641e4c592086a8d563f6d22d5a3011013286f9/flappyim.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "flappyim/Classes/**/*"
+}

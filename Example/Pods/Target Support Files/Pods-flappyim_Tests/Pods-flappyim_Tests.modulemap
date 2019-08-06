@@ -1,0 +1,6 @@
+framework module Pods_flappyim_Tests {
+  umbrella header "Pods-flappyim_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

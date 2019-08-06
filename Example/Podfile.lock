@@ -1,0 +1,16 @@
+PODS:
+  - flappyim (0.1.0)
+
+DEPENDENCIES:
+  - flappyim (from `../`)
+
+EXTERNAL SOURCES:
+  flappyim:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  flappyim: 88681e1ea8d0e7c261172ce47c4e506f1a1b9d59
+
+PODFILE CHECKSUM: feb42ff4229e00a2f94b2e56c132068f957e7df0
+
+COCOAPODS: 1.7.5
