@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '8.0'
+
+target 'flappyim_Example' do
+  pod 'flappyim', :path => '../'
+
+  target 'flappyim_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
