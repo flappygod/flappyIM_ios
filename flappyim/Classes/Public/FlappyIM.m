@@ -304,10 +304,9 @@
     //读取数据
     
     //开启心跳
-    [self performSelector:@selector(startHeart:)
-               withObject:nil
-               afterDelay:10];
-    
+    [self performSelectorOnMainThread:@selector(startHeart:)
+                           withObject:nil
+                        waitUntilDone:false];
     
 }
 
