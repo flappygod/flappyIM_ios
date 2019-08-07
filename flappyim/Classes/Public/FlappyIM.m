@@ -223,6 +223,18 @@
     
 }
 
+//开启心跳
+-(void)startHeart:(id)sender{
+    // 开启心跳
+    // 每隔30s像服务器发送心跳包
+    // 在longConnectToSocket方法中进行长连接需要向服务器发送的讯息
+    self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:10
+                                                         target:self
+                                                       selector:@selector(heartBeat:)
+                                                       userInfo:nil
+                                                        repeats:YES];
+    [self.connectTimer fire];
+}
 
 //长连接的心跳
 -(void)heartBeat:(id)sender{
@@ -287,16 +299,11 @@
     //写入请求数据
     [sock  writeData:reqData withTimeout:-1 tag:0];
     
+    //开启心跳
+    [self performSelectorOnMainThread:@selector(startHeart:)
+                           withObject:nil
+                        waitUntilDone:false];
     
-    // 开启心跳
-    // 每隔30s像服务器发送心跳包
-    // 在longConnectToSocket方法中进行长连接需要向服务器发送的讯息
-    self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:10
-                                                         target:self
-                                                       selector:@selector(heartBeat:)
-                                                       userInfo:nil
-                                                        repeats:YES];
-    [self.connectTimer fire];
     
 }
 
