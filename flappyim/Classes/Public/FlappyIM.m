@@ -29,7 +29,7 @@
 
 
 //心跳计时
-@property (nonatomic, retain) NSTimer        *connectTimer;
+@property (nonatomic,strong) NSTimer        *connectTimer;
 //正在登录的用户
 @property (nonatomic,strong) User*  user;
 //成功
@@ -192,16 +192,16 @@
     
     
     //建立长连接
-    _socket=[[GCDAsyncSocket alloc] initWithDelegate:self
-                                       delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    GCDAsyncSocket* sock=[[GCDAsyncSocket alloc] initWithDelegate:self
+                                                    delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     
     NSError* error=nil;
     
     //连接host
-    [_socket connectToHost:serverAddress
-                    onPort:serverPort.integerValue
-               withTimeout:20
-                     error:&error];
+    [sock connectToHost:serverAddress
+                 onPort:serverPort.integerValue
+            withTimeout:20
+                  error:&error];
     
     
     
@@ -264,6 +264,9 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
     
+    //当前的
+    self.socket=sock;
+    
     //组装登录数据
     LoginInfo* info=[[LoginInfo alloc]init];
     //类型
@@ -287,10 +290,6 @@
     
     //开启心跳
     // 每隔30s像服务器发送心跳包
-    if( self.connectTimer!=nil)
-    {
-        [self.connectTimer invalidate];
-    }
     // 在longConnectToSocket方法中进行长连接需要向服务器发送的讯息
     self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:10
                                                          target:self
