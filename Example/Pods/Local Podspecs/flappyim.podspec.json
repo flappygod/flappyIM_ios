@@ -20,6 +20,10 @@
   },
   "source_files": "flappyim/Classes/**/*",
   "public_header_files": "flappyim/Classes/Public/*.h",
+  "vendored_libraries": [
+    "flappyim/Classes/libprotobuf-lite.a",
+    "flappyim/Classes/libprotobuf.a"
+  ],
   "frameworks": [
     "UIKit",
     "Foundation"
