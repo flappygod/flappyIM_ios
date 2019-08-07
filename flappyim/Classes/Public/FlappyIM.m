@@ -28,8 +28,8 @@
 @property (nonatomic,copy) NSString*  pushID;
 
 
-
-
+//心跳计时
+@property (nonatomic, retain) NSTimer        *connectTimer;
 //正在登录的用户
 @property (nonatomic,strong) User*  user;
 //成功
@@ -224,6 +224,21 @@
 }
 
 
+//长连接的心跳
+-(void)heartBeat:(id)sender{
+    if(self.socket!=nil){
+        //连接到服务器开始请求登录
+        FlappyRequest* request=[[FlappyRequest alloc]init];
+        //登录请求
+        request.type=REQ_PING;
+        //请求数据，已经GPBComputeRawVarint32SizeForInteger
+        NSData* reqData=[request delimitedData];
+        //写入请求数据
+        [self.socket  writeData:reqData withTimeout:-1 tag:0];
+    }
+}
+
+
 
 #pragma GCDAsyncSocketDelegate
 
@@ -266,6 +281,21 @@
     NSData* reqData=[request delimitedData];
     //写入请求数据
     [sock  writeData:reqData withTimeout:-1 tag:0];
+    
+    
+    //开启心跳
+    // 每隔30s像服务器发送心跳包
+    if( self.connectTimer!=nil)
+    {
+        [self.connectTimer invalidate];
+    }
+    // 在longConnectToSocket方法中进行长连接需要向服务器发送的讯息
+    self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:10
+                                                         target:self
+                                                       selector:@selector(heartBeat:)
+                                                       userInfo:nil
+                                                        repeats:YES];
+    [self.connectTimer fire];
     
 }
 
@@ -312,40 +342,6 @@
     NSLog(@"333333");
 }
 
-/**
- * Called if a read operation has reached its timeout without completing.
- * This method allows you to optionally extend the timeout.
- * If you return a positive time interval (> 0) the read's timeout will be extended by the given amount.
- * If you don't implement this method, or return a non-positive time interval (<= 0) the read will timeout as usual.
- *
- * The elapsed parameter is the sum of the original timeout, plus any additions previously added via this method.
- * The length parameter is the number of bytes that have been read so far for the read operation.
- *
- * Note that this method may be called multiple times for a single read if you return positive numbers.
- **/
-- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
-                 elapsed:(NSTimeInterval)elapsed
-               bytesDone:(NSUInteger)length{
-    return 10;
-}
-
-/**
- * Called if a write operation has reached its timeout without completing.
- * This method allows you to optionally extend the timeout.
- * If you return a positive time interval (> 0) the write's timeout will be extended by the given amount.
- * If you don't implement this method, or return a non-positive time interval (<= 0) the write will timeout as usual.
- *
- * The elapsed parameter is the sum of the original timeout, plus any additions previously added via this method.
- * The length parameter is the number of bytes that have been written so far for the write operation.
- *
- * Note that this method may be called multiple times for a single write if you return positive numbers.
- **/
-- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutWriteWithTag:(long)tag
-                 elapsed:(NSTimeInterval)elapsed
-               bytesDone:(NSUInteger)length{
-    
-    return 10;
-}
 
 /**
  * Conditionally called if the read stream closes, but the write stream may still be writeable.
@@ -380,11 +376,17 @@
  * Of course, this depends on how your state machine is configured.
  **/
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err{
-    //整个链接失败了，设置连接失败
+    //登录失败
     if(self.failure!=nil){
         self.failure(err,RESULT_NETERROR);
         self.failure=nil;
     }
+    //停止
+    if(self.connectTimer!=nil){
+        [self.connectTimer invalidate];
+    }
+    //清空socket
+    self.socket=nil;
 }
 
 /**
