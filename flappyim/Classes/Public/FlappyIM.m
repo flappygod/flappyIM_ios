@@ -241,6 +241,10 @@
     request.type=REQ_LOGIN;
     //登录信息
     request.login=info;
+    //请求数据
+    NSData* reqData=[request data];
+    //写入请求数据
+    [sock  writeData:reqData withTimeout:-1 tag:0]
     
 }
 
