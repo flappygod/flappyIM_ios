@@ -353,6 +353,29 @@
     NSLog(@"333333");
 }
 
+- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
+                 elapsed:(NSTimeInterval)elapsed
+               bytesDone:(NSUInteger)length{
+    return 10;
+}
+
+/**
+ * Called if a write operation has reached its timeout without completing.
+ * This method allows you to optionally extend the timeout.
+ * If you return a positive time interval (> 0) the write's timeout will be extended by the given amount.
+ * If you don't implement this method, or return a non-positive time interval (<= 0) the write will timeout as usual.
+ *
+ * The elapsed parameter is the sum of the original timeout, plus any additions previously added via this method.
+ * The length parameter is the number of bytes that have been written so far for the write operation.
+ *
+ * Note that this method may be called multiple times for a single write if you return positive numbers.
+ **/
+- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutWriteWithTag:(long)tag
+                 elapsed:(NSTimeInterval)elapsed
+               bytesDone:(NSUInteger)length{
+    
+    return 10;
+}
 
 /**
  * Conditionally called if the read stream closes, but the write stream may still be writeable.
