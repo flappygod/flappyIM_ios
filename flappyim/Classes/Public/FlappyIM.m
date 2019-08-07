@@ -416,6 +416,7 @@
  * Of course, this depends on how your state machine is configured.
  **/
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err{
+    NSLog(@"连接被关闭");
     //登录失败
     if(self.failure!=nil){
         self.failure(err,RESULT_NETERROR);
