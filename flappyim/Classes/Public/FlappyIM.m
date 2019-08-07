@@ -14,6 +14,7 @@
 #import <netinet/in.h>
 #import <arpa/inet.h>
 #import <unistd.h>
+#import "Flappy.pbobjc.h"
 
 
 @interface FlappyIM ()
@@ -22,6 +23,10 @@
 @property (nonatomic,strong) GCDAsyncSocket*  socket;
 //当前登录的lock
 @property (nonatomic,assign) Boolean  loginLock;
+//推送的ID
+@property (nonatomic,copy) NSString*  pushID;
+//当前保存的正在登录的用户
+@property (nonatomic,strong) User*  user;
 
 @end
 
@@ -39,6 +44,7 @@
         _sharedSingleton = [[super allocWithZone:NULL] init];
     });
     //false
+    _sharedSingleton.pushID=@"123456";
     _sharedSingleton.loginLock=false;
     return _sharedSingleton;
 }
@@ -125,19 +131,25 @@
 -(void)login:(NSString*)userExtendID
   andSuccess:(FlappySuccess)success
   andFailure:(FlappyFailure)failure{
+    
+    //阻止重复请求
+    if(self.loginLock){
+        return;
+    }else{
+        self.loginLock=true;
+    }
+    
     //注册地址
     NSString *urlString = URL_login;
     
-    NSString *pushID=@"123456789";
     
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userID":@"",
                                  @"userExtendID":userExtendID,
                                  @"device":DEVICE_TYPE,
-                                 @"pushid":pushID,
+                                 @"pushid":self.pushID,
                                  };
     
-    self.loginLock=true;
     __weak typeof(self) safeSelf=self;
     //请求数据
     [self postRequest:urlString
@@ -168,6 +180,9 @@
             withUser:(User*)user
          withSuccess:(FlappySuccess)success
          withFailure:(FlappyFailure)failure{
+    
+    //保存用户数据
+    self.user=user;
     
     //建立长连接
     _socket=[[GCDAsyncSocket alloc] initWithDelegate:self
@@ -211,7 +226,22 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
     
-    NSLog(@"adwa");
+    //组装登录数据
+    LoginInfo* info=[[LoginInfo alloc]init];
+    //类型
+    info.device=DEVICE_TYPE;
+    //用户ID
+    info.userId=self.user.userId;
+    //推送ID
+    info.pushid=self.pushID;
+    
+    //连接到服务器开始请求登录
+    FlappyRequest* request=[[FlappyRequest alloc]init];
+    //登录请求
+    request.type=REQ_LOGIN;
+    //登录信息
+    request.login=info;
+    
 }
 
 /**

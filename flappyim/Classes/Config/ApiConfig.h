@@ -50,4 +50,12 @@
 
 
 
+//登录消息
+#define REQ_LOGIN  1
+//请求消息
+#define REQ_MSG  2
+//心跳消息
+#define REQ_PING  3
+
+
 #endif /* ApiConfig_h */
