@@ -306,12 +306,12 @@
     NSLog(@"wait wait wait");
     
     //开始登录
-//    [self performSelector:@selector(login)
-//               withObject:nil];
-//    //开启心跳
-//    [self performSelector:@selector(startHeart:)
-//               withObject:nil
-//               afterDelay:10];
+    [self performSelector:@selector(login)
+               withObject:nil];
+    //开启心跳
+    [self performSelector:@selector(startHeart:)
+               withObject:nil
+               afterDelay:10];
     
     
 }
