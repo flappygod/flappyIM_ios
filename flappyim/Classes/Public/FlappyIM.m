@@ -301,6 +301,8 @@
     //写入请求数据
     [self.socket  writeData:reqData withTimeout:-1 tag:0];
     
+    //读取数据
+    [self.socket readDataWithTimeout:5 tag:0];
     
     //开启心跳
     [self performSelector:@selector(startHeart:)
