@@ -288,7 +288,7 @@
     [sock  writeData:reqData withTimeout:-1 tag:0];
     
     
-    //开启心跳
+    // 开启心跳
     // 每隔30s像服务器发送心跳包
     // 在longConnectToSocket方法中进行长连接需要向服务器发送的讯息
     self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:10
