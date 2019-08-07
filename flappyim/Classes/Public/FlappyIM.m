@@ -238,6 +238,8 @@
 
 //长连接的心跳
 -(void)heartBeat:(id)sender{
+    NSLog(@"heart heart heart");
+    
     if(self.socket!=nil){
         //连接到服务器开始请求登录
         FlappyRequest* request=[[FlappyRequest alloc]init];
@@ -255,6 +257,7 @@
 //登录
 -(void)login{
     
+    NSLog(@"lgoin lgoin lgoin");
     //组装登录数据
     LoginInfo* info=[[LoginInfo alloc]init];
     //类型
@@ -300,14 +303,15 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
 
+    NSLog(@"wait wait wait");
     
     //开始登录
-    [self performSelector:@selector(login)
-               withObject:nil];
-    //开启心跳
-    [self performSelector:@selector(startHeart:)
-               withObject:nil
-               afterDelay:10];
+//    [self performSelector:@selector(login)
+//               withObject:nil];
+//    //开启心跳
+//    [self performSelector:@selector(startHeart:)
+//               withObject:nil
+//               afterDelay:10];
     
     
 }
