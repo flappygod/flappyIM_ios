@@ -19,7 +19,9 @@ PODS:
     - AFNetworking (~> 3.2.1)
     - CocoaAsyncSocket (~> 7.6.2)
     - MJExtension (~> 3.1.0)
+    - Protobuf (~> 3.9.0)
   - MJExtension (3.1.0)
+  - Protobuf (3.9.0)
 
 DEPENDENCIES:
   - flappyim (from `../`)
@@ -29,6 +31,7 @@ SPEC REPOS:
     - AFNetworking
     - CocoaAsyncSocket
     - MJExtension
+    - Protobuf
 
 EXTERNAL SOURCES:
   flappyim:
@@ -37,8 +40,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
-  flappyim: b77285b69bdd91d7e0c971cf2b358c1669b3c401
+  flappyim: ca1285c4eab7c560bdf2d9c12c2a6ccc17b513cc
   MJExtension: 6b69b3bef2864fd550ce1a184eda219e321209d2
+  Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
 
 PODFILE CHECKSUM: feb42ff4229e00a2f94b2e56c132068f957e7df0
 
