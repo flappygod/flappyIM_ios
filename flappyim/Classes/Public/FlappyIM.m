@@ -235,6 +235,8 @@
         NSData* reqData=[request delimitedData];
         //写入请求数据
         [self.socket  writeData:reqData withTimeout:-1 tag:0];
+        
+        NSLog(@"PING PING PING");
     }
 }
 
