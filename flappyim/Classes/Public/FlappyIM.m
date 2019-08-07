@@ -19,14 +19,23 @@
 
 @interface FlappyIM ()
 
+
 //socket通信
 @property (nonatomic,strong) GCDAsyncSocket*  socket;
 //当前登录的lock
 @property (nonatomic,assign) Boolean  loginLock;
 //推送的ID
 @property (nonatomic,copy) NSString*  pushID;
-//当前保存的正在登录的用户
+
+
+
+
+//正在登录的用户
 @property (nonatomic,strong) User*  user;
+//成功
+@property (nonatomic,strong) FlappySuccess  success;
+//失败
+@property (nonatomic,strong) FlappyFailure  failure;
 
 @end
 
@@ -181,8 +190,6 @@
          withSuccess:(FlappySuccess)success
          withFailure:(FlappyFailure)failure{
     
-    //保存用户数据
-    self.user=user;
     
     //建立长连接
     _socket=[[GCDAsyncSocket alloc] initWithDelegate:self
@@ -196,8 +203,22 @@
                withTimeout:20
                      error:&error];
     
+    
+    
+    
     if(error!=nil){
         NSLog(@"%@",error.description);
+        //错误
+        self.failure(error, RESULT_NETERROR);
+        //错误
+        self.failure=nil;
+    }else{
+        //保存用户数据
+        self.user=user;
+        //成功
+        self.success=success;
+        //失败
+        self.failure=failure;
     }
     
 }
@@ -271,6 +292,7 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
     
+    NSLog(@"111111");
 }
 
 /**
@@ -278,6 +300,7 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
     
+    NSLog(@"222222");
 }
 
 /**
@@ -286,6 +309,7 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
     
+    NSLog(@"333333");
 }
 
 /**
@@ -331,6 +355,7 @@
  **/
 - (void)socketDidCloseReadStream:(GCDAsyncSocket *)sock{
     
+    NSLog(@"444444");
 }
 
 /**
@@ -355,7 +380,11 @@
  * Of course, this depends on how your state machine is configured.
  **/
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err{
-    
+    //整个链接失败了，设置连接失败
+    if(self.failure!=nil){
+        self.failure(err,RESULT_NETERROR);
+        self.failure=nil;
+    }
 }
 
 /**
