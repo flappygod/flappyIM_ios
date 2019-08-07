@@ -491,33 +491,43 @@
 /** 解析二进制数据：NSData --> 自定义模型对象 */
 - (void)parseContentDataWithHeadLength:(int32_t)headL withContentLength:(int32_t)contentL{
     
-    NSRange range = NSMakeRange(0, headL + contentL);   //本次解析data的范围
-    NSData *data = [self.receiveData subdataWithRange:range]; //本次解析的data
+    //本次解析data的范围
+    NSRange range = NSMakeRange(0, headL + contentL);
     
+    //本次解析的data
+    NSData *data = [self.receiveData subdataWithRange:range];
+    
+    //接收到的所有数据转换为数据流
     GPBCodedInputStream *inputStream = [GPBCodedInputStream streamWithData:data];
-    
+    //错误
     NSError *error;
-    
-    FlappyResponse *obj = [FlappyResponse parseDelimitedFromCodedInputStream:inputStream extensionRegistry:nil error:&error];
-    
+    //解析数据
+    FlappyResponse *obj = [FlappyResponse parseDelimitedFromCodedInputStream:inputStream
+                                                           extensionRegistry:nil
+                                                                       error:&error];
+    //如果正确解析
     if (!error){
         //保存解析正确的模型对象
-        if (obj) [self saveReceiveInfo:obj];
+        if (obj)
+            [self saveReceiveInfo:obj];
         //移除已经解析过的data
         [self.receiveData replaceBytesInRange:range
                                     withBytes:NULL
                                        length:0];
     }
     
-    if (self.receiveData.length < 1) return;
     
+    if (self.receiveData.length < 1)
+        return;
     //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
     headL = 0;
-    contentL = [self getContentLength:self.receiveData withHeadLength:&headL];
+    contentL = [self getContentLength:self.receiveData
+                       withHeadLength:&headL];
     //实际包不足解析，继续接收下一个包
     if (headL + contentL > self.receiveData.length) return;
     //继续解析下一条
-    [self parseContentDataWithHeadLength:headL withContentLength:contentL];
+    [self parseContentDataWithHeadLength:headL
+                       withContentLength:contentL];
 }
 
 /** 获取data数据的内容长度和头部长度: index --> 头部占用长度 (头部占用长度1-4个字节) */
@@ -561,7 +571,6 @@
 
 /** 处理解析出来的信息 */
 - (void)saveReceiveInfo:(FlappyResponse *)respones{
-    
     NSLog(@"数据解析成功");
     
 }
