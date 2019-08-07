@@ -252,6 +252,30 @@
     }
 }
 
+//登录
+-(void)login{
+    
+    //组装登录数据
+    LoginInfo* info=[[LoginInfo alloc]init];
+    //类型
+    info.device=DEVICE_TYPE;
+    //用户ID
+    info.userId=self.user.userId;
+    //推送ID
+    info.pushid=self.pushID;
+    
+    //连接到服务器开始请求登录
+    FlappyRequest* request=[[FlappyRequest alloc]init];
+    //登录请求
+    request.type=REQ_LOGIN;
+    //登录信息
+    request.login=info;
+    //请求数据，已经GPBComputeRawVarint32SizeForInteger
+    NSData* reqData=[request delimitedData];
+    //写入请求数据
+    [self.socket  writeData:reqData withTimeout:-1 tag:0];
+}
+
 
 
 #pragma GCDAsyncSocketDelegate
@@ -279,26 +303,10 @@
     //当前的
     self.socket=sock;
     
-    //组装登录数据
-    LoginInfo* info=[[LoginInfo alloc]init];
-    //类型
-    info.device=DEVICE_TYPE;
-    //用户ID
-    info.userId=self.user.userId;
-    //推送ID
-    info.pushid=self.pushID;
-    
-    //连接到服务器开始请求登录
-    FlappyRequest* request=[[FlappyRequest alloc]init];
-    //登录请求
-    request.type=REQ_LOGIN;
-    //登录信息
-    request.login=info;
-    //请求数据，已经GPBComputeRawVarint32SizeForInteger
-    NSData* reqData=[request delimitedData];
-    //写入请求数据
-    [sock  writeData:reqData withTimeout:-1 tag:0];
-    
+    //开始登录
+    [self performSelector:@selector(login)
+               withObject:nil
+               afterDelay:1];
     //开启心跳
     [self performSelector:@selector(startHeart:)
                withObject:nil
