@@ -300,9 +300,9 @@
     [sock  writeData:reqData withTimeout:-1 tag:0];
     
     //开启心跳
-    [self performSelectorOnMainThread:@selector(startHeart:)
-                           withObject:nil
-                        waitUntilDone:false];
+    [self performSelector:@selector(startHeart:)
+               withObject:nil
+               afterDelay:10];
     
     
 }
