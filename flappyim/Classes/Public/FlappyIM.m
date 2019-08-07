@@ -192,16 +192,16 @@
     
     
     //建立长连接
-    GCDAsyncSocket* sock=[[GCDAsyncSocket alloc] initWithDelegate:self
-                                                    delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    self.socket=[[GCDAsyncSocket alloc] initWithDelegate:self
+                                           delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     
     NSError* error=nil;
     
     //连接host
-    [sock connectToHost:serverAddress
-                 onPort:serverPort.integerValue
-            withTimeout:20
-                  error:&error];
+    [self.socket connectToHost:serverAddress
+                        onPort:serverPort.integerValue
+                   withTimeout:20
+                         error:&error];
     
     
     
@@ -299,14 +299,11 @@
  * The host parameter will be an IP address, not a DNS name.
  **/
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
-    
-    //当前的
-    self.socket=sock;
+
     
     //开始登录
     [self performSelector:@selector(login)
-               withObject:nil
-               afterDelay:1];
+               withObject:nil];
     //开启心跳
     [self performSelector:@selector(startHeart:)
                withObject:nil
