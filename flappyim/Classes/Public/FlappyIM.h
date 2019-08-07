@@ -6,6 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import <CocoaAsyncSocket/GCDAsyncUdpSocket.h>
 
 
 
@@ -19,7 +21,7 @@ typedef void(^FlappySuccess) (id _Nullable);
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface FlappyIM : NSObject
+@interface FlappyIM : NSObject<GCDAsyncSocketDelegate>
 
 //单例模式
 + (instancetype)shareInstance;
