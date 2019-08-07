@@ -15,6 +15,7 @@
 #import <arpa/inet.h>
 #import <unistd.h>
 #import "Flappy.pbobjc.h"
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 
 @interface FlappyIM ()
@@ -278,7 +279,7 @@
  * The host parameter will be an IP address, not a DNS name.
  **/
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
-
+    
     NSLog(@"wait wait wait");
     
     //组装登录数据
@@ -319,12 +320,15 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag{
     
-    NSError* error=nil;
-    //接收到相应的数据
-    FlappyResponse* response=[[FlappyResponse alloc]initWithData:data
-                                                           error:&error];
     
-    NSLog(@"%d",response.type);
+    //数据
+    NSLog(@"数据收到了");
+    
+    //    NSError* error=nil;
+    //    //接收到相应的数据
+    //    FlappyResponse* response=[[FlappyResponse alloc]initWithData:data
+    //                                                           error:&error];
+    
     
 }
 
