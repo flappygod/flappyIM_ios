@@ -241,26 +241,26 @@
     request.type=REQ_LOGIN;
     //登录信息
     request.login=info;
-    //请求数据
-    NSData* reqData=[request data];
+    //请求数据，已经GPBComputeRawVarint32SizeForInteger
+    NSData* reqData=[request delimitedData];
     //写入请求数据
-    [sock  writeData:reqData withTimeout:-1 tag:0]
+    [sock  writeData:reqData withTimeout:-1 tag:0];
     
 }
 
-/**
- * Called when a socket connects and is ready for reading and writing.
- * The host parameter will be an IP address, not a DNS name.
- **/
-- (void)socket:(GCDAsyncSocket *)sock didConnectToUrl:(NSURL *)url{
-    
-}
 
 /**
  * Called when a socket has completed reading the requested data into memory.
  * Not called if there is an error.
  **/
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag{
+    
+    NSError* error=nil;
+    //接收到相应的数据
+    FlappyResponse* response=[[FlappyResponse alloc]initWithData:data
+                                                           error:&error];
+    
+    NSLog(@"%d",response.type);
     
 }
 
