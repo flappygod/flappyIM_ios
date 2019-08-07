@@ -30,7 +30,7 @@
 
 
 //心跳计时
-@property (nonatomic,strong) NSTimer        *connectTimer;
+@property (nonatomic,strong) NSTimer*  connectTimer;
 //正在登录的用户
 @property (nonatomic,strong) User*  user;
 //成功
@@ -234,7 +234,6 @@
                                                        selector:@selector(heartBeat:)
                                                        userInfo:nil
                                                         repeats:YES];
-    [self.connectTimer fire];
 }
 
 //长连接的心跳
@@ -303,7 +302,6 @@
     [self.socket  writeData:reqData withTimeout:-1 tag:0];
     
     //读取数据
-    [self.socket readDataWithTimeout:5 tag:0];
     
     //开启心跳
     [self performSelector:@selector(startHeart:)
@@ -419,12 +417,17 @@
     NSLog(@"连接被关闭");
     //登录失败
     if(self.failure!=nil){
+        //失败
         self.failure(err,RESULT_NETERROR);
+        //失败
         self.failure=nil;
     }
     //停止
     if(self.connectTimer!=nil){
+        //取消timer
         [self.connectTimer invalidate];
+        //清空
+        self.connectTimer=nil;
     }
     //清空socket
     self.socket=nil;
