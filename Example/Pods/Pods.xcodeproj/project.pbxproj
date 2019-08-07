@@ -1232,14 +1232,15 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Target Support Files/flappyim/flappyim-prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"/usr/local/lib/**",
-					"/usr/local/include/**",
-				);
 				INFOPLIST_FILE = "Target Support Files/flappyim/flappyim-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/../../flappyim/Classes\"",
+					"/usr/local/lib/**",
+				);
 				MODULEMAP_FILE = "Target Support Files/flappyim/flappyim.modulemap";
 				PRODUCT_MODULE_NAME = flappyim;
 				PRODUCT_NAME = flappyim;
@@ -1553,14 +1554,15 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Target Support Files/flappyim/flappyim-prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"/usr/local/lib/**",
-					"/usr/local/include/**",
-				);
 				INFOPLIST_FILE = "Target Support Files/flappyim/flappyim-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/../../flappyim/Classes\"",
+					"/usr/local/lib/**",
+				);
 				MODULEMAP_FILE = "Target Support Files/flappyim/flappyim.modulemap";
 				PRODUCT_MODULE_NAME = flappyim;
 				PRODUCT_NAME = flappyim;
