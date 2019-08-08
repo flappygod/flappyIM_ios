@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PostTool : NSObject
 
+//请求数据
 +(void)postRequest:(NSString*)url
     withParameters:(NSDictionary *)param
        withSuccess:(FlappySuccess)success
