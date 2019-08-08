@@ -10,8 +10,8 @@
 #endif
 #endif
 
+#import "ChatMessage.h"
 #import "FlappyIM.h"
-#import "Message.h"
 #import "PostTool.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
