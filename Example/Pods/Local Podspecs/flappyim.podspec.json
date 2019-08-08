@@ -43,6 +43,9 @@
     ],
     "Reachability": [
       "~> 3.2"
+    ],
+    "SQLitePersistentObject": [
+      "~> 0.3.2"
     ]
   }
 }

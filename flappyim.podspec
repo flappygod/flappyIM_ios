@@ -45,6 +45,7 @@ Pod::Spec.new do |s|
   s.dependency 'Protobuf', '~> 3.9.0'
   s.dependency 'CocoaAsyncSocket', '~> 7.6.3'
   s.dependency 'Reachability', '~> 3.2'
+  s.dependency 'SQLitePersistentObject', '~> 0.3.2'
 
 
 end
