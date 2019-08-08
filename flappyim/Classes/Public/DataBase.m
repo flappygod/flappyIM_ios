@@ -134,7 +134,7 @@
     if(db==nil){
         return false;
     }
-    BOOL result = [db executeUpdate:@"update 'message'(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageRecieve,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) where messageId = ?" withArgumentsInArray:@[msg.messageSession,[NSNumber numberWithInteger:msg.messageSessionType],[NSNumber numberWithInteger:msg.messageSessionOffset],[NSNumber numberWithInteger:msg.messageTableSeq],[NSNumber numberWithInteger:msg.messageType],msg.messageSend,msg.messageRecieve,msg.messageContent,[NSNumber numberWithInteger:msg.messageSended],[NSNumber numberWithInteger:msg.messageReaded],msg.messageDate,msg.messageDeletedDate,[NSNumber numberWithInteger:msg.messageDeleted],msg.messageId]];
+    BOOL result = [db executeUpdate:@"update 'message'(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageRecieve,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?) where messageId = ?" withArgumentsInArray:@[msg.messageSession,[NSNumber numberWithInteger:msg.messageSessionType],[NSNumber numberWithInteger:msg.messageSessionOffset],[NSNumber numberWithInteger:msg.messageTableSeq],[NSNumber numberWithInteger:msg.messageType],msg.messageSend,msg.messageRecieve,msg.messageContent,[NSNumber numberWithInteger:msg.messageSended],[NSNumber numberWithInteger:msg.messageReaded],msg.messageDate,msg.messageDeletedDate,[NSNumber numberWithInteger:msg.messageDeleted],msg.messageId]];
     [db close];
     if (result) {
         return true;
