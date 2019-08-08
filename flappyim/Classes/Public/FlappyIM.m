@@ -749,7 +749,12 @@
     }
     //接收到新的消息
     else if(respones.type==RES_MSG){
-        
+        //消息信息
+        NSMutableArray* array=respones.msgArray;
+        for(int s=0;s<array.count;s++){
+            Message* message=[array objectAtIndex:s];
+            NSLog(@"%@",message.messageContent);
+        }
         
     }
 }
