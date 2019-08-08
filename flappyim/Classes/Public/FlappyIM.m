@@ -17,6 +17,8 @@
 #import "Flappy.pbobjc.h"
 #import "FlappyData.h"
 #import "NetTool.h"
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 
@@ -121,6 +123,21 @@
 }
 
 
+//初始化
+-(void)setup{
+    [self setupNetwork];
+    [self setupNotify];
+}
+
+//增加网络监听
+-(void)setupNotify{
+    // 监听网络状态改变的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(setupNetwork)
+                                                 name:@"flappyim_notification"
+                                               object:nil];
+}
+
 //进行初始化
 -(void)setupNetwork{
     //自动登录
@@ -141,6 +158,20 @@
             }
         }];
     }
+}
+
+//清空
+-(void)dealloc{
+    [self  offline:false];
+    [self  stopOberver];
+}
+
+//停止监听
+-(void)stopOberver{
+    //移除监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"flappyim_notification"
+                                                  object:nil];
 }
 
 
@@ -329,6 +360,8 @@
     }
     
 }
+
+
 
 
 
