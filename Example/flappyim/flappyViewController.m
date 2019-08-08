@@ -20,6 +20,9 @@
 {
     [super viewDidLoad];
     
+    
+    [FlappyIM shareInstance]
+    
     //创建登录
     UITapGestureRecognizer* gs=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(login)];
     [self.view addGestureRecognizer:gs];

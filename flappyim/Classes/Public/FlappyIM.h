@@ -46,6 +46,10 @@ NS_ASSUME_NONNULL_BEGIN
   andFailure:(FlappyFailure)failure;
 
 
+//初始化
+-(void)setup;
+
+
 
 @end
 
