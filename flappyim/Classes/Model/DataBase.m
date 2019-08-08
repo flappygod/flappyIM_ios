@@ -22,8 +22,8 @@
 }
 
 
-// 防止外部调用alloc或者new
-+ (instancetype)allocWithZone:(struct _NSZone *)zone {
+//防止外部调用alloc或者new
++(instancetype)allocWithZone:(struct _NSZone *)zone {
     return [DataBase shareInstance];
 }
 
