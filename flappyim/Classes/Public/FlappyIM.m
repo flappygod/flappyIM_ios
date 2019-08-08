@@ -521,7 +521,7 @@
 - (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
                  elapsed:(NSTimeInterval)elapsed
                bytesDone:(NSUInteger)length{
-    return 10;
+    return 3;
 }
 
 /**
@@ -539,7 +539,7 @@
                  elapsed:(NSTimeInterval)elapsed
                bytesDone:(NSUInteger)length{
     
-    return 10;
+    return 3;
 }
 
 /**
