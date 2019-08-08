@@ -211,6 +211,9 @@
                                 userInfo:nil],RESULT_NETERROR);
         return ;
     }
+    //赋值给当前的回调
+    self.success=success;
+    self.failure = failure;
     
     //注册地址
     NSString *urlString = URL_login;
@@ -221,9 +224,6 @@
                                  @"device":DEVICE_TYPE,
                                  @"pushid":self.pushID
                                  };
-    //赋值给当前的回调
-    self.success=success;
-    self.failure = failure;
     
     __weak typeof(self) safeSelf=self;
     //请求数据
@@ -264,6 +264,9 @@
         return ;
     }
     
+    //赋值给当前的回调
+    self.success = success;
+    self.failure = failure;
     
     //自动登录
     NSString *urlString = URL_autoLogin;
@@ -273,9 +276,6 @@
                                  @"device":DEVICE_TYPE,
                                  @"pushid":self.pushID
                                  };
-    //赋值给当前的回调
-    self.success = success;
-    self.failure = failure;
     
     __weak typeof(self) safeSelf=self;
     //请求数据
