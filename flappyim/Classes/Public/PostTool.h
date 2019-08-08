@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AFNetworking/AFNetworking.h>
+#import "ChatMessage.h"
 
 //登录之后非正常关闭
 typedef void(^FlappyDead) (void);
@@ -16,6 +17,9 @@ typedef void(^FlappyFailure) (NSError *_Nullable,NSInteger);
 
 //请求成功
 typedef void(^FlappySuccess) (id _Nullable);
+
+//消息监听
+typedef void(^MessageListener) (ChatMessage* _Nullable message);
 
 
 NS_ASSUME_NONNULL_BEGIN

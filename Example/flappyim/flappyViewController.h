@@ -10,4 +10,7 @@
 
 @interface flappyViewController : UIViewController
 
+//当前的lable
+@property (weak, nonatomic) IBOutlet UILabel *lable;
+
 @end

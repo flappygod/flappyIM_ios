@@ -38,6 +38,9 @@
     } andFailure:^(NSError * error, NSInteger code) {
         NSLog(@"登录失败");
     }];
+    
+    
+    [FlappyIM shareInstance] a
 }
 
 

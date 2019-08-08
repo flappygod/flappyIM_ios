@@ -38,6 +38,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setup;
 
 
+//增加消息的监听
+-(void)addListener:(MessageListener)listener;
+
 
 @end
 
