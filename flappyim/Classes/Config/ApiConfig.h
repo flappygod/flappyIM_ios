@@ -27,7 +27,7 @@
 //自动登录账号
 #define URL_autoLogin [NSString stringWithFormat:@"%@/api/autoLogin",BaseUrl]
 
-//创建两个人之间的会话
+//创建会话
 #define URL_createSession [NSString stringWithFormat:@"%@/api/createSession",BaseUrl]
 
 //发送消息
