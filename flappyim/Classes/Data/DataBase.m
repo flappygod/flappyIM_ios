@@ -39,7 +39,7 @@
 
 
 //初始化数据库
-+(void)setupDataBase{
++(void)setup{
     //1.创建database路径
     NSString *docuPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     NSString *dbPath = [docuPath stringByAppendingPathComponent:@"flappyim.db"];
