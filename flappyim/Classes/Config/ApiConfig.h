@@ -15,8 +15,6 @@
 
 
 
-
-
 //基础地址
 #define BaseUrl @"http://192.168.124.105"
 
@@ -56,6 +54,15 @@
 #define REQ_MSG  2
 //心跳消息
 #define REQ_PING  3
+
+
+
+//登录返回消息
+#define RES_LOGIN  1
+
+//消息发送
+#define RES_MSG  2
+
 
 
 #endif /* ApiConfig_h */

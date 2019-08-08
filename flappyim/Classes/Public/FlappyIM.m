@@ -23,8 +23,6 @@
 
 //socket通信
 @property (nonatomic,strong) GCDAsyncSocket*  socket;
-//当前登录的lock
-@property (nonatomic,assign) Boolean  loginLock;
 //推送的ID
 @property (nonatomic,copy) NSString*  pushID;
 
@@ -59,7 +57,6 @@
     });
     //false
     _sharedSingleton.pushID=@"123456";
-    _sharedSingleton.loginLock=false;
     _sharedSingleton.receiveData=[[NSMutableData alloc]init];
     return _sharedSingleton;
 }
@@ -147,16 +144,16 @@
   andSuccess:(FlappySuccess)success
   andFailure:(FlappyFailure)failure{
     
-    //阻止重复请求
-    if(self.loginLock){
-        return;
-    }else{
-        self.loginLock=true;
+    //登录成功或者失败的回调没有执行
+    if(self.success!=nil||self.failure!=nil){
+        //直接失败
+        failure([NSError errorWithDomain:@"A login thread also run"
+                                    code:RESULT_NETERROR
+                                userInfo:nil],RESULT_NETERROR);
+        return ;
     }
-    
     //注册地址
     NSString *urlString = URL_login;
-    
     
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userID":@"",
@@ -164,6 +161,9 @@
                                  @"device":DEVICE_TYPE,
                                  @"pushid":self.pushID,
                                  };
+    //赋值给当前的回调
+    self.success=success;
+    self.failure = failure;
     
     __weak typeof(self) safeSelf=self;
     //请求数据
@@ -183,8 +183,10 @@
                       withFailure:failure];
               
           } withFailure:^(NSError * error, NSInteger code) {
-              safeSelf.loginLock=false;
+              //登录失败，清空回调
               failure(error,code);
+              safeSelf.success=nil;
+              safeSelf.failure =nil;
           }];
 }
 
@@ -211,20 +213,20 @@
     
     
     
-    
+    //失败
     if(error!=nil){
         NSLog(@"%@",error.description);
         //错误
         self.failure(error, RESULT_NETERROR);
         //错误
         self.failure=nil;
-    }else{
+        //连接错误
+        self.success=nil;
+    }
+    //成功
+    else{
         //保存用户数据
         self.user=user;
-        //成功
-        self.success=success;
-        //失败
-        self.failure=failure;
     }
     
 }
@@ -241,10 +243,21 @@
                                                         repeats:YES];
 }
 
+//关闭心跳
+-(void)stopHeart{
+    //停止
+    if(self.connectTimer!=nil){
+        //取消timer
+        [self.connectTimer invalidate];
+        //清空
+        self.connectTimer=nil;
+    }
+}
+
+
 //长连接的心跳
 -(void)heartBeat:(id)sender{
-    NSLog(@"heart heart heart");
-    
+    //心跳消息写入
     if(self.socket!=nil){
         //连接到服务器开始请求登录
         FlappyRequest* request=[[FlappyRequest alloc]init];
@@ -254,8 +267,7 @@
         NSData* reqData=[request delimitedData];
         //写入请求数据
         [self.socket  writeData:reqData withTimeout:-1 tag:0];
-        
-        NSLog(@"PING PING PING");
+        NSLog(@"heart beat");
     }
 }
 
@@ -284,8 +296,6 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
     
-    NSLog(@"wait wait wait");
-    
     //组装登录数据
     LoginInfo* info=[[LoginInfo alloc]init];
     //类型
@@ -306,10 +316,11 @@
     //写入请求数据
     [self.socket  writeData:reqData withTimeout:-1 tag:0];
     
-    //读取数据
-    [self.socket readDataWithTimeout:-1 tag:0];
     
-    //开启心跳
+    //开始接收数据
+    [self.socket readDataWithTimeout:-1 tag:0];
+
+    //开启心跳线程
     [self performSelectorOnMainThread:@selector(startHeart:)
                            withObject:nil waitUntilDone:false];
     
@@ -324,7 +335,6 @@
     
     
     //数据
-    NSLog(@"数据收到了");
     [self.receiveData appendData:data];
     //读取data的头部占用字节 和 从头部读取内容长度
     //验证结果：数据比较小时头部占用字节为1，数据比较大时头部占用字节为2
@@ -343,10 +353,6 @@
     [self parseContentDataWithHeadLength:headL withContentLength:contentL];
     [sock readDataWithTimeout:-1 tag:tag];
     
-    
-    
-    
-    
 }
 
 /**
@@ -356,7 +362,6 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
     
-    NSLog(@"111111");
 }
 
 /**
@@ -364,7 +369,6 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
     
-    NSLog(@"222222");
 }
 
 /**
@@ -373,7 +377,6 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
     
-    NSLog(@"333333");
 }
 
 - (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
@@ -408,7 +411,6 @@
  **/
 - (void)socketDidCloseReadStream:(GCDAsyncSocket *)sock{
     
-    NSLog(@"444444");
 }
 
 /**
@@ -440,14 +442,9 @@
         self.failure(err,RESULT_NETERROR);
         //失败
         self.failure=nil;
+        self.success=nil;
     }
-    //停止
-    if(self.connectTimer!=nil){
-        //取消timer
-        [self.connectTimer invalidate];
-        //清空
-        self.connectTimer=nil;
-    }
+    [self stopHeart];
     //清空socket
     self.socket=nil;
 }
@@ -571,7 +568,22 @@
 
 /** 处理解析出来的信息 */
 - (void)saveReceiveInfo:(FlappyResponse *)respones{
-    NSLog(@"数据解析成功");
+    //返回登录消息
+    if(respones.type==RES_LOGIN)
+    {
+        //登录成功
+        if(self.success!=nil){
+            self.success(nil);
+        }
+        //消息信息
+        NSMutableArray* array=respones.msgArray;
+        NSLog(@"消息收到");
+    }
+    //接收到新的消息
+    else if(respones.type==RES_MSG){
+        
+        
+    }
     
 }
 
