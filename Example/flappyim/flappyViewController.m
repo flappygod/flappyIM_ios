@@ -7,7 +7,7 @@
 //
 
 #import "flappyViewController.h"
-//#import <flappyim/FlappyIM.h>
+#import <flappyim/FlappyIM.h>
 
 
 @interface flappyViewController ()
