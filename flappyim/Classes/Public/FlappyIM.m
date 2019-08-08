@@ -15,6 +15,7 @@
 #import <arpa/inet.h>
 #import <unistd.h>
 #import "Flappy.pbobjc.h"
+#import "FlappyData.h"
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 
@@ -116,6 +117,22 @@
     return [FlappyIM shareInstance];
 }
 
+//进行初始化
+-(void)setup{
+    //自动登录
+    User* user=[FlappyData getUser];
+    //用户之前已经登录过
+    if(user!=nil&&user.login==true){
+        //开始
+        [self autoLogin:^(id data) {
+            
+        } andFailure:^(NSError * error, NSInteger code) {
+            
+        }];
+    }
+}
+
+
 //创建账号
 -(void)createAccount:(NSString*)userID
          andUserName:(NSString*)userName
@@ -160,6 +177,56 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userID":@"",
                                  @"userExtendID":userExtendID,
+                                 @"device":DEVICE_TYPE,
+                                 @"pushid":self.pushID,
+                                 };
+    //赋值给当前的回调
+    self.success=success;
+    self.failure = failure;
+    
+    __weak typeof(self) safeSelf=self;
+    //请求数据
+    [self postRequest:urlString
+       withParameters:parameters
+          withSuccess:^(id data) {
+              
+              //赋值登录数据
+              safeSelf.loginData=data;
+              //得到当前的用户数据
+              NSDictionary* dic=data[@"user"];
+              //用户
+              User* user=[User mj_objectWithKeyValues:dic];
+              //连接服务器
+              [self connectSocket:data[@"serverIP"]
+                         withPort:data[@"serverPort"]
+                         withUser:user
+                      withSuccess:success
+                      withFailure:failure];
+              
+          } withFailure:^(NSError * error, NSInteger code) {
+              //登录失败，清空回调
+              failure(error,code);
+              safeSelf.success=nil;
+              safeSelf.failure =nil;
+          }];
+}
+
+//自动登录
+-(void)autoLogin:(FlappySuccess)success
+      andFailure:(FlappyFailure)failure{
+    //登录成功或者失败的回调没有执行
+    if(self.success!=nil||self.failure!=nil){
+        //直接失败
+        failure([NSError errorWithDomain:@"A login thread also run"
+                                    code:RESULT_NETERROR
+                                userInfo:nil],RESULT_NETERROR);
+        return ;
+    }
+    //自动登录
+    NSString *urlString = URL_autoLogin;
+    
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"userID":[FlappyData getUser].userId,
                                  @"device":DEVICE_TYPE,
                                  @"pushid":self.pushID,
                                  };
@@ -320,10 +387,9 @@
     //写入请求数据
     [self.socket  writeData:reqData withTimeout:-1 tag:0];
     
-    
     //开始接收数据
     [self.socket readDataWithTimeout:-1 tag:0];
-
+    
     //开启心跳线程
     [self performSelectorOnMainThread:@selector(startHeart:)
                            withObject:nil waitUntilDone:false];
@@ -509,8 +575,9 @@
     //如果正确解析
     if (!error){
         //保存解析正确的模型对象
-        if (obj)
+        if (obj){
             [self saveReceiveInfo:obj];
+        }
         //移除已经解析过的data
         [self.receiveData replaceBytesInRange:range
                                     withBytes:NULL
@@ -577,6 +644,12 @@
     {
         //登录成功
         if(self.success!=nil){
+            
+            //用户已经登录过了
+            self.user.login=true;
+            //保存用户登录数据
+            [FlappyData saveUser:self.user];
+            
             self.success(self.loginData);
             //清空回调和数据
             self.success=nil;
