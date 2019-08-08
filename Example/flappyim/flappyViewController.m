@@ -27,6 +27,11 @@
     UITapGestureRecognizer* gs=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(login)];
     [self.view addGestureRecognizer:gs];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    __weak typeof(self) safeSelf=self;
+    [[FlappyIM shareInstance] addListener:^(ChatMessage * _Nullable message) {
+        safeSelf.lable.text=message.messageContent;
+    }];
 }
 
 
@@ -39,10 +44,7 @@
         NSLog(@"登录失败");
     }];
     
-    __weak typeof(self) safeSelf=self;
-    [[FlappyIM shareInstance] addListener:^(ChatMessage * _Nullable message) {
-        safeSelf.lable.text=message.messageContent;
-    }];
+    
 }
 
 
