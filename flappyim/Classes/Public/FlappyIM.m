@@ -203,6 +203,9 @@
   andSuccess:(FlappySuccess)success
   andFailure:(FlappyFailure)failure{
     
+    //之前的正常下线
+    [self offline:true];
+    
     //登录成功或者失败的回调没有执行
     if(self.success!=nil||self.failure!=nil){
         //直接失败
@@ -211,6 +214,7 @@
                                 userInfo:nil],RESULT_NETERROR);
         return ;
     }
+    
     //赋值给当前的回调
     self.success=success;
     self.failure = failure;
@@ -255,6 +259,11 @@
 //自动登录
 -(void)autoLogin:(FlappySuccess)success
       andFailure:(FlappyFailure)failure{
+    
+    
+    //之前的正常下线
+    [self offline:true];
+    
     //登录成功或者失败的回调没有执行
     if(self.success!=nil||self.failure!=nil){
         //直接失败
@@ -289,8 +298,6 @@
                   NSDictionary* dic=data[@"user"];
                   //用户
                   User* user=[User mj_objectWithKeyValues:dic];
-                  //用户正常下线
-                  [safeSelf offline:true];
                   //用户下线之后重新连接服务器
                   [safeSelf connectSocket:data[@"serverIP"]
                                  withPort:data[@"serverPort"]
