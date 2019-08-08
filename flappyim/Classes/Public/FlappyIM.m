@@ -132,7 +132,7 @@
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:5];
             break;
         case 2:
-            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:5];
+            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:3];
             break;
         default:
             break;
@@ -362,7 +362,7 @@
             //主线程中重新开始联网判断
             [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
                                        withObject:nil
-                                    waitUntilDone:nil];
+                                    waitUntilDone:false];
         };
     }
     
