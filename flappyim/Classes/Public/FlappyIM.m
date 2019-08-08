@@ -359,10 +359,10 @@
         __weak typeof(self) safeSelf=self;
         //socket非正常退出的时候，重新登录
         self.dead = ^{
-            //3秒后重新执行登录
-            [safeSelf performSelector:@selector(setupReconnect)
-                           withObject:nil
-                           afterDelay:3];
+            //主线程中重新开始联网判断
+            [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
+                                       withObject:nil
+                                    waitUntilDone:nil];
         };
     }
     
