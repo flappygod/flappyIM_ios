@@ -21,6 +21,7 @@
 #import <Foundation/Foundation.h>
 #import <Reachability/Reachability.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import <SQLitePersistentObject/SQLitePersistentObject.h>
 
 
 @interface FlappyIM ()
@@ -93,9 +94,17 @@
     [self setupReconnect];
     //通知
     [self setupNotify];
+    //初始化数据库
+    [self setupDataBase];
 }
 
 
+#pragma database
+-(void)setupDataBase{
+    //创建数据库
+    unlink("flappyim.db");
+    [[SQLiteInstanceManager sharedManager] setDatabaseFilepath:@"flappyim.db"];
+}
 
 #pragma  NOTIFY 网络状态监听通知
 -(void)setupNotify{
