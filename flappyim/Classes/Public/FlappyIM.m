@@ -35,6 +35,8 @@
 @property (nonatomic,strong) NSTimer*  connectTimer;
 //正在登录的用户
 @property (nonatomic,strong) User*  user;
+//登录的数据
+@property (nonatomic,strong) id  loginData;
 //成功
 @property (nonatomic,strong) FlappySuccess  success;
 //失败
@@ -171,6 +173,8 @@
        withParameters:parameters
           withSuccess:^(id data) {
               
+              //赋值登录数据
+              safeSelf.loginData=data;
               //得到当前的用户数据
               NSDictionary* dic=data[@"user"];
               //用户
@@ -573,11 +577,18 @@
     {
         //登录成功
         if(self.success!=nil){
-            self.success(nil);
+            self.success(self.loginData);
+            //清空回调和数据
+            self.success=nil;
+            self.failure=nil;
+            self.loginData=nil;
         }
         //消息信息
         NSMutableArray* array=respones.msgArray;
-        NSLog(@"消息收到");
+        for(int s=0;s<array.count;s++){
+            Message* message=[array objectAtIndex:s];
+            NSLog(@"%@",message.messageContent);
+        }
     }
     //接收到新的消息
     else if(respones.type==RES_MSG){

@@ -29,19 +29,11 @@
 
 //登录
 -(void)login{
-    [[FlappyIM shareInstance] login:@"105" andSuccess:^(id data) {
+    [[FlappyIM shareInstance] login:@"100" andSuccess:^(id data) {
         //登录成功
-        NSDictionary* dic=data;
-        
-        
-        NSString* serverIP=dic[@"serverIP"];
-        NSString* serverPort=dic[@"serverPort"];
-        NSString* serverTopic=dic[@"serverTopic"];
-        NSString* serverGroup=dic[@"serverGroup"];
-        
-        
+        NSLog(@"登录成功");
     } andFailure:^(NSError * error, NSInteger code) {
-        
+        NSLog(@"登录失败");
     }];
 }
 
