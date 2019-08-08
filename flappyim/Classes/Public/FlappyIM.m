@@ -22,14 +22,14 @@
 #import <Foundation/Foundation.h>
 #import <Reachability/Reachability.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
-#import <SQLitePersistentObject/SQLitePersistentObject.h>
-#import <SQLitePersistentObject/SQLiteInstanceManager.h>
+#import "DataBase.h"
 
 
 @interface FlappyIM ()
 
 //用于监听网络变化
 @property (nonatomic,strong) Reachability* hostReachability;
+//用于监听网络变化
 @property (nonatomic,strong) Reachability* internetReachability;
 //socket通信
 @property (nonatomic,strong) GCDAsyncSocket*  socket;
@@ -103,10 +103,8 @@
 
 #pragma database
 -(void)setupDataBase{
-    //创建数据库
-    unlink("flappyim.db");
-    [[SQLiteInstanceManager sharedManager] setDatabaseFilepath:@"flappyim.db"];
-    [[SQLiteInstanceManager sharedManager] setDatabaseName:@"flappyim.db"];
+    //初始化数据库
+    [[DataBase shareInstance] setup];
 }
 
 #pragma  NOTIFY 网络状态监听通知
@@ -771,24 +769,7 @@
             Message* message=[array objectAtIndex:s];
             //转换一下
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
-            //搜索之前存在不存在
-            ChatMessage *joeSmith = (ChatMessage*)[ChatMessage findFirstByCriteria:[NSString stringWithFormat:@"WHERE messageId = '%@'",chatMsg.messageId]];
-            //不存在
-            if(joeSmith==nil){
-                //保存现在的
-                [chatMsg save];
-                [self notifyNewMessage:chatMsg];
-                //保存
-                self.user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
-                //保存最后一条数据
-                [FlappyData saveUser:self.user];
-            }else{
-                //覆盖之前的
-                joeSmith.messageSended=chatMsg.messageSended;
-                joeSmith.messageTableSeq=chatMsg.messageTableSeq;
-                joeSmith.messageDate=chatMsg.messageDate;
-                [joeSmith save];
-            }
+           
             
         }
     }
@@ -800,24 +781,7 @@
             Message* message=[array objectAtIndex:s];
             //转换一下
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
-            //搜索之前存在不存在
-            ChatMessage *joeSmith = (ChatMessage*)[ChatMessage findFirstByCriteria:[NSString stringWithFormat:@"WHERE messageId = '%@'",chatMsg.messageId]];
-            //不存在
-            if(joeSmith==nil){
-                //保存现在的
-                [chatMsg save];
-                [self notifyNewMessage:chatMsg];
-                //保存
-                self.user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
-                //保存最后一条数据
-                [FlappyData saveUser:self.user];
-            }else{
-                //覆盖之前的
-                joeSmith.messageSended=chatMsg.messageSended;
-                joeSmith.messageTableSeq=chatMsg.messageTableSeq;
-                joeSmith.messageDate=chatMsg.messageDate;
-                [joeSmith save];
-            }
+            //消息
         }
     }
 }
