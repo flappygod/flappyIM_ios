@@ -32,7 +32,7 @@
 
 //登录
 -(void)login{
-    [[FlappyIM shareInstance] login:@"100" andSuccess:^(id data) {
+    [[FlappyIM shareInstance] login:@"101" andSuccess:^(id data) {
         //登录成功
         NSLog(@"登录成功");
     } andFailure:^(NSError * error, NSInteger code) {
