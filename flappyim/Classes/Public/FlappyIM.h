@@ -12,7 +12,7 @@
 
 
 //登录之后非正常关闭
-typedef void(^FlappyDead) ();
+typedef void(^FlappyDead) (void);
 
 
 
