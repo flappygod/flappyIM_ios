@@ -126,7 +126,9 @@
 
 //初始化
 -(void)setup{
-    [self setupNetwork];
+    //重新连接
+    [self setupReconnect];
+    //通知
     [self setupNotify];
 }
 
@@ -164,10 +166,10 @@
         case 0:
             break;
         case 1:
-            [self performSelector:@selector(setupNetwork) withObject:nil afterDelay:3];
+            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:3];
             break;
         case 2:
-            [self performSelector:@selector(setupNetwork) withObject:nil afterDelay:3];
+            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:3];
             break;
         default:
             break;
@@ -182,24 +184,28 @@
 }
 
 //进行初始化
--(void)setupNetwork{
+-(void)setupReconnect{
     //自动登录
     User* user=[FlappyData getUser];
     //用户之前已经登录过
-    if(user!=nil&&user.login==true){
-        //开始
-        __weak typeof(self) safeSelf=self;
-        [self autoLogin:^(id data) {
-            NSLog(@"自动登录成功");
-        } andFailure:^(NSError * error, NSInteger code) {
-            //网络连着，但是我们登录失败了
-            if([NetTool getCurrentNetworkState]!=0){
+    if(user==nil||user.login==false){
+        return;
+    }
+    //开始
+    __weak typeof(self) safeSelf=self;
+    //如果网络是正常连接的
+    if([NetTool getCurrentNetworkState]!=0){
+        //防止重复请求
+        if(self.success!=nil||self.failure!=nil){
+            [self autoLogin:^(id data) {
+                NSLog(@"自动登录成功");
+            } andFailure:^(NSError * error, NSInteger code) {
                 //3秒后重新执行登录
-                [safeSelf performSelector:@selector(setupNetwork)
+                [safeSelf performSelector:@selector(setupReconnect)
                                withObject:nil
                                afterDelay:3];
-            }
-        }];
+            }];
+        }
     }
 }
 
@@ -380,7 +386,7 @@
         //socket非正常退出的时候，重新登录
         self.dead = ^{
             //3秒后重新执行登录
-            [safeSelf performSelector:@selector(setupNetwork)
+            [safeSelf performSelector:@selector(setupReconnect)
                            withObject:nil
                            afterDelay:3];
         };
