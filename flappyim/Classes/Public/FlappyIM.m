@@ -375,12 +375,7 @@
                                     waitUntilDone:false];
         };
     }
-    
 }
-
-
-
-
 
 
 #pragma heart beat  心跳
@@ -424,11 +419,7 @@
     }
 }
 
-
-
-
 #pragma GCDAsyncSocketDelegate
-
 /**
  * Called when a socket accepts a connection.
  * Another socket is automatically spawned to handle it.
@@ -457,7 +448,6 @@
     info.userId=self.user.userId;
     //推送ID
     info.pushid=self.pushID;
-    
     
     //连接到服务器开始请求登录
     FlappyRequest* request=[[FlappyRequest alloc]init];
@@ -502,8 +492,8 @@
     }
     //当receiveData长度不小于第一条消息内容长度时，开始解析receiveData
     [self parseContentDataWithHeadLength:headL withContentLength:contentL];
+    //修改
     [sock readDataWithTimeout:-1 tag:tag];
-    
 }
 
 /**
@@ -660,9 +650,7 @@
     }
 }
 
-
-
-/** 解析二进制数据：NSData --> 自定义模型对象 */
+//解析二进制数据：NSData --> 自定义模型对象
 - (void)parseContentDataWithHeadLength:(int32_t)headL withContentLength:(int32_t)contentL{
     
     //本次解析data的范围
@@ -690,8 +678,6 @@
                                     withBytes:NULL
                                        length:0];
     }
-    
-    
     if (self.receiveData.length < 1)
     return;
     //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
@@ -705,9 +691,7 @@
                        withContentLength:contentL];
 }
 
-
-
-/** 处理解析出来的信息 */
+//处理解析出来的信息,新消息过来了
 - (void)saveReceiveInfo:(FlappyResponse *)respones{
     //返回登录消息
     if(respones.type==RES_LOGIN)
@@ -778,7 +762,7 @@
 }
 
 #pragma  dealloc
-//清空
+//销毁逻辑
 -(void)dealloc{
     [self  offline:false];
     [self  stopOberver];
