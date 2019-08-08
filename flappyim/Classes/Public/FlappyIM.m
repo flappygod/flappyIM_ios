@@ -769,7 +769,16 @@
             Message* message=[array objectAtIndex:s];
             //转换一下
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
-           
+            //获取之前的消息ID
+            ChatMessage* former=[[DataBase shareInstance]getMessageByID:chatMsg.messageId];
+            //之前不存在
+            if(former==nil){
+                //添加数据
+                [[DataBase shareInstance] insert:chatMsg];
+                [self notifyNewMessage:chatMsg];
+            }else{
+                [[DataBase shareInstance] updateMessage:chatMsg];
+            }
             
         }
     }
@@ -782,6 +791,16 @@
             //转换一下
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
             //消息
+            //获取之前的消息ID
+            ChatMessage* former=[[DataBase shareInstance]getMessageByID:chatMsg.messageId];
+            //之前不存在
+            if(former==nil){
+                //添加数据
+                [[DataBase shareInstance] insert:chatMsg];
+                [self notifyNewMessage:chatMsg];
+            }else{
+                [[DataBase shareInstance] updateMessage:chatMsg];
+            }
         }
     }
 }

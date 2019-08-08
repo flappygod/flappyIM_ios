@@ -22,6 +22,13 @@ NS_ASSUME_NONNULL_BEGIN
 //插入消息
 -(Boolean)insert:(ChatMessage*)msg;
 
+//通过ID获取消息
+-(ChatMessage*)getMessageByID:(NSString*)messageID;
+
+//更新数据
+-(Boolean)updateMessage:(ChatMessage*)msg;
+
+
 @end
 
 NS_ASSUME_NONNULL_END
