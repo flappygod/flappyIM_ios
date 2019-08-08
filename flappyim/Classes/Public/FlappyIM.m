@@ -16,6 +16,7 @@
 #import <unistd.h>
 #import "Flappy.pbobjc.h"
 #import "FlappyData.h"
+#import "ChatMessage.h"
 #import "NetTool.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
@@ -136,12 +137,12 @@
     
     NetworkStatus netStatus = [reachability currentReachabilityStatus];
     switch (netStatus) {
-        case 0:
+            case 0:
             break;
-        case 1:
+            case 1:
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:5];
             break;
-        case 2:
+            case 2:
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:3];
             break;
         default:
@@ -692,7 +693,7 @@
     
     
     if (self.receiveData.length < 1)
-        return;
+    return;
     //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
     headL = 0;
     contentL = [self getContentLength:self.receiveData
@@ -764,9 +765,30 @@
         }
         //消息信息
         NSMutableArray* array=respones.msgArray;
-        for(int s=0;s<array.count;s++){
+        //转换
+        for(long s=array.count-1;s>=0;s--){
             Message* message=[array objectAtIndex:s];
-            NSLog(@"%@",message.messageContent);
+            //转换一下
+            ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
+            //搜索之前存在不存在
+            ChatMessage *joeSmith = (ChatMessage*)[ChatMessage findFirstByCriteria:[NSString stringWithFormat:@"WHERE messageId = '%@'",chatMsg.messageId]];
+            //不存在
+            if(joeSmith==nil){
+                //保存现在的
+                [chatMsg save];
+                [self notifyNewMessage:chatMsg];
+                //保存
+                self.user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
+                //保存最后一条数据
+                [FlappyData saveUser:self.user];
+            }else{
+                //覆盖之前的
+                joeSmith.messageSended=chatMsg.messageSended;
+                joeSmith.messageTableSeq=chatMsg.messageTableSeq;
+                joeSmith.messageDate=chatMsg.messageDate;
+                [joeSmith save];
+            }
+            
         }
     }
     //接收到新的消息
@@ -775,10 +797,35 @@
         NSMutableArray* array=respones.msgArray;
         for(int s=0;s<array.count;s++){
             Message* message=[array objectAtIndex:s];
-            NSLog(@"%@",message.messageContent);
+            //转换一下
+            ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
+            //搜索之前存在不存在
+            ChatMessage *joeSmith = (ChatMessage*)[ChatMessage findFirstByCriteria:[NSString stringWithFormat:@"WHERE messageId = '%@'",chatMsg.messageId]];
+            //不存在
+            if(joeSmith==nil){
+                //保存现在的
+                [chatMsg save];
+                [self notifyNewMessage:chatMsg];
+                //保存
+                self.user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
+                //保存最后一条数据
+                [FlappyData saveUser:self.user];
+            }else{
+                //覆盖之前的
+                joeSmith.messageSended=chatMsg.messageSended;
+                joeSmith.messageTableSeq=chatMsg.messageTableSeq;
+                joeSmith.messageDate=chatMsg.messageDate;
+                [joeSmith save];
+            }
         }
-        
     }
+}
+
+
+//通知有新的消息
+-(void)notifyNewMessage:(ChatMessage*)message{
+    //打印收到的新消息
+    NSLog(@"收到新的消息%@",message.messageContent);
 }
 
 
