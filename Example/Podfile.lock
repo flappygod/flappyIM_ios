@@ -20,8 +20,10 @@ PODS:
     - CocoaAsyncSocket (~> 7.6.3)
     - MJExtension (~> 3.1.0)
     - Protobuf (~> 3.9.0)
+    - Reachability (~> 3.2)
   - MJExtension (3.1.0)
   - Protobuf (3.9.0)
+  - Reachability (3.2)
 
 DEPENDENCIES:
   - flappyim (from `../`)
@@ -32,6 +34,7 @@ SPEC REPOS:
     - CocoaAsyncSocket
     - MJExtension
     - Protobuf
+    - Reachability
 
 EXTERNAL SOURCES:
   flappyim:
@@ -40,9 +43,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
-  flappyim: fa7eba8d11b8f56b9387658fea5543bb237d7b92
+  flappyim: 7b4ce8f518665ff1c9489d573ac058f61cf2aa69
   MJExtension: 6b69b3bef2864fd550ce1a184eda219e321209d2
   Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
 
 PODFILE CHECKSUM: feb42ff4229e00a2f94b2e56c132068f957e7df0
 

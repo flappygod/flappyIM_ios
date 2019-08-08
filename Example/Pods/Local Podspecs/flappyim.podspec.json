@@ -40,6 +40,9 @@
     ],
     "CocoaAsyncSocket": [
       "~> 7.6.3"
+    ],
+    "Reachability": [
+      "~> 3.2"
     ]
   }
 }

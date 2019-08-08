@@ -19,18 +19,19 @@
 #import "NetTool.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <Reachability/Reachability.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 
 @interface FlappyIM ()
 
-
+//用于监听网络变化
+@property (nonatomic,strong) Reachability* hostReachability;
+@property (nonatomic,strong) Reachability* internetReachability;
 //socket通信
 @property (nonatomic,strong) GCDAsyncSocket*  socket;
 //推送的ID
 @property (nonatomic,copy) NSString*  pushID;
-
-
 
 
 //读取的数据
@@ -129,13 +130,55 @@
     [self setupNotify];
 }
 
-//增加网络监听
+
+
+#pragma  NOTIFY 网络状态监听通知
 -(void)setupNotify{
-    // 监听网络状态改变的通知
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(setupNetwork)
-                                                 name:@"flappyim_notification"
+                                             selector:@selector(reachabilityChanged:)
+                                                 name:kReachabilityChangedNotification
                                                object:nil];
+    // 设置网络检测的站点
+    NSString *remoteHostName = @"www.baidu.com";
+    //创建
+    self.hostReachability = [Reachability reachabilityWithHostName:remoteHostName];
+    [self.hostReachability startNotifier];
+    [self updateInterfaceWithReachability:self.hostReachability];
+    //创建
+    self.internetReachability = [Reachability reachabilityForInternetConnection];
+    [self.internetReachability startNotifier];
+    [self updateInterfaceWithReachability:self.internetReachability];
+}
+//变化监听
+- (void) reachabilityChanged:(NSNotification *)note
+{
+    Reachability* curReach = [note object];
+    [self updateInterfaceWithReachability:curReach];
+}
+//更新网络状态
+- (void)updateInterfaceWithReachability:(Reachability *)reachability
+{
+    
+    NetworkStatus netStatus = [reachability currentReachabilityStatus];
+    switch (netStatus) {
+        case 0:
+            break;
+        case 1:
+            [self performSelector:@selector(setupNetwork) withObject:nil afterDelay:3];
+            break;
+        case 2:
+            [self performSelector:@selector(setupNetwork) withObject:nil afterDelay:3];
+            break;
+        default:
+            break;
+    }
+}
+//停止监听
+-(void)stopOberver{
+    //移除监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:kReachabilityChangedNotification
+                                                  object:nil];
 }
 
 //进行初始化
@@ -158,20 +201,6 @@
             }
         }];
     }
-}
-
-//清空
--(void)dealloc{
-    [self  offline:false];
-    [self  stopOberver];
-}
-
-//停止监听
--(void)stopOberver{
-    //移除监听
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"flappyim_notification"
-                                                  object:nil];
 }
 
 
@@ -350,12 +379,10 @@
         __weak typeof(self) safeSelf=self;
         //socket非正常退出的时候，重新登录
         self.dead = ^{
-            if([NetTool getCurrentNetworkState]!=0){
-                //3秒后重新执行登录
-                [safeSelf performSelector:@selector(setupNetwork)
-                               withObject:nil
-                               afterDelay:3];
-            }
+            //3秒后重新执行登录
+            [safeSelf performSelector:@selector(setupNetwork)
+                           withObject:nil
+                           afterDelay:3];
         };
     }
     
@@ -441,7 +468,7 @@
     //推送ID
     info.pushid=self.pushID;
     
-    
+
     //连接到服务器开始请求登录
     FlappyRequest* request=[[FlappyRequest alloc]init];
     //登录请求
@@ -466,8 +493,6 @@
  * Not called if there is an error.
  **/
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag{
-    
-    
     //数据
     [self.receiveData appendData:data];
     //读取data的头部占用字节 和 从头部读取内容长度
@@ -604,9 +629,6 @@
 - (void)socket:(GCDAsyncSocket *)sock didReceiveTrust:(SecTrustRef)trust completionHandler:(void (^)(BOOL shouldTrustPeer))completionHandler{
     
 }
-
-
-
 
 
 #pragma readData
@@ -761,7 +783,15 @@
         
         
     }
-    
+}
+
+
+
+#pragma  dealloc
+//清空
+-(void)dealloc{
+    [self  offline:false];
+    [self  stopOberver];
 }
 
 
