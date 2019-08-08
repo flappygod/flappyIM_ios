@@ -16,6 +16,7 @@
 #import <unistd.h>
 #import "Flappy.pbobjc.h"
 #import "FlappyData.h"
+#import "NetTool.h"
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 
@@ -38,6 +39,8 @@
 @property (nonatomic,strong) User*  user;
 //登录的数据
 @property (nonatomic,strong) id  loginData;
+//登录成功之后非正常退出的情况
+@property (nonatomic,strong) FlappyDead  dead;
 //成功
 @property (nonatomic,strong) FlappySuccess  success;
 //失败
@@ -117,17 +120,25 @@
     return [FlappyIM shareInstance];
 }
 
+
 //进行初始化
--(void)setup{
+-(void)setupNetwork{
     //自动登录
     User* user=[FlappyData getUser];
     //用户之前已经登录过
     if(user!=nil&&user.login==true){
         //开始
+        __weak typeof(self) safeSelf=self;
         [self autoLogin:^(id data) {
-            
+            NSLog(@"自动登录成功");
         } andFailure:^(NSError * error, NSInteger code) {
-            
+            //网络连着，但是我们登录失败了
+            if([NetTool getCurrentNetworkState]!=0){
+                //3秒后重新执行登录
+                [safeSelf performSelector:@selector(setupNetwork)
+                               withObject:nil
+                               afterDelay:3];
+            }
         }];
     }
 }
@@ -171,6 +182,7 @@
                                 userInfo:nil],RESULT_NETERROR);
         return ;
     }
+    
     //注册地址
     NSString *urlString = URL_login;
     
@@ -270,6 +282,8 @@
          withFailure:(FlappyFailure)failure{
     
     
+    
+    
     //建立长连接
     self.socket=[[GCDAsyncSocket alloc] initWithDelegate:self
                                            delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
@@ -302,6 +316,10 @@
     
 }
 
+
+
+
+#pragma heart beat  心跳
 //开启心跳
 -(void)startHeart:(id)sender{
     // 开启心跳
@@ -506,17 +524,7 @@
  **/
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err{
     NSLog(@"连接被关闭");
-    //登录失败
-    if(self.failure!=nil){
-        //失败
-        self.failure(err,RESULT_NETERROR);
-        //失败
-        self.failure=nil;
-        self.success=nil;
-    }
-    [self stopHeart];
-    //清空socket
-    self.socket=nil;
+    
 }
 
 /**
@@ -553,8 +561,47 @@
 
 
 
+
+
 #pragma readData
 #pragma mark - private methods  辅助方法
+
+//主动下线
+-(void)offline:(Boolean)regular{
+    //正常退出，非正常退出的回调不执行
+    if(regular){
+        self.dead=nil;
+    }
+    //非正常退出
+    if(self.dead!=nil){
+        //非正常退出
+        self.dead();
+        self.dead=nil;
+    }
+    //主动断开连接
+    if(self.socket!=nil){
+        [self.socket disconnect];
+    }
+    //登录失败
+    if(self.failure!=nil){
+        //失败
+        self.failure([NSError errorWithDomain:@"Socket closed by a new login thread"
+                                         code:0
+                                     userInfo:nil],
+                     RESULT_NETERROR);
+        //失败
+        self.failure=nil;
+        //清空
+        self.success=nil;
+    }
+    //心跳停止
+    [self stopHeart];
+    //清空socket
+    self.socket=nil;
+}
+
+
+
 /** 解析二进制数据：NSData --> 自定义模型对象 */
 - (void)parseContentDataWithHeadLength:(int32_t)headL withContentLength:(int32_t)contentL{
     

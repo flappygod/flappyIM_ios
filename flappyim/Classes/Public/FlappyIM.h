@@ -11,6 +11,11 @@
 
 
 
+//登录之后非正常关闭
+typedef void(^FlappyDead) ();
+
+
+
 //请求失败
 typedef void(^FlappyFailure) (NSError *_Nullable,NSInteger);
 

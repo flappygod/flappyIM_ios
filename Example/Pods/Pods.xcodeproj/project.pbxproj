@@ -106,6 +106,8 @@
 		88A0621A22FBBF08001411FF /* FlappyData.h in Headers */ = {isa = PBXBuildFile; fileRef = 88A0621822FBBF08001411FF /* FlappyData.h */; };
 		88A0621B22FBBF08001411FF /* FlappyData.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A0621922FBBF08001411FF /* FlappyData.m */; };
 		88A0621D22FBC0C1001411FF /* CommonDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 88A0621C22FBC0C1001411FF /* CommonDef.h */; };
+		88A0622122FBC464001411FF /* NetTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 88A0621F22FBC464001411FF /* NetTool.h */; };
+		88A0622222FBC464001411FF /* NetTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A0622022FBC464001411FF /* NetTool.m */; };
 		8980273D30E01B29383FD08BE0C4510C /* Timestamp.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 02432BB024B238D1E3EA54DB2319E5B1 /* Timestamp.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8A2E1E487FBFC3DF55C12C056BFA36A1 /* MJPropertyType.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CA6AA51B391F5E9CAE0A0727271FA7 /* MJPropertyType.m */; };
 		8B7108A79B1DF28B1D117451DE0383D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049F2BF3C73C6CFA87731DB9DD14B7EA /* Foundation.framework */; };
@@ -367,6 +369,8 @@
 		88A0621822FBBF08001411FF /* FlappyData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlappyData.h; sourceTree = "<group>"; };
 		88A0621922FBBF08001411FF /* FlappyData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlappyData.m; sourceTree = "<group>"; };
 		88A0621C22FBC0C1001411FF /* CommonDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDef.h; sourceTree = "<group>"; };
+		88A0621F22FBC464001411FF /* NetTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetTool.h; sourceTree = "<group>"; };
+		88A0622022FBC464001411FF /* NetTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetTool.m; sourceTree = "<group>"; };
 		89231AFF9E2FC47A8CB97E9B601915F9 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Source/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
 		89A11BB22AE42BAFB39B08D72FB4483C /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncUdpSocket.m; path = Source/GCD/GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 		89C3C3DC44C9ED68CB1DBCC2EC2A2493 /* Duration.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Duration.pbobjc.h; path = objectivec/google/protobuf/Duration.pbobjc.h; sourceTree = "<group>"; };
@@ -768,6 +772,7 @@
 		873EC9E2E42265A3F228285ED04C119E /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				88A0621E22FBC450001411FF /* NetTool */,
 				3CA5EF3873CCC4CB330DDDA230A6A6FC /* DateTool */,
 				9E7B7210F270AEB58F9377CAE723356A /* JsonTool */,
 				3AAED2617F646D1C10775B33301B4B83 /* StringTool */,
@@ -786,6 +791,15 @@
 			);
 			name = Data;
 			path = flappyim/Classes/Data;
+			sourceTree = "<group>";
+		};
+		88A0621E22FBC450001411FF /* NetTool */ = {
+			isa = PBXGroup;
+			children = (
+				88A0621F22FBC464001411FF /* NetTool.h */,
+				88A0622022FBC464001411FF /* NetTool.m */,
+			);
+			path = NetTool;
 			sourceTree = "<group>";
 		};
 		8B7EC044324C8B488F0117FC716E7FF6 /* Reachability */ = {
@@ -1100,6 +1114,7 @@
 				5744C5FE79E32D4FCEF0CBE34B6A6C25 /* flappyim-umbrella.h in Headers */,
 				C5DA715122E30AFDAD0502DE4D0B6F52 /* FlappyIM.h in Headers */,
 				C6EED634E357075D44CAD7CF0E8E6871 /* HBAsynTask.h in Headers */,
+				88A0622122FBC464001411FF /* NetTool.h in Headers */,
 				8C7F34C53326D2F920CF71418FDC22A9 /* JsonTool.h in Headers */,
 				88A0621A22FBBF08001411FF /* FlappyData.h in Headers */,
 				041CA3C394A83B85FD32B944CD983BD8 /* StringTool.h in Headers */,
@@ -1457,6 +1472,7 @@
 				84D02179FC5FBB07A3839234339694C0 /* Flappy.pbobjc.m in Sources */,
 				05AF8E52942C9E1906393419044841EA /* flappyim-dummy.m in Sources */,
 				88A0621B22FBBF08001411FF /* FlappyData.m in Sources */,
+				88A0622222FBC464001411FF /* NetTool.m in Sources */,
 				945FB1721C7FA86CAF8D66643C38BE85 /* FlappyIM.m in Sources */,
 				E9E89B508704AD4B09234929B6C8897B /* HBAsynTask.m in Sources */,
 				C311CD09B05C6E575612C79E9E9ADE17 /* JsonTool.m in Sources */,
