@@ -489,7 +489,8 @@
     //读取data的头部占用字节 和 从头部读取内容长度
     //验证结果：数据比较小时头部占用字节为1，数据比较大时头部占用字节为2
     int32_t headL = 0;
-    int32_t contentL = [self getContentLength:self.receiveData withHeadLength:&headL];
+    int32_t contentL = [PostTool getContentLength:self.receiveData
+                                   withHeadLength:&headL];
     if (contentL < 1){
         [sock readDataWithTimeout:-1 tag:0];
         return;
@@ -695,7 +696,7 @@
     return;
     //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
     headL = 0;
-    contentL = [self getContentLength:self.receiveData
+    contentL = [PostTool getContentLength:self.receiveData
                        withHeadLength:&headL];
     //实际包不足解析，继续接收下一个包
     if (headL + contentL > self.receiveData.length) return;
@@ -704,44 +705,7 @@
                        withContentLength:contentL];
 }
 
-/** 获取data数据的内容长度和头部长度: index --> 头部占用长度 (头部占用长度1-4个字节) */
-- (int32_t)getContentLength:(NSData *)data withHeadLength:(int32_t *)index{
-    int8_t tmp = [self readRawByte:data headIndex:index];
-    if (tmp >= 0) return tmp;
-    int32_t result = tmp & 0x7f;
-    if ((tmp = [self readRawByte:data headIndex:index]) >= 0) {
-        result |= tmp << 7;
-    } else {
-        result |= (tmp & 0x7f) << 7;
-        if ((tmp = [self readRawByte:data headIndex:index]) >= 0) {
-            result |= tmp << 14;
-        } else {
-            result |= (tmp & 0x7f) << 14;
-            if ((tmp = [self readRawByte:data headIndex:index]) >= 0) {
-                result |= tmp << 21;
-            } else {
-                result |= (tmp & 0x7f) << 21;
-                result |= (tmp = [self readRawByte:data headIndex:index]) << 28;
-                if (tmp < 0) {
-                    for (int i = 0; i < 5; i++) {
-                        if ([self readRawByte:data headIndex:index] >= 0) {
-                            return result;
-                        }
-                    }
-                    result = -1;
-                }
-            }
-        }
-    }
-    return result;
-}
 
-/** 读取字节 */
-- (int8_t)readRawByte:(NSData *)data headIndex:(int32_t *)index{
-    if (*index >= data.length) return -1;
-    *index = *index + 1;
-    return ((int8_t *)data.bytes)[*index - 1];
-}
 
 /** 处理解析出来的信息 */
 - (void)saveReceiveInfo:(FlappyResponse *)respones{
@@ -750,12 +714,10 @@
     {
         //登录成功
         if(self.success!=nil){
-            
             //用户已经登录过了
             self.user.login=true;
             //保存用户登录数据
             [FlappyData saveUser:self.user];
-            
             self.success(self.loginData);
             //清空回调和数据
             self.success=nil;
@@ -809,14 +771,11 @@
     }
 }
 
-
 //通知有新的消息
 -(void)notifyNewMessage:(ChatMessage*)message{
     //打印收到的新消息
     NSLog(@"收到新的消息::%@",message.messageContent);
 }
-
-
 
 #pragma  dealloc
 //清空
