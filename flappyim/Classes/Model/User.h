@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 //用户的注册时间
 @property(nonatomic,copy) NSString* userCreateDate;
 //用户是否删除
-@property(nonatomic,copy) NSInteger userDeleted;
+@property(nonatomic,assign) NSInteger userDeleted;
 //用户的删除s日期
 @property(nonatomic,copy) NSString* userDeletedDate;
 //用户数据
