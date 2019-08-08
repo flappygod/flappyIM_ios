@@ -21,7 +21,7 @@
     //初始化一个AFHTTPSessionManager
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //设置请求体数据为json类型
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
     //设置响应体数据为json类型
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     //请求数据
