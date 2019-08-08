@@ -621,12 +621,6 @@
     if(regular){
         self.dead=nil;
     }
-    //非正常退出
-    if(self.dead!=nil){
-        //非正常退出
-        self.dead();
-        self.dead=nil;
-    }
     //主动断开连接
     if(self.socket!=nil){
         [self.socket disconnect];
@@ -647,6 +641,12 @@
     [self stopHeart];
     //清空socket
     self.socket=nil;
+    //非正常退出
+    if(self.dead!=nil){
+        //非正常退出
+        self.dead();
+        self.dead=nil;
+    }
 }
 
 
