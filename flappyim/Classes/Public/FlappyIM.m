@@ -813,7 +813,7 @@
 //通知有新的消息
 -(void)notifyNewMessage:(ChatMessage*)message{
     //打印收到的新消息
-    NSLog(@"收到新的消息%@",message.messageContent);
+    NSLog(@"收到新的消息::%@",message.messageContent);
 }
 
 
