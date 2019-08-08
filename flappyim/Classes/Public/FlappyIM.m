@@ -463,7 +463,8 @@
     [self.socket readDataWithTimeout:-1 tag:0];
     //开启心跳线程
     [self performSelectorOnMainThread:@selector(startHeart:)
-                           withObject:nil waitUntilDone:false];
+                           withObject:nil
+                        waitUntilDone:false];
     
 }
 
