@@ -11,6 +11,7 @@
 #endif
 
 #import "FlappyIM.h"
+#import "PostTool.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
 FOUNDATION_EXPORT const unsigned char flappyimVersionString[];

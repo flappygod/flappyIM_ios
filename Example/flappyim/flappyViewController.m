@@ -21,7 +21,7 @@
     [super viewDidLoad];
     
     
-    //[[FlappyIM shareInstance] setup];
+    [[FlappyIM shareInstance] setup];
     
     //创建登录
     UITapGestureRecognizer* gs=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(login)];
@@ -32,12 +32,12 @@
 
 //登录
 -(void)login{
-//    [[FlappyIM shareInstance] login:@"100" andSuccess:^(id data) {
-//        //登录成功
-//        NSLog(@"登录成功");
-//    } andFailure:^(NSError * error, NSInteger code) {
-//        NSLog(@"登录失败");
-//    }];
+    [[FlappyIM shareInstance] login:@"100" andSuccess:^(id data) {
+        //登录成功
+        NSLog(@"登录成功");
+    } andFailure:^(NSError * error, NSInteger code) {
+        NSLog(@"登录失败");
+    }];
 }
 
 
