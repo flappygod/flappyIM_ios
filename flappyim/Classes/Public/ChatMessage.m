@@ -1,12 +1,12 @@
 //
-//  Message.m
+//  ChatMessage.m
 //  AFNetworking
 //
 //  Created by lijunlin on 2019/8/8.
 //
 
-#import "Message.h"
+#import "ChatMessage.h"
 
-@implementation Message
+@implementation ChatMessage
 
 @end

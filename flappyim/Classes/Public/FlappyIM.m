@@ -22,6 +22,7 @@
 #import <Reachability/Reachability.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <SQLitePersistentObject/SQLitePersistentObject.h>
+#import <SQLitePersistentObject/SQLiteInstanceManager.h>
 
 
 @interface FlappyIM ()

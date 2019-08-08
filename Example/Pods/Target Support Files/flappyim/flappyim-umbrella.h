@@ -11,6 +11,7 @@
 #endif
 
 #import "FlappyIM.h"
+#import "Message.h"
 #import "PostTool.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
