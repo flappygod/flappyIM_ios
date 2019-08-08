@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <CocoaAsyncSocket/GCDAsyncUdpSocket.h>
+#import "PostTool.h"
 
 
 

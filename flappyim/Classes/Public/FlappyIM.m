@@ -17,7 +17,6 @@
 #import "Flappy.pbobjc.h"
 #import "FlappyData.h"
 #import "NetTool.h"
-#import "PostTool.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <Reachability/Reachability.h>
