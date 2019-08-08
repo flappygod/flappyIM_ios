@@ -129,10 +129,10 @@
         case 0:
             break;
         case 1:
-            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:3];
+            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:5];
             break;
         case 2:
-            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:3];
+            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:5];
             break;
         default:
             break;
@@ -170,7 +170,7 @@
                 //3秒后重新执行登录
                 [safeSelf performSelector:@selector(setupReconnect)
                                withObject:nil
-                               afterDelay:3];
+                               afterDelay:5];
             }];
         }
     }
