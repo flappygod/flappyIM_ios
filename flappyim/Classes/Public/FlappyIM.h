@@ -11,17 +11,6 @@
 
 
 
-//登录之后非正常关闭
-typedef void(^FlappyDead) (void);
-
-
-
-//请求失败
-typedef void(^FlappyFailure) (NSError *_Nullable,NSInteger);
-
-//请求成功
-typedef void(^FlappySuccess) (id _Nullable);
-
 
 NS_ASSUME_NONNULL_BEGIN
 
