@@ -39,8 +39,10 @@
         NSLog(@"登录失败");
     }];
     
-    
-    [FlappyIM shareInstance] a
+    __weak typeof(self) safeSelf=self;
+    [[FlappyIM shareInstance] addListener:^(ChatMessage * _Nullable message) {
+        safeSelf.lable.text=message.messageContent;
+    }];
 }
 
 

@@ -73,7 +73,7 @@
     //推送ID
     _sharedSingleton.pushID=@"123456";
     _sharedSingleton.receiveData=[[NSMutableData alloc]init];
-    _sharedSingleton.callbacks=[NSMutableDictionary alloc]init;
+    _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
     return _sharedSingleton;
 }
 
@@ -689,7 +689,7 @@
     //数量
     for(int s=0;array.count;s++){
         NSString* str=[array objectAtIndex:s];
-        MessageListener* listener=[self.callbacks objectForKey:str];
+        MessageListener listener=[self.callbacks objectForKey:str];
         listener(message);
     }
 }
