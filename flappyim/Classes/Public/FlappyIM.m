@@ -219,7 +219,7 @@
     NSDictionary *parameters = @{@"userID":@"",
                                  @"userExtendID":userExtendID,
                                  @"device":DEVICE_TYPE,
-                                 @"pushid":self.pushID,
+                                 @"pushid":self.pushID
                                  };
     //赋值给当前的回调
     self.success=success;
@@ -271,7 +271,7 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userID":[FlappyData getUser].userId,
                                  @"device":DEVICE_TYPE,
-                                 @"pushid":self.pushID,
+                                 @"pushid":self.pushID
                                  };
     //赋值给当前的回调
     self.success = success;
