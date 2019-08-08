@@ -154,6 +154,9 @@
     if(user==nil||user.login==false){
         return;
     }
+    if(self.socket.isConnected){
+        return;
+    }
     //开始
     __weak typeof(self) safeSelf=self;
     //如果网络是正常连接的
