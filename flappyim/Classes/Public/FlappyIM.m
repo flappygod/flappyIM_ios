@@ -648,7 +648,9 @@
             if(former==nil){
                 //添加数据
                 [[DataBase shareInstance] insert:chatMsg];
-                [self performSelectorOnMainThread:@selector(notifyNewMessage) withObject:chatMsg waitUntilDone:false];
+                [self performSelectorOnMainThread:@selector(notifyNewMessage)
+                                       withObject:chatMsg
+                                    waitUntilDone:false];
                 self.user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
                 [FlappyData saveUser:self.user];
             }else{
