@@ -17,10 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shareInstance;
 
 //初始化数据库
-+(void)setup;
+-(void)setup;
 
 //插入消息
-+(Boolean)insert:(ChatMessage*)msg;
+-(Boolean)insert:(ChatMessage*)msg;
 
 @end
 

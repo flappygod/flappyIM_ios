@@ -39,7 +39,7 @@
 
 
 //初始化数据库
-+(void)setup{
+-(void)setup{
     //1.创建database路径
     NSString *docuPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     NSString *dbPath = [docuPath stringByAppendingPathComponent:@"flappyim.db"];
@@ -67,7 +67,7 @@
 
 
 //插入消息
-+(Boolean)insert:(ChatMessage*)msg{
+-(Boolean)insert:(ChatMessage*)msg{
     
     //1.创建database路径
     NSString *docuPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
