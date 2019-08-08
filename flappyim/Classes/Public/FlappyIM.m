@@ -234,6 +234,8 @@
                                 userInfo:nil],RESULT_NETERROR);
         return ;
     }
+    
+    
     //自动登录
     NSString *urlString = URL_autoLogin;
     
@@ -258,12 +260,15 @@
               NSDictionary* dic=data[@"user"];
               //用户
               User* user=[User mj_objectWithKeyValues:dic];
-              //连接服务器
-              [self connectSocket:data[@"serverIP"]
-                         withPort:data[@"serverPort"]
-                         withUser:user
-                      withSuccess:success
-                      withFailure:failure];
+              //用户正常下线
+              [safeSelf offline:true];
+              //用户下线之后重新连接服务器
+              [safeSelf connectSocket:data[@"serverIP"]
+                             withPort:data[@"serverPort"]
+                             withUser:user
+                          withSuccess:success
+                          withFailure:failure];
+              
               
           } withFailure:^(NSError * error, NSInteger code) {
               //登录失败，清空回调
@@ -280,8 +285,6 @@
             withUser:(User*)user
          withSuccess:(FlappySuccess)success
          withFailure:(FlappyFailure)failure{
-    
-    
     
     
     //建立长连接
@@ -312,6 +315,17 @@
     else{
         //保存用户数据
         self.user=user;
+        //非正常退出的时候，延迟重新执行
+        __weak typeof(self) safeSelf=self;
+        //socket非正常退出的时候，重新登录
+        self.dead = ^{
+            if([NetTool getCurrentNetworkState]!=0){
+                //3秒后重新执行登录
+                [safeSelf performSelector:@selector(setupNetwork)
+                               withObject:nil
+                               afterDelay:3];
+            }
+        };
     }
     
 }
@@ -394,6 +408,7 @@
     //推送ID
     info.pushid=self.pushID;
     
+    
     //连接到服务器开始请求登录
     FlappyRequest* request=[[FlappyRequest alloc]init];
     //登录请求
@@ -403,11 +418,9 @@
     //请求数据，已经GPBComputeRawVarint32SizeForInteger
     NSData* reqData=[request delimitedData];
     //写入请求数据
-    [self.socket  writeData:reqData withTimeout:-1 tag:0];
-    
-    //开始接收数据
+    [self.socket writeData:reqData withTimeout:-1 tag:0];
+    //开启数据读取
     [self.socket readDataWithTimeout:-1 tag:0];
-    
     //开启心跳线程
     [self performSelectorOnMainThread:@selector(startHeart:)
                            withObject:nil waitUntilDone:false];
@@ -523,8 +536,8 @@
  * Of course, this depends on how your state machine is configured.
  **/
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err{
-    NSLog(@"连接被关闭");
-    
+    //非正常d退出
+    [self offline:false];
 }
 
 /**
