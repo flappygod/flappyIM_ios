@@ -106,6 +106,7 @@
     //创建数据库
     unlink("flappyim.db");
     [[SQLiteInstanceManager sharedManager] setDatabaseFilepath:@"flappyim.db"];
+    [[SQLiteInstanceManager sharedManager] setDatabaseName:@"flappyim.db"];
 }
 
 #pragma  NOTIFY 网络状态监听通知
