@@ -776,6 +776,8 @@
                 //添加数据
                 [[DataBase shareInstance] insert:chatMsg];
                 [self notifyNewMessage:chatMsg];
+                self.user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
+                [FlappyData saveUser:self.user];
             }else{
                 [[DataBase shareInstance] updateMessage:chatMsg];
             }
@@ -798,6 +800,8 @@
                 //添加数据
                 [[DataBase shareInstance] insert:chatMsg];
                 [self notifyNewMessage:chatMsg];
+                self.user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
+                [FlappyData saveUser:self.user];
             }else{
                 [[DataBase shareInstance] updateMessage:chatMsg];
             }
