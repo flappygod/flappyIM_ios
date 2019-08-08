@@ -159,7 +159,7 @@
     //如果网络是正常连接的
     if([NetTool getCurrentNetworkState]!=0){
         //防止重复请求
-        if(self.success!=nil||self.failure!=nil){
+        if(self.success==nil&&self.failure==nil){
             [self autoLogin:^(id data) {
                 NSLog(@"自动登录成功");
             } andFailure:^(NSError * error, NSInteger code) {
@@ -190,9 +190,9 @@
     
     //请求数据
     [PostTool postRequest:urlString
-       withParameters:parameters
-          withSuccess:success
-          withFailure:failure];
+           withParameters:parameters
+              withSuccess:success
+              withFailure:failure];
     
 }
 
@@ -228,28 +228,28 @@
     __weak typeof(self) safeSelf=self;
     //请求数据
     [PostTool postRequest:urlString
-       withParameters:parameters
-          withSuccess:^(id data) {
-              
-              //赋值登录数据
-              safeSelf.loginData=data;
-              //得到当前的用户数据
-              NSDictionary* dic=data[@"user"];
-              //用户
-              User* user=[User mj_objectWithKeyValues:dic];
-              //连接服务器
-              [self connectSocket:data[@"serverIP"]
-                         withPort:data[@"serverPort"]
-                         withUser:user
-                      withSuccess:success
-                      withFailure:failure];
-              
-          } withFailure:^(NSError * error, NSInteger code) {
-              //登录失败，清空回调
-              failure(error,code);
-              safeSelf.success=nil;
-              safeSelf.failure =nil;
-          }];
+           withParameters:parameters
+              withSuccess:^(id data) {
+                  
+                  //赋值登录数据
+                  safeSelf.loginData=data;
+                  //得到当前的用户数据
+                  NSDictionary* dic=data[@"user"];
+                  //用户
+                  User* user=[User mj_objectWithKeyValues:dic];
+                  //连接服务器
+                  [self connectSocket:data[@"serverIP"]
+                             withPort:data[@"serverPort"]
+                             withUser:user
+                          withSuccess:success
+                          withFailure:failure];
+                  
+              } withFailure:^(NSError * error, NSInteger code) {
+                  //登录失败，清空回调
+                  failure(error,code);
+                  safeSelf.success=nil;
+                  safeSelf.failure =nil;
+              }];
 }
 
 //自动登录
@@ -274,37 +274,37 @@
                                  @"pushid":self.pushID,
                                  };
     //赋值给当前的回调
-    self.success=success;
+    self.success = success;
     self.failure = failure;
     
     __weak typeof(self) safeSelf=self;
     //请求数据
     [PostTool postRequest:urlString
-       withParameters:parameters
-          withSuccess:^(id data) {
-              
-              //赋值登录数据
-              safeSelf.loginData=data;
-              //得到当前的用户数据
-              NSDictionary* dic=data[@"user"];
-              //用户
-              User* user=[User mj_objectWithKeyValues:dic];
-              //用户正常下线
-              [safeSelf offline:true];
-              //用户下线之后重新连接服务器
-              [safeSelf connectSocket:data[@"serverIP"]
-                             withPort:data[@"serverPort"]
-                             withUser:user
-                          withSuccess:success
-                          withFailure:failure];
-              
-              
-          } withFailure:^(NSError * error, NSInteger code) {
-              //登录失败，清空回调
-              failure(error,code);
-              safeSelf.success=nil;
-              safeSelf.failure =nil;
-          }];
+           withParameters:parameters
+              withSuccess:^(id data) {
+                  
+                  //赋值登录数据
+                  safeSelf.loginData=data;
+                  //得到当前的用户数据
+                  NSDictionary* dic=data[@"user"];
+                  //用户
+                  User* user=[User mj_objectWithKeyValues:dic];
+                  //用户正常下线
+                  [safeSelf offline:true];
+                  //用户下线之后重新连接服务器
+                  [safeSelf connectSocket:data[@"serverIP"]
+                                 withPort:data[@"serverPort"]
+                                 withUser:user
+                              withSuccess:success
+                              withFailure:failure];
+                  
+                  
+              } withFailure:^(NSError * error, NSInteger code) {
+                  //登录失败，清空回调
+                  failure(error,code);
+                  safeSelf.success=nil;
+                  safeSelf.failure =nil;
+              }];
 }
 
 
@@ -437,7 +437,7 @@
     //推送ID
     info.pushid=self.pushID;
     
-
+    
     //连接到服务器开始请求登录
     FlappyRequest* request=[[FlappyRequest alloc]init];
     //登录请求
