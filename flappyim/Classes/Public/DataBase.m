@@ -37,7 +37,6 @@
     return [DataBase shareInstance];
 }
 
-
 //初始化数据库
 -(void)setup{
     //获取db
@@ -51,7 +50,6 @@
     BOOL result = [db executeUpdate:sql];
     if (result) {
         NSLog(@"create table success");
-        
     }
     [db close];
 }
@@ -60,8 +58,8 @@
 -(FMDatabase*)openDB{
     //1.创建database路径
     NSString *docuPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    //打开
     NSString *dbPath = [docuPath stringByAppendingPathComponent:@"flappyim.db"];
-    NSLog(@"!!!dbPath = %@",dbPath);
     //2.创建对应路径下数据库
     FMDatabase* db = [FMDatabase databaseWithPath:dbPath];
     //3.在数据库中进行增删改查操作时，需要判断数据库是否open，如果open失败，可能是权限或者资源不足，数据库操作完成通常使用close关闭数据库
@@ -73,11 +71,8 @@
     return db;
 }
 
-
-
 //插入消息
 -(Boolean)insert:(ChatMessage*)msg{
-
     //获取db
     FMDatabase* db=[self openDB];
     if(db==nil){
@@ -91,8 +86,6 @@
         return false;
     }
 }
-
-
 
 //通过ID获取消息
 -(ChatMessage*)getMessageByID:(NSString*)messageID{
@@ -142,8 +135,6 @@
         return false;
     }
 }
-
-
 
 
 @end
