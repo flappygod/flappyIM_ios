@@ -1,6 +1,0 @@
-framework module SQLitePersistentObject {
-  umbrella header "SQLitePersistentObject-umbrella.h"
-
-  export *
-  module * { export * }
-}
