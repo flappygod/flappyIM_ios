@@ -154,7 +154,8 @@
     if(user==nil||user.login==false){
         return;
     }
-    if(self.socket.isConnected){
+    //当前是已经连接的，不需要继续登录了
+    if(self.socket!=nil&&self.socket.isConnected){
         return;
     }
     //开始
