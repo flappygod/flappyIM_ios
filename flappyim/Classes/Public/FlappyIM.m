@@ -416,16 +416,16 @@
     
     //为空直接出错
     if([FlappyData getUser]==nil){
+        //返回没有登录
         failure([NSError errorWithDomain:@"账户未登录"
                                     code:0
                                 userInfo:nil],
-                RESULT_FAILURE);
+                RESULT_NOTLOGIN);
         return ;
     }
     
     //注册地址
     NSString *urlString = URL_createSession;
-    
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userOne":[FlappyData getUser].userExtendId,
                                  @"userTwo":userTwo,
@@ -434,17 +434,14 @@
     [PostTool postRequest:urlString
            withParameters:parameters
               withSuccess:^(id data) {
-                  
                   //获取model
                   SessionModel* model=[SessionModel mj_objectWithKeyValues:data];
-                  
                   //创建session
                   FlappySession* session=[[FlappySession alloc]init];
                   session.userOne=[FlappyData getUser].userExtendId;
                   session.userTwo=model.userTwo.userExtendId;
                   session.session=model;
                   success(session);
-                  
               } withFailure:^(NSError * error, NSInteger code) {
                   //登录失败，清空回调
                   failure(error,code);

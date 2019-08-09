@@ -38,14 +38,16 @@
 
 
 
-//请求失败
+//请求出错
 #define  RESULT_FAILURE    0
 //请求成功
 #define  RESULT_SUCCESS    1
-//数据解析失败
+//解析失败
 #define  RESULT_JSONERROR  2
-//网络连接失败
+//网络问题
 #define  RESULT_NETERROR   3
+//未登录
+#define  RESULT_NOTLOGIN   4
 
 
 
