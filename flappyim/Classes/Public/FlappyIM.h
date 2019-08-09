@@ -70,10 +70,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)addListener:(MessageListener)listener
      withSessionID:(NSString*)sessionID;
 
-//移除某个会话的监听
+//移除某个session的监听
 -(void)removeListener:(MessageListener)listener
         withSessionID:(NSString*)sessionID;
-
 
 
 @end

@@ -34,7 +34,6 @@
 		1B44B5E1FDC15D1175AB9B3294E82ED3 /* Pods-flappyim_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A212568FADE8B66EF1025FC28B28A97 /* Pods-flappyim_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BF595CF10769CEB4C1434ACB99C8BD4 /* Flappy.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = F9D7F772062A75EC9BC69CAB78803538 /* Flappy.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1C74302537404B0A04ACF8E69E8DA708 /* NetTool.m in Sources */ = {isa = PBXBuildFile; fileRef = BDDB2FE52DA0DA49EE0A71359885E1BD /* NetTool.m */; };
-		1D3D43BB3F9256604282299A52AF2043 /* HBAsynTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 741C5F76BB2B2B48EA883D060F74A7DB /* HBAsynTask.m */; };
 		1E055197012822FCC22850C82E9EEC01 /* FieldMask.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = B59E1BEAB4947131DBE5B8DEA11E4BB9 /* FieldMask.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1F292B5410B16DBF60D1F47A48216622 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 89DE52F145FD246CD4D0DBF953FD5202 /* GCDAsyncSocket.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		1FDF6FD7CF96B315FF19342F739EE607 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = A19FD42E6FBEEC8CD9AF7DAED9EA3823 /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -130,6 +129,8 @@
 		870044029B3BA449A0932AAE3A495DE9 /* AFAutoPurgingImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 60CF475157752EDE227105F86C0ADE5C /* AFAutoPurgingImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87A1F2C0A149B91ED404939E51CE3B39 /* Duration.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 041353FF25CA596457D93ECEE16E4CD9 /* Duration.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		87F2937F85E10AB6BE0FCFE78A320CA3 /* DateTimeTool.h in Headers */ = {isa = PBXBuildFile; fileRef = F6BBEA2674B11EC58118400686A7B6B7 /* DateTimeTool.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		8862865622FD48D200457F6D /* FlappySender.h in Headers */ = {isa = PBXBuildFile; fileRef = 8862865422FD48D200457F6D /* FlappySender.h */; };
+		8862865722FD48D200457F6D /* FlappySender.m in Sources */ = {isa = PBXBuildFile; fileRef = 8862865522FD48D200457F6D /* FlappySender.m */; };
 		8980273D30E01B29383FD08BE0C4510C /* Timestamp.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CBE99CEF8FB2A8EF8024A6DB3453B39 /* Timestamp.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8A23CC839CE67E1AED85169FBDCF42D6 /* FlappyConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 00E7AFF5D39FCBD7BC0064F421D8F821 /* FlappyConfig.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		8A2E1E487FBFC3DF55C12C056BFA36A1 /* MJPropertyType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D358FAA9EDB638C8A1FFF069FEBDE47 /* MJPropertyType.m */; };
@@ -195,7 +196,6 @@
 		E36FDC51A8E9830AA251C349D86EF0D9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A83CCD862C36D3F75C8FEA4AC8B6DDB /* Foundation.framework */; };
 		E41824B4602B0F5C676A1E4F2200A8C2 /* PostTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1C10B0377C82B2CBE92F4E4A982BEB /* PostTool.m */; };
 		E6775033B3F0080B56E29AB395A08867 /* NSString+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EF9D8F3E1884A3CC2534591E5D758B /* NSString+MJExtension.m */; };
-		E6AC471431DE1B1D3CD026404DB452A2 /* HBAsynTask.h in Headers */ = {isa = PBXBuildFile; fileRef = BCABCBA9ADBBD838B64A9B802EE46AB7 /* HBAsynTask.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		E6E10AE979D5A9E30934CAD2E3EC39A3 /* GPBWellKnownTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D958B55C4D02120FB0B540260FAA92 /* GPBWellKnownTypes.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E8B01D8A3CBF9E3C419F87B5FD3069E3 /* GPBExtensionInternals.h in Headers */ = {isa = PBXBuildFile; fileRef = 077A3B34EF7A7189B88EF30FB7D44A6D /* GPBExtensionInternals.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E90A83A08EF5009B8D655A87CA33FD93 /* ChatMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 076B6A9C5E6B31DC717AD91CBD6BC070 /* ChatMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -433,7 +433,6 @@
 		6DB7E31D5DB75EB5CB37286E3CDAF927 /* Reachability-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Reachability-prefix.pch"; sourceTree = "<group>"; };
 		7138EFE07A984524F4E8A61EA346F2F2 /* NSString+MJExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSString+MJExtension.h"; path = "MJExtension/NSString+MJExtension.h"; sourceTree = "<group>"; };
 		739B164C44D2DE0DCD16BFA0070946A2 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseQueue.h; path = src/fmdb/FMDatabaseQueue.h; sourceTree = "<group>"; };
-		741C5F76BB2B2B48EA883D060F74A7DB /* HBAsynTask.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = HBAsynTask.m; sourceTree = "<group>"; };
 		74D840D63307FDB47325E612145CD483 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Source/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
 		75355A33EC06870E351B23CD4366209B /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIActivityIndicatorView+AFNetworking.h"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
 		7547ACEB7AE09A8DA296AD23A664F2DB /* UploadImageTool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = UploadImageTool.m; sourceTree = "<group>"; };
@@ -451,6 +450,8 @@
 		84579E7F75EBFAF3DE653FCFE5D4F014 /* FMDB.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDB.h; path = src/fmdb/FMDB.h; sourceTree = "<group>"; };
 		86266378AADE171657C3E5D025721276 /* FMDB-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FMDB-Info.plist"; sourceTree = "<group>"; };
 		865B99DB6ED1BC3C3599085A6A477545 /* Pods-flappyim_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-flappyim_Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		8862865422FD48D200457F6D /* FlappySender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlappySender.h; sourceTree = "<group>"; };
+		8862865522FD48D200457F6D /* FlappySender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlappySender.m; sourceTree = "<group>"; };
 		8873BF213925B82E168B32DC60167427 /* CocoaAsyncSocket-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "CocoaAsyncSocket-Info.plist"; sourceTree = "<group>"; };
 		89DE52F145FD246CD4D0DBF953FD5202 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Source/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
 		8A212568FADE8B66EF1025FC28B28A97 /* Pods-flappyim_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-flappyim_Tests-umbrella.h"; sourceTree = "<group>"; };
@@ -518,7 +519,6 @@
 		B59E1BEAB4947131DBE5B8DEA11E4BB9 /* FieldMask.pbobjc.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FieldMask.pbobjc.m; path = objectivec/google/protobuf/FieldMask.pbobjc.m; sourceTree = "<group>"; };
 		B892DB4B535881CF2CA20C93C9C46035 /* AFImageDownloader.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFImageDownloader.m; path = "UIKit+AFNetworking/AFImageDownloader.m"; sourceTree = "<group>"; };
 		B8A9BE56EA8D963AF4EAA179A726B0FE /* FMDatabasePool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabasePool.m; path = src/fmdb/FMDatabasePool.m; sourceTree = "<group>"; };
-		BCABCBA9ADBBD838B64A9B802EE46AB7 /* HBAsynTask.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = HBAsynTask.h; sourceTree = "<group>"; };
 		BD78A833FCC435FFA24A6F053CA54A94 /* JsonTool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = JsonTool.m; sourceTree = "<group>"; };
 		BDA5E00BBCB06F793B57964A63D23226 /* Pods-flappyim_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-flappyim_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		BDDB2FE52DA0DA49EE0A71359885E1BD /* NetTool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = NetTool.m; sourceTree = "<group>"; };
@@ -893,7 +893,7 @@
 		6C6F4443AA626EAB7D7639C315D5523C /* flappyim */ = {
 			isa = PBXGroup;
 			children = (
-				ECAF6692753F2EA8BBB1CA97095DC894 /* Async */,
+				ECAF6692753F2EA8BBB1CA97095DC894 /* Send */,
 				1FC537E6C09126C570DB9BAA14C06CD8 /* Config */,
 				34F44DC2A2CF6895ADF1DFFED65A9C87 /* Data */,
 				6F22AB3BF2C06BA8382D42ABCD8AFBBB /* Pod */,
@@ -1227,14 +1227,14 @@
 			path = "Target Support Files/Pods-flappyim_Tests";
 			sourceTree = "<group>";
 		};
-		ECAF6692753F2EA8BBB1CA97095DC894 /* Async */ = {
+		ECAF6692753F2EA8BBB1CA97095DC894 /* Send */ = {
 			isa = PBXGroup;
 			children = (
-				BCABCBA9ADBBD838B64A9B802EE46AB7 /* HBAsynTask.h */,
-				741C5F76BB2B2B48EA883D060F74A7DB /* HBAsynTask.m */,
+				8862865422FD48D200457F6D /* FlappySender.h */,
+				8862865522FD48D200457F6D /* FlappySender.m */,
 			);
-			name = Async;
-			path = flappyim/Classes/Async;
+			name = Send;
+			path = flappyim/Classes/Send;
 			sourceTree = "<group>";
 		};
 		FF6B12497AEDE55854CFB4C7177E5F9F /* Support Files */ = {
@@ -1333,7 +1333,6 @@
 				DA8890EB3C23ED16A59783E8A35364CF /* flappyim-umbrella.h in Headers */,
 				3F5ACEF5C3329E6517C3C85A283F9F31 /* FlappyIM.h in Headers */,
 				7A152EF6E070AA218435D2939702CC38 /* FlappySession.h in Headers */,
-				E6AC471431DE1B1D3CD026404DB452A2 /* HBAsynTask.h in Headers */,
 				35E6BCC198EBC5DC56345D01F75C3BA0 /* JsonTool.h in Headers */,
 				FB91813ED893CA5C2799170739F95B2E /* NetTool.h in Headers */,
 				81D3CB2EA29870DFBB74CF13AECB78C2 /* PostTool.h in Headers */,
@@ -1399,6 +1398,7 @@
 				3E112DA53DD725C9A3185A54EB342EAF /* AFSecurityPolicy.h in Headers */,
 				17D6A066C5F987FEFF8B89D7EFDFD375 /* AFURLRequestSerialization.h in Headers */,
 				47FF1D17418AB1144FDE0E46427F4877 /* AFURLResponseSerialization.h in Headers */,
+				8862865622FD48D200457F6D /* FlappySender.h in Headers */,
 				D59E2A517A48D101120EB57F90F140A5 /* AFURLSessionManager.h in Headers */,
 				B5AD0B8F0F9304975A01978B2908B62F /* UIActivityIndicatorView+AFNetworking.h in Headers */,
 				AEA4CF8EE7E08C13B4A71A634F9F3B5B /* UIButton+AFNetworking.h in Headers */,
@@ -1760,7 +1760,6 @@
 				B07D6C0117BE896766E7AF6C66A9C315 /* flappyim-dummy.m in Sources */,
 				333CB6F187514BF96B9528E8EEDF7706 /* FlappyIM.m in Sources */,
 				8F0EF6FF3822A7583435EBEF7F92F294 /* FlappySession.m in Sources */,
-				1D3D43BB3F9256604282299A52AF2043 /* HBAsynTask.m in Sources */,
 				3F2D2AC6899C4281368F167C9D49A6FC /* JsonTool.m in Sources */,
 				1C74302537404B0A04ACF8E69E8DA708 /* NetTool.m in Sources */,
 				E41824B4602B0F5C676A1E4F2200A8C2 /* PostTool.m in Sources */,
@@ -1800,6 +1799,7 @@
 				8F96E82F250EE718FA3F08AC9AB58423 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				34A7C5747B4C0825465453E196E57FAA /* UIButton+AFNetworking.m in Sources */,
 				AECB9FD1C271F734476CBF6E84BBFC51 /* UIImageView+AFNetworking.m in Sources */,
+				8862865722FD48D200457F6D /* FlappySender.m in Sources */,
 				98114570DFFDF5BD81B7724B4810501D /* UIProgressView+AFNetworking.m in Sources */,
 				D29F2AD07AF58334781F008905C30C35 /* UIRefreshControl+AFNetworking.m in Sources */,
 				DC2186197E507C0C73DFB0600D54867A /* UIWebView+AFNetworking.m in Sources */,

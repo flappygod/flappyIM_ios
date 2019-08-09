@@ -16,6 +16,7 @@
 #import "FlappyData.h"
 #import "DataBase.h"
 #import "NetTool.h"
+#import "FlappySender.h"
 
 
 @interface FlappyIM ()
@@ -482,6 +483,8 @@
     //建立长连接
     self.socket=[[GCDAsyncSocket alloc] initWithDelegate:self
                                            delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    //保存
+    [FlappySender shareInstance].socket=self.socket;
     
     NSError* error=nil;
     
@@ -704,6 +707,8 @@
     [self stopHeart];
     //清空socket
     self.socket=nil;
+    //保存
+    [FlappySender shareInstance].socket=nil;
     //非正常退出
     if(self.dead!=nil){
         //非正常退出

@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 //移除消息的监听
 -(void)removeMessageListener:(MessageListener)listener;
 
+
 //清空监听
 -(void)clearListeners;
 
@@ -40,6 +41,14 @@ NS_ASSUME_NONNULL_BEGIN
 //获取某条信息之前的消息
 -(NSMutableArray*)getMessagesByOffset:(NSInteger)offset
                              withSize:(NSInteger)size;
+
+
+//发送文本
+-(void)sendText:(NSString*)text
+     andSuccess:(FlappySuccess)success
+     andFailure:(FlappyFailure)failure;
+
+
 
 
 @end

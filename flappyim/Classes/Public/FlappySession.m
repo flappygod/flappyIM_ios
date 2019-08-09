@@ -72,5 +72,14 @@
 }
 
 
+//发送文本
+-(void)sendText:(NSString*)text
+     andSuccess:(FlappySuccess)success
+     andFailure:(FlappyFailure)failure{
+    
+    
+}
+
+
 
 @end
