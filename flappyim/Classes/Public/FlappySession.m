@@ -133,6 +133,18 @@
     
 }
 
+//发送图片
+-(void)sendImage:(ChatImage*)image
+      andSuccess:(FlappySuccess)success
+      andFailure:(FlappyFailure)failure{
+    
+}
 
+//发送语音
+-(void)sendVoice:(ChatVoice*)image
+      andSuccess:(FlappySuccess)success
+      andFailure:(FlappyFailure)failure{
+    
+}
 
 @end

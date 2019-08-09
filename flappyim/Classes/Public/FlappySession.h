@@ -9,6 +9,8 @@
 #import "SessionModel.h"
 #import "FlappyIM.h"
 #import "PostTool.h"
+#import "ChatImage.h"
+#import "ChatVoice.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,8 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 //用户
 @property(nonatomic,copy) NSString*  userOne;
+
 //用户
 @property(nonatomic,copy) NSString*  userTwo;
+
 //session
 @property(nonatomic,strong) SessionModel*  session;
 
@@ -49,6 +53,16 @@ NS_ASSUME_NONNULL_BEGIN
      andFailure:(FlappyFailure)failure;
 
 
+//发送图片
+-(void)sendImage:(ChatImage*)image
+      andSuccess:(FlappySuccess)success
+      andFailure:(FlappyFailure)failure;
+
+
+//发送语音
+-(void)sendVoice:(ChatVoice*)image
+      andSuccess:(FlappySuccess)success
+      andFailure:(FlappyFailure)failure;
 
 
 @end
