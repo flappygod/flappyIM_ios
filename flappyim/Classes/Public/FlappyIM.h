@@ -8,9 +8,37 @@
 #import <Foundation/Foundation.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <CocoaAsyncSocket/GCDAsyncUdpSocket.h>
+#import "ApiConfig.h"
+#import "User.h"
+#import "MJExtension.h"
+#import <sys/socket.h>
+#import <netinet/in.h>
+#import <arpa/inet.h>
+#import <unistd.h>
+#import "Flappy.pbobjc.h"
+#import "FlappyData.h"
+#import "ChatMessage.h"
+#import "NetTool.h"
+#import "DataBase.h"
 #import "FlappySession.h"
 #import "PostTool.h"
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <Reachability/Reachability.h>
+#import <AFNetworking/AFNetworking.h>
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
+//登录之后非正常关闭
+typedef void(^FlappyDead) (void);
+
+//请求失败
+typedef void(^FlappyFailure) (NSError *_Nullable,NSInteger);
+
+//请求成功
+typedef void(^FlappySuccess) (id _Nullable);
+
+//消息监听
+typedef void(^MessageListener) (ChatMessage* _Nullable message);
 
 NS_ASSUME_NONNULL_BEGIN
 

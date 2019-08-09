@@ -6,24 +6,6 @@
 //
 
 #import "FlappyIM.h"
-#import "ApiConfig.h"
-#import "User.h"
-#import "MJExtension.h"
-#import <sys/socket.h>
-#import <netinet/in.h>
-#import <arpa/inet.h>
-#import <unistd.h>
-#import "Flappy.pbobjc.h"
-#import "FlappyData.h"
-#import "ChatMessage.h"
-#import "NetTool.h"
-#import "DataBase.h"
-#import "FlappySession.h"
-#import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
-#import <Reachability/Reachability.h>
-#import <AFNetworking/AFNetworking.h>
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 
 @interface FlappyIM ()
