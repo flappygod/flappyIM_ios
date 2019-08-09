@@ -10,6 +10,8 @@
 #import "DateTimeTool.h"
 #import "FlappySender.h"
 #import "FlappyConfig.h"
+#import "JsonTool.h"
+#import "MJExtension.h"
 
 @implementation FlappySession
 {
@@ -138,13 +140,110 @@
       andSuccess:(FlappySuccess)success
       andFailure:(FlappyFailure)failure{
     
+    GCDAsyncSocket* socket=[FlappySender shareInstance].socket;
+    
+    //错误了
+    if(socket==nil){
+        failure([NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
+        return;
+    }
+    
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    Message* msg=[[Message alloc]init];
+    
+    chatmsg.messageId=[NSString stringWithFormat:@"%.2f",[[NSDate new] timeIntervalSince1970]];
+    msg.messageId=chatmsg.messageId;
+    
+    chatmsg.messageSession=self.session.sessionId;
+    msg.messageSession=chatmsg.messageSession;
+    
+    chatmsg.messageSessionType=self.session.sessionType;
+    msg.messageSessionType=(int32_t)chatmsg.messageSessionType;
+    
+    chatmsg.messageSend=self.session.userOne.userId;
+    msg.messageSend=chatmsg.messageSend;
+    
+    chatmsg.messageRecieve=self.session.userTwo.userId;
+    msg.messageRecieve=chatmsg.messageRecieve;
+    
+    chatmsg.messageType=MSG_TYPE_IMG;
+    msg.messageType=(int32_t)chatmsg.messageType;
+    
+    chatmsg.messageContent=[JsonTool DicToJSONString:[image mj_keyValues]];
+    msg.messageContent=chatmsg.messageContent;
+    
+    chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
+    msg.messageDate=chatmsg.messageDate;
+    
+    //连接到服务器开始请求登录
+    FlappyRequest* request=[[FlappyRequest alloc]init];
+    //登录请求
+    request.type=REQ_MSG;
+    //登录信息
+    request.msg=msg;
+    
+    //请求数据，已经GPBComputeRawVarint32SizeForInteger
+    NSData* reqData=[request delimitedData];
+    //写入请求数据
+    [socket writeData:reqData withTimeout:-1 tag:0];
+    
+    //成功
+    success(chatmsg);
 }
 
 //发送语音
--(void)sendVoice:(ChatVoice*)image
+-(void)sendVoice:(ChatVoice*)voice
       andSuccess:(FlappySuccess)success
       andFailure:(FlappyFailure)failure{
     
+    GCDAsyncSocket* socket=[FlappySender shareInstance].socket;
+    //错误了
+    if(socket==nil){
+        failure([NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
+        return;
+    }
+    
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    Message* msg=[[Message alloc]init];
+    
+    chatmsg.messageId=[NSString stringWithFormat:@"%.2f",[[NSDate new] timeIntervalSince1970]];
+    msg.messageId=chatmsg.messageId;
+    
+    chatmsg.messageSession=self.session.sessionId;
+    msg.messageSession=chatmsg.messageSession;
+    
+    chatmsg.messageSessionType=self.session.sessionType;
+    msg.messageSessionType=(int32_t)chatmsg.messageSessionType;
+    
+    chatmsg.messageSend=self.session.userOne.userId;
+    msg.messageSend=chatmsg.messageSend;
+    
+    chatmsg.messageRecieve=self.session.userTwo.userId;
+    msg.messageRecieve=chatmsg.messageRecieve;
+    
+    chatmsg.messageType=MSG_TYPE_VOICE;
+    msg.messageType=(int32_t)chatmsg.messageType;
+    
+    chatmsg.messageContent=[JsonTool DicToJSONString:[voice mj_keyValues]];
+    msg.messageContent=chatmsg.messageContent;
+    
+    chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
+    msg.messageDate=chatmsg.messageDate;
+    
+    //连接到服务器开始请求登录
+    FlappyRequest* request=[[FlappyRequest alloc]init];
+    //登录请求
+    request.type=REQ_MSG;
+    //登录信息
+    request.msg=msg;
+    
+    //请求数据，已经GPBComputeRawVarint32SizeForInteger
+    NSData* reqData=[request delimitedData];
+    //写入请求数据
+    [socket writeData:reqData withTimeout:-1 tag:0];
+    
+    //成功
+    success(chatmsg);
 }
 
 @end
