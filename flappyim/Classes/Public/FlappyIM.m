@@ -782,7 +782,7 @@
         //最后一条的数据保存
         if(array.count>0){
             ChatMessage* last=[array objectAtIndex:array.count-1];
-            self.user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
+            self.user.latest=last.messageTableSeq;
             [FlappyData saveUser:self.user];
         }
         
