@@ -99,7 +99,7 @@
     msg.messageSession=chatmsg.messageSession;
     
     chatmsg.messageSessionType=self.session.sessionType;
-    msg.messageSessionType=chatmsg.messageSessionType;
+    msg.messageSessionType=(int32_t)chatmsg.messageSessionType;
     
     chatmsg.messageSend=self.session.userOne.userId;
     msg.messageSend=chatmsg.messageSend;
@@ -108,7 +108,7 @@
     msg.messageRecieve=chatmsg.messageRecieve;
     
     chatmsg.messageType=MSG_TYPE_TEXT;
-    msg.messageType=chatmsg.messageType;
+    msg.messageType=(int32_t)chatmsg.messageType;
     
     chatmsg.messageContent=text;
     msg.messageContent=chatmsg.messageContent;
