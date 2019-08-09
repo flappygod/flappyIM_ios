@@ -18,18 +18,18 @@
 
 
 //保存用户
-+(void)saveUser:(User*)user{
++(void)saveUser:(ChatUser*)user{
     //装环为字符串
     NSString*  str=[JsonTool JSONObjectToJSONString:[user mj_keyValues]];
     UNSaveObject(str, KEY_USER);
 }
 
 //获取用户
-+(User*)getUser{
++(ChatUser*)getUser{
     NSString* str=UNGetObject(KEY_USER);
     if(str!=nil){
         NSDictionary* dic=[JsonTool JSONStringToDictionary:str];
-        User* ret=[User mj_objectWithKeyValues:dic];
+        ChatUser* ret=[ChatUser mj_objectWithKeyValues:dic];
         return ret;
     }
     return nil;

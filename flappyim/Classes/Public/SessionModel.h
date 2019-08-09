@@ -7,16 +7,16 @@
 
 #import <Foundation/Foundation.h>
 #import "ChatSession.h"
-#import "User.h"
+#import "ChatUser.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SessionModel : ChatSession
 
 //用户一
-@property(nonatomic,strong) User*  userOne;
+@property(nonatomic,strong) ChatUser*  userOne;
 //用户二
-@property(nonatomic,strong) User*  userTwo;
+@property(nonatomic,strong) ChatUser*  userTwo;
 
 
 @end

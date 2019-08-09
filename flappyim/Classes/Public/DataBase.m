@@ -6,6 +6,7 @@
 //
 
 #import "DataBase.h"
+#import "FMDatabase.h"
 
 @implementation DataBase
 

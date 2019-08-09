@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface User : NSObject
+@interface ChatUser : NSObject
 
 //用户ID
 @property(nonatomic,copy) NSString* userId;

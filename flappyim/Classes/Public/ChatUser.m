@@ -5,9 +5,9 @@
 //  Created by lijunlin on 2019/8/6.
 //
 
-#import "User.h"
+#import "ChatUser.h"
 
-@implementation User
+@implementation ChatUser
 
 
 

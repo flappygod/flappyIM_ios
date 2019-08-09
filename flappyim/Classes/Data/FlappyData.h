@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Flappy.pbobjc.h"
-#import "User.h"
+#import "ChatUser.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,10 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //保存用户信息
-+(void)saveUser:(User*)user;
++(void)saveUser:(ChatUser*)user;
 
 //获取当前登录的用户
-+(User*)getUser;
++(ChatUser*)getUser;
 
 //清空用户
 +(void)clearUser;

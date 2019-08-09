@@ -1,13 +1,12 @@
 //
-//  ApiConfig.h
+//  FlappyConfig.h
 //  Pods
 //
-//  Created by lijunlin on 2019/8/6.
+//  Created by lijunlin on 2019/8/9.
 //
 
-#ifndef ApiConfig_h
-#define ApiConfig_h
-
+#ifndef FlappyConfig_h
+#define FlappyConfig_h
 
 
 //当前的设备类型
@@ -66,6 +65,4 @@
 //消息发送
 #define RES_MSG  2
 
-
-
-#endif /* ApiConfig_h */
+#endif /* FlappyConfig_h */

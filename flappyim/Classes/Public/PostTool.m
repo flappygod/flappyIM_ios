@@ -6,7 +6,6 @@
 //
 
 #import "PostTool.h"
-#import "ApiConfig.h"
 
 @implementation PostTool
 

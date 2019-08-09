@@ -7,6 +7,12 @@
 
 #import "FlappyIM.h"
 
+#import "MJExtension.h"
+#import <sys/socket.h>
+#import <netinet/in.h>
+#import <arpa/inet.h>
+#import <unistd.h>
+
 
 @interface FlappyIM ()
 
@@ -25,7 +31,7 @@
 //心跳计时
 @property (nonatomic,strong) NSTimer*  connectTimer;
 //正在登录的用户
-@property (nonatomic,strong) User*  user;
+@property (nonatomic,strong) ChatUser*  user;
 //登录的数据
 @property (nonatomic,strong) id  loginData;
 //登录成功之后非正常退出的情况
@@ -197,7 +203,7 @@
 //进行初始化
 -(void)setupReconnect{
     //自动登录
-    User* user=[FlappyData getUser];
+    ChatUser* user=[FlappyData getUser];
     //用户之前已经登录过
     if(user==nil||user.login==false){
         return;
@@ -292,7 +298,7 @@
                   //得到当前的用户数据
                   NSDictionary* dic=data[@"user"];
                   //用户
-                  User* user=[User mj_objectWithKeyValues:dic];
+                  ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
                   //连接服务器
                   [self connectSocket:data[@"serverIP"]
                              withPort:data[@"serverPort"]
@@ -381,7 +387,7 @@
                   //得到当前的用户数据
                   NSDictionary* dic=data[@"user"];
                   //用户
-                  User* user=[User mj_objectWithKeyValues:dic];
+                  ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
                   //用户下线之后重新连接服务器
                   [safeSelf connectSocket:data[@"serverIP"]
                                  withPort:data[@"serverPort"]
@@ -438,7 +444,7 @@
 //建立长连接
 -(void)connectSocket:(NSString*)serverAddress
             withPort:(NSString*)serverPort
-            withUser:(User*)user
+            withUser:(ChatUser*)user
          withSuccess:(FlappySuccess)success
          withFailure:(FlappyFailure)failure{
     
