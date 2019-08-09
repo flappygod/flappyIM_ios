@@ -692,7 +692,7 @@
             //新消息
             NSArray* array=self.callbacks.allKeys;
             //数量
-            for(int s=0;array.count;s++){
+            for(int s=0;s<array.count;s++){
                 NSString* str=[array objectAtIndex:s];
                 MessageListener listener=[self.callbacks objectForKey:str];
                 listener(message);
