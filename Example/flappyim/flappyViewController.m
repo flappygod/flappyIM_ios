@@ -32,7 +32,7 @@
     [self.view addGestureRecognizer:gs];
     
     
-    [[FlappyIM shareInstance] createSession:"100"
+    [[FlappyIM shareInstance] createSession:@"100"
                                  andSuccess:^(id _Nullable data) {
         
     } andFailure:^(NSError * _Nullable error, NSInteger code) {

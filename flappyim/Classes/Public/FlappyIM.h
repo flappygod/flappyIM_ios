@@ -8,12 +8,9 @@
 #import <Foundation/Foundation.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <CocoaAsyncSocket/GCDAsyncUdpSocket.h>
-#import "FlappyConfig.h"
 #import "ChatMessage.h"
 #import "ChatUser.h"
 #import "Flappy.pbobjc.h"
-#import "FlappyData.h"
-#import "NetTool.h"
 #import "DataBase.h"
 #import "FlappySession.h"
 #import "PostTool.h"

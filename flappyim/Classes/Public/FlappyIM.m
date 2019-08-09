@@ -12,6 +12,9 @@
 #import <netinet/in.h>
 #import <arpa/inet.h>
 #import <unistd.h>
+#import "FlappyConfig.h"
+#import "FlappyData.h"
+#import "NetTool.h"
 
 
 @interface FlappyIM ()

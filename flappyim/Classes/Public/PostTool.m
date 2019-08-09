@@ -6,6 +6,7 @@
 //
 
 #import "PostTool.h"
+#import "FlappyConfig.h"
 
 @implementation PostTool
 
