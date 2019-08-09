@@ -35,7 +35,7 @@
 }
 
 
-
+//创建session
 -(void)createSession{
     //创建session
     [[FlappyIM shareInstance] createSession:@"100"
