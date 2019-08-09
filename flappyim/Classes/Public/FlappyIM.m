@@ -758,7 +758,7 @@
         [array sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             ChatMessage* one=obj1;
             ChatMessage* two=obj2;
-            if(one.messageTableSeq>two.messageTableSeq){
+            if(one.messageTableSeq.integerValue>two.messageTableSeq.integerValue){
                 return NSOrderedDescending;
             }
             return NSOrderedAscending;
