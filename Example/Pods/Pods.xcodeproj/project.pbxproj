@@ -126,6 +126,8 @@
 		856B571FA3AE9D65E81FACB19E3557F4 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B1BA8E60BB6C9D2D2788FB5274298F64 /* AFURLSessionManager.m */; };
 		870044029B3BA449A0932AAE3A495DE9 /* AFAutoPurgingImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 60CF475157752EDE227105F86C0ADE5C /* AFAutoPurgingImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87A1F2C0A149B91ED404939E51CE3B39 /* Duration.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 041353FF25CA596457D93ECEE16E4CD9 /* Duration.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8862864322FD11DF00457F6D /* FlappySession.h in Headers */ = {isa = PBXBuildFile; fileRef = 8862864122FD11DF00457F6D /* FlappySession.h */; };
+		8862864422FD11DF00457F6D /* FlappySession.m in Sources */ = {isa = PBXBuildFile; fileRef = 8862864222FD11DF00457F6D /* FlappySession.m */; };
 		8980273D30E01B29383FD08BE0C4510C /* Timestamp.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CBE99CEF8FB2A8EF8024A6DB3453B39 /* Timestamp.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		89FBC7E274C70F20D1DE40A2F25E965C /* FlappyData.m in Sources */ = {isa = PBXBuildFile; fileRef = 707D5744F2C845794FCF0ABFD7068922 /* FlappyData.m */; };
 		8A2E1E487FBFC3DF55C12C056BFA36A1 /* MJPropertyType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D358FAA9EDB638C8A1FFF069FEBDE47 /* MJPropertyType.m */; };
@@ -439,6 +441,8 @@
 		84A70348B871F8770D33896F06E3CEC8 /* ApiConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ApiConfig.h; sourceTree = "<group>"; };
 		86266378AADE171657C3E5D025721276 /* FMDB-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FMDB-Info.plist"; sourceTree = "<group>"; };
 		865B99DB6ED1BC3C3599085A6A477545 /* Pods-flappyim_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-flappyim_Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		8862864122FD11DF00457F6D /* FlappySession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlappySession.h; sourceTree = "<group>"; };
+		8862864222FD11DF00457F6D /* FlappySession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlappySession.m; sourceTree = "<group>"; };
 		8873BF213925B82E168B32DC60167427 /* CocoaAsyncSocket-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "CocoaAsyncSocket-Info.plist"; sourceTree = "<group>"; };
 		89C2E2BDF071C138A7C96613BA184EF2 /* ChatMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChatMessage.m; sourceTree = "<group>"; };
 		89DE52F145FD246CD4D0DBF953FD5202 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Source/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
@@ -852,6 +856,8 @@
 				8FF1BA1C565B9C6CF604ED052ED09BB1 /* Flappy.pbobjc.m */,
 				5DAC3D8958A1481FFABDF9EC5695B22A /* User.h */,
 				B09AD60A05EC7C50E45EEBA44FEA6B48 /* User.m */,
+				8862864122FD11DF00457F6D /* FlappySession.h */,
+				8862864222FD11DF00457F6D /* FlappySession.m */,
 			);
 			name = Model;
 			path = flappyim/Classes/Model;
@@ -1378,6 +1384,7 @@
 			files = (
 				870044029B3BA449A0932AAE3A495DE9 /* AFAutoPurgingImageCache.h in Headers */,
 				F407B4E0B40A8AA4CA7443563F105E40 /* AFCompatibilityMacros.h in Headers */,
+				8862864322FD11DF00457F6D /* FlappySession.h in Headers */,
 				169B3FC2BD33B8FBC2D4C35A1C1DC6BF /* AFHTTPSessionManager.h in Headers */,
 				E261B82A0EEFE0EA897EA1A36C69C1CE /* AFImageDownloader.h in Headers */,
 				2AE1F29F045D02727E815DBBAC8C7B4F /* AFNetworkActivityIndicatorManager.h in Headers */,
@@ -1785,6 +1792,7 @@
 				8F96E82F250EE718FA3F08AC9AB58423 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				34A7C5747B4C0825465453E196E57FAA /* UIButton+AFNetworking.m in Sources */,
 				AECB9FD1C271F734476CBF6E84BBFC51 /* UIImageView+AFNetworking.m in Sources */,
+				8862864422FD11DF00457F6D /* FlappySession.m in Sources */,
 				98114570DFFDF5BD81B7724B4810501D /* UIProgressView+AFNetworking.m in Sources */,
 				D29F2AD07AF58334781F008905C30C35 /* UIRefreshControl+AFNetworking.m in Sources */,
 				DC2186197E507C0C73DFB0600D54867A /* UIWebView+AFNetworking.m in Sources */,
