@@ -51,11 +51,12 @@
     __weak typeof(self) safeSelf=self;
     [[FlappyIM shareInstance] createSession:@"100"
                                  andSuccess:^(id _Nullable data) {
+                                     NSLog(@"会话创建成功");
                                      safeSelf.session=data;
                                      [self sessionSuccess:data];
                                      
                                  } andFailure:^(NSError * _Nullable error, NSInteger code) {
-                                     
+                                     NSLog(@"会话创建失败");
                                  }];
 }
 
