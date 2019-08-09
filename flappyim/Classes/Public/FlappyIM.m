@@ -747,6 +747,15 @@
         }
         //消息信息
         NSMutableArray* array=respones.msgArray;
+        //进行排序
+        array=[array sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            ChatMessage* one=obj1;
+            ChatMessage* two=obj2;
+            if(one.messageTableSeq>two.messageTableSeq){
+                return true;
+            }
+            return false;
+        }];
         //转换
         for(long s=array.count-1;s>=0;s--){
             Message* message=[array objectAtIndex:s];
@@ -758,16 +767,18 @@
             if(former==nil){
                 //添加数据
                 [[DataBase shareInstance] insert:chatMsg];
-                [self performSelectorOnMainThread:@selector(notifyNewMessage:)
-                                       withObject:chatMsg
-                                    waitUntilDone:false];
-                self.user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
-                [FlappyData saveUser:self.user];
+                [self notifyNewMessage:chatMsg];
             }else{
                 [[DataBase shareInstance] updateMessage:chatMsg];
             }
-            
         }
+        //最后一条的数据保存
+        if(array.count>0){
+            ChatMessage* last=[array objectAtIndex:array.count-1];
+            self.user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
+            [FlappyData saveUser:self.user];
+        }
+        
     }
     //接收到新的消息
     else if(respones.type==RES_MSG){
@@ -785,11 +796,13 @@
                 //添加数据
                 [[DataBase shareInstance] insert:chatMsg];
                 [self notifyNewMessage:chatMsg];
-                self.user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
-                [FlappyData saveUser:self.user];
             }else{
                 [[DataBase shareInstance] updateMessage:chatMsg];
             }
+            //保存最近的时间
+            self.user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
+            //保存最近的时间
+            [FlappyData saveUser:self.user];
         }
     }
 }
