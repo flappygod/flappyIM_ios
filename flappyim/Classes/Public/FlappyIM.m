@@ -122,6 +122,23 @@
     }
 }
 
+//移除监听
+-(void)removeListener:(MessageListener)listener{
+    //监听所有消息
+    if(listener!=nil){
+        //获取当前的监听列表
+        NSMutableArray* listeners=[self.callbacks objectForKey:@""];
+        //创建新的监听
+        if(listeners==nil){
+            //设置监听
+            listeners=[[NSMutableArray alloc]init];
+            [self.callbacks setObject:listeners forKey:@""];
+        }
+        //添加监听
+        [listeners removeObject:listener];
+    }
+}
+
 //增加某个session的监听
 -(void)addListener:(MessageListener)listener
      withSessionID:(NSString*)sessionID{

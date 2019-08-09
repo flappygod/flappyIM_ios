@@ -26,6 +26,13 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setMessageListener:(MessageListener)listener;
 
 
+//清空监听
+-(void)clearListeners;
+
+
+
+
+
 @end
 
 NS_ASSUME_NONNULL_END

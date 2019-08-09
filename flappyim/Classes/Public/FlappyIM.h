@@ -57,6 +57,9 @@ NS_ASSUME_NONNULL_BEGIN
      withSessionID:(NSString*)sessionID;
 
 
+//移除监听
+-(void)removeListener:(MessageListener)listener;
+
 
 @end
 

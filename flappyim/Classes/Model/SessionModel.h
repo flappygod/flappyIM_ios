@@ -6,11 +6,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ChatSession.h"
 #import "User.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SessionModel : NSObject
+@interface SessionModel : ChatSession
 
 //用户一
 @property(nonatomic,strong) User*  userOne;
