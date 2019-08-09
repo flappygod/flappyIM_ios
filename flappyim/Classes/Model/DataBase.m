@@ -136,5 +136,76 @@
     }
 }
 
+//通过会话ID获取最近的一次会话
+-(ChatMessage*)getLatestMessageBySession:(NSString*)sessionID{
+    //获取db
+    FMDatabase* db=[self openDB];
+    if(db==nil){
+        return nil;
+    }
+    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? order by messageTableSeq desc" withArgumentsInArray:@[sessionID]];
+    //返回消息
+    while ([result next]) {
+        ChatMessage *msg = [ChatMessage new];
+        msg.messageId = [result stringForColumn:@"messageId"];
+        msg.messageSession = [result stringForColumn:@"messageSession"];
+        msg.messageSessionType = [result intForColumn:@"messageSessionType"];
+        msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
+        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+        msg.messageType = [result intForColumn:@"messageType"];
+        msg.messageSend = [result stringForColumn:@"messageSend"];
+        msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
+        msg.messageContent = [result stringForColumn:@"messageContent"];
+        msg.messageSended = [result intForColumn:@"messageSended"];
+        msg.messageReaded = [result intForColumn:@"messageReaded"];
+        msg.messageDate = [result stringForColumn:@"messageDate"];
+        msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+        msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+        [db close];
+        //返回消息
+        return msg;
+    }
+    [db close];
+    return nil;
+}
+
+//通过sessionID，获取之前的
+-(NSMutableArray*)getSessionMessage:(NSString*)sessionID
+                         withOffset:(NSInteger)offset
+                           withSize:(NSInteger)size{
+    //获取db
+    FMDatabase* db=[self openDB];
+    if(db==nil){
+        return nil;
+    }
+    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq<? order by messageTableSeq  desc limit ?" withArgumentsInArray:@[sessionID,offset,size]];
+    
+    //创建消息列表
+    NSMutableArray* retArray=[[NSMutableArray alloc]init];
+    //返回消息
+    while ([result next]) {
+        //获取之前的消息
+        ChatMessage *msg = [ChatMessage new];
+        msg.messageId = [result stringForColumn:@"messageId"];
+        msg.messageSession = [result stringForColumn:@"messageSession"];
+        msg.messageSessionType = [result intForColumn:@"messageSessionType"];
+        msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
+        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+        msg.messageType = [result intForColumn:@"messageType"];
+        msg.messageSend = [result stringForColumn:@"messageSend"];
+        msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
+        msg.messageContent = [result stringForColumn:@"messageContent"];
+        msg.messageSended = [result intForColumn:@"messageSended"];
+        msg.messageReaded = [result intForColumn:@"messageReaded"];
+        msg.messageDate = [result stringForColumn:@"messageDate"];
+        msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+        msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+        [retArray addObject:msg];
+    }
+    [db close];
+    return retArray;
+}
+
+
 
 @end

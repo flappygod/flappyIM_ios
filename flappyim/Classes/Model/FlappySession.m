@@ -6,6 +6,7 @@
 //
 
 #import "FlappySession.h"
+#import "DataBase.h"
 
 @implementation FlappySession
 {
@@ -43,6 +44,25 @@
         }
     }
 }
+
+//获取最近的一条消息
+-(ChatMessage*)getLatestMessage{
+    //获取消息
+    ChatMessage* message=[[DataBase shareInstance]getLatestMessageBySession:self.session.sessionId];
+    //返回
+    return message;
+}
+
+
+//获取某条信息之前的消息
+-(NSMutableArray*)getMessagesByOffset:(NSInteger)offset
+                             withSize:(NSInteger)size{
+    NSMutableArray* arr=[[DataBase shareInstance]getSessionMessage:self.session.sessionId
+                                                        withOffset:offset
+                                                          withSize:size];
+    return arr;
+}
+
 
 
 @end
