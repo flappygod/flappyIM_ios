@@ -567,6 +567,11 @@
     request.type=REQ_LOGIN;
     //登录信息
     request.login=info;
+    //登录信息
+    if([FlappyData getUser]!=nil){
+        request.latest=[FlappyData getUser].latest;
+    }
+    
     //请求数据，已经GPBComputeRawVarint32SizeForInteger
     NSData* reqData=[request delimitedData];
     //写入请求数据
