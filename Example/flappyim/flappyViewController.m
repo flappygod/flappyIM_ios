@@ -31,6 +31,10 @@
     UITapGestureRecognizer* gs=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(login)];
     [self.view addGestureRecognizer:gs];
     
+    [self.sendBtn addTarget:self
+                     action:@selector(sendMessage:)
+           forControlEvents:UIControlEventTouchUpInside];
+    
    
 }
 
@@ -57,6 +61,10 @@
     }];
 }
 
+//发送消息
+-(void)sendMessage:(id)sender{
+    
+}
 
 - (void)didReceiveMemoryWarning
 {
