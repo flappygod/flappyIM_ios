@@ -23,8 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //设置消息的监听
--(void)setMessageListener:(MessageListener)listener;
+-(void)addMessageListener:(MessageListener)listener;
 
+
+//移除消息的监听
+-(void)removeMessageListener:(MessageListener)listener;
 
 //清空监听
 -(void)clearListeners;

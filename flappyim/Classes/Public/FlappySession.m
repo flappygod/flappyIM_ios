@@ -23,7 +23,7 @@
 }
 
 //设置消息的监听
--(void)setMessageListener:(MessageListener)listener{
+-(void)addMessageListener:(MessageListener)listener{
     //添加ID
     [[FlappyIM shareInstance] addListener:listener
                             withSessionID: self.session.sessionId];
