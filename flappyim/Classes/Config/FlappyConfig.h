@@ -15,7 +15,7 @@
 
 
 //基础地址
-#define BaseUrl @"http://192.168.124.105"
+#define BaseUrl @"http://49.234.106.91"
 
 //创建账户
 #define URL_register [NSString stringWithFormat:@"%@/api/register",BaseUrl]
