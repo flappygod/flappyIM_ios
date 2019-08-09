@@ -28,9 +28,11 @@
     [[FlappyIM shareInstance] setup];
     
     //创建登录
-    UITapGestureRecognizer* gs=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(login)];
+    UITapGestureRecognizer* gs=[[UITapGestureRecognizer alloc]initWithTarget:self
+                                                                      action:@selector(login)];
     [self.view addGestureRecognizer:gs];
     
+    //发送
     [self.sendBtn addTarget:self
                      action:@selector(sendMessage:)
            forControlEvents:UIControlEventTouchUpInside];
