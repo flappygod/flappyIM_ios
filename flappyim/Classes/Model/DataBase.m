@@ -178,7 +178,7 @@
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq<? order by messageTableSeq  desc limit ?" withArgumentsInArray:@[sessionID,offset,size]];
+    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq<? order by messageTableSeq  desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInt:offset],[NSNumber numberWithInt:size]]];
     
     //创建消息列表
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
