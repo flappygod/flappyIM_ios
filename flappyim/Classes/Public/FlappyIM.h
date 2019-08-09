@@ -52,6 +52,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)addListener:(MessageListener)listener;
 
 
+//增加某个session的监听
+-(void)addListener:(MessageListener)listener
+     withSessionID:(NSString*)sessionID;
+
+
 
 @end
 

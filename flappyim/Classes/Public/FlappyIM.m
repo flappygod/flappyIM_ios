@@ -18,6 +18,7 @@
 #import "ChatMessage.h"
 #import "NetTool.h"
 #import "DataBase.h"
+#import "FlappySession.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <Reachability/Reachability.h>
@@ -108,10 +109,36 @@
 -(void)addListener:(MessageListener)listener{
     //监听所有消息
     if(listener!=nil){
-        [self.callbacks setObject:listener forKey:@""];
+        //获取当前的监听列表
+        NSMutableArray* listeners=[self.callbacks objectForKey:@""];
+        //创建新的监听
+        if(listeners==nil){
+            //设置监听
+            listeners=[[NSMutableArray alloc]init];
+            [self.callbacks setObject:listeners forKey:@""];
+        }
+        //添加监听
+        [listeners addObject:listener];
     }
 }
 
+//增加某个session的监听
+-(void)addListener:(MessageListener)listener
+     withSessionID:(NSString*)sessionID{
+    //监听所有消息
+    if(listener!=nil){
+        //获取当前的监听列表
+        NSMutableArray* listeners=[self.callbacks objectForKey:sessionID];
+        //创建新的监听
+        if(listeners==nil){
+            //设置监听
+            listeners=[[NSMutableArray alloc]init];
+            [self.callbacks setObject:listeners forKey:sessionID];
+        }
+        //添加监听
+        [listeners addObject:listener];
+    }
+}
 
 #pragma database
 -(void)setupDataBase{
@@ -299,8 +326,6 @@
                                  @"device":DEVICE_TYPE,
                                  @"pushid":self.pushID
                                  };
-    
-    __weak typeof(self) safeSelf=self;
     //请求数据
     [PostTool postRequest:urlString
            withParameters:parameters
@@ -393,6 +418,9 @@
     [PostTool postRequest:urlString
            withParameters:parameters
               withSuccess:^(id data) {
+                  
+                  FlappySession* session=[[FlappySession alloc]init];
+                  
                   
                   
               } withFailure:^(NSError * error, NSInteger code) {
@@ -756,8 +784,12 @@
             //数量
             for(int s=0;s<array.count;s++){
                 NSString* str=[array objectAtIndex:s];
-                MessageListener listener=[self.callbacks objectForKey:str];
-                listener(message);
+                NSMutableArray* listeners=[self.callbacks objectForKey:str];
+                //回调监听的事件
+                for(int w=0;w<listeners.count;w++){
+                    MessageListener listener=[listeners objectAtIndex:w];
+                    listener(message);
+                }
             }
         });
     });

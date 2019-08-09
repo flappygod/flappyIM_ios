@@ -10,7 +10,6 @@
 #endif
 #endif
 
-#import "ChatMessage.h"
 #import "FlappyIM.h"
 #import "PostTool.h"
 

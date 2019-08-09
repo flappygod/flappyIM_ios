@@ -10,13 +10,13 @@
 @implementation FlappySession
 {
     //消息
-    MessageListener* _listener;
+    MessageListener _listener;
 }
 
 
 //设置消息的监听
 -(void)setMessageListener:(MessageListener*)listener{
-   
+    
 }
 
 
