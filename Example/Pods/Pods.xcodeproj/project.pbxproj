@@ -938,9 +938,6 @@
 		58EDA2F64BCF2B1739671883D660E958 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				C25C4CC2F2F6DD68CC3C91D8BD9F9B77 /* FlappyIM.h */,
-				2B4DF4D47755C9D812023271A1C5785B /* FlappyIM.m */,
-				12B0BC89BEE33CC857D417A7A52F12FD /* Models */,
 			);
 			name = Public;
 			path = flappyim/Classes/Public;
@@ -1012,6 +1009,17 @@
 				115EEFF50244BD2590FBF62FED393C0A /* AFSecurityPolicy.m */,
 			);
 			name = Security;
+			sourceTree = "<group>";
+		};
+		8862865222FD29B300457F6D /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				12B0BC89BEE33CC857D417A7A52F12FD /* Models */,
+				C25C4CC2F2F6DD68CC3C91D8BD9F9B77 /* FlappyIM.h */,
+				2B4DF4D47755C9D812023271A1C5785B /* FlappyIM.m */,
+			);
+			name = Main;
+			path = flappyim/Classes/Main;
 			sourceTree = "<group>";
 		};
 		900AF052B6228A8C3823CFE4332A27A9 /* UploadImage */ = {
@@ -1152,6 +1160,7 @@
 		CED8C9B7CB30E314987374FE91FB45D9 /* flappyim */ = {
 			isa = PBXGroup;
 			children = (
+				8862865222FD29B300457F6D /* Main */,
 				6E21F738FD84749DDC2762FB7DDF4D6A /* Async */,
 				4A2FDE056535BD8AFE677D8A7D4253F4 /* Config */,
 				2E5D7254898213371B99F328835A4989 /* Data */,
