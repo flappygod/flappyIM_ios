@@ -754,9 +754,9 @@
             ChatMessage* one=obj1;
             ChatMessage* two=obj2;
             if(one.messageTableSeq>two.messageTableSeq){
-                return true;
+                return NSOrderedDescending;
             }
-            return false;
+            return NSOrderedAscending;
         }];
         //转换
         for(long s=0;s<array.count;s++){
