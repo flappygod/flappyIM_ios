@@ -413,6 +413,16 @@
 -(void)createSession:(NSString*)userTwo
           andSuccess:(FlappySuccess)success
           andFailure:(FlappyFailure)failure{
+    
+    //为空直接出错
+    if([FlappyData getUser]==nil){
+        failure([NSError errorWithDomain:@"账户未登录"
+                                    code:0
+                                userInfo:nil],
+                RESULT_FAILURE);
+        return ;
+    }
+    
     //注册地址
     NSString *urlString = URL_createSession;
     
@@ -420,7 +430,6 @@
     NSDictionary *parameters = @{@"userOne":[FlappyData getUser].userExtendId,
                                  @"userTwo":userTwo,
                                  };
-    
     //请求数据
     [PostTool postRequest:urlString
            withParameters:parameters
