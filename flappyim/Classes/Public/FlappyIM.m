@@ -187,10 +187,10 @@
             case 0:
             break;
             case 1:
-            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:5];
+            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
             break;
             case 2:
-            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:3];
+            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
             break;
         default:
             break;
