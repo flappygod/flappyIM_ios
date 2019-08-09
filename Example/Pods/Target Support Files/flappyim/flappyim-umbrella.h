@@ -12,6 +12,7 @@
 
 #import "ChatMessage.h"
 #import "FlappyIM.h"
+#import "FlappySession.h"
 #import "PostTool.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
