@@ -686,14 +686,19 @@
 
 //通知有新的消息
 -(void)notifyNewMessage:(ChatMessage*)message{
-    //新消息
-    NSArray* array=self.callbacks.allKeys;
-    //数量
-    for(int s=0;array.count;s++){
-        NSString* str=[array objectAtIndex:s];
-        MessageListener listener=[self.callbacks objectForKey:str];
-        listener(message);
-    }
+    //在主线程之中执行
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //新消息
+            NSArray* array=self.callbacks.allKeys;
+            //数量
+            for(int s=0;array.count;s++){
+                NSString* str=[array objectAtIndex:s];
+                MessageListener listener=[self.callbacks objectForKey:str];
+                listener(message);
+            }
+        });
+    });
 }
 
 #pragma  dealloc
