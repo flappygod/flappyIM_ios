@@ -67,4 +67,5 @@
 //消息发送
 #define RES_MSG  2
 
+
 #endif /* FlappyConfig_h */
