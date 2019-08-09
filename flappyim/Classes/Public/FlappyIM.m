@@ -282,6 +282,40 @@
               }];
 }
 
+
+//退出登录下线
+-(void)logout:(NSString*)userExtendID
+   andSuccess:(FlappySuccess)success
+   andFailure:(FlappyFailure)failure{
+    
+    //之前的正常下线
+    [self offline:true];
+    //注册地址
+    NSString *urlString = URL_logout;
+    
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"userID":@"",
+                                 @"userExtendID":userExtendID,
+                                 @"device":DEVICE_TYPE,
+                                 @"pushid":self.pushID
+                                 };
+    
+    __weak typeof(self) safeSelf=self;
+    //请求数据
+    [PostTool postRequest:urlString
+           withParameters:parameters
+              withSuccess:^(id data) {
+                  //退出登录成功
+                  success(data);
+                  //清空当前相应的用户信息
+                  [FlappyData clearUser];
+              } withFailure:^(NSError * error, NSInteger code) {
+                  //登录失败，清空回调
+                  failure(error,code);
+              }];
+    
+}
+
 //自动登录
 -(void)autoLogin:(FlappySuccess)success
       andFailure:(FlappyFailure)failure{

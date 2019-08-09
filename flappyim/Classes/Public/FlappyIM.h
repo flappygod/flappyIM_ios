@@ -36,6 +36,10 @@ NS_ASSUME_NONNULL_BEGIN
   andFailure:(FlappyFailure)failure;
 
 
+//退出登录
+-(void)logout:(NSString*)userExtendID
+   andSuccess:(FlappySuccess)success
+   andFailure:(FlappyFailure)failure;
 
 
 //增加消息的监听

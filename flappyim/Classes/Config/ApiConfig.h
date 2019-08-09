@@ -24,6 +24,9 @@
 //登录账号
 #define URL_login [NSString stringWithFormat:@"%@/api/login",BaseUrl]
 
+//退出账号
+#define URL_logout [NSString stringWithFormat:@"%@/api/logout",BaseUrl]
+
 //自动登录账号
 #define URL_autoLogin [NSString stringWithFormat:@"%@/api/autoLogin",BaseUrl]
 
