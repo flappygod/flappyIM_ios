@@ -9,18 +9,20 @@
 
 @implementation FlappySession
 {
-    //消息
-    MessageListener _listener;
+    NSMutableArray* listeners;
 }
+
 
 
 //设置消息的监听
--(void)setMessageListener:(MessageListener*)listener{
-    
+-(void)setMessageListener:(MessageListener)listener{
+    //[[FlappyIM shareInstance] addListener:listener withSessionID: self.];
 }
 
-
-
+//清除
+-(void)dealloc{
+    
+}
 
 
 @end

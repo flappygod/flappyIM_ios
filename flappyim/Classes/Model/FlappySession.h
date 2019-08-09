@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#improt "SessionModel.h"
 #import "FlappyIM.h"
 #import "PostTool.h"
 
@@ -13,9 +14,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FlappySession : NSObject
 
+//用户
+@property(nonatomic,copy) NSString*  userOne;
+//用户
+@property(nonatomic,copy) NSString*  userTwo;
+//session
+@property(nonatomic,strong) SessionModel*  session;
+
 
 //设置消息的监听
--(void)setMessageListener:(MessageListener*)listener;
+-(void)setMessageListener:(MessageListener)listener;
 
 
 @end

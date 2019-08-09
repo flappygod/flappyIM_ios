@@ -419,8 +419,10 @@
            withParameters:parameters
               withSuccess:^(id data) {
                   
+                  //创建session
                   FlappySession* session=[[FlappySession alloc]init];
-                  
+                  session.userOne=[FlappyData getUser].userExtendId;
+                  session.userTwo=
                   
                   
               } withFailure:^(NSError * error, NSInteger code) {
