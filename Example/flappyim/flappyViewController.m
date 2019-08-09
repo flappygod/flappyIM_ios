@@ -24,7 +24,7 @@
 {
     [super viewDidLoad];
     
-    
+    //初始化
     [[FlappyIM shareInstance] setup];
     
     //创建登录
@@ -90,6 +90,7 @@
     }
 }
 
+//内存不足
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
