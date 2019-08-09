@@ -93,7 +93,7 @@
     msg.messageSession=chatmsg.messageSession;
     
     chatmsg.messageSessionType=self.session.sessionType;
-    msg.sessionType=chatmsg.sessionType;
+    msg.messageSessionType=chatmsg.messageSessionType;
     
     chatmsg.messageSend=self.session.userOne.userId;
     msg.messageSend=chatmsg.messageSend;

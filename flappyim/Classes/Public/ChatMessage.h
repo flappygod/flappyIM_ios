@@ -12,15 +12,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //文本消息
-#define MSG_TYPE_TEXT  @"1"
+#define MSG_TYPE_TEXT  1
 //图片消息
-#define MSG_TYPE_IMG  @"2"
+#define MSG_TYPE_IMG  2
 //语音消息
-#define MSG_TYPE_VOICE  @"3"
+#define MSG_TYPE_VOICE  3
 //表情消息
-#define MSG_TYPE_EMOJ  @"4"
+#define MSG_TYPE_EMOJ  4
 //红包消息
-#define MSG_TYPE_REDBACKET  @"5"
+#define MSG_TYPE_REDBACKET 5
 
 
 
