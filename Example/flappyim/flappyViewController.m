@@ -79,7 +79,14 @@
 
 //发送消息
 -(void)sendMessage:(id)sender{
-    
+    if(self.session!=nil){
+        [self.session sendText:self.sendText.text
+                    andSuccess:^(id _Nullable data) {
+                        NSLog(@"发送成功");
+                    } andFailure:^(NSError * _Nullable error, NSInteger code) {
+                        NSLog(@"发送失败");
+                    }];
+    }
 }
 
 - (void)didReceiveMemoryWarning
