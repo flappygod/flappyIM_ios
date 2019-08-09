@@ -10,9 +10,11 @@
 #endif
 #endif
 
+#import "ChatImage.h"
 #import "ChatMessage.h"
 #import "ChatSession.h"
 #import "ChatUser.h"
+#import "ChatVoice.h"
 #import "Flappy.pbobjc.h"
 #import "FlappyIM.h"
 #import "FlappySession.h"
