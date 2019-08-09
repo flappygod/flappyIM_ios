@@ -419,11 +419,15 @@
            withParameters:parameters
               withSuccess:^(id data) {
                   
+                  //获取model
+                  SessionModel* model=[SessionModel mj_objectWithKeyValues:data];
+                  
                   //创建session
                   FlappySession* session=[[FlappySession alloc]init];
                   session.userOne=[FlappyData getUser].userExtendId;
-                  session.userTwo=
-                  
+                  session.userTwo=model.userTwo.userExtendId;
+                  session.session=model;
+                  success(session);
                   
               } withFailure:^(NSError * error, NSInteger code) {
                   //登录失败，清空回调

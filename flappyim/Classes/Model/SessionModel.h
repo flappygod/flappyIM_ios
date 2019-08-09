@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#improt "User.h"
+#import "User.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

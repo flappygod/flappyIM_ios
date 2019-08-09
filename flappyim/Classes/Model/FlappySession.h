@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#improt "SessionModel.h"
+#import "SessionModel.h"
 #import "FlappyIM.h"
 #import "PostTool.h"
 
