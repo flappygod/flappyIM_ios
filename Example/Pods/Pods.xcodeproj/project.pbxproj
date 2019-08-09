@@ -938,6 +938,8 @@
 		58EDA2F64BCF2B1739671883D660E958 /* Public */ = {
 			isa = PBXGroup;
 			children = (
+				C25C4CC2F2F6DD68CC3C91D8BD9F9B77 /* FlappyIM.h */,
+				2B4DF4D47755C9D812023271A1C5785B /* FlappyIM.m */,
 			);
 			name = Public;
 			path = flappyim/Classes/Public;
@@ -1015,8 +1017,6 @@
 			isa = PBXGroup;
 			children = (
 				12B0BC89BEE33CC857D417A7A52F12FD /* Models */,
-				C25C4CC2F2F6DD68CC3C91D8BD9F9B77 /* FlappyIM.h */,
-				2B4DF4D47755C9D812023271A1C5785B /* FlappyIM.m */,
 			);
 			name = Main;
 			path = flappyim/Classes/Main;
