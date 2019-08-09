@@ -31,13 +31,19 @@
     UITapGestureRecognizer* gs=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(login)];
     [self.view addGestureRecognizer:gs];
     
-    
+   
+}
+
+
+
+-(void)createSession{
+    //创建session
     [[FlappyIM shareInstance] createSession:@"100"
                                  andSuccess:^(id _Nullable data) {
-        
-    } andFailure:^(NSError * _Nullable error, NSInteger code) {
-        
-    }];
+                                     
+                                 } andFailure:^(NSError * _Nullable error, NSInteger code) {
+                                     
+                                 }];
 }
 
 
