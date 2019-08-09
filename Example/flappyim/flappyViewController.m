@@ -42,6 +42,16 @@
                     action:@selector(createSession)
           forControlEvents:UIControlEventTouchUpInside];
     
+    [[FlappyIM shareInstance] createAccount:@"101"
+                                andUserName:@"老板"
+                                andUserHead:@""
+                                 andSuccess:^(id _Nullable data) {
+                                     
+                                     NSLog(@"账户创建成功");
+        
+    } andFailure:^(NSError * _Nullable error, NSInteger code) {
+        
+    }];
 }
 
 
