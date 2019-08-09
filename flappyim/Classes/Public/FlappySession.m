@@ -83,10 +83,16 @@
     
     GCDAsyncSocket* socket=[FlappySender shareInstance].socket;
     
+    //错误了
+    if(socket==nil){
+        failure([NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
+        return;
+    }
+    
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     Message* msg=[[Message alloc]init];
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%ld",[NSDate new].timeIntervalSince1970];
+    chatmsg.messageId=[NSString stringWithFormat:@"%d",[NSDate new].timeIntervalSince1970];
     msg.messageId=chatmsg.messageId;
     
     chatmsg.messageSession=self.session.sessionId;
@@ -109,21 +115,18 @@
     
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     msg.messageDate=chatmsg.messageDate;
-    //错误了
-    if(socket==nil){
-        failure([NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
-    }
+    
     //连接到服务器开始请求登录
     FlappyRequest* request=[[FlappyRequest alloc]init];
     //登录请求
-    request.type=REQ_LOGIN;
+    request.type=REQ_MSG;
     //登录信息
     request.msg=msg;
     
     //请求数据，已经GPBComputeRawVarint32SizeForInteger
     NSData* reqData=[request delimitedData];
     //写入请求数据
-    [self.socket writeData:reqData withTimeout:-1 tag:0];
+    [socket writeData:reqData withTimeout:-1 tag:0];
     
     //成功
     success(chatmsg);
