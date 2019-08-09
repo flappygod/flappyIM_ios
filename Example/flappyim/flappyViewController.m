@@ -35,6 +35,10 @@
                      action:@selector(sendMessage:)
            forControlEvents:UIControlEventTouchUpInside];
     
+    //创建会话
+    [self.create addTarget:self
+                     action:@selector(createSession)
+           forControlEvents:UIControlEventTouchUpInside];
    
 }
 

@@ -49,6 +49,16 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ef-Nq-DOT">
+                                <rect key="frame" x="20" y="235" width="335" height="45"/>
+                                <color key="backgroundColor" red="0.098039215690000001" green="0.63137254899999995" blue="0.8980392157" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="Nza-Lu-79O"/>
+                                </constraints>
+                                <state key="normal" title="创建会话">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -56,14 +66,18 @@
                             <constraint firstItem="wr9-mq-vxE" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="20" id="PGn-5g-hox"/>
                             <constraint firstItem="wr9-mq-vxE" firstAttribute="top" secondItem="tir-zj-uWV" secondAttribute="bottom" constant="20" id="UBs-t3-Yd9"/>
                             <constraint firstAttribute="trailing" secondItem="wr9-mq-vxE" secondAttribute="trailing" constant="20" id="Vx1-8L-s6N"/>
+                            <constraint firstItem="4Ef-Nq-DOT" firstAttribute="top" secondItem="wr9-mq-vxE" secondAttribute="bottom" constant="20" id="ew6-Kj-2YJ"/>
+                            <constraint firstItem="4Ef-Nq-DOT" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="20" id="iRw-Aj-Uny"/>
                             <constraint firstAttribute="trailing" secondItem="tir-zj-uWV" secondAttribute="trailing" constant="20" id="igO-Q3-Ggw"/>
                             <constraint firstAttribute="trailing" secondItem="VVI-0e-l2n" secondAttribute="trailing" id="izg-cu-O5z"/>
+                            <constraint firstAttribute="trailing" secondItem="4Ef-Nq-DOT" secondAttribute="trailing" constant="20" id="rLt-vA-sDh"/>
                             <constraint firstItem="VVI-0e-l2n" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" id="tmL-Bw-1ne"/>
                             <constraint firstItem="VVI-0e-l2n" firstAttribute="top" secondItem="uEw-UM-LJ8" secondAttribute="bottom" constant="20" id="w01-V9-yPg"/>
                             <constraint firstItem="tir-zj-uWV" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="20" id="wGQ-Hn-Pq6"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="create" destination="4Ef-Nq-DOT" id="5h9-Ws-d5d"/>
                         <outlet property="lable" destination="VVI-0e-l2n" id="huw-k1-0SW"/>
                         <outlet property="sendBtn" destination="wr9-mq-vxE" id="h3a-JP-PtK"/>
                         <outlet property="sendText" destination="tir-zj-uWV" id="8lT-6Y-qLq"/>

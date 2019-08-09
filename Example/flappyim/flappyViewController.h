@@ -14,5 +14,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *sendText;
 @property (weak, nonatomic) IBOutlet UILabel *lable;
 @property (weak, nonatomic) IBOutlet UIButton *sendBtn;
+@property (weak, nonatomic) IBOutlet UIButton *create;
 
 @end
