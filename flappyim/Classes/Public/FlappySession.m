@@ -7,6 +7,9 @@
 
 #import "FlappySession.h"
 #import "DataBase.h"
+#import "DateTimeTool.h"
+#import "FlappySender.h"
+#import "FlappyConfig.h"
 
 @implementation FlappySession
 {
@@ -30,6 +33,7 @@
     [_listeners addObject:listener];
 }
 
+//清除某个监听
 -(void)removeMessageListener:(MessageListener)listener{
     //移除监听
     [[FlappyIM shareInstance] removeListener:listener
@@ -37,7 +41,7 @@
     [_listeners removeObject:listener];
 }
 
-//清除
+//销毁的时候清除监听
 -(void)dealloc{
     [self clearListeners];
 }
@@ -77,6 +81,52 @@
      andSuccess:(FlappySuccess)success
      andFailure:(FlappyFailure)failure{
     
+    GCDAsyncSocket* socket=[FlappySender shareInstance].socket;
+    
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    Message* msg=[[Message alloc]init];
+    
+    chatmsg.messageId=[NSString stringWithFormat:@"%ld",[NSDate new].timeIntervalSince1970];
+    msg.messageId=chatmsg.messageId;
+    
+    chatmsg.messageSession=self.session.sessionId;
+    msg.messageSession=chatmsg.messageSession;
+    
+    chatmsg.messageSessionType=self.session.sessionType;
+    msg.sessionType=chatmsg.sessionType;
+    
+    chatmsg.messageSend=self.session.userOne.userId;
+    msg.messageSend=chatmsg.messageSend;
+    
+    chatmsg.messageRecieve=self.session.userTwo.userId;
+    msg.messageRecieve=chatmsg.messageRecieve;
+    
+    chatmsg.messageType=MSG_TYPE_TEXT;
+    msg.messageType=chatmsg.messageType;
+    
+    chatmsg.messageContent=text;
+    msg.messageContent=chatmsg.messageContent;
+    
+    chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
+    msg.messageDate=chatmsg.messageDate;
+    //错误了
+    if(socket==nil){
+        failure([NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
+    }
+    //连接到服务器开始请求登录
+    FlappyRequest* request=[[FlappyRequest alloc]init];
+    //登录请求
+    request.type=REQ_LOGIN;
+    //登录信息
+    request.msg=msg;
+    
+    //请求数据，已经GPBComputeRawVarint32SizeForInteger
+    NSData* reqData=[request delimitedData];
+    //写入请求数据
+    [self.socket writeData:reqData withTimeout:-1 tag:0];
+    
+    //成功
+    success(chatmsg);
     
 }
 
