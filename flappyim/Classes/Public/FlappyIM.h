@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 //单例模式
 + (instancetype)shareInstance;
 
+//初始化
+-(void)setup;
+
 
 //创建账号
 -(void)createAccount:(NSString*)userID
@@ -27,15 +30,12 @@ NS_ASSUME_NONNULL_BEGIN
           andSuccess:(FlappySuccess)success
           andFailure:(FlappyFailure)failure;
 
-
 //登录账号
 -(void)login:(NSString*)userExtendID
   andSuccess:(FlappySuccess)success
   andFailure:(FlappyFailure)failure;
 
 
-//初始化
--(void)setup;
 
 
 //增加消息的监听
