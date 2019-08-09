@@ -7,6 +7,7 @@
 //
 
 #import "flappyViewController.h"
+
 #import <flappyim/FlappyIM.h>
 
 
@@ -15,6 +16,9 @@
 @end
 
 @implementation flappyViewController
+{
+    FlappySession* session;
+}
 
 - (void)viewDidLoad
 {
@@ -26,11 +30,13 @@
     //创建登录
     UITapGestureRecognizer* gs=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(login)];
     [self.view addGestureRecognizer:gs];
-    // Do any additional setup after loading the view, typically from a nib.
     
-    __weak typeof(self) safeSelf=self;
-    [[FlappyIM shareInstance] addListener:^(ChatMessage * _Nullable message) {
-        safeSelf.lable.text=message.messageContent;
+    
+    [[FlappyIM shareInstance] createSession:"100"
+                                 andSuccess:^(id _Nullable data) {
+        
+    } andFailure:^(NSError * _Nullable error, NSInteger code) {
+        
     }];
 }
 
@@ -43,8 +49,6 @@
     } andFailure:^(NSError * error, NSInteger code) {
         NSLog(@"登录失败");
     }];
-    
-    
 }
 
 
@@ -52,5 +56,6 @@
 {
     [super didReceiveMemoryWarning];
 }
+
 
 @end
