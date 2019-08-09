@@ -757,7 +757,7 @@
             return false;
         }];
         //转换
-        for(long s=array.count-1;s>=0;s--){
+        for(long s=0;s<array.count;s++){
             Message* message=[array objectAtIndex:s];
             //转换一下
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
@@ -774,7 +774,7 @@
         }
         //最后一条的数据保存
         if(array.count>0){
-            ChatMessage* last=[array objectAtIndex:array.count-1];
+            ChatMessage* last=[array objectAtIndex:0];
             self.user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
             [FlappyData saveUser:self.user];
         }
