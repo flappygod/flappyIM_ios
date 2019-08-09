@@ -413,7 +413,6 @@
                                  @"userTwo":userTwo,
                                  };
     
-    __weak typeof(self) safeSelf=self;
     //请求数据
     [PostTool postRequest:urlString
            withParameters:parameters
