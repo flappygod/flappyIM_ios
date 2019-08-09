@@ -38,7 +38,7 @@
 -(void)clearListeners{
     //移除添加的监听
     if(_listeners!=nil&&_listeners.count>0){
-        for(int s=0;s<listeners.count;s++){
+        for(int s=0;s<_listeners.count;s++){
             [[FlappyIM shareInstance] removeListener:[_listeners objectAtIndex:s]];
         }
     }
