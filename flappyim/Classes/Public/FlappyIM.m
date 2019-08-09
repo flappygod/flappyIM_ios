@@ -748,7 +748,7 @@
         //消息信息
         NSMutableArray* array=respones.msgArray;
         //进行排序
-        NSArray* newArray=[array sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        [array sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             ChatMessage* one=obj1;
             ChatMessage* two=obj2;
             if(one.messageTableSeq>two.messageTableSeq){
@@ -757,8 +757,8 @@
             return false;
         }];
         //转换
-        for(long s=newArray.count-1;s>=0;s--){
-            Message* message=[newArray objectAtIndex:s];
+        for(long s=array.count-1;s>=0;s--){
+            Message* message=[array objectAtIndex:s];
             //转换一下
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
             //获取之前的消息ID
@@ -773,8 +773,8 @@
             }
         }
         //最后一条的数据保存
-        if(newArray.count>0){
-            ChatMessage* last=[newArray objectAtIndex:newArray.count-1];
+        if(array.count>0){
+            ChatMessage* last=[array objectAtIndex:array.count-1];
             self.user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
             [FlappyData saveUser:self.user];
         }
