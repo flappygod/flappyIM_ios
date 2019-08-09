@@ -30,6 +30,13 @@
     [_listeners addObject:listener];
 }
 
+-(void)removeMessageListener:(MessageListener)listener{
+    //移除监听
+    [[FlappyIM shareInstance] removeListener:listener
+                               withSessionID:self.session.sessionId];
+    [_listeners removeObject:listener];
+}
+
 //清除
 -(void)dealloc{
     [self clearListeners];
@@ -40,7 +47,8 @@
     //移除添加的监听
     if(_listeners!=nil&&_listeners.count>0){
         for(int s=0;s<_listeners.count;s++){
-            [[FlappyIM shareInstance] removeListener:[_listeners objectAtIndex:s]];
+            [[FlappyIM shareInstance] removeListener:[_listeners objectAtIndex:s]
+                                       withSessionID:self.session.sessionId];
         }
     }
 }

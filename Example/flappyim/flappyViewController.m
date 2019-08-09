@@ -13,12 +13,12 @@
 
 @interface flappyViewController ()
 
+@property(nonatomic,strong) FlappySession* session;
+
 @end
 
 @implementation flappyViewController
-{
-    FlappySession* session;
-}
+
 
 - (void)viewDidLoad
 {
@@ -39,17 +39,23 @@
     
     //创建会话
     [self.create addTarget:self
-                     action:@selector(createSession)
-           forControlEvents:UIControlEventTouchUpInside];
-   
+                    action:@selector(createSession)
+          forControlEvents:UIControlEventTouchUpInside];
+    
 }
 
 
 //创建session
 -(void)createSession{
     //创建session
+    __weak typeof(self) safeSelf=self;
     [[FlappyIM shareInstance] createSession:@"100"
                                  andSuccess:^(id _Nullable data) {
+                                     safeSelf.session=data;
+                                     
+                                     [safeSelf.session setMessageListener:^(ChatMessage * _Nullable message) {
+                                         
+                                     }];
                                      
                                  } andFailure:^(NSError * _Nullable error, NSInteger code) {
                                      

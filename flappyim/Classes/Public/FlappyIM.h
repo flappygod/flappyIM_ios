@@ -59,17 +59,21 @@ NS_ASSUME_NONNULL_BEGIN
           andFailure:(FlappyFailure)failure;
 
 
-//增加消息的监听
--(void)addListener:(MessageListener)listener;
+//增加所有消息的监听
+-(void)addGloableListener:(MessageListener)listener;
+
+//移除所有消息的监听
+-(void)removeGloableListener:(MessageListener)listener;
 
 
 //增加某个session的监听
 -(void)addListener:(MessageListener)listener
      withSessionID:(NSString*)sessionID;
 
+//移除某个会话的监听
+-(void)removeListener:(MessageListener)listener
+        withSessionID:(NSString*)sessionID;
 
-//移除监听
--(void)removeListener:(MessageListener)listener;
 
 
 @end

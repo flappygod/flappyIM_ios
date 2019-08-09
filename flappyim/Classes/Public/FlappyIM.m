@@ -98,7 +98,7 @@
 }
 
 //增加消息的监听
--(void)addListener:(MessageListener)listener{
+-(void)addGloableListener:(MessageListener)listener{
     //监听所有消息
     if(listener!=nil){
         //获取当前的监听列表
@@ -115,7 +115,7 @@
 }
 
 //移除监听
--(void)removeListener:(MessageListener)listener{
+-(void)removeGloableListener:(MessageListener)listener{
     //监听所有消息
     if(listener!=nil){
         //获取当前的监听列表
@@ -146,6 +146,24 @@
         }
         //添加监听
         [listeners addObject:listener];
+    }
+}
+
+//移除会话的
+-(void)removeListener:(MessageListener)listener
+        withSessionID:(NSString*)sessionID{
+    //监听所有消息
+    if(listener!=nil){
+        //获取当前的监听列表
+        NSMutableArray* listeners=[self.callbacks objectForKey:sessionID];
+        //创建新的监听
+        if(listeners==nil){
+            //设置监听
+            listeners=[[NSMutableArray alloc]init];
+            [self.callbacks setObject:listeners forKey:sessionID];
+        }
+        //添加监听
+        [listeners removeObject:listener];
     }
 }
 
@@ -440,7 +458,7 @@
                   //获取model
                   SessionModel* model=[SessionModel mj_objectWithKeyValues:data];
                   //创建session
-                  FlappySession* session=[[FlappySession alloc]init];
+                  FlappySession* session=[FlappySession mj_objectWithKeyValues:data];
                   session.userOne=[FlappyData getUser].userExtendId;
                   session.userTwo=model.userTwo.userExtendId;
                   session.session=model;
