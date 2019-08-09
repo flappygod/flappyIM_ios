@@ -92,7 +92,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     Message* msg=[[Message alloc]init];
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.2d",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%.2f",[[NSDate new] timeIntervalSince1970]];
     msg.messageId=chatmsg.messageId;
     
     chatmsg.messageSession=self.session.sessionId;
