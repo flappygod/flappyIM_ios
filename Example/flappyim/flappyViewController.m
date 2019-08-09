@@ -52,14 +52,18 @@
     [[FlappyIM shareInstance] createSession:@"100"
                                  andSuccess:^(id _Nullable data) {
                                      safeSelf.session=data;
-                                     
-                                     [safeSelf.session setMessageListener:^(ChatMessage * _Nullable message) {
-                                         
-                                     }];
+                                     [self sessionSuccess:data];
                                      
                                  } andFailure:^(NSError * _Nullable error, NSInteger code) {
                                      
                                  }];
+}
+
+-(void)sessionSuccess:(FlappySession*)session{
+    __weak typeof(self) safeSelf=self;
+    [session addMessageListener:^(ChatMessage * _Nullable message) {
+        safeSelf.lable.text=message.messageContent;
+    }];
 }
 
 
