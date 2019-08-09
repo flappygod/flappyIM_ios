@@ -363,9 +363,9 @@
 		28ABDB14325F6512DF9EEB86CE671367 /* PostTool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PostTool.m; sourceTree = "<group>"; };
 		295E349F1B214D4F3A230268E846535D /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLResponseSerialization.h; path = AFNetworking/AFURLResponseSerialization.h; sourceTree = "<group>"; };
 		29CDEB0A9109111690BF34B474F0F4DA /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2A116289555032346FF86F7ADED8A520 /* Pods_flappyim_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_flappyim_Tests.framework; path = "Pods-flappyim_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A116289555032346FF86F7ADED8A520 /* Pods_flappyim_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_flappyim_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A9F47A698197CF6388043BCE8BC68BA /* GPBMessage_PackagePrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBMessage_PackagePrivate.h; path = objectivec/GPBMessage_PackagePrivate.h; sourceTree = "<group>"; };
-		2B276B0A79173A1D6E83C9B4FB9A4A57 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MJExtension.framework; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B276B0A79173A1D6E83C9B4FB9A4A57 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B3FCFC9A9016C56ED27CB39A4352BC3 /* Timestamp.pbobjc.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Timestamp.pbobjc.m; path = objectivec/google/protobuf/Timestamp.pbobjc.m; sourceTree = "<group>"; };
 		2C0E4CF3EEDA34B49D266195DDF0698D /* Struct.pbobjc.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Struct.pbobjc.m; path = objectivec/google/protobuf/Struct.pbobjc.m; sourceTree = "<group>"; };
 		2DE4D470C1CADB329616D79518C8983A /* GPBUnknownFieldSet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBUnknownFieldSet.m; path = objectivec/GPBUnknownFieldSet.m; sourceTree = "<group>"; };
@@ -377,10 +377,10 @@
 		3904419AB0F56E263B4B9EEBE88107F9 /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A83CCD862C36D3F75C8FEA4AC8B6DDB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3BDA5675491019DF3C1107AE994CC503 /* AFNetworking.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = AFNetworking.modulemap; sourceTree = "<group>"; };
-		3CED5C95AC5A602F5860EC80DEBFF7AB /* Pods_flappyim_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_flappyim_Example.framework; path = "Pods-flappyim_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CED5C95AC5A602F5860EC80DEBFF7AB /* Pods_flappyim_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_flappyim_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D1130CA639C27316A3F6990C30C0712 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
 		3F5CBDF4B49FA253E4859D84BB49DA30 /* MJExtension-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MJExtension-prefix.pch"; sourceTree = "<group>"; };
-		400FF55D0451E7A8F33A3D0D3E11C1B9 /* Reachability.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Reachability.framework; path = Reachability.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		400FF55D0451E7A8F33A3D0D3E11C1B9 /* Reachability.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Reachability.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		40EA801031090422491585460A968D1D /* GPBDictionary.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBDictionary.m; path = objectivec/GPBDictionary.m; sourceTree = "<group>"; };
 		40F10E4FBAA8960B215F86AFDA564D88 /* UploadImageTool.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = UploadImageTool.h; sourceTree = "<group>"; };
 		4126371171F8B572EE6B794F083F1C83 /* MJExtension-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "MJExtension-Info.plist"; sourceTree = "<group>"; };
@@ -418,13 +418,13 @@
 		621644B9EA629D1352400FA0512CB371 /* FlappyData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyData.h; sourceTree = "<group>"; };
 		627CF4CFE52381C92209E0ED0E4B9532 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseQueue.m; path = src/fmdb/FMDatabaseQueue.m; sourceTree = "<group>"; };
 		633868944B357A15D053A84B0521DFC4 /* Protobuf-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Protobuf-umbrella.h"; sourceTree = "<group>"; };
-		660D878C66199F7386C3ADEA933A57C3 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		660D878C66199F7386C3ADEA933A57C3 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		67A0202DE0B93632713414E5D749DDC9 /* GPBRootObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBRootObject.m; path = objectivec/GPBRootObject.m; sourceTree = "<group>"; };
 		67D25028F500AE1C0CF57A68DD97D99A /* MJExtension-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MJExtension-dummy.m"; sourceTree = "<group>"; };
 		67F4663202943ECE7C9A9EC621139750 /* Pods-flappyim_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-flappyim_Example.modulemap"; sourceTree = "<group>"; };
 		6A5095F0FE92965C5B9A786ACF33CEC6 /* GPBDictionary.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBDictionary.h; path = objectivec/GPBDictionary.h; sourceTree = "<group>"; };
 		6B8419C2592097D5B5871EE505F22F60 /* CommonDef.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CommonDef.h; sourceTree = "<group>"; };
-		6CBEFE4F9E22AFDC6347A739BB35FF8C /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CocoaAsyncSocket.framework; path = CocoaAsyncSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CBEFE4F9E22AFDC6347A739BB35FF8C /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CocoaAsyncSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CCD20CA7D3B41BFBC4CD115F2994EC1 /* CocoaAsyncSocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CocoaAsyncSocket-dummy.m"; sourceTree = "<group>"; };
 		6D358FAA9EDB638C8A1FFF069FEBDE47 /* MJPropertyType.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJPropertyType.m; path = MJExtension/MJPropertyType.m; sourceTree = "<group>"; };
 		6DB7E31D5DB75EB5CB37286E3CDAF927 /* Reachability-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Reachability-prefix.pch"; sourceTree = "<group>"; };
@@ -470,7 +470,7 @@
 		950D73FDB945EC0FD8253428BE6C756B /* Protobuf-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Protobuf-dummy.m"; sourceTree = "<group>"; };
 		97446A58F3B5A23EA9412C7C3D7B0396 /* Type.pbobjc.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Type.pbobjc.m; path = objectivec/google/protobuf/Type.pbobjc.m; sourceTree = "<group>"; };
 		9762DAB716FE117995A032912AF7C729 /* Pods-flappyim_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-flappyim_Tests-Info.plist"; sourceTree = "<group>"; };
-		982D1B97A9137D881603B5B99B4C87EA /* flappyim.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = flappyim.framework; path = flappyim.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		982D1B97A9137D881603B5B99B4C87EA /* flappyim.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = flappyim.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98BAFD4B1FD01C8B7C2589ED48D87FC8 /* NSObject+MJCoding.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSObject+MJCoding.h"; path = "MJExtension/NSObject+MJCoding.h"; sourceTree = "<group>"; };
 		992FCAAFD11EC6ED51E4F881575A2CFF /* AFNetworking-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AFNetworking-dummy.m"; sourceTree = "<group>"; };
 		99D6CAF3D10BD335F1AB15370DCA4CE6 /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworkReachabilityManager.h; path = AFNetworking/AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
@@ -480,19 +480,19 @@
 		9B321865045BB42355757EA4219E84B1 /* GPBBootstrap.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBBootstrap.h; path = objectivec/GPBBootstrap.h; sourceTree = "<group>"; };
 		9D34E6D10A7F5A222831C14187514B34 /* UIRefreshControl+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIRefreshControl+AFNetworking.h"; path = "UIKit+AFNetworking/UIRefreshControl+AFNetworking.h"; sourceTree = "<group>"; };
 		9D6E777EB609855BD9772B7D1259C6EE /* UIImage+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+AFNetworking.h"; path = "UIKit+AFNetworking/UIImage+AFNetworking.h"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9E3FD5B90C86831CECDF62330F4DF88E /* GPBCodedInputStream_PackagePrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBCodedInputStream_PackagePrivate.h; path = objectivec/GPBCodedInputStream_PackagePrivate.h; sourceTree = "<group>"; };
 		9E9F680AEF69F5E6EADAECFE955CECF7 /* GPBMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBMessage.m; path = objectivec/GPBMessage.m; sourceTree = "<group>"; };
 		A19FD42E6FBEEC8CD9AF7DAED9EA3823 /* Reachability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		A2AE61EADA441D9B0B27DD14EFFCAF56 /* Reachability-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Reachability-dummy.m"; sourceTree = "<group>"; };
-		A3A80BA70CFB7F75C5391BEBBBA8C9DA /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FMDB.framework; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3A80BA70CFB7F75C5391BEBBBA8C9DA /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3AE5E2A52E2DFCE1C96CF0BBB26912F /* FMResultSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = src/fmdb/FMResultSet.h; sourceTree = "<group>"; };
 		A4045542B37BBC0DCEBFCFD75BD1994E /* GPBUtilities.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBUtilities.m; path = objectivec/GPBUtilities.m; sourceTree = "<group>"; };
 		A49E7E429474876AA2745D36FD8D2B1F /* flappyim-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "flappyim-Info.plist"; sourceTree = "<group>"; };
-		A4FA15D44DF6BAC7550EDEED10862AA3 /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = AFNetworking.framework; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A4FA15D44DF6BAC7550EDEED10862AA3 /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4FE8DF03E21EE4EADC7EE3BB93A1EA8 /* StringTool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = StringTool.m; sourceTree = "<group>"; };
 		A5AD4F079EB66747AC8278F0A0687BC4 /* GPBUnknownField.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBUnknownField.m; path = objectivec/GPBUnknownField.m; sourceTree = "<group>"; };
-		A65534729C21A228853CFA262B4E95BE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		A65534729C21A228853CFA262B4E95BE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A71458ABE3E36DDAD163F3026156C8C5 /* UIKit+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIKit+AFNetworking.h"; path = "UIKit+AFNetworking/UIKit+AFNetworking.h"; sourceTree = "<group>"; };
 		A864B46455DF5F2AE0CAE208156A1F65 /* GPBArray.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBArray.h; path = objectivec/GPBArray.h; sourceTree = "<group>"; };
 		A9B945B46DFA2F5E156A5706016A5066 /* GPBCodedInputStream.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBCodedInputStream.m; path = objectivec/GPBCodedInputStream.m; sourceTree = "<group>"; };
@@ -522,8 +522,8 @@
 		BE13EA9F45B5642CF9721FB3354176CA /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFHTTPSessionManager.h; path = AFNetworking/AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		BF2567F1D58D1C86AE79A8222CE2E60E /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFNetworkReachabilityManager.m; path = AFNetworking/AFNetworkReachabilityManager.m; sourceTree = "<group>"; };
 		C083904E777854662B7855C19247802E /* CocoaAsyncSocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaAsyncSocket-prefix.pch"; sourceTree = "<group>"; };
-		C0B5EA22CBD8C059E4A428AB3479A8DC /* flappyim.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = flappyim.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		C2105C94812B6214B154F54DCEDB72AC /* Protobuf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Protobuf.framework; path = Protobuf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0B5EA22CBD8C059E4A428AB3479A8DC /* flappyim.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = flappyim.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		C2105C94812B6214B154F54DCEDB72AC /* Protobuf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Protobuf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C32F3D458BF31CB707552A8D787D5750 /* Pods-flappyim_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-flappyim_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		C5A0A065C77BB277E9CFBF7AE6B1D06A /* AFURLSessionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLSessionManager.h; path = AFNetworking/AFURLSessionManager.h; sourceTree = "<group>"; };
 		C73DB87B63478943A0BCFABA2A2150D6 /* GPBDescriptor.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBDescriptor.m; path = objectivec/GPBDescriptor.m; sourceTree = "<group>"; };
@@ -785,7 +785,6 @@
 				061D5F6D1ABDEDFD385A0835FE3C74ED /* StringTool.h */,
 				A4FE8DF03E21EE4EADC7EE3BB93A1EA8 /* StringTool.m */,
 			);
-			name = StringTool;
 			path = StringTool;
 			sourceTree = "<group>";
 		};
@@ -796,7 +795,6 @@
 				544E0DC88A672B7B0713947AC2058B1F /* Reachability.m */,
 				D0DA2DD24EB14DAC9BB72F963D14F24F /* Support Files */,
 			);
-			name = Reachability;
 			path = Reachability;
 			sourceTree = "<group>";
 		};
@@ -811,7 +809,6 @@
 				D5174441C43D30CA8AF1765FE9C7A9D6 /* Support Files */,
 				13A37B477DA09BDCC1D9A69988922264 /* UIKit */,
 			);
-			name = AFNetworking;
 			path = AFNetworking;
 			sourceTree = "<group>";
 		};
@@ -876,7 +873,6 @@
 				05AB54CA1DFECE3E1B9FC3B8FFFCDCB5 /* GCDAsyncUdpSocket.m */,
 				FF6B12497AEDE55854CFB4C7177E5F9F /* Support Files */,
 			);
-			name = CocoaAsyncSocket;
 			path = CocoaAsyncSocket;
 			sourceTree = "<group>";
 		};
@@ -886,7 +882,6 @@
 				168D60135E6909E045BDEF3D65805EF9 /* standard */,
 				A4E48EF137FF409367A40AF6FA661506 /* Support Files */,
 			);
-			name = FMDB;
 			path = FMDB;
 			sourceTree = "<group>";
 		};
@@ -951,7 +946,6 @@
 				6F5960FF305338BFF24F513DE91C6F35 /* DateTimeTool.h */,
 				B42439E50574B05B23AB98968960AFFE /* DateTimeTool.m */,
 			);
-			name = DateTool;
 			path = DateTool;
 			sourceTree = "<group>";
 		};
@@ -979,7 +973,6 @@
 				DE8171ABF0E242F258CEC26BE37975FA /* NetTool.h */,
 				02BF9EC5D2ABA87EDC9BCC5951AF5BD6 /* NetTool.m */,
 			);
-			name = NetTool;
 			path = NetTool;
 			sourceTree = "<group>";
 		};
@@ -989,7 +982,6 @@
 				133EE0292408F12FAF264E3C6CFE2678 /* JsonTool.h */,
 				FADB45B8945FF367F4A2CE7387B6F02F /* JsonTool.m */,
 			);
-			name = JsonTool;
 			path = JsonTool;
 			sourceTree = "<group>";
 		};
@@ -1032,7 +1024,6 @@
 				27EF9D8F3E1884A3CC2534591E5D758B /* NSString+MJExtension.m */,
 				1A8AD4EB4A0EB3E1357E70E44EBFD760 /* Support Files */,
 			);
-			name = MJExtension;
 			path = MJExtension;
 			sourceTree = "<group>";
 		};
@@ -1127,7 +1118,6 @@
 				AA6DDAB0471C2B08126BAB7F5447CFAE /* Wrappers.pbobjc.m */,
 				77E4D49E81E3AA033703B4493D58F7AB /* Support Files */,
 			);
-			name = Protobuf;
 			path = Protobuf;
 			sourceTree = "<group>";
 		};
@@ -1163,7 +1153,6 @@
 				40F10E4FBAA8960B215F86AFDA564D88 /* UploadImageTool.h */,
 				44EAD338C7870359E49B28C16C955227 /* UploadImageTool.m */,
 			);
-			name = UploadImage;
 			path = UploadImage;
 			sourceTree = "<group>";
 		};
@@ -1235,6 +1224,15 @@
 		E80BFE9AD654550D5AF3EF64B3EF3BD5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F9BA5A34856E7B324211823AEC02C20A /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				FC73C15FB312E3EBE5BE434E73610570 /* FlappyIM.h */,
+				1DDA305F0CC01A49DDFC976FEB96EF11 /* FlappyIM.m */,
 				8E6DB5CF734314D9E2F726100469ED62 /* ChatMessage.h */,
 				8402D3D6ACD184C2D43C247DC40C42A0 /* ChatMessage.m */,
 				2417B189F1A965811A6EE5C6F77FD34B /* ChatSession.h */,
@@ -1251,16 +1249,6 @@
 				81E38DF09FAF5E39061C0CE556DC25D6 /* SessionModel.m */,
 				D10A359BE84D4228BB7A5557C0A2C43F /* User.h */,
 				816CB41ED6B4B8A44B6F8CADBCA4747C /* User.m */,
-			);
-			name = Models;
-			path = Models;
-			sourceTree = "<group>";
-		};
-		F9BA5A34856E7B324211823AEC02C20A /* Public */ = {
-			isa = PBXGroup;
-			children = (
-				FC73C15FB312E3EBE5BE434E73610570 /* FlappyIM.h */,
-				1DDA305F0CC01A49DDFC976FEB96EF11 /* FlappyIM.m */,
 			);
 			name = Public;
 			path = flappyim/Classes/Public;
@@ -2175,8 +2163,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
