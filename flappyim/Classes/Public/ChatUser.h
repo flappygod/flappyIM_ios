@@ -9,6 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+//会话的用户
 @interface ChatUser : NSObject
 
 //用户ID

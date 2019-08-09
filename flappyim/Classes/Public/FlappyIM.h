@@ -11,7 +11,6 @@
 #import "ChatMessage.h"
 #import "ChatUser.h"
 #import "Flappy.pbobjc.h"
-#import "DataBase.h"
 #import "FlappySession.h"
 #import "PostTool.h"
 #import <UIKit/UIKit.h>

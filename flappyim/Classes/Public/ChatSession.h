@@ -9,6 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+//会话
 @interface ChatSession : NSObject
 
 @property(nonatomic,copy) NSString* sessionId;

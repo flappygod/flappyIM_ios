@@ -14,6 +14,7 @@
 #import <unistd.h>
 #import "FlappyConfig.h"
 #import "FlappyData.h"
+#import "DataBase.h"
 #import "NetTool.h"
 
 
