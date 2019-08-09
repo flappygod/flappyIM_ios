@@ -203,12 +203,12 @@
     
     NetworkStatus netStatus = [reachability currentReachabilityStatus];
     switch (netStatus) {
-            case 0:
+        case 0:
             break;
-            case 1:
+        case 1:
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
             break;
-            case 2:
+        case 2:
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
             break;
         default:
@@ -746,7 +746,7 @@
                                        length:0];
     }
     if (self.receiveData.length < 1)
-    return;
+        return;
     //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
     headL = 0;
     contentL = [PostTool getContentLength:self.receiveData

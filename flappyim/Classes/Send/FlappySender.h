@@ -8,7 +8,6 @@
 #import <Foundation/Foundation.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
-NS_ASSUME_NONNULL_BEGIN
 
 @interface FlappySender : NSObject
 
@@ -19,5 +18,3 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shareInstance;
 
 @end
-
-NS_ASSUME_NONNULL_END
