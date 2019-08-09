@@ -10,7 +10,15 @@
 #endif
 #endif
 
+#import "ChatMessage.h"
+#import "ChatSession.h"
+#import "DataBase.h"
+#import "Flappy.pbobjc.h"
 #import "FlappyIM.h"
+#import "FlappySession.h"
+#import "PostTool.h"
+#import "SessionModel.h"
+#import "User.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
 FOUNDATION_EXPORT const unsigned char flappyimVersionString[];
