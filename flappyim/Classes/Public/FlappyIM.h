@@ -47,8 +47,10 @@ NS_ASSUME_NONNULL_BEGIN
           andSuccess:(FlappySuccess)success
           andFailure:(FlappyFailure)failure;
 
+
 //增加消息的监听
 -(void)addListener:(MessageListener)listener;
+
 
 
 @end
