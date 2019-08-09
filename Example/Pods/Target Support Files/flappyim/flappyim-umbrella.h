@@ -13,7 +13,6 @@
 #import "ChatMessage.h"
 #import "ChatSession.h"
 #import "ChatUser.h"
-#import "DataBase.h"
 #import "Flappy.pbobjc.h"
 #import "FlappyIM.h"
 #import "FlappySession.h"
