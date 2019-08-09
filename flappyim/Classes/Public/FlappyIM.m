@@ -375,6 +375,34 @@
 }
 
 
+
+//创建两个人的会话
+-(void)createSession:(NSString*)userTwo
+          andSuccess:(FlappySuccess)success
+          andFailure:(FlappyFailure)failure{
+    //注册地址
+    NSString *urlString = URL_createSession;
+    
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"userOne":[FlappyData getUser].userExtendId,
+                                 @"userTwo":userTwo,
+                                 };
+    
+    __weak typeof(self) safeSelf=self;
+    //请求数据
+    [PostTool postRequest:urlString
+           withParameters:parameters
+              withSuccess:^(id data) {
+                  
+                  
+              } withFailure:^(NSError * error, NSInteger code) {
+                  //登录失败，清空回调
+                  failure(error,code);
+              }];
+}
+
+
+
 //建立长连接
 -(void)connectSocket:(NSString*)serverAddress
             withPort:(NSString*)serverPort

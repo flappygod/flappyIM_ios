@@ -42,6 +42,11 @@ NS_ASSUME_NONNULL_BEGIN
    andFailure:(FlappyFailure)failure;
 
 
+//创建session
+-(void)createSession:(NSString*)userTwo
+          andSuccess:(FlappySuccess)success
+          andFailure:(FlappyFailure)failure;
+
 //增加消息的监听
 -(void)addListener:(MessageListener)listener;
 
