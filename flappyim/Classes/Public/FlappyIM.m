@@ -818,6 +818,7 @@
             self.user.login=true;
             //保存用户登录数据
             [FlappyData saveUser:self.user];
+            //登录成功
             self.success(self.loginData);
             //清空回调和数据
             self.success=nil;
