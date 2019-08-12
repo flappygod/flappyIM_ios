@@ -115,8 +115,6 @@
                                   withChatMsg:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
-    //成功
-    success(chatmsg);
     
 }
 
