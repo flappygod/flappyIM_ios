@@ -80,8 +80,6 @@
 
 //插入数据库
 -(void)msgInsert:(ChatMessage*)msg{
-    
-    
     //我们先姑且认为它是最后一条
     ChatUser* user=[FlappyData getUser];
     //创建
