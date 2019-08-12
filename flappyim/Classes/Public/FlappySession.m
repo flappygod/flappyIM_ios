@@ -77,6 +77,13 @@
     return arr;
 }
 
+//插入数据库
+-(void)msgInsert:(ChatMessage*)msg{
+    msg.messageSended=SEND_STATE_CREATE;
+    msg.messageTableSeq=[NSString stringWithFormat:@"%ld",(long)NSIntegerMax];
+    [[DataBase shareInstance] insert:msg];
+}
+
 
 //发送文本
 -(void)sendText:(NSString*)text
@@ -113,6 +120,8 @@
     chatmsg.messageSended=SEND_STATE_CREATE;
     msg.messageSended=chatmsg.messageSended;
     
+    
+    [self msgInsert:chatmsg];
     
     [[FlappySender shareInstance] sendMessage:msg
                                   withChatMsg:chatmsg
@@ -157,6 +166,9 @@
     chatmsg.messageSended=SEND_STATE_CREATE;
     msg.messageSended=chatmsg.messageSended;
     
+    
+    [self msgInsert:chatmsg];
+    
     [[FlappySender shareInstance] sendMessage:msg
                                   withChatMsg:chatmsg
                                    andSuccess:success
@@ -198,6 +210,9 @@
     
     chatmsg.messageSended=SEND_STATE_CREATE;
     msg.messageSended=chatmsg.messageSended;
+    
+    
+    [self msgInsert:chatmsg];
     
     [[FlappySender shareInstance] sendMessage:msg
                                   withChatMsg:chatmsg
