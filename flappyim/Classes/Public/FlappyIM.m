@@ -111,7 +111,9 @@
             [self.callbacks setObject:listeners forKey:@""];
         }
         //添加监听
-        [listeners addObject:listener];
+        if(listener!=nil){
+            [listeners addObject:listener];
+        }
     }
 }
 
@@ -128,7 +130,9 @@
             [self.callbacks setObject:listeners forKey:@""];
         }
         //添加监听
-        [listeners removeObject:listener];
+        if(listener!=nil){
+            [listeners removeObject:listener];
+        }
     }
 }
 
@@ -146,7 +150,9 @@
             [self.callbacks setObject:listeners forKey:sessionID];
         }
         //添加监听
-        [listeners addObject:listener];
+        if(listener!=nil){
+            [listeners addObject:listener];
+        }
     }
 }
 
@@ -164,7 +170,9 @@
             [self.callbacks setObject:listeners forKey:sessionID];
         }
         //添加监听
-        [listeners removeObject:listener];
+        if(listener!=nil){
+            [listeners removeObject:listener];
+        }
     }
 }
 
