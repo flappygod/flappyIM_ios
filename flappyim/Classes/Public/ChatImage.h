@@ -11,8 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ChatImage : NSObject
 
-
-
+//发送的本地地址
+@property(nonatomic,copy) NSString*  sendPath;
 //地址
 @property(nonatomic,copy) NSString*  path;
 //宽度
