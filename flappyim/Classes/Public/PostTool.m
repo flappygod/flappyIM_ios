@@ -31,7 +31,7 @@
              
          } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
              //请求成功
-             if(responseObject!=nil&&[responseObject[@"resultCode"] integerValue]==1){
+             if(responseObject!=nil&&[responseObject[@"resultCode"] integerValue]==RESULT_SUCCESS){
                  //数据请求成功
                  success(responseObject[@"resultData"]);
              }else{
@@ -39,7 +39,7 @@
                  failure([[NSError alloc]initWithDomain:responseObject[@"resultMessage"]
                                                    code:RESULT_FAILURE
                                                userInfo:nil],
-                         RESULT_FAILURE);
+                         [responseObject[@"resultCode"] integerValue]);
              }
          } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
              //网络错误请求失败
