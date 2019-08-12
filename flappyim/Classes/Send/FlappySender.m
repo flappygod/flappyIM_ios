@@ -82,7 +82,7 @@
     //请求数据，已经GPBComputeRawVarint32SizeForInteger
     NSData* reqData=[request delimitedData];
     //当前的时间戳
-    NSInteger  dateTime=[[NSDate date] timeIntervalSince1970]*1000;
+    NSInteger  dateTime=(NSInteger)([[NSDate date] timeIntervalSince1970]*1000);
     
     //发送成功
     [self.successCallbacks setObject:success forKey:dateTime];
@@ -100,16 +100,16 @@
 //成功
 -(void)successCallback:(NSInteger)call{
     //获取回调
-    FlappySuccess success=[self.successCallbacks objectForKey:[call]];
+    FlappySuccess success=[self.successCallbacks objectForKey:call];
     //消息
     ChatMessage* msg=[self.successMsgs objectForKey:call];
     //不为空
     if(success!=nil){
         //移除
         success(msg);
-        [self.successCallbacks removeObjectForKey:tag];
-        [self.failureCallbacks removeObjectForKey:tag];
-        [self.successMsgs removeObjectForKey:tag];
+        [self.successCallbacks removeObjectForKey:call];
+        [self.failureCallbacks removeObjectForKey:call];
+        [self.successMsgs removeObjectForKey:call];
     }
 }
 

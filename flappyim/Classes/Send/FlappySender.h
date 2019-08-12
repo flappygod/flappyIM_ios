@@ -9,6 +9,7 @@
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import "ChatMessage.h"
 #import "PostTool.h"
+#import "FlappyConfig.h"
 #import "Flappy.pbobjc.h"
 
 
