@@ -63,11 +63,11 @@
         //不能再使用alloc方法
         //因为已经重写了allocWithZone方法，所以这里要调用父类的分配空间的方法
         _sharedSingleton = [[super allocWithZone:NULL] init];
+        //推送ID
+        _sharedSingleton.pushID=@"123456";
+        _sharedSingleton.receiveData=[[NSMutableData alloc]init];
+        _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
     });
-    //推送ID
-    _sharedSingleton.pushID=@"123456";
-    _sharedSingleton.receiveData=[[NSMutableData alloc]init];
-    _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
     return _sharedSingleton;
 }
 
