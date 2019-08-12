@@ -79,8 +79,11 @@
 
 //插入数据库
 -(void)msgInsert:(ChatMessage*)msg{
+    //创建
     msg.messageSended=SEND_STATE_CREATE;
+    //放在最后
     msg.messageTableSeq=[NSString stringWithFormat:@"%ld",(long)NSIntegerMax];
+    //插入数据
     [[DataBase shareInstance] insert:msg];
 }
 
