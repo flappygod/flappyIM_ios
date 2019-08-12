@@ -7,6 +7,22 @@
 
 #import "FlappySender.h"
 
+
+@interface FlappySender()
+
+
+//成功
+@property(nonatomic,strong) NSMutableDictionary* successCallbacks;
+
+//失败
+@property(nonatomic,strong) NSMutableDictionary* failureCallbacks;
+
+//消息
+@property(nonatomic,strong) NSMutableDictionary* successMsgs;
+
+@end
+
+
 @implementation FlappySender
 
 
@@ -22,6 +38,7 @@
     //初始化
     _sharedSingleton.successCallbacks=[[NSMutableDictionary alloc]init];
     _sharedSingleton.failureCallbacks=[[NSMutableDictionary alloc]init];
+    _sharedSingleton.successMsgs=[[NSMutableDictionary alloc]init];
     return _sharedSingleton;
 }
 
@@ -43,8 +60,10 @@
 
 //发送消息
 -(void)sendMessage:(Message*)msg
+       withChatMsg:(ChatMessage*)chatMsg
         andSuccess:(FlappySuccess)success
         andFailure:(FlappyFailure) failure{
+    
     //获取socket
     GCDAsyncSocket* socket=self.socket;
     //创建
@@ -69,11 +88,47 @@
     self.successCallbacks setObject:success forKey:dateTime];
     //发送失败
     self.failureCallbacks setObject:failure forKey:dateTime];
+    //保存消息
+    self.successMsgs setObject:ChatMessage forKey:dateTime];
     
     //写入请求数据
     [socket writeData:reqData withTimeout:-1 tag:dateTime];
     
 }
+
+
+//成功
+-(void)successCallback:(NSInteger)call{
+    //获取回调
+    FlappySuccess success=[self.successCallbacks objectForKey:call];
+    //消息
+    ChatMessage* msg=[self.successMsgs objectForKey:call];
+    //不为空
+    if(success!=nil){
+        //移除
+        success(msg);
+        [self.successCallbacks removeObjectForKey:tag];
+        [self.failureCallbacks removeObjectForKey:tag];
+        [self.successMsgs removeObjectForKey:tag];
+    }
+}
+
+//失败
+-(void)failureCallbacl:(NSInteger)call{
+    //获取回调
+    FlappyFailure failure=[self.failureCallbacks objectForKey:call];
+    //消息
+    ChatMessage* msg=[self.successMsgs objectForKey:call];
+    //不为空
+    if(failure!=nil){
+        //移除
+        failure(msg);
+        [self.successCallbacks removeObjectForKey:tag];
+        [self.failureCallbacks removeObjectForKey:tag];
+        [self.successMsgs removeObjectForKey:tag];
+    }
+}
+
 
 
 @end
