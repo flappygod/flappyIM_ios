@@ -85,11 +85,11 @@
     NSInteger  dateTime=[[NSDate date] timeIntervalSince1970]*1000;
     
     //发送成功
-    self.successCallbacks setObject:success forKey:dateTime];
+    [self.successCallbacks setObject:success forKey:dateTime];
     //发送失败
-    self.failureCallbacks setObject:failure forKey:dateTime];
+    [self.failureCallbacks setObject:failure forKey:dateTime];
     //保存消息
-    self.successMsgs setObject:ChatMessage forKey:dateTime];
+    [self.successMsgs setObject:ChatMessage forKey:dateTime];
     
     //写入请求数据
     [socket writeData:reqData withTimeout:-1 tag:dateTime];
