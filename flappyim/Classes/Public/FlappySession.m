@@ -114,7 +114,10 @@
     msg.messageDate=chatmsg.messageDate;
     
     
-    [[FlappySender shareInstance] sendMessage:<#(Message *)#> andSuccess:<#^(id _Nullable)success#> andFailure:<#^(NSError * _Nullable, NSInteger)failure#>]
+    [[FlappySender shareInstance] sendMessage:msg
+                                  withChatMsg:chatmsg
+                                   andSuccess:success
+                                   andFailure:failure];
     //成功
     success(chatmsg);
     
@@ -125,13 +128,6 @@
       andSuccess:(FlappySuccess)success
       andFailure:(FlappyFailure)failure{
     
-    GCDAsyncSocket* socket=[FlappySender shareInstance].socket;
-    
-    //错误了
-    if(socket==nil){
-        failure([NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
-        return;
-    }
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     Message* msg=[[Message alloc]init];
@@ -160,20 +156,10 @@
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     msg.messageDate=chatmsg.messageDate;
     
-    //连接到服务器开始请求登录
-    FlappyRequest* request=[[FlappyRequest alloc]init];
-    //登录请求
-    request.type=REQ_MSG;
-    //登录信息
-    request.msg=msg;
-    
-    //请求数据，已经GPBComputeRawVarint32SizeForInteger
-    NSData* reqData=[request delimitedData];
-    //写入请求数据
-    [socket writeData:reqData withTimeout:-1 tag:0];
-    
-    //成功
-    success(chatmsg);
+    [[FlappySender shareInstance] sendMessage:msg
+                                  withChatMsg:chatmsg
+                                   andSuccess:success
+                                   andFailure:failure];
 }
 
 //发送语音
@@ -181,12 +167,6 @@
       andSuccess:(FlappySuccess)success
       andFailure:(FlappyFailure)failure{
     
-    GCDAsyncSocket* socket=[FlappySender shareInstance].socket;
-    //错误了
-    if(socket==nil){
-        failure([NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
-        return;
-    }
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     Message* msg=[[Message alloc]init];
@@ -215,20 +195,11 @@
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     msg.messageDate=chatmsg.messageDate;
     
-    //连接到服务器开始请求登录
-    FlappyRequest* request=[[FlappyRequest alloc]init];
-    //登录请求
-    request.type=REQ_MSG;
-    //登录信息
-    request.msg=msg;
     
-    //请求数据，已经GPBComputeRawVarint32SizeForInteger
-    NSData* reqData=[request delimitedData];
-    //写入请求数据
-    [socket writeData:reqData withTimeout:-1 tag:0];
-    
-    //成功
-    success(chatmsg);
+    [[FlappySender shareInstance] sendMessage:msg
+                                  withChatMsg:chatmsg
+                                   andSuccess:success
+                                   andFailure:failure];
 }
 
 @end
