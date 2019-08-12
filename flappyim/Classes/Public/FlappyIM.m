@@ -813,6 +813,8 @@
             Message* message=[array objectAtIndex:s];
             //转换一下
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
+            //接收成功
+            chatMsg.messageSended=SEND_STATE_REACHED;
             //获取之前的消息ID
             ChatMessage* former=[[DataBase shareInstance]getMessageByID:chatMsg.messageId];
             //之前不存在
@@ -840,7 +842,8 @@
             Message* message=[array objectAtIndex:s];
             //转换一下
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
-            //消息
+            //接收成功
+            chatMsg.messageSended=SEND_STATE_REACHED;
             //获取之前的消息ID
             ChatMessage* former=[[DataBase shareInstance]getMessageByID:chatMsg.messageId];
             //之前不存在
