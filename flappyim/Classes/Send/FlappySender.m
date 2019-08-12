@@ -7,6 +7,7 @@
 
 #import "FlappySender.h"
 #import "DataBase.h"
+#import "FlappyData.h"
 
 
 @interface FlappySender()
@@ -113,7 +114,14 @@
         //移除
         success(msg);
         
+        //获取当前的用户
+        ChatUser* user=[FlappyData getUser];
+        
+        //这里其实我们可以认为已经发送成功了,
         msg.messageSended=SEND_STATE_SENDED;
+        //发送成功了，因为服务器还没有返回messageTableSeq，我们暂且认为是最后一条，这样，保证显示的位置
+        msg.messageTableSeq=user.latest;
+        //放入指定的位置
         [[DataBase shareInstance] insert:msg];
         
         [self.successCallbacks removeObjectForKey:dateTimeStr];
@@ -132,8 +140,9 @@
     //不为空
     if(failure!=nil){
         
-        //发送失败
+        //发送失败的情况下，消息始终在最后一条
         msg.messageSended=SEND_STATE_FAILURE;
+        //插入失败的数据
         [[DataBase shareInstance] insert:msg];
         
         //移除
