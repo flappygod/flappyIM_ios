@@ -83,9 +83,6 @@
      andSuccess:(FlappySuccess)success
      andFailure:(FlappyFailure)failure{
     
-    GCDAsyncSocket* socket=[FlappySender shareInstance].socket;
-    
-    
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     Message* msg=[[Message alloc]init];
     
