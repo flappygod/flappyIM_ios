@@ -7,6 +7,7 @@
 
 #import "DataBase.h"
 #import "FMDatabase.h"
+#import "StringTool.h"
 
 @implementation DataBase
 
@@ -79,7 +80,7 @@
     if(db==nil){
         return false;
     }
-    BOOL result = [db executeUpdate:@"insert into 'message'(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageRecieve,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)" withArgumentsInArray:@[msg.messageId,msg.messageSession,[NSNumber numberWithInteger:msg.messageSessionType],[NSNumber numberWithInteger:msg.messageSessionOffset],msg.messageTableSeq,[NSNumber numberWithInteger:msg.messageType],msg.messageSend,msg.messageRecieve,msg.messageContent,[NSNumber numberWithInteger:msg.messageSended],[NSNumber numberWithInteger:msg.messageReaded],msg.messageDate,msg.messageDeletedDate,[NSNumber numberWithInteger:msg.messageDeleted]]];
+    BOOL result = [db executeUpdate:@"insert into 'message'(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageRecieve,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)" withArgumentsInArray:@[msg.messageId,msg.messageSession,[NSNumber numberWithInteger:msg.messageSessionType],[NSNumber numberWithInteger:msg.messageSessionOffset],msg.messageTableSeq,[NSNumber numberWithInteger:msg.messageType],msg.messageSend,msg.messageRecieve,msg.messageContent,[NSNumber numberWithInteger:msg.messageSended],[NSNumber numberWithInteger:msg.messageReaded],msg.messageDate,[StringTool toUnNullStr:msg.messageDeletedDate],[NSNumber numberWithInteger:msg.messageDeleted]]];
     [db close];
     if (result) {
         return true;
