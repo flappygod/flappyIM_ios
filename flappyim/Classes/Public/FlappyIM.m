@@ -899,7 +899,14 @@
 
 //判断当前用户是否登录
 -(Boolean)isLogin{
-    return [FlappyData getUser]==nil ? false:true;
+    //获取当前账户
+    ChatUser* user=[FlappyData getUser];
+    //如果当前账户不是登录的状态
+    if(user==nil||user.login==false){
+        return false;
+    }
+    //返回状态
+    return true;
 }
 
 #pragma  dealloc
