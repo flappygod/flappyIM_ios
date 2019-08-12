@@ -48,21 +48,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //发送文本
--(void)sendText:(NSString*)text
-     andSuccess:(FlappySuccess)success
-     andFailure:(FlappyFailure)failure;
+-(ChatMessage*)sendText:(NSString*)text
+             andSuccess:(FlappySuccess)success
+             andFailure:(FlappyFailure)failure;
 
 
 //发送图片
--(void)sendImage:(ChatImage*)image
-      andSuccess:(FlappySuccess)success
-      andFailure:(FlappyFailure)failure;
+-(ChatMessage*)sendImage:(ChatImage*)image
+              andSuccess:(FlappySuccess)success
+              andFailure:(FlappyFailure)failure;
 
 
 //发送语音
--(void)sendVoice:(ChatVoice*)image
-      andSuccess:(FlappySuccess)success
-      andFailure:(FlappyFailure)failure;
+-(ChatMessage*)sendVoice:(ChatVoice*)image
+              andSuccess:(FlappySuccess)success
+              andFailure:(FlappyFailure)failure;
 
 
 @end

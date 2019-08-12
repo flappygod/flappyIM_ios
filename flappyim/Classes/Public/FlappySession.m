@@ -96,9 +96,9 @@
 
 
 //发送文本
--(void)sendText:(NSString*)text
-     andSuccess:(FlappySuccess)success
-     andFailure:(FlappyFailure)failure{
+-(ChatMessage*)sendText:(NSString*)text
+             andSuccess:(FlappySuccess)success
+             andFailure:(FlappyFailure)failure{
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     Message* msg=[[Message alloc]init];
@@ -137,13 +137,14 @@
                                   withChatMsg:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
-    
+
+    return chatmsg;
 }
 
 //发送图片
--(void)sendImage:(ChatImage*)image
-      andSuccess:(FlappySuccess)success
-      andFailure:(FlappyFailure)failure{
+-(ChatMessage*)sendImage:(ChatImage*)image
+              andSuccess:(FlappySuccess)success
+              andFailure:(FlappyFailure)failure{
     
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -183,12 +184,13 @@
                                   withChatMsg:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
+    return chatmsg;
 }
 
 //发送语音
--(void)sendVoice:(ChatVoice*)voice
-      andSuccess:(FlappySuccess)success
-      andFailure:(FlappyFailure)failure{
+-(ChatMessage*)sendVoice:(ChatVoice*)voice
+              andSuccess:(FlappySuccess)success
+              andFailure:(FlappyFailure)failure{
     
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -227,6 +229,8 @@
                                   withChatMsg:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
+    
+    return chatmsg;
 }
 
 @end
