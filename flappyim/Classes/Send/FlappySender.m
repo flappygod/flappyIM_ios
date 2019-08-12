@@ -83,13 +83,14 @@
     NSData* reqData=[request delimitedData];
     //当前的时间戳
     NSInteger  dateTime=(NSInteger)([[NSDate date] timeIntervalSince1970]*1000);
-    
+    //设置
+    NSString* dateTimeStr=[NSString stringWithFormat:@"%ld",(long)dateTime];
     //发送成功
-    [self.successCallbacks setObject:success forKey:dateTime];
+    [self.successCallbacks setObject:success forKey:dateTimeStr];
     //发送失败
-    [self.failureCallbacks setObject:failure forKey:dateTime];
+    [self.failureCallbacks setObject:failure forKey:dateTimeStr];
     //保存消息
-    [self.successMsgs setObject:ChatMessage forKey:dateTime];
+    [self.successMsgs setObject:chatMsg forKey:dateTimeStr];
     
     //写入请求数据
     [socket writeData:reqData withTimeout:-1 tag:dateTime];
@@ -99,43 +100,47 @@
 
 //成功
 -(void)successCallback:(NSInteger)call{
+    
+    NSString* dateTimeStr=[NSString stringWithFormat:@"%ld",(long)call];
+    
     //获取回调
-    FlappySuccess success=[self.successCallbacks objectForKey:call];
+    FlappySuccess success=[self.successCallbacks objectForKey:dateTimeStr];
     //消息
-    ChatMessage* msg=[self.successMsgs objectForKey:call];
+    ChatMessage* msg=[self.successMsgs objectForKey:dateTimeStr];
     //不为空
     if(success!=nil){
         //移除
         success(msg);
-        [self.successCallbacks removeObjectForKey:call];
-        [self.failureCallbacks removeObjectForKey:call];
-        [self.successMsgs removeObjectForKey:call];
+        [self.successCallbacks removeObjectForKey:dateTimeStr];
+        [self.failureCallbacks removeObjectForKey:dateTimeStr];
+        [self.successMsgs removeObjectForKey:dateTimeStr];
     }
 }
 
 //失败
 -(void)failureCallback:(NSInteger)call{
+    NSString* dateTimeStr=[NSString stringWithFormat:@"%ld",(long)call];
     //获取回调
-    FlappyFailure failure=[self.failureCallbacks objectForKey:call];
+    FlappyFailure failure=[self.failureCallbacks objectForKey:dateTimeStr];
     //消息
-    ChatMessage* msg=[self.successMsgs objectForKey:call];
+    ChatMessage* msg=[self.successMsgs objectForKey:dateTimeStr];
     //不为空
     if(failure!=nil){
         //移除
         failure([NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
-        [self.successCallbacks removeObjectForKey:tag];
-        [self.failureCallbacks removeObjectForKey:tag];
-        [self.successMsgs removeObjectForKey:tag];
+        [self.successCallbacks removeObjectForKey:dateTimeStr];
+        [self.failureCallbacks removeObjectForKey:dateTimeStr];
+        [self.successMsgs removeObjectForKey:dateTimeStr];
     }
 }
 
 
 //全部失败
--(void)failureCallbacks{
+-(void)failureAllCallbacks{
     NSMutableDictionary* dic=self.failureCallbacks;
-    for(NSInteger time in dic)
+    for(NSString* time in dic)
     {
-        [self failureCallbacl:time];
+        [self failureCallback:[time integerValue]];
     }
 }
 

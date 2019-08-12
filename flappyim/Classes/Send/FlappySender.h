@@ -36,7 +36,7 @@
 -(void)failureCallback:(NSInteger)call;
 
 //全部失败
--(void)failureCallbacks;
+-(void)failureAllCallbacks;
 
 
 @end
