@@ -214,7 +214,6 @@
     chatmsg.messageSended=SEND_STATE_CREATE;
     msg.messageSended=chatmsg.messageSended;
     
-    
     [self msgInsert:chatmsg];
     
     [[FlappySender shareInstance] sendMessage:msg
