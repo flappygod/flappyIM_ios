@@ -6,6 +6,7 @@
 //
 
 #import "FlappySender.h"
+#import "DataBase.h"
 
 
 @interface FlappySender()
@@ -111,6 +112,10 @@
     if(success!=nil){
         //移除
         success(msg);
+        
+        msg.messageSended=SEND_STATE_SENDED;
+        [[DataBase shareInstance] insert:msg];
+        
         [self.successCallbacks removeObjectForKey:dateTimeStr];
         [self.failureCallbacks removeObjectForKey:dateTimeStr];
         [self.successMsgs removeObjectForKey:dateTimeStr];
@@ -122,8 +127,15 @@
     NSString* dateTimeStr=[NSString stringWithFormat:@"%ld",(long)call];
     //获取回调
     FlappyFailure failure=[self.failureCallbacks objectForKey:dateTimeStr];
+    //消息
+    ChatMessage* msg=[self.successMsgs objectForKey:dateTimeStr];
     //不为空
     if(failure!=nil){
+        
+        //发送失败
+        msg.messageSended=SEND_STATE_FAILURE;
+        [[DataBase shareInstance] insert:msg];
+        
         //移除
         failure([NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
         [self.successCallbacks removeObjectForKey:dateTimeStr];
