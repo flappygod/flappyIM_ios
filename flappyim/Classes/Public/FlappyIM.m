@@ -576,8 +576,6 @@
 }
 
 #pragma GCDAsyncSocketDelegate
-
-
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket{
     
 }
@@ -749,7 +747,7 @@
     if (!error){
         //保存解析正确的模型对象
         if (obj){
-            [self saveReceiveInfo:obj];
+            [self msgRecieved:obj];
         }
         //移除已经解析过的data
         [self.receiveData replaceBytesInRange:range
@@ -770,7 +768,7 @@
 }
 
 //处理解析出来的信息,新消息过来了
-- (void)saveReceiveInfo:(FlappyResponse *)respones{
+- (void)msgRecieved:(FlappyResponse *)respones{
     //返回登录消息
     if(respones.type==RES_LOGIN)
     {
