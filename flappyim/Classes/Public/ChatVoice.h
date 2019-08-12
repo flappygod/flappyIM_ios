@@ -12,11 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ChatVoice : NSObject
 
 
-//地址
+//当前语音的地址
 @property(nonatomic,copy) NSString* path;
 
-//声音有多少秒
-@property(nonatomic,assign) NSInteger seconds;
+//当前语音的秒数
+@property(nonatomic,copy) NSString* seconds;
 
 
 @end
