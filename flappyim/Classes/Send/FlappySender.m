@@ -116,7 +116,7 @@
         //发送成功了
         msg.messageSended=SEND_STATE_SENDED;
         //放入指定的位置
-        [[DataBase shareInstance] insert:msg];
+        [[DataBase shareInstance] updateMessage:msg];
         
         [self.successCallbacks removeObjectForKey:dateTimeStr];
         [self.failureCallbacks removeObjectForKey:dateTimeStr];
@@ -137,7 +137,7 @@
         //发送失败了
         msg.messageSended=SEND_STATE_FAILURE;
         //插入数据
-        [[DataBase shareInstance] insert:msg];
+        [[DataBase shareInstance] updateMessage:msg];
         
         //移除
         failure([NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
