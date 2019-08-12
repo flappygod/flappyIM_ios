@@ -17,6 +17,13 @@
 //socket通信
 @property (nonatomic,strong) GCDAsyncSocket*  socket;
 
+//成功
+@property(nonatomic,strong) NSMutableDictionary* successCallbacks;
+
+//失败
+@property(nonatomic,strong) NSMutableDictionary* failureCallbacks;
+
+
 //单例模式
 + (instancetype)shareInstance;
 
