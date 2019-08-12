@@ -21,7 +21,6 @@
 
 @interface FlappyIM ()
 
-@property (nonatomic,strong) FlappyKnicked* knicked;
 //用于监听网络变化
 @property (nonatomic,strong) Reachability* hostReachability;
 //用于监听网络变化
@@ -46,6 +45,8 @@
 @property (nonatomic,strong) FlappySuccess  success;
 //失败
 @property (nonatomic,strong) FlappyFailure  failure;
+//被踢下线了
+@property (nonatomic,strong) FlappyKnicked knicked;
 //回调
 @property (nonatomic,strong) NSMutableDictionary*  callbacks;
 
