@@ -84,8 +84,12 @@
     ChatUser* user=[FlappyData getUser];
     //创建
     msg.messageSended=SEND_STATE_CREATE;
+    //数据
+    NSInteger value=(user.latest!=nil? user.latest.integerValue:0)+1;
+    //最后一条
+    NSString* str=[NSString stringWithFormat:@"%ld",(long)value];
     //还没发送成功，那么放在最后一条
-    msg.messageTableSeq=user.latest;
+    msg.messageTableSeq=str;
     //插入数据
     [[DataBase shareInstance] insert:msg];
 }
