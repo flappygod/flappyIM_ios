@@ -648,7 +648,21 @@
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
-    
+    //在主线程之中执行
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //新消息
+            NSMutableDictionary* dic=[FlappySender shareInstance].successCallbacks;
+            //获取回调
+            FlappySuccess* success=[dic objectForKey:tag];
+            //不为空
+            if(success!=nil){
+                //移除
+                [dic removeObjectForKey:tag];
+            }
+            success();
+        });
+    });
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{

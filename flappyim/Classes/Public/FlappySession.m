@@ -114,7 +114,7 @@
     msg.messageDate=chatmsg.messageDate;
     
     
-    
+    [[FlappySender shareInstance] sendMessage:<#(Message *)#> andSuccess:<#^(id _Nullable)success#> andFailure:<#^(NSError * _Nullable, NSInteger)failure#>]
     //成功
     success(chatmsg);
     

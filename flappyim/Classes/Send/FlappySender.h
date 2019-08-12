@@ -17,14 +17,22 @@
 //socket通信
 @property (nonatomic,strong) GCDAsyncSocket*  socket;
 
-//成功
-@property(nonatomic,strong) NSMutableDictionary* successCallbacks;
-
-//失败
-@property(nonatomic,strong) NSMutableDictionary* failureCallbacks;
-
 
 //单例模式
 + (instancetype)shareInstance;
+
+
+//发送消息
+-(void)sendMessage:(Message*)msg
+       withChatMsg:(ChatMessage*)chatMsg
+        andSuccess:(FlappySuccess)success
+        andFailure:(FlappyFailure) failure;
+
+//成功
+-(void)successCallback:(NSInteger)call;
+
+//失败
+-(void)failureCallbacl:(NSInteger)call;
+
 
 @end
