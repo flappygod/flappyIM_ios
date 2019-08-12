@@ -34,11 +34,11 @@
         //不能再使用alloc方法
         //因为已经重写了allocWithZone方法，所以这里要调用父类的分配空间的方法
         _sharedSingleton = [[super allocWithZone:NULL] init];
+        //初始化
+        _sharedSingleton.successCallbacks=[[NSMutableDictionary alloc]init];
+        _sharedSingleton.failureCallbacks=[[NSMutableDictionary alloc]init];
+        _sharedSingleton.successMsgs=[[NSMutableDictionary alloc]init];
     });
-    //初始化
-    _sharedSingleton.successCallbacks=[[NSMutableDictionary alloc]init];
-    _sharedSingleton.failureCallbacks=[[NSMutableDictionary alloc]init];
-    _sharedSingleton.successMsgs=[[NSMutableDictionary alloc]init];
     return _sharedSingleton;
 }
 
