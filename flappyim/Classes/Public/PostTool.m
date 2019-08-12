@@ -7,6 +7,7 @@
 
 #import "PostTool.h"
 #import "FlappyConfig.h"
+#import "StringTool.h"
 
 @implementation PostTool
 
@@ -35,8 +36,9 @@
                  //数据请求成功
                  success(responseObject[@"resultData"]);
              }else{
+                 NSString* resultStr=responseObject[@"resultMessage"];
                  //请求失败
-                 failure([[NSError alloc]initWithDomain:responseObject[@"resultMessage"]
+                 failure([[NSError alloc]initWithDomain:[StringTool toUnNullStr:resultStr]
                                                    code:RESULT_FAILURE
                                                userInfo:nil],
                          [responseObject[@"resultCode"] integerValue]);
