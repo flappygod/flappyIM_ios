@@ -199,12 +199,14 @@
     [self.internetReachability startNotifier];
     [self updateInterfaceWithReachability:self.internetReachability];
 }
+
 //变化监听
 - (void) reachabilityChanged:(NSNotification *)note
 {
     Reachability* curReach = [note object];
     [self updateInterfaceWithReachability:curReach];
 }
+
 //更新网络状态
 - (void)updateInterfaceWithReachability:(Reachability *)reachability
 {
@@ -223,6 +225,7 @@
             break;
     }
 }
+
 //停止监听
 -(void)stopOberver{
     //移除监听
