@@ -74,6 +74,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)removeListener:(MessageListener)listener
         withSessionID:(NSString*)sessionID;
 
+
+//设置被踢下线的监听
+-(void)setKnickedListener:(FlappyKnicked)knicked;
+
+
 //判断当前账号是否登录
 -(Boolean)isLogin;
 
