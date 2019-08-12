@@ -7,16 +7,6 @@
 
 #import "FlappySender.h"
 
-@interface FlappySender()
-
-//成功
-@property(nonatomic,strong) NSMutableDictionary* successCallbacks;
-//失败
-@property(nonatomic,strong) NSMutableDictionary* failureCallbacks;
-
-@end
-
-
 @implementation FlappySender
 
 
