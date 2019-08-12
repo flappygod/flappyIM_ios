@@ -895,6 +895,11 @@
     });
 }
 
+//判断当前用户是否登录
+-(Boolean)isLogin{
+    return [FlappyData getUser]==nil ? false:true;
+}
+
 #pragma  dealloc
 //销毁逻辑
 -(void)dealloc{
