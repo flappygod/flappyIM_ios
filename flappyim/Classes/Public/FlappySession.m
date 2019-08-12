@@ -11,6 +11,7 @@
 #import "FlappySender.h"
 #import "FlappyConfig.h"
 #import "JsonTool.h"
+#import "FlappyData.h"
 #import "MJExtension.h"
 
 @implementation FlappySession
@@ -81,7 +82,7 @@
 -(void)msgInsert:(ChatMessage*)msg{
     //创建
     msg.messageSended=SEND_STATE_CREATE;
-    //放在最后
+    //还没发送成功，那么放在最后一条
     msg.messageTableSeq=[NSString stringWithFormat:@"%ld",(long)NSIntegerMax];
     //插入数据
     [[DataBase shareInstance] insert:msg];
