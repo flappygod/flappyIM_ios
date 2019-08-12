@@ -889,7 +889,7 @@
                 [[DataBase shareInstance] updateMessage:chatMsg];
             }
             //保存最近的时间
-            self.user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
+            self.user.latest=chatMsg.messageTableSeq;
             //保存最近的时间
             [FlappyData saveUser:self.user];
         }
