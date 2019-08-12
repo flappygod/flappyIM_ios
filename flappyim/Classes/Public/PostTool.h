@@ -9,6 +9,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "ChatMessage.h"
 
+typedef void(^FlappyKnicked) (void);
 
 //登录之后非正常关闭
 typedef void(^FlappyDead) (void);

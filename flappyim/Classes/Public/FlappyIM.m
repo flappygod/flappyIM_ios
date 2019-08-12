@@ -21,6 +21,7 @@
 
 @interface FlappyIM ()
 
+@property (nonatomic,strong) FlappyKnicked* knicked;
 //用于监听网络变化
 @property (nonatomic,strong) Reachability* hostReachability;
 //用于监听网络变化
@@ -259,6 +260,11 @@
                 if(code==RESULT_KNICKED){
                     //清空user
                     [FlappyData clearUser];
+                    //当前账户被踢下线
+                    if(self.knicked!=nil){
+                        self.knicked();
+                        self.knicked=nil;
+                    }
                 }else{
                     //3秒后重新执行登录
                     [safeSelf performSelector:@selector(setupReconnect)
