@@ -259,7 +259,9 @@
                 //当前账户已经被踢下线了
                 if(code==RESULT_KNICKED){
                     //清空user
-                    [FlappyData clearUser];
+                    ChatUser* uesr=[FlappyData getUser];
+                    uesr.login=false;
+                    [FlappyData saveUser:uesr];
                     //当前账户被踢下线
                     if(self.knicked!=nil){
                         self.knicked();
