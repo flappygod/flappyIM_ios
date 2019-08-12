@@ -110,6 +110,9 @@
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     msg.messageDate=chatmsg.messageDate;
     
+    chatmsg.messageSended=SEND_STATE_CREATE;
+    msg.messageSended=chatmsg.messageSended;
+    
     
     [[FlappySender shareInstance] sendMessage:msg
                                   withChatMsg:chatmsg
@@ -151,6 +154,9 @@
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     msg.messageDate=chatmsg.messageDate;
     
+    chatmsg.messageSended=SEND_STATE_CREATE;
+    msg.messageSended=chatmsg.messageSended;
+    
     [[FlappySender shareInstance] sendMessage:msg
                                   withChatMsg:chatmsg
                                    andSuccess:success
@@ -190,6 +196,8 @@
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     msg.messageDate=chatmsg.messageDate;
     
+    chatmsg.messageSended=SEND_STATE_CREATE;
+    msg.messageSended=chatmsg.messageSended;
     
     [[FlappySender shareInstance] sendMessage:msg
                                   withChatMsg:chatmsg

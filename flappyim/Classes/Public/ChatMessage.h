@@ -10,6 +10,19 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+//消息被创建
+#define SEND_STATE_CREATE   0
+//消息已经发送
+#define SEND_STATE_SENDED   1
+//消息已经推送
+#define SEND_STATE_PUSHED   2
+//消息已经到达
+#define SEND_STATE_REACHED  3
+//消息发送失败
+#define SEND_STATE_FAILURE  9
+
+
+
 
 //文本消息
 #define MSG_TYPE_TEXT  1
