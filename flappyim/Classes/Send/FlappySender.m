@@ -122,8 +122,6 @@
     NSString* dateTimeStr=[NSString stringWithFormat:@"%ld",(long)call];
     //获取回调
     FlappyFailure failure=[self.failureCallbacks objectForKey:dateTimeStr];
-    //消息
-    ChatMessage* msg=[self.successMsgs objectForKey:dateTimeStr];
     //不为空
     if(failure!=nil){
         //移除
