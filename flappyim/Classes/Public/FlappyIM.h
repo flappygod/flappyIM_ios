@@ -74,6 +74,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)removeListener:(MessageListener)listener
         withSessionID:(NSString*)sessionID;
 
+//判断当前账号是否登录
+-(Boolean)isLogin;
+
 
 @end
 
