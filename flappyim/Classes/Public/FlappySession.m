@@ -219,7 +219,7 @@
     msg.messageDate=chatmsg.messageDate;
     
     chatmsg.messageSended=SEND_STATE_CREATE;
-    msg.messageSended=chatmsg.messageSended;
+    msg.messageSended=(int32_t)chatmsg.messageSended;
     
     [self msgInsert:chatmsg];
     
