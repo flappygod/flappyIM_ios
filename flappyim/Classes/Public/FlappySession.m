@@ -80,10 +80,14 @@
 
 //插入数据库
 -(void)msgInsert:(ChatMessage*)msg{
+    
+    
+    //我们先姑且认为它是最后一条
+    ChatUser* user=[FlappyData getUser];
     //创建
     msg.messageSended=SEND_STATE_CREATE;
     //还没发送成功，那么放在最后一条
-    msg.messageTableSeq=[NSString stringWithFormat:@"%ld",(long)NSIntegerMax];
+    msg.messageTableSeq=user.latest;
     //插入数据
     [[DataBase shareInstance] insert:msg];
 }

@@ -116,7 +116,6 @@
         
         //获取当前的用户
         ChatUser* user=[FlappyData getUser];
-        
         //这里其实我们可以认为已经发送成功了,
         msg.messageSended=SEND_STATE_SENDED;
         //发送成功了，因为服务器还没有返回messageTableSeq，我们暂且认为是最后一条，这样，保证显示的位置
