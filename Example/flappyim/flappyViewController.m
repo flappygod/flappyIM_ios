@@ -86,12 +86,12 @@
 
 //登录
 -(void)login{
-//    [[FlappyIM shareInstance] login:@"101" andSuccess:^(id data) {
-//        //登录成功
-//        NSLog(@"登录成功");
-//    } andFailure:^(NSError * error, NSInteger code) {
-//        NSLog(@"登录失败");
-//    }];
+    [[FlappyIM shareInstance] login:@"101" andSuccess:^(id data) {
+        //登录成功
+        NSLog(@"登录成功");
+    } andFailure:^(NSError * error, NSInteger code) {
+        NSLog(@"登录失败");
+    }];
 }
 
 //发送消息
