@@ -255,13 +255,16 @@
             [self autoLogin:^(id data) {
                 NSLog(@"自动登录成功");
             } andFailure:^(NSError * error, NSInteger code) {
-                
-                if()
-                
-                //3秒后重新执行登录
-                [safeSelf performSelector:@selector(setupReconnect)
-                               withObject:nil
-                               afterDelay:5];
+                //当前账户已经被踢下线了
+                if(code==RESULT_KNICKED){
+                    //清空user
+                    [FlappyData clearUser];
+                }else{
+                    //3秒后重新执行登录
+                    [safeSelf performSelector:@selector(setupReconnect)
+                                   withObject:nil
+                                   afterDelay:5];
+                }
             }];
         }
     }

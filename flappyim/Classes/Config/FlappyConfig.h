@@ -42,12 +42,14 @@
 #define  RESULT_FAILURE    0
 //请求成功
 #define  RESULT_SUCCESS    1
-//解析失败
-#define  RESULT_JSONERROR  2
 //网络问题
-#define  RESULT_NETERROR   3
+#define  RESULT_KNICKED    2
+//解析失败
+#define  RESULT_JSONERROR  3
+//网络问题
+#define  RESULT_NETERROR   4
 //未登录
-#define  RESULT_NOTLOGIN   4
+#define  RESULT_NOTLOGIN   5
 
 
 
@@ -61,11 +63,14 @@
 
 
 
+
 //登录返回消息
 #define RES_LOGIN  1
 
 //消息发送
 #define RES_MSG  2
+
+
 
 
 #endif /* FlappyConfig_h */
