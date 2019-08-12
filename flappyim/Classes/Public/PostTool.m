@@ -36,12 +36,15 @@
                  //数据请求成功
                  success(responseObject[@"resultData"]);
              }else{
+                 //消息
                  NSString* resultStr=responseObject[@"resultMessage"];
+                 //返回代码
+                 NSString* resultCode=[StringTool toUnNullZeroStr:responseObject[@"resultCode"]];
                  //请求失败
                  failure([[NSError alloc]initWithDomain:[StringTool toUnNullStr:resultStr]
                                                    code:RESULT_FAILURE
                                                userInfo:nil],
-                         [responseObject[@"resultCode"] integerValue]);
+                         [resultCode integerValue]);
              }
          } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
              //网络错误请求失败
