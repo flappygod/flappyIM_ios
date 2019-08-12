@@ -114,7 +114,7 @@
 }
 
 //失败
--(void)failureCallbacl:(NSInteger)call{
+-(void)failureCallback:(NSInteger)call{
     //获取回调
     FlappyFailure failure=[self.failureCallbacks objectForKey:call];
     //消息
@@ -122,13 +122,22 @@
     //不为空
     if(failure!=nil){
         //移除
-        failure(msg);
+        failure([NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
         [self.successCallbacks removeObjectForKey:tag];
         [self.failureCallbacks removeObjectForKey:tag];
         [self.successMsgs removeObjectForKey:tag];
     }
 }
 
+
+//全部失败
+-(void)failureCallbacks{
+    NSMutableDictionary* dic=self.failureCallbacks;
+    for(NSInteger time in dic)
+    {
+        [self failureCallbacl:time];
+    }
+}
 
 
 @end

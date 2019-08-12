@@ -32,7 +32,10 @@
 -(void)successCallback:(NSInteger)call;
 
 //失败
--(void)failureCallbacl:(NSInteger)call;
+-(void)failureCallback:(NSInteger)call;
+
+//全部失败
+-(void)failureCallbacks;
 
 
 @end
