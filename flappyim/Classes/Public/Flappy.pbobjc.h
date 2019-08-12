@@ -4,7 +4,7 @@
 // This CPP symbol can be defined to use imports that match up to the framework
 // imports needed when using CocoaPods.
 #if !defined(GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS)
- #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 1
+ #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
 #endif
 
 #if GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
@@ -105,14 +105,18 @@ typedef GPB_ENUM(FlappyResponse_FieldNumber) {
 #pragma mark - KafkaMsg
 
 typedef GPB_ENUM(KafkaMsg_FieldNumber) {
-  KafkaMsg_FieldNumber_RouteArray = 1,
-  KafkaMsg_FieldNumber_Msg = 2,
+  KafkaMsg_FieldNumber_Type = 1,
+  KafkaMsg_FieldNumber_RouteArray = 2,
+  KafkaMsg_FieldNumber_Msg = 3,
 };
 
 /**
  * kafka消息
  **/
 @interface KafkaMsg : GPBMessage
+
+/** 类型 */
+@property(nonatomic, readwrite) int32_t type;
 
 /** 路由 */
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<Route*> *routeArray;

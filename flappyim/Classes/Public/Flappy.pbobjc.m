@@ -4,7 +4,7 @@
 // This CPP symbol can be defined to use imports that match up to the framework
 // imports needed when using CocoaPods.
 #if !defined(GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS)
- #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 1
+ #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
 #endif
 
 #if GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
@@ -180,11 +180,13 @@ typedef struct FlappyResponse__storage_ {
 
 @implementation KafkaMsg
 
+@dynamic type;
 @dynamic routeArray, routeArray_Count;
 @dynamic hasMsg, msg;
 
 typedef struct KafkaMsg__storage_ {
   uint32_t _has_storage_[1];
+  int32_t type;
   NSMutableArray *routeArray;
   Message *msg;
 } KafkaMsg__storage_;
@@ -195,6 +197,15 @@ typedef struct KafkaMsg__storage_ {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "type",
+        .dataTypeSpecific.className = NULL,
+        .number = KafkaMsg_FieldNumber_Type,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(KafkaMsg__storage_, type),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt32,
+      },
       {
         .name = "routeArray",
         .dataTypeSpecific.className = GPBStringifySymbol(Route),
@@ -208,7 +219,7 @@ typedef struct KafkaMsg__storage_ {
         .name = "msg",
         .dataTypeSpecific.className = GPBStringifySymbol(Message),
         .number = KafkaMsg_FieldNumber_Msg,
-        .hasIndex = 0,
+        .hasIndex = 1,
         .offset = (uint32_t)offsetof(KafkaMsg__storage_, msg),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
