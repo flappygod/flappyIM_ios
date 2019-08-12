@@ -100,7 +100,7 @@
 //成功
 -(void)successCallback:(NSInteger)call{
     //获取回调
-    FlappySuccess success=[self.successCallbacks objectForKey:call];
+    FlappySuccess success=[self.successCallbacks objectForKey:[call]];
     //消息
     ChatMessage* msg=[self.successMsgs objectForKey:call];
     //不为空
