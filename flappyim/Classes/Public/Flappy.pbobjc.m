@@ -250,12 +250,14 @@ typedef struct KafkaMsg__storage_ {
 @dynamic userId;
 @dynamic device;
 @dynamic pushid;
+@dynamic time;
 
 typedef struct Route__storage_ {
   uint32_t _has_storage_[1];
   NSString *userId;
   NSString *device;
   NSString *pushid;
+  NSString *time;
 } Route__storage_;
 
 // This method is threadsafe because it is initially called
@@ -288,6 +290,15 @@ typedef struct Route__storage_ {
         .number = Route_FieldNumber_Pushid,
         .hasIndex = 2,
         .offset = (uint32_t)offsetof(Route__storage_, pushid),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "time",
+        .dataTypeSpecific.className = NULL,
+        .number = Route_FieldNumber_Time,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(Route__storage_, time),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
       },
