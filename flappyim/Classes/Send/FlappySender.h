@@ -7,6 +7,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import "ChatMessage.h"
+#import "PostTool.h"
+#import "Flappy.pbobjc.h"
 
 
 @interface FlappySender : NSObject

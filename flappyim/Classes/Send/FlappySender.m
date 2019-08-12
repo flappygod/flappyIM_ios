@@ -7,6 +7,16 @@
 
 #import "FlappySender.h"
 
+@interface FlappySender()
+
+//成功
+@property(nonatomic,strong) NSMutableDictionary* successCallbacks;
+//失败
+@property(nonatomic,strong) NSMutableDictionary* failureCallbacks;
+
+@end
+
+
 @implementation FlappySender
 
 
@@ -19,6 +29,9 @@
         //因为已经重写了allocWithZone方法，所以这里要调用父类的分配空间的方法
         _sharedSingleton = [[super allocWithZone:NULL] init];
     });
+    //初始化
+    _sharedSingleton.successCallbacks=[[NSMutableDictionary alloc]init];
+    _sharedSingleton.failureCallbacks=[[NSMutableDictionary alloc]init];
     return _sharedSingleton;
 }
 
@@ -36,6 +49,40 @@
 // 防止外部调用mutableCopy
 - (id)mutableCopyWithZone:(nullable NSZone *)zone {
     return [FlappySender shareInstance];
+}
+
+//发送消息
+-(void)sendMessage:(Message*)msg
+        andSuccess:(FlappySuccess)success
+        andFailure:(FlappyFailure) failure{
+    //获取socket
+    GCDAsyncSocket* socket=self.socket;
+    //创建
+    if(socket==nil){
+        failure([NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
+        return;
+    }
+    
+    //连接到服务器开始请求登录
+    FlappyRequest* request=[[FlappyRequest alloc]init];
+    //登录请求
+    request.type=REQ_MSG;
+    //登录信息
+    request.msg=msg;
+    
+    //请求数据，已经GPBComputeRawVarint32SizeForInteger
+    NSData* reqData=[request delimitedData];
+    //当前的时间戳
+    NSInteger  dateTime=[[NSDate date] timeIntervalSince1970]*1000;
+    
+    //发送成功
+    self.successCallbacks setObject:success forKey:dateTime];
+    //发送失败
+    self.failureCallbacks setObject:failure forKey:dateTime];
+    
+    //写入请求数据
+    [socket writeData:reqData withTimeout:-1 tag:dateTime];
+    
 }
 
 
