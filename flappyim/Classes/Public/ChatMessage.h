@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) NSInteger messageSessionOffset;
 
-@property(nonatomic,assign) NSString* messageTableSeq;
+@property(nonatomic,copy) NSString* messageTableSeq;
 
 @property(nonatomic,assign) NSInteger messageType;
 
