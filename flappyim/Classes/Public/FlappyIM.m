@@ -449,12 +449,18 @@
                   NSDictionary* dic=data[@"user"];
                   //用户
                   ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
+                  //更新信息
+                  ChatUser* newUser=[FlappyData getUser];
                   //最后的时间保存起来
-                  user.latest=[FlappyData getUser].latest;
+                  newUser.userName=user.userName;
+                  //头像
+                  newUser.userHead=user.userHead;
+                  //保存
+                  [FlappyData saveUser:newUser];
                   //用户下线之后重新连接服务器
                   [safeSelf connectSocket:data[@"serverIP"]
                                  withPort:data[@"serverPort"]
-                                 withUser:user
+                                 withUser:newUser
                               withSuccess:success
                               withFailure:failure];
                   
