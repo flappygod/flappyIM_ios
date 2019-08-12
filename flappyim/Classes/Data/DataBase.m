@@ -144,7 +144,7 @@
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? order by messageTableSeq desc" withArgumentsInArray:@[sessionID]];
+    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? order by messageTableSeq desc limit 1" withArgumentsInArray:@[sessionID]];
     //返回消息
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
