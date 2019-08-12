@@ -89,6 +89,18 @@
     return [FlappyIM shareInstance];
 }
 
+//设置被踢下线的监听
+-(void)setKnicked:(FlappyKnicked)knicked{
+    //保留
+    _knicked=knicked;
+    //查看当前的登录状态
+    ChatUser* user=[FlappyData getUser];
+    //用户存在，但是登录状态不对，代表已经被踢下线了
+    if(user!=nil&&user.login==false){
+        self.knicked();
+    }
+}
+
 
 //初始化
 -(void)setup{
