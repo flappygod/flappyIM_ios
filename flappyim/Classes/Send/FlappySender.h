@@ -24,8 +24,7 @@
 
 
 //发送消息
--(void)sendMessage:(Message*)msg
-       withChatMsg:(ChatMessage*)chatMsg
+-(void)sendMessage:(ChatMessage*)chatMsg
         andSuccess:(FlappySuccess)success
         andFailure:(FlappyFailure) failure;
 
