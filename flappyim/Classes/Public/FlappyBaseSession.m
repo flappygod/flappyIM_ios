@@ -17,7 +17,7 @@
 @implementation FlappyBaseSession
 
 //转换为
--(Message*)changeToMessage:(ChatMessage*)chatMsg{
++(Message*)changeToMessage:(ChatMessage*)chatMsg{
     
     Message* msg=[[Message alloc]init];
     

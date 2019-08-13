@@ -18,7 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //转换为
--(Message*)changeToMessage:(ChatMessage*)chatMsg;
++(Message*)changeToMessage:(ChatMessage*)chatMsg;
+
 
 @end
 
