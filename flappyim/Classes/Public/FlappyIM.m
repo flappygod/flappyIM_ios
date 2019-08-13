@@ -487,10 +487,7 @@
     //为空直接出错
     if([FlappyData getUser]==nil){
         //返回没有登录
-        failure([NSError errorWithDomain:@"账户未登录"
-                                    code:0
-                                userInfo:nil],
-                RESULT_NOTLOGIN);
+        failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
     
@@ -526,10 +523,7 @@
     //为空直接出错
     if([FlappyData getUser]==nil){
         //返回没有登录
-        failure([NSError errorWithDomain:@"账户未登录"
-                                    code:0
-                                userInfo:nil],
-                RESULT_NOTLOGIN);
+        failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
     
@@ -566,10 +560,7 @@
     //为空直接出错
     if([FlappyData getUser]==nil){
         //返回没有登录
-        failure([NSError errorWithDomain:@"账户未登录"
-                                    code:0
-                                userInfo:nil],
-                RESULT_NOTLOGIN);
+        failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
     
@@ -603,10 +594,7 @@
     //为空直接出错
     if([FlappyData getUser]==nil){
         //返回没有登录
-        failure([NSError errorWithDomain:@"账户未登录"
-                                    code:0
-                                userInfo:nil],
-                RESULT_NOTLOGIN);
+        failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
     
@@ -640,10 +628,7 @@
     //为空直接出错
     if([FlappyData getUser]==nil){
         //返回没有登录
-        failure([NSError errorWithDomain:@"账户未登录"
-                                    code:0
-                                userInfo:nil],
-                RESULT_NOTLOGIN);
+        failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
     
