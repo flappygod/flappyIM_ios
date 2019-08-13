@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FlappyBaseSession.h"
 #import "SessionModel.h"
 #import "FlappyIM.h"
 #import "PostTool.h"
@@ -14,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FlappySession : NSObject
+@interface FlappySession : FlappyBaseSession
 
 //用户
 @property(nonatomic,copy) NSString*  userOne;

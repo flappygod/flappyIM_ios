@@ -107,38 +107,24 @@
              andFailure:(FlappyFailure)failure{
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    Message* msg=[[Message alloc]init];
     
     chatmsg.messageId=[NSString stringWithFormat:@"%.2f",[[NSDate new] timeIntervalSince1970]];
-    msg.messageId=chatmsg.messageId;
-    
     chatmsg.messageSession=self.session.sessionId;
-    msg.messageSession=chatmsg.messageSession;
-    
     chatmsg.messageSessionType=self.session.sessionType;
-    msg.messageSessionType=(int32_t)chatmsg.messageSessionType;
-    
     chatmsg.messageSend=self.session.userOne.userId;
-    msg.messageSend=chatmsg.messageSend;
-    
     chatmsg.messageRecieve=self.session.userTwo.userId;
-    msg.messageRecieve=chatmsg.messageRecieve;
-    
     chatmsg.messageType=MSG_TYPE_TEXT;
-    msg.messageType=(int32_t)chatmsg.messageType;
-    
     chatmsg.messageContent=text;
-    msg.messageContent=chatmsg.messageContent;
-    
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
-    msg.messageDate=chatmsg.messageDate;
-    
     chatmsg.messageSended=SEND_STATE_CREATE;
-    msg.messageSended=(int32_t)chatmsg.messageSended;
     
+    //转换一下
+    Message* msg=[self changeToMessage:chatmsg];
     
+    //插入消息
     [self msgInsert:chatmsg];
     
+    //发送消息
     [[FlappySender shareInstance] sendMessage:msg
                                   withChatMsg:chatmsg
                                    andSuccess:success
@@ -161,35 +147,18 @@
     
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    Message* msg=[[Message alloc]init];
     
     chatmsg.messageId=[NSString stringWithFormat:@"%.2f",[[NSDate new] timeIntervalSince1970]];
-    msg.messageId=chatmsg.messageId;
-    
     chatmsg.messageSession=self.session.sessionId;
-    msg.messageSession=chatmsg.messageSession;
-    
     chatmsg.messageSessionType=self.session.sessionType;
-    msg.messageSessionType=(int32_t)chatmsg.messageSessionType;
-    
     chatmsg.messageSend=self.session.userOne.userId;
-    msg.messageSend=chatmsg.messageSend;
-    
     chatmsg.messageRecieve=self.session.userTwo.userId;
-    msg.messageRecieve=chatmsg.messageRecieve;
-    
     chatmsg.messageType=MSG_TYPE_IMG;
-    msg.messageType=(int32_t)chatmsg.messageType;
-    
     chatmsg.messageContent=[JsonTool DicToJSONString:[image mj_keyValues]];
-    msg.messageContent=chatmsg.messageContent;
-    
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
-    msg.messageDate=chatmsg.messageDate;
-    
     chatmsg.messageSended=SEND_STATE_CREATE;
-    msg.messageSended=(int32_t)chatmsg.messageSended;
     
+    Message* msg=[self changeToMessage:chatmsg];
     
     [self msgInsert:chatmsg];
     
@@ -210,31 +179,17 @@
     Message* msg=[[Message alloc]init];
     
     chatmsg.messageId=[NSString stringWithFormat:@"%.2f",[[NSDate new] timeIntervalSince1970]];
-    msg.messageId=chatmsg.messageId;
-    
     chatmsg.messageSession=self.session.sessionId;
-    msg.messageSession=chatmsg.messageSession;
-    
     chatmsg.messageSessionType=self.session.sessionType;
-    msg.messageSessionType=(int32_t)chatmsg.messageSessionType;
-    
     chatmsg.messageSend=self.session.userOne.userId;
-    msg.messageSend=chatmsg.messageSend;
-    
     chatmsg.messageRecieve=self.session.userTwo.userId;
-    msg.messageRecieve=chatmsg.messageRecieve;
-    
     chatmsg.messageType=MSG_TYPE_VOICE;
-    msg.messageType=(int32_t)chatmsg.messageType;
-    
     chatmsg.messageContent=[JsonTool DicToJSONString:[voice mj_keyValues]];
-    msg.messageContent=chatmsg.messageContent;
-    
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
-    msg.messageDate=chatmsg.messageDate;
-    
     chatmsg.messageSended=SEND_STATE_CREATE;
-    msg.messageSended=(int32_t)chatmsg.messageSended;
+    
+    
+    Message* msg=[self changeToMessage:chatmsg];
     
     [self msgInsert:chatmsg];
     
