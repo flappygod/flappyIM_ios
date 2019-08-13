@@ -8,6 +8,9 @@
 #import "FlappySender.h"
 #import "FlappyBaseSession.h"
 #import "UploadImageTool.h"
+#import "MJExtension.h"
+#import "JsonTool.h"
+#import "ImageTool.h"
 #import "DataBase.h"
 #import "FlappyData.h"
 
@@ -68,20 +71,48 @@
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure{
     
+    //图片信息
+    ChatImage* chatImg=[ChatImage mj_objectWithKeyValues:[JsonTool JSONStringToDictionary:chatMsg.messageContent]];
+    
     //开始请求
     UploadImageTool* req=[[UploadImageTool alloc]init];
+    
+    __weak typeof(self) safeSelf=self;
+    //成功
     req.successBlock=^(NSString*  data){
-        
+        //字典
+        NSDictionary* dic=[JsonTool JSONStringToDictionary:data];
+        //地址
+        NSString* imgPath=dic[@"resultData"];
+        //地址赋值
+        chatImg.path=imgPath;
+        //设置
+        chatMsg.messageContent=[JsonTool DicToJSONString:[chatMsg mj_keyValues]];
+        //上传完成发送消息
+        [safeSelf sendMessage:chatMsg
+                   andSuccess:success
+                   andFailure:failure];
     };
+    //失败
     req.errorBlock=^(NSException*  error){
         failure(error,RESULT_NETERROR);
     };
-    //设置header
+    //数据
     NSMutableDictionary* data=[[NSMutableDictionary alloc]init];
-    [data setObject:loginKey forKey:@"key"];
+    //获取图片
+    UIImage* image=[[UIImage alloc]initWithContentsOfFile:chatImg.sendPath];
+    //图片
     NSMutableDictionary* images=[[NSMutableDictionary alloc]init];
-    [images setObject:image forKey:@"refund_pic"];
-    [req uploadImage:URL_ORDER_EXCHANGE_PHOTO andMParams:data andImage:images];
+    //转换
+    [images setObject:image forKey:@"file"];
+    //保存宽度
+    chatImg.width=[NSString stringWithFormat:@"%ld",(long)image.size.width];
+    //保存高度
+    chatImg.height=[NSString stringWithFormat:@"%ld",(long)image.size.height];
+    
+    [req uploadImage:URL_uploadUrl
+          andMParams:data
+            andImage:images];
     
     
 }
