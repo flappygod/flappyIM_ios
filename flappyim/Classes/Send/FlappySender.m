@@ -154,9 +154,7 @@
         
     }
     
-    
-    
-    
+    //上传文件
     UploadModel* uploadReq=[[UploadModel alloc]init];
     uploadReq.path=chatVoice.sendPath;
     uploadReq.name=@"file";
