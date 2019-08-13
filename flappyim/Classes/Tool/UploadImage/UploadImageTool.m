@@ -18,17 +18,31 @@
 - (void)uploadImageAndMovieBaseModel:(NSString*)urlPath
                             andModel:(UploadModel *)model {
     
-    //获取文件的后缀名
-    NSString *extension = [model.path componentsSeparatedByString:@"."].lastObject;
     //文件名
     NSString *fileName = [model.path componentsSeparatedByString:@"/"].lastObject;
     
     //设置mimeType
     NSString *mimeType;
     if ([model.type isEqualToString:@"image"]) {
-        mimeType = [NSString stringWithFormat:@"image/%@", extension];
+        //获取文件的后缀名
+        if([model.path rangeOfString:@"."].location!=NSNotFound){
+            NSString *extension = [model.path componentsSeparatedByString:@"."].lastObject;
+            mimeType = [NSString stringWithFormat:@"image/%@", extension];
+        }else{
+            NSString *extension = @"png";
+            mimeType = [NSString stringWithFormat:@"image/%@", extension];
+        }
+        
     } else {
-        mimeType = [NSString stringWithFormat:@"video/%@", extension];
+        //获取文件的后缀名
+        if([model.path rangeOfString:@"."].location!=NSNotFound){
+            NSString *extension = [model.path componentsSeparatedByString:@"."].lastObject;
+            mimeType = [NSString stringWithFormat:@"video/%@", extension];
+        }else{
+            NSString *extension = @"mp4";
+            mimeType = [NSString stringWithFormat:@"video/%@", extension];
+        }
+        
     }
     //创建AFHTTPSessionManager
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
