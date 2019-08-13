@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FlappySession : NSObject
+@interface ChatSingleSession : NSObject
 
 
 //session

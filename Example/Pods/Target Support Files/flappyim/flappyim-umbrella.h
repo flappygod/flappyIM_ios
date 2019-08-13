@@ -20,7 +20,8 @@
 #import "FlappyIM.h"
 #import "FlappySession.h"
 #import "PostTool.h"
-#import "SessionModel.h"
+#import "SessionGroupData.h"
+#import "SessionSingleData.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
 FOUNDATION_EXPORT const unsigned char flappyimVersionString[];
