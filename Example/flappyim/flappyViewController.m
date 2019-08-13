@@ -70,6 +70,7 @@
     imagePickVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     imagePickVC.allowsEditing = NO;
     imagePickVC.delegate = self;
+    imagePickVC.mediaTypes = [NSArray arrayWithObjects:@"public.movie", nil];
     [self presentViewController:imagePickVC animated:YES completion:nil];
 }
 
