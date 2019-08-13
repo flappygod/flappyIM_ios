@@ -52,7 +52,6 @@
     //开始上传
     [manager POST:urlPath parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
-        __strong typeof(safeSelf) ss = safeSelf;
         
         NSError *error;
         BOOL success = [formData appendPartWithFileURL:[NSURL fileURLWithPath:model.path]
@@ -61,9 +60,9 @@
                                               mimeType:mimeType
                                                  error:&error];
         if (!success) {
-            if(ss.errorBlock!=nil)
+            if(safeSelf.errorBlock!=nil)
             {
-               ss.errorBlock([[NSException alloc]initWithName:@"upload error"
+                safeSelf.errorBlock([[NSException alloc]initWithName:@"upload error"
                                                               reason:error.description
                                                             userInfo:nil]);
             }
@@ -73,20 +72,16 @@
         
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        __strong typeof(safeSelf) ss = safeSelf;
         //结束
-        if(ss.successBlock!=nil)
+        if(safeSelf.successBlock!=nil)
         {
-            ss.successBlock(responseObject);
+            safeSelf.successBlock(responseObject);
         }
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        __strong typeof(safeSelf) ss = safeSelf;
         //结束
-        if(ss.errorBlock!=nil)
+        if(safeSelf.errorBlock!=nil)
         {
-            ss.errorBlock([[NSException alloc]initWithName:@"upload error"
+            safeSelf.errorBlock([[NSException alloc]initWithName:@"upload error"
                                                           reason:error.description
                                                         userInfo:nil]);
         }
