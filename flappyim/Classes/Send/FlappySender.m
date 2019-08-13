@@ -139,7 +139,7 @@
     
     [req uploadImageAndMovieBaseModel:URL_uploadUrl
                              andModel:iup];
-    //添加
+    //添加进入请求列表，方式请求被回收
     [self.reqArray addObject:req];
     
 }
@@ -158,6 +158,7 @@
     
     //自己
     __weak typeof(self) safeSelf=self;
+    //用于引用
     __weak typeof (req) safeReq=req;
     
     //成功
@@ -208,7 +209,7 @@
     [req uploadImageAndMovieBaseModel:URL_uploadUrl
                              andModel:iup];
     
-    //添加
+    //添加进入请求列表，方式请求被回收
     [self.reqArray addObject:req];
     
 }
