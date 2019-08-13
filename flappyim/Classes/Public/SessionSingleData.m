@@ -9,6 +9,5 @@
 
 @implementation SessionSingleData
 
-@property(nonatomic,strong) NSMutableArray<ChatUser>*  users;
 
 @end
