@@ -42,7 +42,6 @@
             NSString *extension = @"mp4";
             mimeType = [NSString stringWithFormat:@"video/%@", extension];
         }
-        
     }
     //创建AFHTTPSessionManager
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
