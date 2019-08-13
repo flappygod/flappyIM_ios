@@ -17,6 +17,11 @@
 //基础地址
 #define BaseUrl @"http://49.234.106.91"
 
+
+
+//上传文件的地址
+#define URL_uploadUrl [NSString stringWithFormat:@"%@/upload/fileUpload",BaseUrl]
+
 //创建账户
 #define URL_register [NSString stringWithFormat:@"%@/api/register",BaseUrl]
 

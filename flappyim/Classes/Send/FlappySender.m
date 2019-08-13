@@ -7,6 +7,7 @@
 
 #import "FlappySender.h"
 #import "FlappyBaseSession.h"
+#import "UploadImageTool.h"
 #import "DataBase.h"
 #import "FlappyData.h"
 
@@ -65,7 +66,23 @@
 //上传图片并发送
 -(void)uploadImageAndSend:(ChatMessage*)chatMsg
                andSuccess:(FlappySuccess)success
-               andFailure:(FlappyFailure) failure{
+               andFailure:(FlappyFailure)failure{
+    
+    //开始请求
+    UploadImageTool* req=[[UploadImageTool alloc]init];
+    req.successBlock=^(NSString*  data){
+        
+    };
+    req.errorBlock=^(NSException*  error){
+        failure(error,RESULT_NETERROR);
+    };
+    //设置header
+    NSMutableDictionary* data=[[NSMutableDictionary alloc]init];
+    [data setObject:loginKey forKey:@"key"];
+    NSMutableDictionary* images=[[NSMutableDictionary alloc]init];
+    [images setObject:image forKey:@"refund_pic"];
+    [req uploadImage:URL_ORDER_EXCHANGE_PHOTO andMParams:data andImage:images];
+    
     
 }
 
@@ -80,7 +97,8 @@
     
     //获取socket
     GCDAsyncSocket* socket=self.socket;
-    //创建
+    
+    //连接已经断开了
     if(socket==nil){
         failure([NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
         return;
