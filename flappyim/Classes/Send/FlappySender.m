@@ -102,10 +102,8 @@
     };
     
     
-    //数据
-    NSMutableDictionary* data=[[NSMutableDictionary alloc]init];
     //地址
-    AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:chatVoice.sendPath
+    AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:chatVoice.sendPath]
                                                  options:nil];
     //获取长度
     if(audioAsset==nil){
@@ -118,18 +116,18 @@
     //seconds
     float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
     //长度
-    chatVoice.seconds=(NSInteger)audioDurationSeconds*1000;
+    chatVoice.seconds=[NSString stringWithFormat:@"%ld",(long)audioDurationSeconds*1000];
     
     
     
-    //图片
-    NSMutableDictionary* files=[[NSMutableDictionary alloc]init];
-    //转换
-    [files setObject:image forKey:@"file"];
+    UploadModel* iup=[[UploadModel alloc]init];
+    iup.path=chatVoice.sendPath;
+    iup.name=@"file";
+    iup.type=@"video";
     
-    [req uploadFiles:URL_uploadUrl
-          andMParams:data
-             andFile:files];
+    
+    [req uploadImageAndMovieBaseModel:URL_uploadUrl
+                             andModel:iup];
     
     
 }
@@ -189,8 +187,8 @@
     //上传
     UploadModel* iup=[[UploadModel alloc]init];
     iup.path=chatImg.sendPath;
-    iup.name="file";
-    iup.type="image";
+    iup.name=@"file";
+    iup.type=@"image";
     
     [req uploadImageAndMovieBaseModel:URL_uploadUrl
                              andModel:iup];
