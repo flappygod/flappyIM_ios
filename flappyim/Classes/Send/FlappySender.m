@@ -77,6 +77,9 @@
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure{
     
+    //消息
+    [self msgInsert:chatMsg];
+    
     //图片信息
     ChatVoice* chatVoice=[ChatVoice mj_objectWithKeyValues:[JsonTool JSONStringToDictionary:chatMsg.messageContent]];
     
@@ -161,6 +164,9 @@
 -(void)uploadImageAndSend:(ChatMessage*)chatMsg
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure{
+    
+    //消息
+    [self msgInsert:chatMsg];
     
     //图片信息
     ChatImage* chatImg=[ChatImage mj_objectWithKeyValues:[JsonTool JSONStringToDictionary:chatMsg.messageContent]];
