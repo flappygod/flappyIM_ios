@@ -149,13 +149,13 @@
     
     
     
-    UploadModel* iup=[[UploadModel alloc]init];
-    iup.path=chatVoice.sendPath;
-    iup.name=@"file";
-    iup.type=@"video";
+    UploadModel* uploadReq=[[UploadModel alloc]init];
+    uploadReq.path=chatVoice.sendPath;
+    uploadReq.name=@"file";
+    uploadReq.type=@"video";
     
     [req uploadImageAndMovieBaseModel:URL_uploadUrl
-                             andModel:iup];
+                             andModel:uploadReq];
     //添加进入请求列表，方式请求被回收
     [self.reqArray addObject:req];
     
@@ -232,16 +232,14 @@
         
     }
     
-    
-    
     //上传
-    UploadModel* iup=[[UploadModel alloc]init];
-    iup.path=chatImg.sendPath;
-    iup.name=@"file";
-    iup.type=@"image";
-    
+    UploadModel* uploadReq=[[UploadModel alloc]init];
+    uploadReq.path=chatImg.sendPath;
+    uploadReq.name=@"file";
+    uploadReq.type=@"image";
     [req uploadImageAndMovieBaseModel:URL_uploadUrl
-                             andModel:iup];
+                             andModel:uploadReq];
+    
     
     //添加进入请求列表，方式请求被回收
     [self.reqArray addObject:req];
