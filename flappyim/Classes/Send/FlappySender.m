@@ -83,8 +83,6 @@
     //开始请求
     UploadImageTool* req=[[UploadImageTool alloc]init];
     
-    
-    
     //自己
     __weak typeof(self) safeSelf=self;
     __weak typeof (req) safeReq=req;
@@ -114,21 +112,32 @@
         [safeSelf.reqArray removeObject:safeReq];
     };
     
-    //地址
-    AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:chatVoice.sendPath]
-                                                 options:nil];
-    //获取长度
-    if(audioAsset==nil){
+    
+    @try {
+        //地址
+        AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:chatVoice.sendPath]
+                                                     options:nil];
+        //获取长度
+        if(audioAsset==nil){
+            [self msgFailure:chatMsg];
+            failure([NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],RESULT_NETERROR);
+            return;
+        }
+        
+        //长度
+        CMTime audioDuration = audioAsset.duration;
+        //seconds
+        float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
+        //长度
+        chatVoice.seconds=[NSString stringWithFormat:@"%ld",(long)audioDurationSeconds*1000];
+    } @catch (NSException *exception) {
+        [self msgFailure:chatMsg];
         failure([NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],RESULT_NETERROR);
         return;
+    } @finally {
+        
     }
     
-    //长度
-    CMTime audioDuration = audioAsset.duration;
-    //seconds
-    float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
-    //长度
-    chatVoice.seconds=[NSString stringWithFormat:@"%ld",(long)audioDurationSeconds*1000];
     
     
     
@@ -186,19 +195,33 @@
         [safeSelf.reqArray removeObject:safeReq];
     };
     
-    //获取图片
-    UIImage* image=[[UIImage alloc]initWithContentsOfFile:chatImg.sendPath];
-    //不为空
-    if(image==nil){
+    @try {
+        //获取图片
+        UIImage* image=[[UIImage alloc]initWithContentsOfFile:chatImg.sendPath];
+        //不为空
+        if(image==nil){
+            [self msgFailure:chatMsg];
+            failure([NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
+                    RESULT_NETERROR);
+            return;
+        }
+        //保存宽度
+        chatImg.width=[NSString stringWithFormat:@"%ld",(long)image.size.width];
+        //保存高度
+        chatImg.height=[NSString stringWithFormat:@"%ld",(long)image.size.height];
+    } @catch (NSException *exception) {
+        //失败了
         [self msgFailure:chatMsg];
-        failure([NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],RESULT_NETERROR);
+        //图片读取失败
+        failure([NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
+                RESULT_NETERROR);
+        //返回
         return;
+    } @finally {
+        
     }
     
-    //保存宽度
-    chatImg.width=[NSString stringWithFormat:@"%ld",(long)image.size.width];
-    //保存高度
-    chatImg.height=[NSString stringWithFormat:@"%ld",(long)image.size.height];
+    
     
     //上传
     UploadModel* iup=[[UploadModel alloc]init];
