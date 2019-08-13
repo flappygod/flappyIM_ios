@@ -73,6 +73,21 @@ NS_ASSUME_NONNULL_BEGIN
             andFailure:(FlappyFailure)failure;
 
 
+//添加用户到群组
+-(void)addUserToSession:(NSString*)userID
+            withGroupID:(NSString*)groupID
+             andSuccess:(FlappySuccess)success
+             andFailure:(FlappyFailure)failure;
+
+
+//删除群组中的某个用户
+-(void)delUserInSession:(NSString*)userID
+            withGroupID:(NSString*)groupID
+             andSuccess:(FlappySuccess)success
+             andFailure:(FlappyFailure)failure;
+
+
+
 //增加所有消息的监听
 -(void)addGloableListener:(MessageListener)listener;
 
