@@ -18,6 +18,7 @@
 
 //转换为
 -(Message*)changeToMessage:(ChatMessage*)chatMsg{
+    
     Message* msg=[[Message alloc]init];
     
     msg.messageId=chatmsg.messageId;
