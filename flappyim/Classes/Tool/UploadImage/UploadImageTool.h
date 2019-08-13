@@ -21,10 +21,10 @@ typedef void(^SuccessBlock) (id);
 @property(nonatomic,strong)  NSMutableData *receiveData;
 
 //失败代码块
-@property (nonatomic, strong)ErrorBlock errorBlock;
+@property (nonatomic, strong) ErrorBlock errorBlock;
 
 //成功代码块
-@property (nonatomic, strong)SuccessBlock successBlock;
+@property (nonatomic, strong) SuccessBlock successBlock;
 
 
 //上传图片到服务器

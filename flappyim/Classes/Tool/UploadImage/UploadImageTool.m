@@ -47,8 +47,8 @@
     //设置请求头类型
     [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
     
-    //防止循环引用
     __weak typeof(self) safeSelf=self;
+    
     //开始上传
     [manager POST:urlPath parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
@@ -61,7 +61,7 @@
         if (!success) {
             if(safeSelf.errorBlock!=nil)
             {
-                safeSelf.errorBlock([[NSException alloc]initWithName:@"upload error"
+               safeSelf.errorBlock([[NSException alloc]initWithName:@"upload error"
                                                               reason:error.description
                                                             userInfo:nil]);
             }
