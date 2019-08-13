@@ -28,6 +28,11 @@
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure;
 
+
+-(void)uploadVoiceAndSend:(ChatMessage*)chatMsg
+               andSuccess:(FlappySuccess)success
+               andFailure:(FlappyFailure)failure;
+
 //发送消息
 -(void)sendMessage:(ChatMessage*)chatMsg
         andSuccess:(FlappySuccess)success
