@@ -143,8 +143,15 @@
                                   withChatMsg:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
-
+    
     return chatmsg;
+}
+
+//发送本地的图片
+-(ChatMessage*)sendLocalImage:(NSString*)path
+                   andSuccess:(FlappySuccess)success
+                   andFailure:(FlappyFailure)failure{
+    
 }
 
 //发送图片

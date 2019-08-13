@@ -16,6 +16,7 @@
 #import "ChatUser.h"
 #import "ChatVoice.h"
 #import "Flappy.pbobjc.h"
+#import "FlappyBaseSession.h"
 #import "FlappyIM.h"
 #import "FlappySession.h"
 #import "PostTool.h"

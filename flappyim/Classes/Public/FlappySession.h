@@ -59,6 +59,12 @@ NS_ASSUME_NONNULL_BEGIN
               andFailure:(FlappyFailure)failure;
 
 
+//发送本地图片
+-(ChatMessage*)sendLocalImage:(NSString*)path
+                   andSuccess:(FlappySuccess)success
+                   andFailure:(FlappyFailure)failure;
+
+
 //发送语音
 -(ChatMessage*)sendVoice:(ChatVoice*)image
               andSuccess:(FlappySuccess)success
