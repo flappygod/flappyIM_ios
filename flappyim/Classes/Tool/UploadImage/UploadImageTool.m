@@ -19,16 +19,13 @@
                             andModel:(UploadModel *)model {
     
     //获取文件的后缀名
-    NSString *extension = [model.name componentsSeparatedByString:@"."].lastObject;
+    NSString *extension = [model.path componentsSeparatedByString:@"."].lastObject;
     //文件名
-    NSString *fileName = [model.name componentsSeparatedByString:@"/"].lastObject;
+    NSString *fileName = [model.path componentsSeparatedByString:@"/"].lastObject;
     
     //设置mimeType
     NSString *mimeType;
     if ([model.type isEqualToString:@"image"]) {
-        if(extension==nil){
-            extension=@"png";
-        }
         mimeType = [NSString stringWithFormat:@"image/%@", extension];
     } else {
         mimeType = [NSString stringWithFormat:@"video/%@", extension];

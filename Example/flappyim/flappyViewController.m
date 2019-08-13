@@ -143,7 +143,7 @@
     // 本地沙盒目录
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
     // 得到本地沙盒中名为"MyImage"的路径，"MyImage"是保存的图片名
-    NSString *imageFilePath = [path stringByAppendingPathComponent:@"MyImage"];
+    NSString *imageFilePath = [path stringByAppendingPathComponent:@"MyImage.png"];
     // 将取得的图片写入本地的沙盒中，其中0.5表示压缩比例，1表示不压缩，数值越小压缩比例越大
     BOOL success = [UIImageJPEGRepresentation(image, 0.5) writeToFile:imageFilePath  atomically:YES];
     if (success){
