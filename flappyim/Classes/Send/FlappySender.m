@@ -171,6 +171,7 @@
     };
     //数据
     NSMutableDictionary* data=[[NSMutableDictionary alloc]init];
+    
     //获取图片
     UIImage* image=[[UIImage alloc]initWithContentsOfFile:chatImg.sendPath];
     //不为空
@@ -179,18 +180,20 @@
         failure([NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],RESULT_NETERROR);
         return;
     }
-    //图片
-    NSMutableDictionary* images=[[NSMutableDictionary alloc]init];
-    //转换
-    [images setObject:image forKey:@"file"];
+    
     //保存宽度
     chatImg.width=[NSString stringWithFormat:@"%ld",(long)image.size.width];
     //保存高度
     chatImg.height=[NSString stringWithFormat:@"%ld",(long)image.size.height];
     
-    [req uploadFiles:URL_uploadUrl
-          andMParams:data
-             andFile:images];
+    //上传
+    UploadModel* iup=[[UploadModel alloc]init];
+    iup.path=chatImg.sendPath;
+    iup.name="file";
+    iup.type="image";
+    
+    [req uploadImageAndMovieBaseModel:URL_uploadUrl
+                             andModel:iup];
     
     
 }

@@ -20,17 +20,16 @@
     
     //获取文件的后缀名
     NSString *extension = [model.name componentsSeparatedByString:@"."].lastObject;
+    //文件名
+    NSString *fileName = [model.name componentsSeparatedByString:@"/"].lastObject;
     
     //设置mimeType
     NSString *mimeType;
     if ([model.type isEqualToString:@"image"]) {
-        
         mimeType = [NSString stringWithFormat:@"image/%@", extension];
     } else {
-        
         mimeType = [NSString stringWithFormat:@"video/%@", extension];
     }
-    
     //创建AFHTTPSessionManager
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
@@ -48,21 +47,23 @@
     //设置请求头类型
     [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
     
+    //防止循环引用
+    __weak typeof(self) safeSelf=self;
     //开始上传
     [manager POST:urlPath parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
         NSError *error;
         BOOL success = [formData appendPartWithFileURL:[NSURL fileURLWithPath:model.path]
                                                   name:model.name
-                                              fileName:model.name
+                                              fileName:fileName
                                               mimeType:mimeType
                                                  error:&error];
         if (!success) {
-            if(self.errorBlock!=nil)
+            if(safeSelf.errorBlock!=nil)
             {
-                self.errorBlock([[NSException alloc]initWithName:@"upload error"
-                                                          reason:error.description
-                                                        userInfo:nil]);
+                safeSelf.errorBlock([[NSException alloc]initWithName:@"upload error"
+                                                              reason:error.description
+                                                            userInfo:nil]);
             }
         }
     } progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -71,22 +72,20 @@
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        model.isUploaded = YES;
         //结束
-        if(self.successBlock!=nil)
+        if(safeSelf.successBlock!=nil)
         {
-            self.successBlock(responseObject);
+            safeSelf.successBlock(responseObject);
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         //结束
-        if(self.errorBlock!=nil)
+        if(safeSelf.errorBlock!=nil)
         {
-            self.errorBlock([[NSException alloc]initWithName:@"upload error"
-                                                      reason:error.description
-                                                    userInfo:nil]);
+            safeSelf.errorBlock([[NSException alloc]initWithName:@"upload error"
+                                                          reason:error.description
+                                                        userInfo:nil]);
         }
-        model.isUploaded = NO;
     }];
 }
 
