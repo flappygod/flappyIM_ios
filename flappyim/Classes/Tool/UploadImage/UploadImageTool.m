@@ -73,7 +73,8 @@
                                               fileName:fileName
                                               mimeType:mimeType
                                                  error:&error];
-        
+        if (!success) {
+        }
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
         
