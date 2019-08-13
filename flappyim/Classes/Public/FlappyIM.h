@@ -12,6 +12,7 @@
 #import "ChatUser.h"
 #import "Flappy.pbobjc.h"
 #import "ChatSingleSession.h"
+#import "ChatGroupSession.h"
 #import "PostTool.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
