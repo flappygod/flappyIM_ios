@@ -26,10 +26,10 @@
     //设置mimeType
     NSString *mimeType;
     if ([model.type isEqualToString:@"image"]) {
-        mimeType = [NSString stringWithFormat:@"image/%@", extension];
         if(extension==nil){
             extension=@"png";
         }
+        mimeType = [NSString stringWithFormat:@"image/%@", extension];
     } else {
         mimeType = [NSString stringWithFormat:@"video/%@", extension];
     }
