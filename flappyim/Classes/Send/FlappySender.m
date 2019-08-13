@@ -87,7 +87,7 @@
         //地址赋值
         chatImg.path=imgPath;
         //设置
-        chatMsg.messageContent=[JsonTool DicToJSONString:[chatMsg mj_keyValues]];
+        chatMsg.messageContent=[JsonTool DicToJSONString:[chatImg mj_keyValues]];
         //上传完成发送消息
         [safeSelf sendMessage:chatMsg
                    andSuccess:success
