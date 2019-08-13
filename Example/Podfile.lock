@@ -48,7 +48,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
-  flappyim: caf10c145a51ef72bf7e0f9effba84add47d2a55
+  flappyim: 56e9fb9934498a3d17be98620071cc256b5deb3a
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   MJExtension: 6b69b3bef2864fd550ce1a184eda219e321209d2
   Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
