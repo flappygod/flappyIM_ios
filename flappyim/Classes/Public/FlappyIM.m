@@ -507,7 +507,7 @@
                   //获取model
                   SessionSingleData* model=[SessionSingleData mj_objectWithKeyValues:data];
                   //创建session
-                  FlappySession* session=[FlappySession mj_objectWithKeyValues:data];
+                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
                   session.session=model;
                   success(session);
               } withFailure:^(NSError * error, NSInteger code) {

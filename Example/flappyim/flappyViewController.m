@@ -13,7 +13,7 @@
 
 @interface flappyViewController ()
 
-@property(nonatomic,strong) FlappySession* session;
+@property(nonatomic,strong) ChatSingleSession* session;
 
 @end
 
