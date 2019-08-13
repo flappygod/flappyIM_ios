@@ -73,14 +73,7 @@
                                               fileName:fileName
                                               mimeType:mimeType
                                                  error:&error];
-        if (!success) {
-            if(safeSelf.errorBlock!=nil)
-            {
-                safeSelf.errorBlock([[NSException alloc]initWithName:@"upload error"
-                                                              reason:[StringTool toUnNullStr:error.description]
-                                                            userInfo:nil]);
-            }
-        }
+        
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
         
