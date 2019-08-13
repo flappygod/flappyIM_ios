@@ -133,6 +133,8 @@
 		88DF2E7E17427829BC8689F2460AC71E /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29CDEB0A9109111690BF34B474F0F4DA /* AFNetworking.framework */; };
 		88F48F6D2302630600005D12 /* ImageTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 88F48F6B2302630600005D12 /* ImageTool.h */; };
 		88F48F6E2302630600005D12 /* ImageTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F48F6C2302630600005D12 /* ImageTool.m */; };
+		88F48F712302791000005D12 /* UploadModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 88F48F6F2302791000005D12 /* UploadModel.h */; };
+		88F48F722302791000005D12 /* UploadModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F48F702302791000005D12 /* UploadModel.m */; };
 		8980273D30E01B29383FD08BE0C4510C /* Timestamp.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CBE99CEF8FB2A8EF8024A6DB3453B39 /* Timestamp.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8A2E1E487FBFC3DF55C12C056BFA36A1 /* MJPropertyType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D358FAA9EDB638C8A1FFF069FEBDE47 /* MJPropertyType.m */; };
 		8A655B7CE4EFCCBE7BFB2EBC628D049A /* ChatMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 776ED37682FE3138379D807A34559C20 /* ChatMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -461,6 +463,8 @@
 		8889FBEBE10A1ACE7FB3AC2DC73A15BD /* PostTool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PostTool.m; sourceTree = "<group>"; };
 		88F48F6B2302630600005D12 /* ImageTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTool.h; sourceTree = "<group>"; };
 		88F48F6C2302630600005D12 /* ImageTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageTool.m; sourceTree = "<group>"; };
+		88F48F6F2302791000005D12 /* UploadModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UploadModel.h; sourceTree = "<group>"; };
+		88F48F702302791000005D12 /* UploadModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UploadModel.m; sourceTree = "<group>"; };
 		89DE52F145FD246CD4D0DBF953FD5202 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Source/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
 		8A212568FADE8B66EF1025FC28B28A97 /* Pods-flappyim_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-flappyim_Tests-umbrella.h"; sourceTree = "<group>"; };
 		8A7C2815EB253916369C3E394FA1C503 /* Type.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Type.pbobjc.h; path = objectivec/google/protobuf/Type.pbobjc.h; sourceTree = "<group>"; };
@@ -936,6 +940,8 @@
 				88F48F6C2302630600005D12 /* ImageTool.m */,
 				C432596E18BB35429380E73EDFD94861 /* UploadImageTool.h */,
 				655E3CED32C70C17AAEEC2AC32291F6D /* UploadImageTool.m */,
+				88F48F6F2302791000005D12 /* UploadModel.h */,
+				88F48F702302791000005D12 /* UploadModel.m */,
 			);
 			path = UploadImage;
 			sourceTree = "<group>";
@@ -1362,6 +1368,7 @@
 				0CEA8594498E670D4490A8C1F7870624 /* DataBase.h in Headers */,
 				EDDF83026C5611DEF45A9D1005F5B363 /* DateTimeTool.h in Headers */,
 				4C81E114AE9064528C1789638A54590A /* Flappy.pbobjc.h in Headers */,
+				88F48F712302791000005D12 /* UploadModel.h in Headers */,
 				00A96014E136D9560266B8FD3A42B1BB /* FlappyBaseSession.h in Headers */,
 				9C3F7860FF69BA038AD3EAE64379DB33 /* FlappyConfig.h in Headers */,
 				DBC000813D2A8185E4DDC9551D76B304 /* FlappyData.h in Headers */,
@@ -1805,6 +1812,7 @@
 				4D0B1B0140EA1A11061851A208E9EC0A /* flappyim-dummy.m in Sources */,
 				2248A27C370699231232FDCBB0011DAB /* FlappyIM.m in Sources */,
 				40FB11E70F74789430C26D3223B14485 /* FlappySender.m in Sources */,
+				88F48F722302791000005D12 /* UploadModel.m in Sources */,
 				F436BC3026D4AC31A64284C1564FE7B1 /* FlappySession.m in Sources */,
 				AA0B975A67203ED1561F9F7C6E0BD8FF /* JsonTool.m in Sources */,
 				8D439637B4FE5280E7068C669297EF9B /* NetTool.m in Sources */,

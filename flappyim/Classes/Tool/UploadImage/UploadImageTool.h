@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UploadModel.h"
 
 //错误请求数据
 typedef void(^ErrorBlock) (NSException *);
@@ -30,6 +31,12 @@ typedef void(^SuccessBlock) (NSString *);
 -(void)uploadFiles:(NSString*)urlPath
         andMParams:(NSMutableDictionary*)params
            andFile:(NSMutableDictionary*)images;
+
+
+
+//上传文件到服务器
+- (void)uploadImageAndMovieBaseModel:(NSString*)urlPath
+                            andModel:(UploadModel *)model;
 
 
 @end
