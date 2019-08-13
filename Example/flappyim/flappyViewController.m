@@ -148,7 +148,7 @@
     BOOL success = [UIImageJPEGRepresentation(image, 0.5) writeToFile:imageFilePath  atomically:YES];
     if (success){
         if(self.session!=nil){
-            [self.session sendLocalImage:imageFilePath
+            [self.session sendLocalVoice:imageFilePath
                               andSuccess:^(id _Nullable data) {
                                   NSLog(@"发送成功");
                               } andFailure:^(NSError * _Nullable error, NSInteger code) {
