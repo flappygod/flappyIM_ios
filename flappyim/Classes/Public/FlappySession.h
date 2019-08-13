@@ -16,11 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FlappySession : NSObject
 
-//用户
-@property(nonatomic,copy) NSString*  userOne;
-
-//用户
-@property(nonatomic,copy) NSString*  userTwo;
 
 //session
 @property(nonatomic,strong) SessionModel*  session;

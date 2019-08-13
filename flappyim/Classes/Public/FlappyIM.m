@@ -508,8 +508,6 @@
                   SessionModel* model=[SessionModel mj_objectWithKeyValues:data];
                   //创建session
                   FlappySession* session=[FlappySession mj_objectWithKeyValues:data];
-                  session.userOne=[FlappyData getUser].userExtendId;
-                  session.userTwo=model.userTwo.userExtendId;
                   session.session=model;
                   success(session);
               } withFailure:^(NSError * error, NSInteger code) {
