@@ -107,7 +107,7 @@
     req.errorBlock=^(NSException*  error){
         [safeSelf msgFailure:chatMsg];
         //上传失败了
-        failure([NSError errorWithDomain:error.description code:0 userInfo:nil],
+        failure([NSError errorWithDomain:error.reason code:0 userInfo:nil],
                 RESULT_NETERROR);
         //移除请求释放资源
         [safeSelf.reqArray removeObject:safeReq];
