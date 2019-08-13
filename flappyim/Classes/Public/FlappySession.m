@@ -108,7 +108,7 @@
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.2f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSend=self.session.userOne.userId;
@@ -148,7 +148,7 @@
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.2f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSend=self.session.userOne.userId;
@@ -178,7 +178,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     Message* msg=[[Message alloc]init];
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.2f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSend=self.session.userOne.userId;
