@@ -30,6 +30,9 @@
 //消息
 @property(nonatomic,strong) NSMutableDictionary* successMsgs;
 
+//请求
+@property(nonatomic,strong) NSMutableArray* reqArray;
+
 @end
 
 
@@ -48,6 +51,7 @@
         _sharedSingleton.successCallbacks=[[NSMutableDictionary alloc]init];
         _sharedSingleton.failureCallbacks=[[NSMutableDictionary alloc]init];
         _sharedSingleton.successMsgs=[[NSMutableDictionary alloc]init];
+        _sharedSingleton.reqArray=[[NSMutableArray alloc]init];
     });
     return _sharedSingleton;
 }
@@ -79,7 +83,12 @@
     //开始请求
     UploadImageTool* req=[[UploadImageTool alloc]init];
     
+    
+    
+    //自己
     __weak typeof(self) safeSelf=self;
+    __weak typeof (req) safeReq=req;
+    
     //成功
     req.successBlock=^(id data){
         //字典
@@ -92,15 +101,18 @@
         [safeSelf sendMessage:chatMsg
                    andSuccess:success
                    andFailure:failure];
+        
+        [safeSelf.reqArray removeObject:safeReq];
     };
+    
     //失败
     req.errorBlock=^(NSException*  error){
         [safeSelf msgFailure:chatMsg];
         //上传失败了
         failure([NSError errorWithDomain:error.description code:0 userInfo:nil],
                 RESULT_NETERROR);
+        [safeSelf.reqArray removeObject:safeReq];
     };
-    
     
     //地址
     AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:chatVoice.sendPath]
@@ -125,10 +137,10 @@
     iup.name=@"file";
     iup.type=@"video";
     
-    
     [req uploadImageAndMovieBaseModel:URL_uploadUrl
                              andModel:iup];
-    
+    //添加
+    [self.reqArray addObject:req];
     
 }
 
