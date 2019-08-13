@@ -27,10 +27,6 @@ typedef void(^SuccessBlock) (id);
 @property (nonatomic, strong) SuccessBlock successBlock;
 
 
-//上传图片到服务器
--(void)uploadFiles:(NSString*)urlPath
-        andMParams:(NSMutableDictionary*)params
-           andFile:(NSMutableDictionary*)images;
 
 
 
