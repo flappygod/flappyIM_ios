@@ -6,6 +6,7 @@
 //
 
 #import "FlappySender.h"
+#import "FlappyBaseSession.h"
 #import "DataBase.h"
 #import "FlappyData.h"
 
@@ -78,7 +79,7 @@
     //登录请求
     request.type=REQ_MSG;
     //登录信息
-    request.msg=msg;
+    request.msg=[FlappyBaseSession changeToMessage:chatMsg];
     
     //请求数据，已经GPBComputeRawVarint32SizeForInteger
     NSData* reqData=[request delimitedData];
