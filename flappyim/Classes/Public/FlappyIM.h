@@ -60,6 +60,19 @@ NS_ASSUME_NONNULL_BEGIN
           andFailure:(FlappyFailure)failure;
 
 
+//创建群组会话
+-(void)createGroupSession:(NSString*)users
+              withGroupID:(NSString*)groupID
+            withGroupName:(NSString*)groupName
+               andSuccess:(FlappySuccess)success
+               andFailure:(FlappyFailure)failure;
+
+//获取群组会话
+-(void)getGroupSession:(NSString*)groupID
+            andSuccess:(FlappySuccess)success
+            andFailure:(FlappyFailure)failure;
+
+
 //增加所有消息的监听
 -(void)addGloableListener:(MessageListener)listener;
 

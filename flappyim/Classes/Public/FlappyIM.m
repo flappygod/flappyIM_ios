@@ -559,6 +559,43 @@
 }
 
 
+//获取群组会话
+-(void)getGroupSession:(NSString*)groupID
+            andSuccess:(FlappySuccess)success
+            andFailure:(FlappyFailure)failure{
+    //为空直接出错
+    if([FlappyData getUser]==nil){
+        //返回没有登录
+        failure([NSError errorWithDomain:@"账户未登录"
+                                    code:0
+                                userInfo:nil],
+                RESULT_NOTLOGIN);
+        return ;
+    }
+    
+    //创建群组会话
+    NSString *urlString = URL_getGroupSession;
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"extendID":groupID};
+    //请求数据
+    [PostTool postRequest:urlString
+           withParameters:parameters
+              withSuccess:^(id data) {
+                  //获取model
+                  SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
+                  //创建session
+                  ChatGroupSession* session=[ChatGroupSession mj_objectWithKeyValues:data];
+                  //数据
+                  session.session=model;
+                  //成功
+                  success(session);
+              } withFailure:^(NSError * error, NSInteger code) {
+                  //登录失败，清空回调
+                  failure(error,code);
+              }];
+}
+
+
 
 //建立长连接
 -(void)connectSocket:(NSString*)serverAddress
