@@ -7,6 +7,7 @@
 //
 
 #import "UploadImageTool.h"
+#import "StringTool.h"
 #import <AFNetworking/AFNetworking.h>
 
 
@@ -76,7 +77,7 @@
             if(safeSelf.errorBlock!=nil)
             {
                 safeSelf.errorBlock([[NSException alloc]initWithName:@"upload error"
-                                                              reason:error.description
+                                                              reason:[StringTool toUnNullStr:error.description]
                                                             userInfo:nil]);
             }
         }
@@ -95,7 +96,7 @@
         if(safeSelf.errorBlock!=nil)
         {
             safeSelf.errorBlock([[NSException alloc]initWithName:@"upload error"
-                                                          reason:error.description
+                                                          reason:[StringTool toUnNullStr:error.description]
                                                         userInfo:nil]);
         }
     }];
