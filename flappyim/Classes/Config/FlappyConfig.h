@@ -37,6 +37,18 @@
 //创建会话
 #define URL_createSession [NSString stringWithFormat:@"%@/api/createSession",BaseUrl]
 
+//创建多人会话
+#define URL_createGroupSession [NSString stringWithFormat:@"%@/api/createGroupSession",BaseUrl]
+
+//获取多人会话
+#define URL_getGroupSession [NSString stringWithFormat:@"%@/api/getGroupSession",BaseUrl]
+
+//添加用户到会话
+#define URL_addUserToSession [NSString stringWithFormat:@"%@/api/addUserToSession",BaseUrl]
+
+//删除会话中的用户
+#define URL_delUserInSession [NSString stringWithFormat:@"%@/api/delUserInSession",BaseUrl]
+
 //发送消息
 #define URL_sendMessage [NSString stringWithFormat:@"%@/api/sendMessage",BaseUrl]
 

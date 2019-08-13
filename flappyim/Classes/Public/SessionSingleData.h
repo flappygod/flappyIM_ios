@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SessionModel : ChatSession
+@interface SessionSingleData : ChatSession
 
 //用户一
 @property(nonatomic,strong) ChatUser*  userOne;

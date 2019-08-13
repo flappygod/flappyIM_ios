@@ -505,7 +505,7 @@
            withParameters:parameters
               withSuccess:^(id data) {
                   //获取model
-                  SessionModel* model=[SessionModel mj_objectWithKeyValues:data];
+                  SessionSingleData* model=[SessionSingleData mj_objectWithKeyValues:data];
                   //创建session
                   FlappySession* session=[FlappySession mj_objectWithKeyValues:data];
                   session.session=model;
