@@ -42,22 +42,35 @@
                     action:@selector(createSession)
           forControlEvents:UIControlEventTouchUpInside];
     
+    [self.sendImageBtn addTarget:self
+                          action:@selector(chooseImag:)
+                forControlEvents:UIControlEventTouchUpInside];
+    
     [[FlappyIM shareInstance] createAccount:@"101"
                                 andUserName:@"老板"
                                 andUserHead:@""
                                  andSuccess:^(id _Nullable data) {
                                      
                                      NSLog(@"账户创建成功");
-        
-    } andFailure:^(NSError * _Nullable error, NSInteger code) {
-        
-    }];
+                                     
+                                 } andFailure:^(NSError * _Nullable error, NSInteger code) {
+                                     
+                                 }];
     
     //踢下线
     [[FlappyIM shareInstance] setKnickedListener:^{
         NSLog(@"当前设备已经被踢下线了");
     }];
     
+}
+
+-(void)chooseImag:(id)sender{
+    
+    UIImagePickerController *imagePickVC = [[UIImagePickerController alloc] init];
+    imagePickVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePickVC.allowsEditing = NO;
+    imagePickVC.delegate = self;
+    [self presentViewController:imagePickVC animated:YES completion:nil];
 }
 
 
@@ -111,6 +124,33 @@
 {
     [super didReceiveMemoryWarning];
 }
+
+
+
+#pragma UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    NSString *type = [info objectForKey:UIImagePickerControllerMediaType];
+    if (![type isEqualToString:@"public.image"]) {
+        return;
+    }
+    UIImage* image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    if (!image) {
+        return;
+    }
+    NSURL *imageAssetUrl = [info objectForKey:UIImagePickerControllerReferenceURL];
+    if(self.session!=nil){
+        [self.session sendLocalImage:imageAssetUrl.path
+                          andSuccess:^(id _Nullable data) {
+                              NSLog(@"发送成功");
+                          } andFailure:^(NSError * _Nullable error, NSInteger code) {
+                              NSLog(@"发送失败");
+                          }];
+    }
+    
+}
+
 
 
 @end

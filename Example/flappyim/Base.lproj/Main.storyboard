@@ -59,10 +59,22 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZGc-rl-Iwu">
+                                <rect key="frame" x="20" y="300" width="335" height="45"/>
+                                <color key="backgroundColor" red="0.098039215690000001" green="0.63137254899999995" blue="0.8980392157" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="YU0-CG-qc3"/>
+                                </constraints>
+                                <state key="normal" title="图片">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="ZGc-rl-Iwu" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="20" id="5Z5-K3-g4i"/>
                             <constraint firstItem="tir-zj-uWV" firstAttribute="top" secondItem="VVI-0e-l2n" secondAttribute="bottom" constant="20" id="6I3-DH-R9d"/>
+                            <constraint firstItem="ZGc-rl-Iwu" firstAttribute="top" secondItem="4Ef-Nq-DOT" secondAttribute="bottom" constant="20" id="9wH-Qu-sFY"/>
                             <constraint firstItem="wr9-mq-vxE" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="20" id="PGn-5g-hox"/>
                             <constraint firstItem="wr9-mq-vxE" firstAttribute="top" secondItem="tir-zj-uWV" secondAttribute="bottom" constant="20" id="UBs-t3-Yd9"/>
                             <constraint firstAttribute="trailing" secondItem="wr9-mq-vxE" secondAttribute="trailing" constant="20" id="Vx1-8L-s6N"/>
@@ -74,12 +86,14 @@
                             <constraint firstItem="VVI-0e-l2n" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" id="tmL-Bw-1ne"/>
                             <constraint firstItem="VVI-0e-l2n" firstAttribute="top" secondItem="uEw-UM-LJ8" secondAttribute="bottom" constant="20" id="w01-V9-yPg"/>
                             <constraint firstItem="tir-zj-uWV" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="20" id="wGQ-Hn-Pq6"/>
+                            <constraint firstAttribute="trailing" secondItem="ZGc-rl-Iwu" secondAttribute="trailing" constant="20" id="wru-TR-7eA"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="create" destination="4Ef-Nq-DOT" id="5h9-Ws-d5d"/>
                         <outlet property="lable" destination="VVI-0e-l2n" id="huw-k1-0SW"/>
                         <outlet property="sendBtn" destination="wr9-mq-vxE" id="h3a-JP-PtK"/>
+                        <outlet property="sendImageBtn" destination="ZGc-rl-Iwu" id="cQF-Bi-7Pg"/>
                         <outlet property="sendText" destination="tir-zj-uWV" id="8lT-6Y-qLq"/>
                     </connections>
                 </viewController>

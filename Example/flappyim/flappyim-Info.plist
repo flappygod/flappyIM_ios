@@ -29,6 +29,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>选择图片上传</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

@@ -8,12 +8,13 @@
 
 @import UIKit;
 
-@interface flappyViewController : UIViewController
+@interface flappyViewController : UIViewController<UIImagePickerControllerDelegate>
 
 //当前的lable
 @property (weak, nonatomic) IBOutlet UITextField *sendText;
 @property (weak, nonatomic) IBOutlet UILabel *lable;
 @property (weak, nonatomic) IBOutlet UIButton *sendBtn;
 @property (weak, nonatomic) IBOutlet UIButton *create;
+@property (weak, nonatomic) IBOutlet UIButton *sendImageBtn;
 
 @end
