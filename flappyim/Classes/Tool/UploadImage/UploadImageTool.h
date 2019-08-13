@@ -12,7 +12,7 @@
 //错误请求数据
 typedef void(^ErrorBlock) (NSException *);
 //请求正确数据
-typedef void(^SuccessBlock) (NSString *);
+typedef void(^SuccessBlock) (id);
 //工具
 @interface UploadImageTool : NSObject
 
@@ -20,9 +20,9 @@ typedef void(^SuccessBlock) (NSString *);
 //异步请求时接收数据的data
 @property(nonatomic,strong)  NSMutableData *receiveData;
 
-
 //失败代码块
 @property (nonatomic, strong)ErrorBlock errorBlock;
+
 //成功代码块
 @property (nonatomic, strong)SuccessBlock successBlock;
 

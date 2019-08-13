@@ -81,9 +81,9 @@
     
     __weak typeof(self) safeSelf=self;
     //成功
-    req.successBlock=^(NSString*  data){
+    req.successBlock=^(id data){
         //字典
-        NSDictionary* dic=[JsonTool JSONStringToDictionary:data];
+        NSDictionary* dic=data;
         //地址赋值
         chatVoice.path=dic[@"resultData"];
         //设置
@@ -146,9 +146,9 @@
     
     __weak typeof(self) safeSelf=self;
     //成功
-    req.successBlock=^(NSString*  data){
+    req.successBlock=^(id data){
         //字典
-        NSDictionary* dic=[JsonTool JSONStringToDictionary:data];
+        NSDictionary* dic=data;
         //地址
         NSString* imgPath=dic[@"resultData"];
         //地址赋值
@@ -167,8 +167,6 @@
         failure([NSError errorWithDomain:error.description code:0 userInfo:nil],
                 RESULT_NETERROR);
     };
-    //数据
-    NSMutableDictionary* data=[[NSMutableDictionary alloc]init];
     
     //获取图片
     UIImage* image=[[UIImage alloc]initWithContentsOfFile:chatImg.sendPath];
