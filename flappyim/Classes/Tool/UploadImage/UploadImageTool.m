@@ -30,6 +30,7 @@
             NSString *extension = [model.path componentsSeparatedByString:@"."].lastObject;
             mimeType = [NSString stringWithFormat:@"image/%@", extension];
         }else{
+            //图片默认png
             NSString *extension = @"png";
             mimeType = [NSString stringWithFormat:@"image/%@", extension];
         }
@@ -40,7 +41,8 @@
             NSString *extension = [model.path componentsSeparatedByString:@"."].lastObject;
             mimeType = [NSString stringWithFormat:@"video/%@", extension];
         }else{
-            NSString *extension = @"mp4";
+            //音频默认MOV文件
+            NSString *extension = @"MOV";
             mimeType = [NSString stringWithFormat:@"video/%@", extension];
         }
     }
