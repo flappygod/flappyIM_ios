@@ -118,15 +118,11 @@
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
-    //转换一下
-    Message* msg=[self changeToMessage:chatmsg];
-    
     //插入消息
     [self msgInsert:chatmsg];
     
     //发送消息
-    [[FlappySender shareInstance] sendMessage:msg
-                                  withChatMsg:chatmsg
+    [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
     
@@ -158,12 +154,9 @@
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
-    Message* msg=[self changeToMessage:chatmsg];
-    
     [self msgInsert:chatmsg];
     
-    [[FlappySender shareInstance] sendMessage:msg
-                                  withChatMsg:chatmsg
+    [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
     return chatmsg;
@@ -188,13 +181,9 @@
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
-    
-    Message* msg=[self changeToMessage:chatmsg];
-    
     [self msgInsert:chatmsg];
     
-    [[FlappySender shareInstance] sendMessage:msg
-                                  withChatMsg:chatmsg
+    [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
     
