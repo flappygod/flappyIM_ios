@@ -211,4 +211,27 @@
     return chatmsg;
 }
 
+//重新发送
+-(void)resendMessage:(ChatMessage*)chatmsg{
+    if(chatmsg.messageType==MSG_TYPE_TEXT){
+        [[FlappySender shareInstance] sendMessage:chatmsg
+                                       andSuccess:success
+                                       andFailure:failure];
+    }else if(chatmsg.messageType==MSG_TYPE_IMG){
+        
+        
+        [[FlappySender shareInstance] uploadImageAndSend:chatmsg
+                                              andSuccess:success
+                                              andFailure:failure];
+        
+    }else if(chatmsg.messageType==MSG_TYPE_VOICE){
+        
+        [[FlappySender shareInstance] uploadVoiceAndSend:chatmsg
+                                              andSuccess:success
+                                              andFailure:failure];
+    }
+    
+}
+
+
 @end
