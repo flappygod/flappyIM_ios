@@ -166,7 +166,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     //创建发送地址
     ChatVoice* voice=[[ChatVoice alloc]init];
-    image.sendPath=path;
+    voice.sendPath=path;
     
     chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
     chatmsg.messageSession=self.session.sessionId;
