@@ -109,6 +109,27 @@
                    andSuccess:(FlappySuccess)success
                    andFailure:(FlappyFailure)failure{
     
+    
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    //创建发送地址
+    ChatImage* image=[[ChatImage alloc]init];
+    image.sendPath=path;
+    
+    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionType=self.session.sessionType;
+    chatmsg.messageSend=self.session.userOne.userId;
+    chatmsg.messageRecieve=self.session.userTwo.userId;
+    chatmsg.messageType=MSG_TYPE_IMG;
+    chatmsg.messageContent=[JsonTool DicToJSONString:[image mj_keyValues]];
+    chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageSended=SEND_STATE_CREATE;
+    
+    [[FlappySender shareInstance] sendMessage:chatmsg
+                                   andSuccess:success
+                                   andFailure:failure];
+    return chatmsg;
+    
 }
 
 //发送图片
