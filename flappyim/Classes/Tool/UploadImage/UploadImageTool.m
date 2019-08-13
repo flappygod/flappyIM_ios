@@ -14,9 +14,9 @@
 
 
 //上传图片到服务器
--(void)uploadImage:(NSString*)urlPath
+-(void)uploadFiles:(NSString*)urlPath
         andMParams:(NSMutableDictionary*)params
-          andImage:(NSMutableDictionary*)images{
+           andFile:(NSMutableDictionary*)images{
     
     NSString* PREFIX = @"--"; // 前缀
     NSString* LINE_END = @"\r\n";     // 边界标识

@@ -13,6 +13,9 @@
 #import "ImageTool.h"
 #import "DataBase.h"
 #import "FlappyData.h"
+#import <AVFoundation/AVAsset.h>
+#import <CoreMedia/CoreMedia.h>
+#import <AVFoundation/AVFoundation.h>
 
 
 @interface FlappySender()
@@ -63,6 +66,72 @@
 // 防止外部调用mutableCopy
 - (id)mutableCopyWithZone:(nullable NSZone *)zone {
     return [FlappySender shareInstance];
+}
+
+//发送音频文件
+-(void)uploadVoiceAndSend:(ChatMessage*)chatMsg
+               andSuccess:(FlappySuccess)success
+               andFailure:(FlappyFailure)failure{
+    
+    //图片信息
+    ChatVoice* chatVoice=[ChatVoice mj_objectWithKeyValues:[JsonTool JSONStringToDictionary:chatMsg.messageContent]];
+    
+    //开始请求
+    UploadImageTool* req=[[UploadImageTool alloc]init];
+    
+    __weak typeof(self) safeSelf=self;
+    //成功
+    req.successBlock=^(NSString*  data){
+        //字典
+        NSDictionary* dic=[JsonTool JSONStringToDictionary:data];
+        //地址赋值
+        chatVoice.path=dic[@"resultData"];
+        //设置
+        chatMsg.messageContent=[JsonTool DicToJSONString:[chatVoice mj_keyValues]];
+        //上传完成发送消息
+        [safeSelf sendMessage:chatMsg
+                   andSuccess:success
+                   andFailure:failure];
+    };
+    //失败
+    req.errorBlock=^(NSException*  error){
+        [safeSelf msgFailure:chatMsg];
+        //上传失败了
+        failure([NSError errorWithDomain:error.description code:0 userInfo:nil],
+                RESULT_NETERROR);
+    };
+    
+    
+    //数据
+    NSMutableDictionary* data=[[NSMutableDictionary alloc]init];
+    //地址
+    AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:chatVoice.sendPath
+                                                 options:nil];
+    //获取长度
+    if(audioAsset==nil){
+        failure([NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],RESULT_NETERROR);
+        return;
+    }
+    
+    //长度
+    CMTime audioDuration = audioAsset.duration;
+    //seconds
+    float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
+    //长度
+    chatVoice.seconds=(NSInteger)audioDurationSeconds*1000;
+    
+    
+    
+    //图片
+    NSMutableDictionary* files=[[NSMutableDictionary alloc]init];
+    //转换
+    [files setObject:image forKey:@"file"];
+    
+    [req uploadFiles:URL_uploadUrl
+          andMParams:data
+             andFile:files];
+    
+    
 }
 
 
@@ -119,9 +188,9 @@
     //保存高度
     chatImg.height=[NSString stringWithFormat:@"%ld",(long)image.size.height];
     
-    [req uploadImage:URL_uploadUrl
+    [req uploadFiles:URL_uploadUrl
           andMParams:data
-            andImage:images];
+             andFile:images];
     
     
 }

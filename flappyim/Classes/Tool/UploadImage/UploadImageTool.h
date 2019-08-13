@@ -27,9 +27,9 @@ typedef void(^SuccessBlock) (NSString *);
 
 
 //上传图片到服务器
--(void)uploadImage:(NSString*)urlPath
+-(void)uploadFiles:(NSString*)urlPath
         andMParams:(NSMutableDictionary*)params
-          andImage:(NSMutableDictionary*)images;
+           andFile:(NSMutableDictionary*)images;
 
 
 @end
