@@ -90,8 +90,14 @@
     NSString* str=[NSString stringWithFormat:@"%ld",(long)value];
     //还没发送成功，那么放在最后一条
     msg.messageTableSeq=str;
-    //插入数据
-    [[DataBase shareInstance] insert:msg];
+    //之前有没有
+    ChatMessage* former=[[DataBase shareInstance] getMessageByID:msg.messageId];
+    //没有就插入，有就更新
+    if(former==nil){
+        [[DataBase shareInstance] insert:msg];
+    }else{
+        [[DataBase shareInstance] updateMessage:msg];
+    }
 }
 
 
