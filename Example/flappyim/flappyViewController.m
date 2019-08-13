@@ -141,7 +141,8 @@
         url = info[UIImagePickerControllerMediaURL];//获得视频的URL
     }
     if(self.session!=nil){
-        [self.session sendLocalVoice:url.absoluteString
+        NSString* str=[url.absoluteString substringWithRange:NSMakeRange(7, url.absoluteString.length-7)];
+        [self.session sendLocalVoice:str
                           andSuccess:^(id _Nullable data) {
                               NSLog(@"发送成功");
                           } andFailure:^(NSError * _Nullable error, NSInteger code) {
