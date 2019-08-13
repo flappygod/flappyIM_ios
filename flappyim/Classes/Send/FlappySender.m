@@ -99,7 +99,7 @@
         [safeSelf sendMessage:chatMsg
                    andSuccess:success
                    andFailure:failure];
-        
+        //移除请求释放资源
         [safeSelf.reqArray removeObject:safeReq];
     };
     
@@ -109,6 +109,7 @@
         //上传失败了
         failure([NSError errorWithDomain:error.description code:0 userInfo:nil],
                 RESULT_NETERROR);
+        //移除请求释放资源
         [safeSelf.reqArray removeObject:safeReq];
     };
     
@@ -120,7 +121,8 @@
         //获取长度
         if(audioAsset==nil){
             [self msgFailure:chatMsg];
-            failure([NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],RESULT_NETERROR);
+            failure([NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
+                    RESULT_FILEERR);
             return;
         }
         
@@ -132,7 +134,8 @@
         chatVoice.seconds=[NSString stringWithFormat:@"%ld",(long)audioDurationSeconds*1000];
     } @catch (NSException *exception) {
         [self msgFailure:chatMsg];
-        failure([NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],RESULT_NETERROR);
+        failure([NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
+                RESULT_FILEERR);
         return;
     } @finally {
         
@@ -202,7 +205,7 @@
         if(image==nil){
             [self msgFailure:chatMsg];
             failure([NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
-                    RESULT_NETERROR);
+                    RESULT_FILEERR);
             return;
         }
         //保存宽度
@@ -214,7 +217,7 @@
         [self msgFailure:chatMsg];
         //图片读取失败
         failure([NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
-                RESULT_NETERROR);
+                RESULT_FILEERR);
         //返回
         return;
     } @finally {
