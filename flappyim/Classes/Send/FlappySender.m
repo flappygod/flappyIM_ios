@@ -234,7 +234,7 @@
     //不为空
     if(failure!=nil){
         //发送失败
-        [self msgFailure:msg]
+        [self msgFailure:msg];
         //移除
         failure([NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
         [self.successCallbacks removeObjectForKey:dateTimeStr];
