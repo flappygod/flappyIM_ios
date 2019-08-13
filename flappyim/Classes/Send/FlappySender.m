@@ -95,7 +95,10 @@
     };
     //失败
     req.errorBlock=^(NSException*  error){
-        failure(error,RESULT_NETERROR);
+        [safeSelf msgFailure:chatMsg];
+        //上传失败了
+        failure([NSError errorWithDomain:error.description code:0 userInfo:nil],
+                RESULT_NETERROR);
     };
     //数据
     NSMutableDictionary* data=[[NSMutableDictionary alloc]init];
@@ -131,6 +134,7 @@
     
     //连接已经断开了
     if(socket==nil){
+        [self msgFailure:chatMsg];
         failure([NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
         return;
     }
@@ -184,6 +188,21 @@
     }
 }
 
+//发送成功
+-(void)msgSuccess:(ChatMessage*)msg{
+    //发送成功了
+    msg.messageSended=SEND_STATE_SENDED;
+    //放入指定的位置
+    [[DataBase shareInstance] updateMessage:msg];
+}
+
+//发送失败
+-(void)msgFailure:(ChatMessage*)msg{
+    //发送成功了
+    msg.messageSended=SEND_STATE_FAILURE;
+    //放入指定的位置
+    [[DataBase shareInstance] updateMessage:msg];
+}
 
 //成功
 -(void)successCallback:(NSInteger)call{
@@ -198,11 +217,7 @@
     if(success!=nil){
         //移除
         success(msg);
-        //发送成功了
-        msg.messageSended=SEND_STATE_SENDED;
-        //放入指定的位置
-        [[DataBase shareInstance] updateMessage:msg];
-        
+        [self msgSuccess:msg];
         [self.successCallbacks removeObjectForKey:dateTimeStr];
         [self.failureCallbacks removeObjectForKey:dateTimeStr];
         [self.successMsgs removeObjectForKey:dateTimeStr];
@@ -218,12 +233,8 @@
     ChatMessage* msg=[self.successMsgs objectForKey:dateTimeStr];
     //不为空
     if(failure!=nil){
-        
-        //发送失败了
-        msg.messageSended=SEND_STATE_FAILURE;
-        //插入数据
-        [[DataBase shareInstance] updateMessage:msg];
-        
+        //发送失败
+        [self msgFailure:msg]
         //移除
         failure([NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
         [self.successCallbacks removeObjectForKey:dateTimeStr];
