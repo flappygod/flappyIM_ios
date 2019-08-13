@@ -125,9 +125,9 @@
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
-    [[FlappySender shareInstance] sendMessage:chatmsg
-                                   andSuccess:success
-                                   andFailure:failure];
+    [[FlappySender shareInstance] uploadImageAndSend:chatmsg
+                                          andSuccess:success
+                                          andFailure:failure];
     return chatmsg;
     
 }

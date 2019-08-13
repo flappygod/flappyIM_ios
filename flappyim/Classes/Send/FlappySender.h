@@ -23,6 +23,11 @@
 + (instancetype)shareInstance;
 
 
+//上传图片并发送
+-(void)uploadImageAndSend:(ChatMessage*)chatMsg
+               andSuccess:(FlappySuccess)success
+               andFailure:(FlappyFailure)failure;
+
 //发送消息
 -(void)sendMessage:(ChatMessage*)chatMsg
         andSuccess:(FlappySuccess)success
