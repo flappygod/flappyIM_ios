@@ -360,6 +360,8 @@
                   NSDictionary* dic=data[@"user"];
                   //用户
                   ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
+                  //登录成功
+                  user.login=true;
                   //连接服务器
                   [self connectSocket:data[@"serverIP"]
                              withPort:data[@"serverPort"]
@@ -455,6 +457,8 @@
                   newUser.userName=user.userName;
                   //头像
                   newUser.userHead=user.userHead;
+                  //登录成功的
+                  newUser.login =true;
                   //保存
                   [FlappyData saveUser:newUser];
                   //用户下线之后重新连接服务器
