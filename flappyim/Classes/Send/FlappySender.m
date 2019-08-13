@@ -104,6 +104,12 @@
     NSMutableDictionary* data=[[NSMutableDictionary alloc]init];
     //获取图片
     UIImage* image=[[UIImage alloc]initWithContentsOfFile:chatImg.sendPath];
+    //不为空
+    if(image==nil){
+        [self msgFailure:chatMsg];
+        failure([NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],RESULT_NETERROR);
+        return;
+    }
     //图片
     NSMutableDictionary* images=[[NSMutableDictionary alloc]init];
     //转换
