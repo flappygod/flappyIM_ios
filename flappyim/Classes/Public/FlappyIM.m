@@ -517,6 +517,9 @@
 }
 
 
+-(void)
+
+
 
 //建立长连接
 -(void)connectSocket:(NSString*)serverAddress
