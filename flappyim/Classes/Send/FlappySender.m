@@ -119,7 +119,9 @@
     
     @try {
         //地址
-        AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:chatVoice.sendPath]
+        NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"file://%@",chatVoice.sendPath]];
+        //地址
+        AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:url
                                                      options:nil];
         //获取长度
         if(audioAsset==nil){
