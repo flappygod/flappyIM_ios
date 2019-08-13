@@ -77,7 +77,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //重新发送
--(void)resendMessage:(ChatMessage*)chatmsg;
+-(void)resendMessage:(ChatMessage*)chatmsg
+          andSuccess:(FlappySuccess)success
+          andFailure:(FlappyFailure)failure;
 
 
 @end

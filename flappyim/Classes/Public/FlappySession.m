@@ -212,7 +212,9 @@
 }
 
 //重新发送
--(void)resendMessage:(ChatMessage*)chatmsg{
+-(void)resendMessage:(ChatMessage*)chatmsg
+          andSuccess:(FlappySuccess)success
+          andFailure:(FlappyFailure)failure{
     if(chatmsg.messageType==MSG_TYPE_TEXT){
         [[FlappySender shareInstance] sendMessage:chatmsg
                                        andSuccess:success
