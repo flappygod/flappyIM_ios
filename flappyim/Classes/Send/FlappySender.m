@@ -66,6 +66,9 @@
         andSuccess:(FlappySuccess)success
         andFailure:(FlappyFailure) failure{
     
+    //消息
+    [self msgInsert:chatMsg];
+    
     //获取socket
     GCDAsyncSocket* socket=self.socket;
     //创建
@@ -97,6 +100,30 @@
     //写入请求数据
     [socket writeData:reqData withTimeout:-1 tag:dateTime];
     
+}
+
+
+
+//插入数据库
+-(void)msgInsert:(ChatMessage*)msg{
+    //我们先姑且认为它是最后一条
+    ChatUser* user=[FlappyData getUser];
+    //创建
+    msg.messageSended=SEND_STATE_CREATE;
+    //数据
+    NSInteger value=(user.latest!=nil? user.latest.integerValue:0)+1;
+    //最后一条
+    NSString* str=[NSString stringWithFormat:@"%ld",(long)value];
+    //还没发送成功，那么放在最后一条
+    msg.messageTableSeq=str;
+    //之前有没有
+    ChatMessage* former=[[DataBase shareInstance] getMessageByID:msg.messageId];
+    //没有就插入，有就更新
+    if(former==nil){
+        [[DataBase shareInstance] insert:msg];
+    }else{
+        [[DataBase shareInstance] updateMessage:msg];
+    }
 }
 
 

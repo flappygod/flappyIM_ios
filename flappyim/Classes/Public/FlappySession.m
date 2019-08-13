@@ -78,28 +78,6 @@
     return arr;
 }
 
-//插入数据库
--(void)msgInsert:(ChatMessage*)msg{
-    //我们先姑且认为它是最后一条
-    ChatUser* user=[FlappyData getUser];
-    //创建
-    msg.messageSended=SEND_STATE_CREATE;
-    //数据
-    NSInteger value=(user.latest!=nil? user.latest.integerValue:0)+1;
-    //最后一条
-    NSString* str=[NSString stringWithFormat:@"%ld",(long)value];
-    //还没发送成功，那么放在最后一条
-    msg.messageTableSeq=str;
-    //之前有没有
-    ChatMessage* former=[[DataBase shareInstance] getMessageByID:msg.messageId];
-    //没有就插入，有就更新
-    if(former==nil){
-        [[DataBase shareInstance] insert:msg];
-    }else{
-        [[DataBase shareInstance] updateMessage:msg];
-    }
-}
-
 
 //发送文本
 -(ChatMessage*)sendText:(NSString*)text
@@ -117,9 +95,6 @@
     chatmsg.messageContent=text;
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
-    
-    //插入消息
-    [self msgInsert:chatmsg];
     
     //发送消息
     [[FlappySender shareInstance] sendMessage:chatmsg
@@ -154,8 +129,6 @@
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
-    [self msgInsert:chatmsg];
-    
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
@@ -180,8 +153,6 @@
     chatmsg.messageContent=[JsonTool DicToJSONString:[voice mj_keyValues]];
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
-    
-    [self msgInsert:chatmsg];
     
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
