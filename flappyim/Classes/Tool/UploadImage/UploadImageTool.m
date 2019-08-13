@@ -67,10 +67,21 @@
     
     //开始上传
     [manager POST:urlPath parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-        
-        
+        //错误
         NSError *error;
-        BOOL success = [formData appendPartWithFileURL:[NSURL fileURLWithPath:model.path]
+        //URL
+        NSURL* url;
+        //如果以file开头
+        if([model.path hasPrefix:@"file://"]){
+            //其实不需要，切掉前面的
+            NSString* path=[model.path substringWithRange:NSMakeRange(7, model.path.length-7)];
+            //创建url
+            url=[NSURL fileURLWithPath:path];
+        }else{
+            //创建url
+            url=[NSURL fileURLWithPath:model.path];
+        }
+        BOOL success = [formData appendPartWithFileURL:url
                                                   name:model.name
                                               fileName:fileName
                                               mimeType:mimeType
