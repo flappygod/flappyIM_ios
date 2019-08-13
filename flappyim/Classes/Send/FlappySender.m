@@ -156,7 +156,10 @@
     //开始请求
     UploadImageTool* req=[[UploadImageTool alloc]init];
     
+    //自己
     __weak typeof(self) safeSelf=self;
+    __weak typeof (req) safeReq=req;
+    
     //成功
     req.successBlock=^(id data){
         //字典
@@ -171,6 +174,7 @@
         [safeSelf sendMessage:chatMsg
                    andSuccess:success
                    andFailure:failure];
+        [safeSelf.reqArray removeObject:safeReq];
     };
     //失败
     req.errorBlock=^(NSException*  error){
@@ -178,6 +182,7 @@
         //上传失败了
         failure([NSError errorWithDomain:error.description code:0 userInfo:nil],
                 RESULT_NETERROR);
+        [safeSelf.reqArray removeObject:safeReq];
     };
     
     //获取图片
@@ -203,6 +208,8 @@
     [req uploadImageAndMovieBaseModel:URL_uploadUrl
                              andModel:iup];
     
+    //添加
+    [self.reqArray addObject:req];
     
 }
 
