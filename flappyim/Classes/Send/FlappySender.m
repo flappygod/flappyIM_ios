@@ -118,8 +118,16 @@
     
     
     @try {
-        //地址
-        NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"file://%@",chatVoice.sendPath]];
+        //根据地址来
+        NSURL* url;
+        //如果以file开头
+        if([chatVoice.sendPath hasPrefix:@"file"]){
+            //直接
+            url=[NSURL URLWithString:chatVoice.sendPath];
+        }else{
+            //否则不用了
+            url=[NSURL URLWithString:[NSString stringWithFormat:@"file://%@",chatVoice.sendPath]];
+        }
         //地址
         AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:url
                                                      options:nil];
