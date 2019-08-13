@@ -139,15 +139,25 @@
     if (!image) {
         return;
     }
-    NSURL *imageAssetUrl = [info objectForKey:UIImagePickerControllerReferenceURL];
-    if(self.session!=nil){
-        [self.session sendLocalImage:imageAssetUrl.path
-                          andSuccess:^(id _Nullable data) {
-                              NSLog(@"发送成功");
-                          } andFailure:^(NSError * _Nullable error, NSInteger code) {
-                              NSLog(@"发送失败");
-                          }];
+    
+    // 本地沙盒目录
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    // 得到本地沙盒中名为"MyImage"的路径，"MyImage"是保存的图片名
+    NSString *imageFilePath = [path stringByAppendingPathComponent:@"MyImage"];
+    // 将取得的图片写入本地的沙盒中，其中0.5表示压缩比例，1表示不压缩，数值越小压缩比例越大
+    BOOL success = [UIImageJPEGRepresentation(image, 0.5) writeToFile:imageFilePath  atomically:YES];
+    if (success){
+        if(self.session!=nil){
+            [self.session sendLocalImage:imageFilePath
+                              andSuccess:^(id _Nullable data) {
+                                  NSLog(@"发送成功");
+                              } andFailure:^(NSError * _Nullable error, NSInteger code) {
+                                  NSLog(@"发送失败");
+                              }];
+        }
     }
+    
+    
     
 }
 
