@@ -30,7 +30,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'flappyim/Classes/**/*'
   s.public_header_files = 'flappyim/Classes/Public/*.h'
-  s.vendored_libraries = 'flappyim/Classes/libprotobuf-lite.a','flappyim/Classes/libprotobuf.a'
   
   # s.resource_bundles = {
   #   'flappyim' => ['flappyim/Assets/*.png']
