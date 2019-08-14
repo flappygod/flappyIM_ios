@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ChatGroupSession : NSObject
 
 
-//session
+//群组的数据
 @property(nonatomic,strong) SessionGroupData*  session;
 
 
