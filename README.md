@@ -22,7 +22,7 @@ pod 'flappyim'
 
 ## Author
 
-4c641e4c592086a8d563f6d22d5a3011013286f9, 327603258@qq.com
+lijunlin, 327603258@qq.com
 
 ## License
 
