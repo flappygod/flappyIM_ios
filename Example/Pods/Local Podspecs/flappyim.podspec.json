@@ -1,18 +1,18 @@
 {
   "name": "flappyim",
   "version": "0.1.0",
-  "summary": "A short description of flappyim.",
+  "summary": "A im named flappyim",
   "description": "flappyIM  for  IOS",
-  "homepage": "https://github.com/4c641e4c592086a8d563f6d22d5a3011013286f9/flappyim",
+  "homepage": "https://github.com/flappygod/flappyIM_ios",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
-    "4c641e4c592086a8d563f6d22d5a3011013286f9": "327603258@qq.com"
+    "lijunlin": "327603258@qq.com"
   },
   "source": {
-    "git": "https://github.com/4c641e4c592086a8d563f6d22d5a3011013286f9/flappyim.git",
+    "git": "https://github.com/flappygod/flappyIM_ios.git",
     "tag": "0.1.0"
   },
   "platforms": {
@@ -20,10 +20,6 @@
   },
   "source_files": "flappyim/Classes/**/*",
   "public_header_files": "flappyim/Classes/Public/*.h",
-  "vendored_libraries": [
-    "flappyim/Classes/libprotobuf-lite.a",
-    "flappyim/Classes/libprotobuf.a"
-  ],
   "frameworks": [
     "UIKit",
     "Foundation",
