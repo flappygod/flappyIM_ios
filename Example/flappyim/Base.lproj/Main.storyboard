@@ -82,9 +82,9 @@
                             <constraint firstItem="4Ef-Nq-DOT" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="20" id="iRw-Aj-Uny"/>
                             <constraint firstAttribute="trailing" secondItem="tir-zj-uWV" secondAttribute="trailing" constant="20" id="igO-Q3-Ggw"/>
                             <constraint firstAttribute="trailing" secondItem="VVI-0e-l2n" secondAttribute="trailing" id="izg-cu-O5z"/>
+                            <constraint firstItem="VVI-0e-l2n" firstAttribute="top" secondItem="uEw-UM-LJ8" secondAttribute="bottom" constant="20" id="oYb-uN-cXS"/>
                             <constraint firstAttribute="trailing" secondItem="4Ef-Nq-DOT" secondAttribute="trailing" constant="20" id="rLt-vA-sDh"/>
                             <constraint firstItem="VVI-0e-l2n" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" id="tmL-Bw-1ne"/>
-                            <constraint firstItem="VVI-0e-l2n" firstAttribute="top" secondItem="uEw-UM-LJ8" secondAttribute="bottom" constant="20" id="w01-V9-yPg"/>
                             <constraint firstItem="tir-zj-uWV" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="20" id="wGQ-Hn-Pq6"/>
                             <constraint firstAttribute="trailing" secondItem="ZGc-rl-Iwu" secondAttribute="trailing" constant="20" id="wru-TR-7eA"/>
                         </constraints>
