@@ -49,8 +49,6 @@
 //删除会话中的用户
 #define URL_delUserInSession [NSString stringWithFormat:@"%@/api/delUserInSession",BaseUrl]
 
-//发送消息
-#define URL_sendMessage [NSString stringWithFormat:@"%@/api/sendMessage",BaseUrl]
 
 
 
