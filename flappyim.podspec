@@ -19,11 +19,11 @@ Pod::Spec.new do |s|
 
   s.description      = 'flappyIM  for  IOS'
 
-  s.homepage         = 'https://github.com/4c641e4c592086a8d563f6d22d5a3011013286f9/flappyim'
+  s.homepage         = 'https://github.com/flappygod/flappyIM_ios'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { '4c641e4c592086a8d563f6d22d5a3011013286f9' => '327603258@qq.com' }
-  s.source           = { :git => 'https://github.com/4c641e4c592086a8d563f6d22d5a3011013286f9/flappyim.git', :tag => s.version.to_s }
+  s.author           = { 'lijunlin' => '327603258@qq.com' }
+  s.source           = { :git => 'https://github.com/flappygod/flappyIM_ios.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
