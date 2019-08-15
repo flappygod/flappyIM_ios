@@ -35,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setup;
 
 
+//判断当前账号是否登录
+-(Boolean)isLogin;
+
+
 //创建账号
 -(void)createAccount:(NSString*)userID
          andUserName:(NSString*)userName
@@ -108,8 +112,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setKnickedListener:(FlappyKnicked)knicked;
 
 
-//判断当前账号是否登录
--(Boolean)isLogin;
 
 
 @end
