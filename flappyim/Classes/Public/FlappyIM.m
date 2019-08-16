@@ -97,7 +97,9 @@
     ChatUser* user=[FlappyData getUser];
     //用户存在，但是登录状态不对，代表已经被踢下线了
     if(user!=nil&&user.login==false){
-        self.knicked();
+        if(self.knicked!=nil){
+            self.knicked();
+        }
     }
 }
 
