@@ -90,7 +90,7 @@
 }
 
 //设置被踢下线的监听
--(void)setKnickedListener:(FlappyKnicked)knicked{
+-(void)setKnickedListener:(__nullable FlappyKnicked)knicked{
     //保留
     _knicked=knicked;
     //查看当前的登录状态
