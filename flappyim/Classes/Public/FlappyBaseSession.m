@@ -10,7 +10,7 @@
 #import "DateTimeTool.h"
 #import "FlappySender.h"
 #import "FlappyConfig.h"
-#import "JsonTool.h"
+#import "FlappyJsonTool.h"
 #import "FlappyData.h"
 #import "MJExtension.h"
 

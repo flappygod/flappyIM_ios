@@ -6,7 +6,7 @@
 //
 
 #import "FlappyData.h"
-#import "JsonTool.h"
+#import "FlappyJsonTool.h"
 #import "CommonDef.h"
 #import "MJExtension.h"
 
@@ -20,7 +20,7 @@
 //保存用户
 +(void)saveUser:(ChatUser*)user{
     //装环为字符串
-    NSString*  str=[JsonTool JSONObjectToJSONString:[user mj_keyValues]];
+    NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[user mj_keyValues]];
     UNSaveObject(str, KEY_USER);
 }
 
@@ -28,7 +28,7 @@
 +(ChatUser*)getUser{
     NSString* str=UNGetObject(KEY_USER);
     if(str!=nil){
-        NSDictionary* dic=[JsonTool JSONStringToDictionary:str];
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:str];
         ChatUser* ret=[ChatUser mj_objectWithKeyValues:dic];
         return ret;
     }

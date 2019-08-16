@@ -10,7 +10,7 @@
 #import "DateTimeTool.h"
 #import "FlappySender.h"
 #import "FlappyConfig.h"
-#import "JsonTool.h"
+#import "FlappyJsonTool.h"
 #import "FlappyData.h"
 #import "MJExtension.h"
 
@@ -121,7 +121,7 @@
     chatmsg.messageSend=self.session.userOne.userId;
     chatmsg.messageRecieve=self.session.userTwo.userId;
     chatmsg.messageType=MSG_TYPE_IMG;
-    chatmsg.messageContent=[JsonTool DicToJSONString:[image mj_keyValues]];
+    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[image mj_keyValues]];
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
@@ -146,7 +146,7 @@
     chatmsg.messageSend=self.session.userOne.userId;
     chatmsg.messageRecieve=self.session.userTwo.userId;
     chatmsg.messageType=MSG_TYPE_IMG;
-    chatmsg.messageContent=[JsonTool DicToJSONString:[image mj_keyValues]];
+    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[image mj_keyValues]];
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
@@ -174,7 +174,7 @@
     chatmsg.messageSend=self.session.userOne.userId;
     chatmsg.messageRecieve=self.session.userTwo.userId;
     chatmsg.messageType=MSG_TYPE_IMG;
-    chatmsg.messageContent=[JsonTool DicToJSONString:[voice mj_keyValues]];
+    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[voice mj_keyValues]];
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
@@ -200,7 +200,7 @@
     chatmsg.messageSend=self.session.userOne.userId;
     chatmsg.messageRecieve=self.session.userTwo.userId;
     chatmsg.messageType=MSG_TYPE_VOICE;
-    chatmsg.messageContent=[JsonTool DicToJSONString:[voice mj_keyValues]];
+    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[voice mj_keyValues]];
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     

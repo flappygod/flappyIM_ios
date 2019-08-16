@@ -6,9 +6,9 @@
 //  Copyright (c) 2015年 etong. All rights reserved.
 //
 
-#import "JsonTool.h"
+#import "FlappyJsonTool.h"
 
-@implementation JsonTool
+@implementation FlappyJsonTool
 
 
 

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface JsonTool : NSObject
+@interface FlappyJsonTool : NSObject
 
 
 /*************************

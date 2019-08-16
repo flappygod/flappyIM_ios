@@ -9,7 +9,7 @@
 #import "FlappyBaseSession.h"
 #import "UploadImageTool.h"
 #import "MJExtension.h"
-#import "JsonTool.h"
+#import "FlappyJsonTool.h"
 #import "ImageTool.h"
 #import "DataBase.h"
 #import "FlappyData.h"
@@ -81,7 +81,7 @@
     [self msgInsert:chatMsg];
     
     //图片信息
-    ChatVoice* chatVoice=[ChatVoice mj_objectWithKeyValues:[JsonTool JSONStringToDictionary:chatMsg.messageContent]];
+    ChatVoice* chatVoice=[ChatVoice mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:chatMsg.messageContent]];
     
     //开始请求
     UploadImageTool* req=[[UploadImageTool alloc]init];
@@ -97,7 +97,7 @@
         //地址赋值
         chatVoice.path=dic[@"resultData"];
         //设置
-        chatMsg.messageContent=[JsonTool DicToJSONString:[chatVoice mj_keyValues]];
+        chatMsg.messageContent=[FlappyJsonTool DicToJSONString:[chatVoice mj_keyValues]];
         //上传完成发送消息
         [safeSelf sendMessage:chatMsg
                    andSuccess:success
@@ -177,7 +177,7 @@
     [self msgInsert:chatMsg];
     
     //图片信息
-    ChatImage* chatImg=[ChatImage mj_objectWithKeyValues:[JsonTool JSONStringToDictionary:chatMsg.messageContent]];
+    ChatImage* chatImg=[ChatImage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:chatMsg.messageContent]];
     
     //开始请求
     UploadImageTool* req=[[UploadImageTool alloc]init];
@@ -196,7 +196,7 @@
         //地址赋值
         chatImg.path=imgPath;
         //设置
-        chatMsg.messageContent=[JsonTool DicToJSONString:[chatImg mj_keyValues]];
+        chatMsg.messageContent=[FlappyJsonTool DicToJSONString:[chatImg mj_keyValues]];
         //上传完成发送消息
         [safeSelf sendMessage:chatMsg
                    andSuccess:success
