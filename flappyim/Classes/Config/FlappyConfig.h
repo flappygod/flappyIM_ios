@@ -15,7 +15,8 @@
 
 
 //基础地址
-#define BaseUrl @"http://49.234.106.91"
+//#define BaseUrl @"http://49.234.106.91"
+#define BaseUrl @"http://192.168.31.80"
 
 
 
