@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SessionData : ChatSession
 
-@property(nonatomic,strong) NSMutableArray*  users;
+@property(nonatomic,strong) NSMutableArray<ChatUser*>*  users;
 
 @end
 
