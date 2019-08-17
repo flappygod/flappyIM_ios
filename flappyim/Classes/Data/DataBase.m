@@ -80,7 +80,7 @@
     if(db==nil){
         return false;
     }
-    BOOL result = [db executeUpdate:@"insert into 'message'(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageRecieve,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)" withArgumentsInArray:@[msg.messageId,msg.messageSession,[NSNumber numberWithInteger:msg.messageSessionType],[NSNumber numberWithInteger:msg.messageSessionOffset],[StringTool toUnNullStr:msg.messageTableSeq],[NSNumber numberWithInteger:msg.messageType],msg.messageSend,msg.messageRecieve,msg.messageContent,[NSNumber numberWithInteger:msg.messageSended],[NSNumber numberWithInteger:msg.messageReaded],[StringTool toUnNullStr:msg.messageDate],[StringTool toUnNullStr:msg.messageDeletedDate],[NSNumber numberWithInteger:msg.messageDeleted]]];
+    BOOL result = [db executeUpdate:@"insert into 'message'(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)" withArgumentsInArray:@[msg.messageId,msg.messageSession,[NSNumber numberWithInteger:msg.messageSessionType],[NSNumber numberWithInteger:msg.messageSessionOffset],[StringTool toUnNullStr:msg.messageTableSeq],[NSNumber numberWithInteger:msg.messageType],msg.messageSend,msg.messageSendExtendid,msg.messageRecieve,msg.messageRecieveExtendid,msg.messageContent,[NSNumber numberWithInteger:msg.messageSended],[NSNumber numberWithInteger:msg.messageReaded],[StringTool toUnNullStr:msg.messageDate],[StringTool toUnNullStr:msg.messageDeletedDate],[NSNumber numberWithInteger:msg.messageDeleted]]];
     [db close];
     if (result) {
         return true;
@@ -107,7 +107,9 @@
         msg.messageTableSeq = [result stringForColumn:@"messageTableSeq"];
         msg.messageType = [result intForColumn:@"messageType"];
         msg.messageSend = [result stringForColumn:@"messageSend"];
+        msg.messageSendExtendid = [result stringForColumn:@"messageSendExtendid"];
         msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
+        msg.messageRecieveExtendid = [result stringForColumn:@"messageRecieveExtendid"];
         msg.messageContent = [result stringForColumn:@"messageContent"];
         msg.messageSended = [result intForColumn:@"messageSended"];
         msg.messageReaded = [result intForColumn:@"messageReaded"];
@@ -129,7 +131,7 @@
     if(db==nil){
         return false;
     }
-    BOOL result = [db executeUpdate:@"update 'message' set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageRecieve=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?" withArgumentsInArray:@[msg.messageSession,[NSNumber numberWithInteger:msg.messageSessionType],[NSNumber numberWithInteger:msg.messageSessionOffset],[StringTool toUnNullStr:msg.messageTableSeq],[NSNumber numberWithInteger:msg.messageType],msg.messageSend,msg.messageRecieve,msg.messageContent,[NSNumber numberWithInteger:msg.messageSended],[NSNumber numberWithInteger:msg.messageReaded],[StringTool toUnNullStr:msg.messageDate],[StringTool toUnNullStr:msg.messageDeletedDate],[NSNumber numberWithInteger:msg.messageDeleted],msg.messageId]];
+    BOOL result = [db executeUpdate:@"update 'message' set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?" withArgumentsInArray:@[msg.messageSession,[NSNumber numberWithInteger:msg.messageSessionType],[NSNumber numberWithInteger:msg.messageSessionOffset],[StringTool toUnNullStr:msg.messageTableSeq],[NSNumber numberWithInteger:msg.messageType],msg.messageSend,msg.messageSendExtendid,msg.messageRecieve,msg.messageRecieveExtendid,msg.messageContent,[NSNumber numberWithInteger:msg.messageSended],[NSNumber numberWithInteger:msg.messageReaded],[StringTool toUnNullStr:msg.messageDate],[StringTool toUnNullStr:msg.messageDeletedDate],[NSNumber numberWithInteger:msg.messageDeleted],msg.messageId]];
     [db close];
     if (result) {
         return true;
@@ -156,7 +158,9 @@
         msg.messageTableSeq = [result stringForColumn:@"messageTableSeq"];
         msg.messageType = [result intForColumn:@"messageType"];
         msg.messageSend = [result stringForColumn:@"messageSend"];
+        msg.messageSendExtendid = [result stringForColumn:@"messageSendExtendid"];
         msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
+        msg.messageRecieveExtendid = [result stringForColumn:@"messageRecieveExtendid"];
         msg.messageContent = [result stringForColumn:@"messageContent"];
         msg.messageSended = [result intForColumn:@"messageSended"];
         msg.messageReaded = [result intForColumn:@"messageReaded"];
@@ -195,7 +199,9 @@
         msg.messageTableSeq = [result stringForColumn:@"messageTableSeq"];
         msg.messageType = [result intForColumn:@"messageType"];
         msg.messageSend = [result stringForColumn:@"messageSend"];
+        msg.messageSendExtendid = [result stringForColumn:@"messageSendExtendid"];
         msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
+        msg.messageRecieveExtendid = [result stringForColumn:@"messageRecieveExtendid"];
         msg.messageContent = [result stringForColumn:@"messageContent"];
         msg.messageSended = [result intForColumn:@"messageSended"];
         msg.messageReaded = [result intForColumn:@"messageReaded"];

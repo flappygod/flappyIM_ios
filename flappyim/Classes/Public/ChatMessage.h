@@ -55,7 +55,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy)NSString* messageSend;
 
+@property(nonatomic,copy)NSString* messageSendExtendid;
+
 @property(nonatomic,copy)NSString* messageRecieve;
+
+@property(nonatomic,copy)NSString* messageRecieveExtendid;
 
 @property(nonatomic,copy)NSString* messageContent;
 
