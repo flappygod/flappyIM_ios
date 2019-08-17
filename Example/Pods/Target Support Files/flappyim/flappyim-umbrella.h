@@ -20,6 +20,7 @@
 #import "FlappyBaseSession.h"
 #import "FlappyChatSession.h"
 #import "FlappyIM.h"
+#import "FlappySocket.h"
 #import "SessionData.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;

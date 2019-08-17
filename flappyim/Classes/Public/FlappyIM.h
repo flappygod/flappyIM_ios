@@ -13,6 +13,7 @@
 #import "Flappy.pbobjc.h"
 #import "FlappyChatSession.h"
 #import "FlappyApiRequest.h"
+#import "FlappySocket.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <Reachability/Reachability.h>
@@ -26,6 +27,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface FlappyIM : NSObject<GCDAsyncSocketDelegate>
+
+
+//推送的ID
+@property (nonatomic,copy) NSString*  pushID;
+
+//回调
+@property (nonatomic,strong) NSMutableDictionary*  callbacks;
+
 
 //单例模式
 + (instancetype)shareInstance;

@@ -16,7 +16,7 @@
 @interface FlappySender : NSObject
 
 //socket通信
-@property (nonatomic,strong) GCDAsyncSocket*  socket;
+@property (nonatomic,weak) GCDAsyncSocket*  socket;
 
 
 //单例模式

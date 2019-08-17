@@ -26,30 +26,13 @@
 @property (nonatomic,strong) Reachability* hostReachability;
 //用于监听网络变化
 @property (nonatomic,strong) Reachability* internetReachability;
-//socket通信
-@property (nonatomic,strong) GCDAsyncSocket*  socket;
-//推送的ID
-@property (nonatomic,copy) NSString*  pushID;
 
 
-//读取的数据
-@property (nonatomic,strong) NSMutableData*  receiveData;
-//心跳计时
-@property (nonatomic,strong) NSTimer*  connectTimer;
-//正在登录的用户
-@property (nonatomic,strong) ChatUser*  user;
-//登录的数据
-@property (nonatomic,strong) id  loginData;
-//登录成功之后非正常退出的情况
-@property (nonatomic,strong) FlappyDead  dead;
-//成功
-@property (nonatomic,strong) FlappySuccess  success;
-//失败
-@property (nonatomic,strong) FlappyFailure  failure;
+@property (nonatomic,strong) FlappySocket* flappysocket;
+
+
 //被踢下线了
 @property (nonatomic,strong) FlappyKnicked knicked;
-//回调
-@property (nonatomic,strong) NSMutableDictionary*  callbacks;
 
 
 @end
@@ -68,7 +51,6 @@
         _sharedSingleton = [[super allocWithZone:NULL] init];
         //推送ID
         _sharedSingleton.pushID=@"123456";
-        _sharedSingleton.receiveData=[[NSMutableData alloc]init];
         _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
     });
     return _sharedSingleton;
@@ -270,42 +252,46 @@
 -(void)setupReconnect{
     //自动登录
     ChatUser* user=[FlappyData getUser];
-    //用户之前已经登录过
+    
+    //当前用户没有登录或者被踢下线的情况
     if(user==nil||user.login==false){
         return;
     }
     //当前是已经连接的，不需要继续登录了
-    if(self.socket!=nil&&self.socket.isConnected){
-        return;
+    if(self.flappysocket!=nil){
+        //不为空而且已经连接，不需要继续登录了
+        if(self.flappysocket.socket!=nil&&self.flappysocket.socket.isConnected){
+            return;
+        }
     }
     //开始
     __weak typeof(self) safeSelf=self;
     //如果网络是正常连接的
     if([NetTool getCurrentNetworkState]!=0){
         //防止重复请求
-        if(self.success==nil&&self.failure==nil){
-            [self autoLogin:^(id data) {
-                NSLog(@"自动登录成功");
-            } andFailure:^(NSError * error, NSInteger code) {
-                //当前账户已经被踢下线了
-                if(code==RESULT_KNICKED){
-                    //清空user
-                    ChatUser* uesr=[FlappyData getUser];
-                    uesr.login=false;
-                    [FlappyData saveUser:uesr];
-                    //当前账户被踢下线
-                    if(self.knicked!=nil){
-                        self.knicked();
-                        self.knicked=nil;
-                    }
-                }else{
-                    //3秒后重新执行登录
-                    [safeSelf performSelector:@selector(setupReconnect)
-                                   withObject:nil
-                                   afterDelay:5];
+        [self autoLogin:^(id data) {
+            
+            NSLog(@"自动登录成功");
+            
+        } andFailure:^(NSError * error, NSInteger code) {
+            //当前账户已经被踢下线了
+            if(code==RESULT_KNICKED){
+                //清空user
+                ChatUser* uesr=[FlappyData getUser];
+                uesr.login=false;
+                [FlappyData saveUser:uesr];
+                //当前账户被踢下线
+                if(self.knicked!=nil){
+                    self.knicked();
+                    self.knicked=nil;
                 }
-            }];
-        }
+            }else{
+                //3秒后重新执行登录
+                [safeSelf performSelector:@selector(setupReconnect)
+                               withObject:nil
+                               afterDelay:5];
+            }
+        }];
     }
 }
 
@@ -327,9 +313,9 @@
     
     //请求数据
     [FlappyApiRequest postRequest:urlString
-           withParameters:parameters
-              withSuccess:success
-              withFailure:failure];
+                   withParameters:parameters
+                      withSuccess:success
+                      withFailure:failure];
     
 }
 
@@ -340,11 +326,10 @@
   andSuccess:(FlappySuccess)success
   andFailure:(FlappyFailure)failure{
     
-    //之前的正常下线
-    [self offline:true];
     
-    //登录成功或者失败的回调没有执行
-    if(self.success!=nil||self.failure!=nil){
+    //当前有flappysocket，而且正在登录
+    if(self.flappysocket!=nil&&(self.flappysocket.success!=nil||self.flappysocket.failure!=nil)){
+        
         //直接失败
         failure([NSError errorWithDomain:@"A login thread also run"
                                     code:RESULT_NETERROR
@@ -352,9 +337,12 @@
         return ;
     }
     
-    //赋值给当前的回调
-    self.success=success;
-    self.failure = failure;
+    //如果当前有正在连接的socket,先下线了
+    if(self.flappysocket!=nil){
+        //之前的正常下线
+        [self.flappysocket offline:true];
+    }
+    
     
     //注册地址
     NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
@@ -366,40 +354,47 @@
                                  @"pushid":self.pushID
                                  };
     
+    
+    //创建
+    self.flappysocket=[[FlappySocket alloc] init];
+    
     __weak typeof(self) safeSelf=self;
     //请求数据
     [FlappyApiRequest postRequest:urlString
-           withParameters:parameters
-              withSuccess:^(id data) {
-                  
-                  //赋值登录数据
-                  safeSelf.loginData=data;
-                  //得到当前的用户数据
-                  NSDictionary* dic=data[@"user"];
-                  //用户
-                  ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
-                  //登录成功
-                  user.login=true;
-                  //连接服务器
-                  [self connectSocket:data[@"serverIP"]
-                             withPort:data[@"serverPort"]
-                             withUser:user
-                          withSuccess:success
-                          withFailure:failure];
-                  
-              } withFailure:^(NSError * error, NSInteger code) {
-                  //登录失败，清空回调
-                  failure(error,code);
-                  safeSelf.success=nil;
-                  safeSelf.failure =nil;
-              }];
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+                          
+                          //得到当前的用户数据
+                          NSDictionary* dic=data[@"user"];
+                          //用户
+                          ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
+                          //登录成功
+                          user.login=true;
+                          
+                          
+                          safeSelf.flappysocket.loginData=data;
+                          //连接服务器
+                          [safeSelf.flappysocket connectSocket:data[@"serverIP"]
+                                                      withPort:data[@"serverPort"]
+                                                      withUser:user
+                                                   withSuccess:success
+                                                   withFailure:failure
+                                                          dead:^{
+                                                              [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
+                                                                                         withObject:nil
+                                                                                      waitUntilDone:false];
+                                                          }];
+                          
+                      } withFailure:^(NSError * error, NSInteger code) {
+                          //登录失败，清空回调
+                          failure(error,code);
+                      }];
 }
 
 
 //退出登录下线
 -(void)logout:(FlappySuccess)success
    andFailure:(FlappyFailure)failure{
-    
     
     //为空直接出错
     if([FlappyData getUser]==nil){
@@ -409,7 +404,11 @@
     }
     
     //之前的正常下线
-    [self offline:true];
+    [self.flappysocket offline:true];
+    
+    //清空
+    self.flappysocket=nil;
+    
     //注册地址
     NSString *urlString = [FlappyApiConfig shareInstance].URL_logout;
     
@@ -421,16 +420,16 @@
                                  };
     //请求数据
     [FlappyApiRequest postRequest:urlString
-           withParameters:parameters
-              withSuccess:^(id data) {
-                  //退出登录成功
-                  success(data);
-                  //清空当前相应的用户信息
-                  [FlappyData clearUser];
-              } withFailure:^(NSError * error, NSInteger code) {
-                  //登录失败，清空回调
-                  failure(error,code);
-              }];
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+                          //退出登录成功
+                          success(data);
+                          //清空当前相应的用户信息
+                          [FlappyData clearUser];
+                      } withFailure:^(NSError * error, NSInteger code) {
+                          //登录失败，清空回调
+                          failure(error,code);
+                      }];
     
 }
 
@@ -439,11 +438,9 @@
       andFailure:(FlappyFailure)failure{
     
     
-    //之前的正常下线
-    [self offline:true];
-    
-    //登录成功或者失败的回调没有执行
-    if(self.success!=nil||self.failure!=nil){
+    //当前有flappysocket，而且正在登录
+    if(self.flappysocket!=nil&&(self.flappysocket.success!=nil||self.flappysocket.failure!=nil)){
+        
         //直接失败
         failure([NSError errorWithDomain:@"A login thread also run"
                                     code:RESULT_NETERROR
@@ -451,9 +448,12 @@
         return ;
     }
     
-    //赋值给当前的回调
-    self.success = success;
-    self.failure = failure;
+    //如果当前有正在连接的socket,先下线了
+    if(self.flappysocket!=nil){
+        //之前的正常下线
+        [self.flappysocket offline:true];
+    }
+    
     
     //自动登录
     NSString *urlString = [FlappyApiConfig shareInstance].URL_autoLogin;
@@ -464,50 +464,62 @@
                                  @"pushid":self.pushID
                                  };
     
+    //创建新的
+    self.flappysocket=[[FlappySocket alloc] init];
+    
     __weak typeof(self) safeSelf=self;
     //请求数据
     [FlappyApiRequest postRequest:urlString
-           withParameters:parameters
-              withSuccess:^(id data) {
-                  
-                  //赋值登录数据
-                  safeSelf.loginData=data;
-                  //得到当前的用户数据
-                  NSDictionary* dic=data[@"user"];
-                  //用户
-                  ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
-                  //更新信息
-                  ChatUser* newUser=[FlappyData getUser];
-                  //最后的时间保存起来
-                  newUser.userName=user.userName;
-                  //头像
-                  newUser.userHead=user.userHead;
-                  //登录成功的
-                  newUser.login =true;
-                  //保存
-                  [FlappyData saveUser:newUser];
-                  //用户下线之后重新连接服务器
-                  [safeSelf connectSocket:data[@"serverIP"]
-                                 withPort:data[@"serverPort"]
-                                 withUser:newUser
-                              withSuccess:success
-                              withFailure:failure];
-                  
-                  
-              } withFailure:^(NSError * error, NSInteger code) {
-                  //登录失败，清空回调
-                  failure(error,code);
-                  safeSelf.success=nil;
-                  safeSelf.failure =nil;
-              }];
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+                          
+                          //得到当前的用户数据
+                          NSDictionary* dic=data[@"user"];
+                          //用户
+                          ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
+                          //更新信息
+                          ChatUser* newUser=[FlappyData getUser];
+                          //最后的时间保存起来
+                          newUser.userName=user.userName;
+                          //头像
+                          newUser.userHead=user.userHead;
+                          //登录成功的
+                          newUser.login =true;
+                          
+                          //保存
+                          [FlappyData saveUser:newUser];
+                          
+                          
+                          //设置登录返回的数据
+                          safeSelf.flappysocket.loginData=data;
+                          //连接服务器
+                          [safeSelf.flappysocket connectSocket:data[@"serverIP"]
+                                                      withPort:data[@"serverPort"]
+                                                      withUser:user
+                                                   withSuccess:success
+                                                   withFailure:failure
+                                                          dead:^{
+                                                              
+                                                              [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
+                                                                                         withObject:nil
+                                                                                      waitUntilDone:false];
+                                                              
+                                                          }];
+                          
+                          
+                          
+                      } withFailure:^(NSError * error, NSInteger code) {
+                          //登录失败，清空回调
+                          failure(error,code);
+                      }];
 }
 
 
 
 //创建两个人的会话
 -(void)createSingleSession:(NSString*)userTwo
-          andSuccess:(FlappySuccess)success
-          andFailure:(FlappyFailure)failure{
+                andSuccess:(FlappySuccess)success
+                andFailure:(FlappyFailure)failure{
     
     //为空直接出错
     if([FlappyData getUser]==nil){
@@ -524,18 +536,18 @@
                                  };
     //请求数据
     [FlappyApiRequest postRequest:urlString
-           withParameters:parameters
-              withSuccess:^(id data) {
-                  //获取model
-                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                  //创建session
-                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
-                  session.session=model;
-                  success(session);
-              } withFailure:^(NSError * error, NSInteger code) {
-                  //登录失败，清空回调
-                  failure(error,code);
-              }];
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+                          //获取model
+                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
+                          //创建session
+                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+                          session.session=model;
+                          success(session);
+                      } withFailure:^(NSError * error, NSInteger code) {
+                          //登录失败，清空回调
+                          failure(error,code);
+                      }];
 }
 
 
@@ -558,18 +570,18 @@
                                  };
     //请求数据
     [FlappyApiRequest postRequest:urlString
-           withParameters:parameters
-              withSuccess:^(id data) {
-                  //获取model
-                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                  //创建session
-                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
-                  session.session=model;
-                  success(session);
-              } withFailure:^(NSError * error, NSInteger code) {
-                  //登录失败，清空回调
-                  failure(error,code);
-              }];
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+                          //获取model
+                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
+                          //创建session
+                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+                          session.session=model;
+                          success(session);
+                      } withFailure:^(NSError * error, NSInteger code) {
+                          //登录失败，清空回调
+                          failure(error,code);
+                      }];
 }
 
 
@@ -597,26 +609,26 @@
                                  };
     //请求数据
     [FlappyApiRequest postRequest:urlString
-           withParameters:parameters
-              withSuccess:^(id data) {
-                  //获取model
-                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                  //创建session
-                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
-                  session.session=model;
-                  success(session);
-              } withFailure:^(NSError * error, NSInteger code) {
-                  //登录失败，清空回调
-                  failure(error,code);
-              }];
-
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+                          //获取model
+                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
+                          //创建session
+                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+                          session.session=model;
+                          success(session);
+                      } withFailure:^(NSError * error, NSInteger code) {
+                          //登录失败，清空回调
+                          failure(error,code);
+                      }];
+    
 }
 
 
 //获取群组会话
 -(void)getSessionByID:(NSString*)groupID
-            andSuccess:(FlappySuccess)success
-            andFailure:(FlappyFailure)failure{
+           andSuccess:(FlappySuccess)success
+           andFailure:(FlappyFailure)failure{
     //为空直接出错
     if([FlappyData getUser]==nil){
         //返回没有登录
@@ -630,20 +642,20 @@
     NSDictionary *parameters = @{@"extendID":groupID};
     //请求数据
     [FlappyApiRequest postRequest:urlString
-           withParameters:parameters
-              withSuccess:^(id data) {
-                  //获取model
-                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                  //创建session
-                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
-                  //数据
-                  session.session=model;
-                  //成功
-                  success(session);
-              } withFailure:^(NSError * error, NSInteger code) {
-                  //登录失败，清空回调
-                  failure(error,code);
-              }];
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+                          //获取model
+                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
+                          //创建session
+                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+                          //数据
+                          session.session=model;
+                          //成功
+                          success(session);
+                      } withFailure:^(NSError * error, NSInteger code) {
+                          //登录失败，清空回调
+                          failure(error,code);
+                      }];
 }
 
 //获取用户的sessions
@@ -698,20 +710,20 @@
     NSDictionary *parameters = @{@"extendID":groupID,@"userID":userID};
     //请求数据
     [FlappyApiRequest postRequest:urlString
-           withParameters:parameters
-              withSuccess:^(id data) {
-                  //获取model
-                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                  //创建session
-                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
-                  //数据
-                  session.session=model;
-                  //成功
-                  success(session);
-              } withFailure:^(NSError * error, NSInteger code) {
-                  //登录失败，清空回调
-                  failure(error,code);
-              }];
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+                          //获取model
+                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
+                          //创建session
+                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+                          //数据
+                          session.session=model;
+                          //成功
+                          success(session);
+                      } withFailure:^(NSError * error, NSInteger code) {
+                          //登录失败，清空回调
+                          failure(error,code);
+                      }];
 }
 
 //删除会话
@@ -732,424 +744,22 @@
     NSDictionary *parameters = @{@"extendID":groupID,@"userID":userID};
     //请求数据
     [FlappyApiRequest postRequest:urlString
-           withParameters:parameters
-              withSuccess:^(id data) {
-                  //获取model
-                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                  //创建session
-                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
-                  //数据
-                  session.session=model;
-                  //成功
-                  success(session);
-              } withFailure:^(NSError * error, NSInteger code) {
-                  //登录失败，清空回调
-                  failure(error,code);
-              }];
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+                          //获取model
+                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
+                          //创建session
+                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+                          //数据
+                          session.session=model;
+                          //成功
+                          success(session);
+                      } withFailure:^(NSError * error, NSInteger code) {
+                          //登录失败，清空回调
+                          failure(error,code);
+                      }];
 }
 
-
-
-//建立长连接
--(void)connectSocket:(NSString*)serverAddress
-            withPort:(NSString*)serverPort
-            withUser:(ChatUser*)user
-         withSuccess:(FlappySuccess)success
-         withFailure:(FlappyFailure)failure{
-    
-    
-    //建立长连接
-    self.socket=[[GCDAsyncSocket alloc] initWithDelegate:self
-                                           delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
-    //保存
-    [FlappySender shareInstance].socket=self.socket;
-    
-    NSError* error=nil;
-    
-    //连接host
-    [self.socket connectToHost:serverAddress
-                        onPort:serverPort.integerValue
-                   withTimeout:20
-                         error:&error];
-    
-    
-    
-    //失败
-    if(error!=nil){
-        NSLog(@"%@",error.description);
-        //错误
-        self.failure(error, RESULT_NETERROR);
-        //错误
-        self.failure=nil;
-        //连接错误
-        self.success=nil;
-    }
-    //成功
-    else{
-        //保存用户数据
-        self.user=user;
-        //非正常退出的时候，延迟重新执行
-        __weak typeof(self) safeSelf=self;
-        //socket非正常退出的时候，重新登录
-        self.dead = ^{
-            //主线程中重新开始联网判断
-            [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
-                                       withObject:nil
-                                    waitUntilDone:false];
-        };
-    }
-}
-
-
-#pragma heart beat  心跳
-//开启心跳
--(void)startHeart:(id)sender{
-    // 开启心跳
-    // 每隔30s像服务器发送心跳包
-    // 在longConnectToSocket方法中进行长连接需要向服务器发送的讯息
-    self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:10
-                                                         target:self
-                                                       selector:@selector(heartBeat:)
-                                                       userInfo:nil
-                                                        repeats:YES];
-}
-
-//关闭心跳
--(void)stopHeart{
-    //停止
-    if(self.connectTimer!=nil){
-        //取消timer
-        [self.connectTimer invalidate];
-        //清空
-        self.connectTimer=nil;
-    }
-}
-
-
-//长连接的心跳
--(void)heartBeat:(id)sender{
-    //心跳消息写入
-    if(self.socket!=nil){
-        //连接到服务器开始请求登录
-        FlappyRequest* request=[[FlappyRequest alloc]init];
-        //登录请求
-        request.type=REQ_PING;
-        //请求数据，已经GPBComputeRawVarint32SizeForInteger
-        NSData* reqData=[request delimitedData];
-        //写入请求数据
-        [self.socket  writeData:reqData withTimeout:-1 tag:0];
-        NSLog(@"heart beat");
-    }
-}
-
-#pragma GCDAsyncSocketDelegate
-- (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket{
-    
-}
-
-- (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
-    
-    //组装登录数据
-    LoginInfo* info=[[LoginInfo alloc]init];
-    //类型
-    info.device=DEVICE_TYPE;
-    //用户ID
-    info.userId=self.user.userId;
-    //推送ID
-    info.pushid=self.pushID;
-    
-    //连接到服务器开始请求登录
-    FlappyRequest* request=[[FlappyRequest alloc]init];
-    //登录请求
-    request.type=REQ_LOGIN;
-    //登录信息
-    request.login=info;
-    //登录信息
-    if([FlappyData getUser]!=nil){
-        request.latest=[FlappyData getUser].latest;
-    }
-    
-    //请求数据，已经GPBComputeRawVarint32SizeForInteger
-    NSData* reqData=[request delimitedData];
-    //写入请求数据
-    [self.socket writeData:reqData withTimeout:-1 tag:0];
-    //开启数据读取
-    [self.socket readDataWithTimeout:-1 tag:0];
-    //开启心跳线程
-    [self performSelectorOnMainThread:@selector(startHeart:)
-                           withObject:nil
-                        waitUntilDone:false];
-    
-}
-
-
-/**
- * Called when a socket has completed reading the requested data into memory.
- * Not called if there is an error.
- **/
-- (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag{
-    //数据
-    [self.receiveData appendData:data];
-    //读取data的头部占用字节 和 从头部读取内容长度
-    //验证结果：数据比较小时头部占用字节为1，数据比较大时头部占用字节为2
-    int32_t headL = 0;
-    int32_t contentL = [FlappyApiRequest getContentLength:self.receiveData
-                                   withHeadLength:&headL];
-    if (contentL < 1){
-        [sock readDataWithTimeout:-1 tag:0];
-        return;
-    }
-    //拆包情况下：继续接收下一条消息，直至接收完这条消息所有的拆包，再解析
-    if (headL + contentL > self.receiveData.length){
-        [sock readDataWithTimeout:-1 tag:0];
-        return;
-    }
-    //当receiveData长度不小于第一条消息内容长度时，开始解析receiveData
-    [self parseContentDataWithHeadLength:headL withContentLength:contentL];
-    //修改
-    [sock readDataWithTimeout:-1 tag:tag];
-}
-
-- (void)socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
-    
-}
-
-- (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
-    //在主线程之中执行
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [[FlappySender shareInstance]successCallback:tag];
-            
-        });
-    });
-}
-
-- (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
-    
-}
-
-- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
-                 elapsed:(NSTimeInterval)elapsed
-               bytesDone:(NSUInteger)length{
-    return 3;
-}
-
-- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutWriteWithTag:(long)tag
-                 elapsed:(NSTimeInterval)elapsed
-               bytesDone:(NSUInteger)length{
-    
-    return 3;
-}
-
-- (void)socketDidCloseReadStream:(GCDAsyncSocket *)sock{
-    
-}
-
-- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err{
-    //非正常d退出
-    [self offline:false];
-    //退出了
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[FlappySender shareInstance] failureAllCallbacks];
-        });
-    });
-}
-
-- (void)socketDidSecure:(GCDAsyncSocket *)sock{
-    
-}
-
-
-- (void)socket:(GCDAsyncSocket *)sock didReceiveTrust:(SecTrustRef)trust completionHandler:(void (^)(BOOL shouldTrustPeer))completionHandler{
-    
-}
-
-
-#pragma readData
-#pragma mark - private methods  辅助方法
-
-//主动下线
--(void)offline:(Boolean)regular{
-    //正常退出，非正常退出的回调不执行
-    if(regular){
-        self.dead=nil;
-    }
-    //主动断开连接
-    if(self.socket!=nil){
-        [self.socket disconnect];
-    }
-    //登录失败
-    if(self.failure!=nil){
-        //失败
-        self.failure([NSError errorWithDomain:@"Socket closed by a new login thread"
-                                         code:0
-                                     userInfo:nil],
-                     RESULT_NETERROR);
-        //失败
-        self.failure=nil;
-        //清空
-        self.success=nil;
-    }
-    //心跳停止
-    [self stopHeart];
-    //清空socket
-    self.socket=nil;
-    //保存
-    [FlappySender shareInstance].socket=nil;
-    //非正常退出
-    if(self.dead!=nil){
-        //非正常退出
-        self.dead();
-        self.dead=nil;
-    }
-}
-
-//解析二进制数据：NSData --> 自定义模型对象
-- (void)parseContentDataWithHeadLength:(int32_t)headL withContentLength:(int32_t)contentL{
-    
-    //本次解析data的范围
-    NSRange range = NSMakeRange(0, headL + contentL);
-    
-    //本次解析的data
-    NSData *data = [self.receiveData subdataWithRange:range];
-    
-    //接收到的所有数据转换为数据流
-    GPBCodedInputStream *inputStream = [GPBCodedInputStream streamWithData:data];
-    //错误
-    NSError *error;
-    //解析数据
-    FlappyResponse *obj = [FlappyResponse parseDelimitedFromCodedInputStream:inputStream
-                                                           extensionRegistry:nil
-                                                                       error:&error];
-    //如果正确解析
-    if (!error){
-        //保存解析正确的模型对象
-        if (obj){
-            [self msgRecieved:obj];
-        }
-        //移除已经解析过的data
-        [self.receiveData replaceBytesInRange:range
-                                    withBytes:NULL
-                                       length:0];
-    }
-    if (self.receiveData.length < 1)
-        return;
-    //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
-    headL = 0;
-    contentL = [FlappyApiRequest getContentLength:self.receiveData
-                           withHeadLength:&headL];
-    //实际包不足解析，继续接收下一个包
-    if (headL + contentL > self.receiveData.length) return;
-    //继续解析下一条
-    [self parseContentDataWithHeadLength:headL
-                       withContentLength:contentL];
-}
-
-//处理解析出来的信息,新消息过来了
-- (void)msgRecieved:(FlappyResponse *)respones{
-    //返回登录消息
-    if(respones.type==RES_LOGIN)
-    {
-        //登录成功
-        if(self.success!=nil){
-            //用户已经登录过了
-            self.user.login=true;
-            //保存用户登录数据
-            [FlappyData saveUser:self.user];
-            //登录成功
-            self.success(self.loginData);
-            //清空回调和数据
-            self.success=nil;
-            self.failure=nil;
-            self.loginData=nil;
-        }
-        //消息信息
-        NSMutableArray* array=respones.msgArray;
-        //进行排序
-        [array sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-            ChatMessage* one=obj1;
-            ChatMessage* two=obj2;
-            if(one.messageTableSeq.integerValue>two.messageTableSeq.integerValue){
-                return NSOrderedDescending;
-            }
-            return NSOrderedAscending;
-        }];
-        //转换
-        for(long s=0;s<array.count;s++){
-            Message* message=[array objectAtIndex:s];
-            //转换一下
-            ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
-            //接收成功
-            chatMsg.messageSended=SEND_STATE_REACHED;
-            //获取之前的消息ID
-            ChatMessage* former=[[DataBase shareInstance]getMessageByID:chatMsg.messageId];
-            //之前不存在
-            if(former==nil){
-                //添加数据
-                [[DataBase shareInstance] insert:chatMsg];
-                [self notifyNewMessage:chatMsg];
-            }else{
-                [[DataBase shareInstance] updateMessage:chatMsg];
-            }
-        }
-        //最后一条的数据保存
-        if(array.count>0){
-            ChatMessage* last=[array objectAtIndex:array.count-1];
-            self.user.latest=last.messageTableSeq;
-            [FlappyData saveUser:self.user];
-        }
-        
-    }
-    //接收到新的消息
-    else if(respones.type==RES_MSG){
-        //消息信息
-        NSMutableArray* array=respones.msgArray;
-        for(int s=0;s<array.count;s++){
-            Message* message=[array objectAtIndex:s];
-            //转换一下
-            ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
-            //接收成功
-            chatMsg.messageSended=SEND_STATE_REACHED;
-            //获取之前的消息ID
-            ChatMessage* former=[[DataBase shareInstance]getMessageByID:chatMsg.messageId];
-            //之前不存在
-            if(former==nil){
-                //添加数据
-                [[DataBase shareInstance] insert:chatMsg];
-                [self notifyNewMessage:chatMsg];
-            }else{
-                [[DataBase shareInstance] updateMessage:chatMsg];
-            }
-            //保存最近的时间
-            self.user.latest=chatMsg.messageTableSeq;
-            //保存最近的时间
-            [FlappyData saveUser:self.user];
-        }
-    }
-}
-
-//通知有新的消息
--(void)notifyNewMessage:(ChatMessage*)message{
-    //在主线程之中执行
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            //新消息
-            NSArray* array=self.callbacks.allKeys;
-            //数量
-            for(int s=0;s<array.count;s++){
-                NSString* str=[array objectAtIndex:s];
-                NSMutableArray* listeners=[self.callbacks objectForKey:str];
-                //回调监听的事件
-                for(int w=0;w<listeners.count;w++){
-                    MessageListener listener=[listeners objectAtIndex:w];
-                    listener(message);
-                }
-            }
-        });
-    });
-}
 
 //判断当前用户是否登录
 -(Boolean)isLogin{
@@ -1167,7 +777,7 @@
 //销毁逻辑
 -(void)dealloc{
     //下线
-    [self  offline:false];
+    [self.flappysocket  offline:false];
     //停止
     [self  stopOberver];
     //清空

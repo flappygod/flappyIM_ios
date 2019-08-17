@@ -46,12 +46,7 @@
                           action:@selector(chooseImag:)
                 forControlEvents:UIControlEventTouchUpInside];
     
-    [[FlappyIM shareInstance] logout:^(id _Nullable data) {
-        
-        NSLog(@"当前设备已经被踢下线了");
-    } andFailure:^(NSError * _Nullable rt, NSInteger v) {
-    
-    }];
+   
     
     //踢下线
     [[FlappyIM shareInstance] setKnickedListener:^{
