@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 //初始化
 -(void)setup;
 
+//通过服务器地址初始化
+-(void)setup:(NSString*)serverUrl  withUploadUrl:(NSString*)uploadUrl;
 
 //判断当前账号是否登录
 -(Boolean)isLogin;
