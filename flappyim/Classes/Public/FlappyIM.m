@@ -115,6 +115,21 @@
     [self setupDataBase];
 }
 
+
+//初始化
+-(void)setup:(NSString*)serverUrl  withUploadUrl:(NSString*)uploadUrl{
+    //重新设置服务器地址
+    [[FlappyApiConfig shareInstance] resetServer:serverUrl andUploadUrl:uploadUrl];
+    
+    //重新连接
+    [self setupReconnect];
+    //通知
+    [self setupNotify];
+    //初始化数据库
+    [self setupDataBase];
+}
+
+
 //增加消息的监听
 -(void)addGloableListener:(MessageListener)listener{
     //监听所有消息
