@@ -5,11 +5,11 @@
 //  Created by lijunlin on 2019/8/8.
 //
 
-#import "FlappyRequest.h"
+#import "FlappyApiRequest.h"
 #import "FlappyConfig.h"
 #import "StringTool.h"
 
-@implementation FlappyRequest
+@implementation FlappyApiRequest
 
 
 //请求接口

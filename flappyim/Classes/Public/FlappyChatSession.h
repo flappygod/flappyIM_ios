@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "SessionData.h"
 #import "FlappyIM.h"
-#import "FlappyRequest.h"
+#import "FlappyApiRequest.h"
 #import "ChatImage.h"
 #import "ChatVoice.h"
 

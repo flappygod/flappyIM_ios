@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import "ChatMessage.h"
-#import "FlappyRequest.h"
+#import "FlappyApiRequest.h"
 #import "FlappyConfig.h"
 #import "Flappy.pbobjc.h"
 

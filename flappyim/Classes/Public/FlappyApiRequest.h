@@ -26,7 +26,7 @@ typedef void(^MessageListener) (ChatMessage* _Nullable message);
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FlappyRequest : NSObject
+@interface FlappyApiRequest : NSObject
 
 //请求数据
 +(void)postRequest:(NSString*)url
