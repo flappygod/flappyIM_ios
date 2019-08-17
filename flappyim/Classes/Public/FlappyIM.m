@@ -654,7 +654,7 @@
                           NSArray* array=data;
                           NSMutableArray* sessions=[[NSMutableArray alloc]init];
                           for(int s=0;s<array.count;s++){
-                              [sessions addObject:[ChatSession mj_objectWithKeyValues:[array objectAtIndex:s]]]
+                              [sessions addObject:[ChatSession mj_objectWithKeyValues:[array objectAtIndex:s]]];
                           }
                           //成功
                           success(sessions);
