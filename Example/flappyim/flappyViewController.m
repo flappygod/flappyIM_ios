@@ -84,7 +84,7 @@
 -(void)sessionSuccess:(FlappyChatSession*)session{
     __weak typeof(self) safeSelf=self;
     [session addMessageListener:^(ChatMessage * _Nullable message) {
-        safeSelf.lable.text=message.messageContent;
+        safeSelf.lable.text=[message getChatText];
     }];
 }
 
