@@ -52,8 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //退出登录
--(void)logout:(NSString*)userExtendID
-   andSuccess:(FlappySuccess)success
+-(void)logout:(FlappySuccess)success
    andFailure:(FlappyFailure)failure;
 
 

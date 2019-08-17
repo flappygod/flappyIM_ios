@@ -381,9 +381,16 @@
 
 
 //退出登录下线
--(void)logout:(NSString*)userExtendID
-   andSuccess:(FlappySuccess)success
+-(void)logout:(FlappySuccess)success
    andFailure:(FlappyFailure)failure{
+    
+    
+    //为空直接出错
+    if([FlappyData getUser]==nil){
+        //返回没有登录
+        failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
+        return ;
+    }
     
     //之前的正常下线
     [self offline:true];
@@ -392,7 +399,7 @@
     
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userID":@"",
-                                 @"userExtendID":userExtendID,
+                                 @"userExtendID":[FlappyData getUser].userExtendId,
                                  @"device":DEVICE_TYPE,
                                  @"pushid":self.pushID
                                  };
