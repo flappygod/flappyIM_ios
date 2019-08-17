@@ -272,7 +272,7 @@
     }
     
     //连接到服务器开始请求登录
-    FlappyApiRequest* request=[[FlappyApiRequest alloc]init];
+    FlappyRequest* request=[[FlappyRequest alloc]init];
     //登录请求
     request.type=REQ_MSG;
     //登录信息

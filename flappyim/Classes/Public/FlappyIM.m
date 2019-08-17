@@ -774,7 +774,7 @@
     //心跳消息写入
     if(self.socket!=nil){
         //连接到服务器开始请求登录
-        FlappyApiRequest* request=[[FlappyApiRequest alloc]init];
+        FlappyRequest* request=[[FlappyRequest alloc]init];
         //登录请求
         request.type=REQ_PING;
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
@@ -802,7 +802,7 @@
     info.pushid=self.pushID;
     
     //连接到服务器开始请求登录
-    FlappyApiRequest* request=[[FlappyApiRequest alloc]init];
+    FlappyRequest* request=[[FlappyRequest alloc]init];
     //登录请求
     request.type=REQ_LOGIN;
     //登录信息
