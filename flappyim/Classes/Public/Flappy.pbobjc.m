@@ -337,7 +337,9 @@ typedef struct Route__storage_ {
 @dynamic messageTableSeq;
 @dynamic messageType;
 @dynamic messageSend;
+@dynamic messageSendExtendid;
 @dynamic messageRecieve;
+@dynamic messageRecieveExtendid;
 @dynamic messageContent;
 @dynamic messageSended;
 @dynamic messageReaded;
@@ -357,7 +359,9 @@ typedef struct Message__storage_ {
   NSString *messageSession;
   NSString *messageTableSeq;
   NSString *messageSend;
+  NSString *messageSendExtendid;
   NSString *messageRecieve;
+  NSString *messageRecieveExtendid;
   NSString *messageContent;
   NSString *messageDate;
   NSString *messageDeletedDate;
@@ -433,11 +437,29 @@ typedef struct Message__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
+        .name = "messageSendExtendid",
+        .dataTypeSpecific.className = NULL,
+        .number = Message_FieldNumber_MessageSendExtendid,
+        .hasIndex = 7,
+        .offset = (uint32_t)offsetof(Message__storage_, messageSendExtendid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "messageRecieve",
         .dataTypeSpecific.className = NULL,
         .number = Message_FieldNumber_MessageRecieve,
-        .hasIndex = 7,
+        .hasIndex = 8,
         .offset = (uint32_t)offsetof(Message__storage_, messageRecieve),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "messageRecieveExtendid",
+        .dataTypeSpecific.className = NULL,
+        .number = Message_FieldNumber_MessageRecieveExtendid,
+        .hasIndex = 9,
+        .offset = (uint32_t)offsetof(Message__storage_, messageRecieveExtendid),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
       },
@@ -445,7 +467,7 @@ typedef struct Message__storage_ {
         .name = "messageContent",
         .dataTypeSpecific.className = NULL,
         .number = Message_FieldNumber_MessageContent,
-        .hasIndex = 8,
+        .hasIndex = 10,
         .offset = (uint32_t)offsetof(Message__storage_, messageContent),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
@@ -454,7 +476,7 @@ typedef struct Message__storage_ {
         .name = "messageSended",
         .dataTypeSpecific.className = NULL,
         .number = Message_FieldNumber_MessageSended,
-        .hasIndex = 9,
+        .hasIndex = 11,
         .offset = (uint32_t)offsetof(Message__storage_, messageSended),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt32,
@@ -463,7 +485,7 @@ typedef struct Message__storage_ {
         .name = "messageReaded",
         .dataTypeSpecific.className = NULL,
         .number = Message_FieldNumber_MessageReaded,
-        .hasIndex = 10,
+        .hasIndex = 12,
         .offset = (uint32_t)offsetof(Message__storage_, messageReaded),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt32,
@@ -472,7 +494,7 @@ typedef struct Message__storage_ {
         .name = "messageDate",
         .dataTypeSpecific.className = NULL,
         .number = Message_FieldNumber_MessageDate,
-        .hasIndex = 11,
+        .hasIndex = 13,
         .offset = (uint32_t)offsetof(Message__storage_, messageDate),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
@@ -481,7 +503,7 @@ typedef struct Message__storage_ {
         .name = "messageDeleted",
         .dataTypeSpecific.className = NULL,
         .number = Message_FieldNumber_MessageDeleted,
-        .hasIndex = 12,
+        .hasIndex = 14,
         .offset = (uint32_t)offsetof(Message__storage_, messageDeleted),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt32,
@@ -490,7 +512,7 @@ typedef struct Message__storage_ {
         .name = "messageDeletedDate",
         .dataTypeSpecific.className = NULL,
         .number = Message_FieldNumber_MessageDeletedDate,
-        .hasIndex = 13,
+        .hasIndex = 15,
         .offset = (uint32_t)offsetof(Message__storage_, messageDeletedDate),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
@@ -506,8 +528,8 @@ typedef struct Message__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\016\001\t\000\002\016\000\003\022\000\004\024\000\005\017\000\006\013\000\007\013\000\010\016\000\t\016\000\n\r\000\013\r\000\014\013\000\r\016\000"
-        "\016\022\000";
+        "\020\001\t\000\002\016\000\003\022\000\004\024\000\005\017\000\006\013\000\007\013\000\010\023\000\t\016\000\n\026\000\013\016\000\014\r\000\r\r\000"
+        "\016\013\000\017\016\000\020\022\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG

@@ -164,13 +164,15 @@ typedef GPB_ENUM(Message_FieldNumber) {
   Message_FieldNumber_MessageTableSeq = 5,
   Message_FieldNumber_MessageType = 6,
   Message_FieldNumber_MessageSend = 7,
-  Message_FieldNumber_MessageRecieve = 8,
-  Message_FieldNumber_MessageContent = 9,
-  Message_FieldNumber_MessageSended = 10,
-  Message_FieldNumber_MessageReaded = 11,
-  Message_FieldNumber_MessageDate = 12,
-  Message_FieldNumber_MessageDeleted = 13,
-  Message_FieldNumber_MessageDeletedDate = 14,
+  Message_FieldNumber_MessageSendExtendid = 8,
+  Message_FieldNumber_MessageRecieve = 9,
+  Message_FieldNumber_MessageRecieveExtendid = 10,
+  Message_FieldNumber_MessageContent = 11,
+  Message_FieldNumber_MessageSended = 12,
+  Message_FieldNumber_MessageReaded = 13,
+  Message_FieldNumber_MessageDate = 14,
+  Message_FieldNumber_MessageDeleted = 15,
+  Message_FieldNumber_MessageDeletedDate = 16,
 };
 
 /**
@@ -192,7 +194,11 @@ typedef GPB_ENUM(Message_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *messageSend;
 
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageSendExtendid;
+
 @property(nonatomic, readwrite, copy, null_resettable) NSString *messageRecieve;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageRecieveExtendid;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *messageContent;
 
