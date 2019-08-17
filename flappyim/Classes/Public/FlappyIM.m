@@ -17,6 +17,7 @@
 #import "DataBase.h"
 #import "NetTool.h"
 #import "FlappySender.h"
+#import "FlappyApiConfig.h"
 
 
 @interface FlappyIM ()
@@ -302,7 +303,7 @@
           andFailure:(FlappyFailure)failure{
     
     //注册地址
-    NSString *urlString = URL_register;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_register;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userExtendID":userID,
                                  @"userName":userName,
@@ -341,7 +342,7 @@
     self.failure = failure;
     
     //注册地址
-    NSString *urlString = URL_login;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
     
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userID":@"",
@@ -395,7 +396,7 @@
     //之前的正常下线
     [self offline:true];
     //注册地址
-    NSString *urlString = URL_logout;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_logout;
     
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userID":@"",
@@ -440,7 +441,7 @@
     self.failure = failure;
     
     //自动登录
-    NSString *urlString = URL_autoLogin;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_autoLogin;
     
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userID":[FlappyData getUser].userId,
@@ -501,7 +502,7 @@
     }
     
     //注册地址
-    NSString *urlString = URL_createSingleSession;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_createSingleSession;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userOne":[FlappyData getUser].userExtendId,
                                  @"userTwo":userTwo,
@@ -535,7 +536,7 @@
     }
     
     //注册地址
-    NSString *urlString = URL_getSingleSession;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_getSingleSession;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userOne":[FlappyData getUser].userExtendId,
                                  @"userTwo":userTwo,
@@ -572,7 +573,7 @@
     }
     
     //创建群组会话
-    NSString *urlString = URL_createGroupSession;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_createGroupSession;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"users":users,
                                  @"createUser":[FlappyData getUser].userId,
@@ -609,7 +610,7 @@
     }
     
     //创建群组会话
-    NSString *urlString = URL_getSessionByID;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_getSessionByID;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"extendID":groupID};
     //请求数据
@@ -642,7 +643,7 @@
     }
     
     //创建群组会话
-    NSString *urlString = URL_getUserSessions;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_getUserSessions;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userExtendID":[FlappyData getUser].userExtendId};
     //请求数据
@@ -677,7 +678,7 @@
     }
     
     //创建群组会话
-    NSString *urlString = URL_addUserToSession;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_addUserToSession;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"extendID":groupID,@"userID":userID};
     //请求数据
@@ -711,7 +712,7 @@
     }
     
     //创建群组会话
-    NSString *urlString = URL_delUserInSession;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_delUserInSession;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"extendID":groupID,@"userID":userID};
     //请求数据
