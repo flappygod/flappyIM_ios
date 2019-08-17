@@ -131,7 +131,7 @@
     chatmsg.messageRecieve=[self getPeerID];
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_TEXT;
-    chatmsg.messageContent=text;
+    [chatmsg setChatText:text];
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
