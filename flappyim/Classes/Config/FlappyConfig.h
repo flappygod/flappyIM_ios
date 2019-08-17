@@ -14,48 +14,6 @@
 
 
 
-//基础地址
-//#define BaseUrl @"http://49.234.106.91"
-#define BaseUrl @"http://192.168.31.80"
-
-
-
-//上传文件的地址
-#define URL_uploadUrl [NSString stringWithFormat:@"%@/upload/fileUpload",BaseUrl]
-
-//创建账户
-#define URL_register [NSString stringWithFormat:@"%@/api/register",BaseUrl]
-
-//登录账号
-#define URL_login [NSString stringWithFormat:@"%@/api/login",BaseUrl]
-
-//退出账号
-#define URL_logout [NSString stringWithFormat:@"%@/api/logout",BaseUrl]
-
-//自动登录账号
-#define URL_autoLogin [NSString stringWithFormat:@"%@/api/autoLogin",BaseUrl]
-
-//创建会话
-#define URL_createSingleSession [NSString stringWithFormat:@"%@/api/createSingleSession",BaseUrl]
-
-//获取单聊会话
-#define URL_getSingleSession [NSString stringWithFormat:@"%@/api/getSingleSession",BaseUrl]
-
-
-//创建多人会话
-#define URL_createGroupSession [NSString stringWithFormat:@"%@/api/createGroupSession",BaseUrl]
-
-//获取多人会话
-#define URL_getSessionByID [NSString stringWithFormat:@"%@/api/getSessionByID",BaseUrl]
-
-//获取当前用户的所有会话
-#define URL_getUserSessions [NSString stringWithFormat:@"%@/api/getUserSessions",BaseUrl]
-
-//添加用户到会话
-#define URL_addUserToSession [NSString stringWithFormat:@"%@/api/addUserToSession",BaseUrl]
-
-//删除会话中的用户
-#define URL_delUserInSession [NSString stringWithFormat:@"%@/api/delUserInSession",BaseUrl]
 
 
 
