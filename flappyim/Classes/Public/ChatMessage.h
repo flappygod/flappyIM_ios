@@ -6,6 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ChatImage.h"
+#import "ChatVoice.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -72,6 +74,23 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) NSInteger messageDeleted;
 
 @property(nonatomic,copy)NSString* messageDeletedDate;
+
+
+
+//设置聊天文本
+-(void)setChatText:(NSString*)chatText;
+
+
+//获取聊天文本
+-(NSString*)getChatText;
+
+
+//获取图像
+-(ChatImage*)getChatImage;
+
+
+//获取声音
+-(ChatVoice*)getChatVoice;
 
 @end
 
