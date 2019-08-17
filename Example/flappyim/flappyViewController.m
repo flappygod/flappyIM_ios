@@ -76,6 +76,9 @@
                                      safeSelf.session=data;
                                      [self sessionSuccess:data];
                                      
+                                     ChatMessage* ms=[safeSelf.session getLatestMessage];
+                                     safeSelf.lable.text=[ms getChatText];
+                                     
                                  } andFailure:^(NSError * _Nullable error, NSInteger code) {
                                      NSLog(@"会话创建失败");
                                  }];
