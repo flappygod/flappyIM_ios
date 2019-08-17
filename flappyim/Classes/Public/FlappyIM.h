@@ -12,7 +12,7 @@
 #import "ChatUser.h"
 #import "Flappy.pbobjc.h"
 #import "FlappyChatSession.h"
-#import "PostTool.h"
+#import "FlappyRequest.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <Reachability/Reachability.h>

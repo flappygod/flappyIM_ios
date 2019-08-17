@@ -5,11 +5,11 @@
 //  Created by lijunlin on 2019/8/8.
 //
 
-#import "PostTool.h"
+#import "FlappyRequest.h"
 #import "FlappyConfig.h"
 #import "StringTool.h"
 
-@implementation PostTool
+@implementation FlappyRequest
 
 
 //请求接口

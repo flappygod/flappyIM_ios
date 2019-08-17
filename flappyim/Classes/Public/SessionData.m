@@ -5,8 +5,8 @@
 //  Created by lijunlin on 2019/8/13.
 //
 
-#import "SessionGroupData.h"
+#import "SessionData.h"
 
-@implementation SessionGroupData
+@implementation SessionData
 
 @end

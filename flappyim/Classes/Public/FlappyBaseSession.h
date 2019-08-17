@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FlappyIM.h"
-#import "PostTool.h"
+#import "FlappyRequest.h"
 #import "ChatImage.h"
 #import "ChatVoice.h"
 

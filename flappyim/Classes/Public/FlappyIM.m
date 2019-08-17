@@ -310,7 +310,7 @@
                                  };
     
     //请求数据
-    [PostTool postRequest:urlString
+    [FlappyRequest postRequest:urlString
            withParameters:parameters
               withSuccess:success
               withFailure:failure];
@@ -352,7 +352,7 @@
     
     __weak typeof(self) safeSelf=self;
     //请求数据
-    [PostTool postRequest:urlString
+    [FlappyRequest postRequest:urlString
            withParameters:parameters
               withSuccess:^(id data) {
                   
@@ -397,7 +397,7 @@
                                  @"pushid":self.pushID
                                  };
     //请求数据
-    [PostTool postRequest:urlString
+    [FlappyRequest postRequest:urlString
            withParameters:parameters
               withSuccess:^(id data) {
                   //退出登录成功
@@ -443,7 +443,7 @@
     
     __weak typeof(self) safeSelf=self;
     //请求数据
-    [PostTool postRequest:urlString
+    [FlappyRequest postRequest:urlString
            withParameters:parameters
               withSuccess:^(id data) {
                   
@@ -500,11 +500,11 @@
                                  @"userTwo":userTwo,
                                  };
     //请求数据
-    [PostTool postRequest:urlString
+    [FlappyRequest postRequest:urlString
            withParameters:parameters
               withSuccess:^(id data) {
                   //获取model
-                  SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
+                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
                   //创建session
                   FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   session.session=model;
@@ -534,11 +534,11 @@
                                  @"userTwo":userTwo,
                                  };
     //请求数据
-    [PostTool postRequest:urlString
+    [FlappyRequest postRequest:urlString
            withParameters:parameters
               withSuccess:^(id data) {
                   //获取model
-                  SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
+                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
                   //创建session
                   FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   session.session=model;
@@ -573,11 +573,11 @@
                                  @"sessionName":groupName
                                  };
     //请求数据
-    [PostTool postRequest:urlString
+    [FlappyRequest postRequest:urlString
            withParameters:parameters
               withSuccess:^(id data) {
                   //获取model
-                  SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
+                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
                   //创建session
                   FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   session.session=model;
@@ -606,11 +606,11 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"extendID":groupID};
     //请求数据
-    [PostTool postRequest:urlString
+    [FlappyRequest postRequest:urlString
            withParameters:parameters
               withSuccess:^(id data) {
                   //获取model
-                  SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
+                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
                   //创建session
                   FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   //数据
@@ -640,11 +640,11 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"extendID":groupID,@"userID":userID};
     //请求数据
-    [PostTool postRequest:urlString
+    [FlappyRequest postRequest:urlString
            withParameters:parameters
               withSuccess:^(id data) {
                   //获取model
-                  SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
+                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
                   //创建session
                   FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   //数据
@@ -674,11 +674,11 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"extendID":groupID,@"userID":userID};
     //请求数据
-    [PostTool postRequest:urlString
+    [FlappyRequest postRequest:urlString
            withParameters:parameters
               withSuccess:^(id data) {
                   //获取model
-                  SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
+                  SessionData* model=[SessionData mj_objectWithKeyValues:data];
                   //创建session
                   FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   //数据
@@ -836,7 +836,7 @@
     //读取data的头部占用字节 和 从头部读取内容长度
     //验证结果：数据比较小时头部占用字节为1，数据比较大时头部占用字节为2
     int32_t headL = 0;
-    int32_t contentL = [PostTool getContentLength:self.receiveData
+    int32_t contentL = [FlappyRequest getContentLength:self.receiveData
                                    withHeadLength:&headL];
     if (contentL < 1){
         [sock readDataWithTimeout:-1 tag:0];
@@ -981,7 +981,7 @@
         return;
     //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
     headL = 0;
-    contentL = [PostTool getContentLength:self.receiveData
+    contentL = [FlappyRequest getContentLength:self.receiveData
                            withHeadLength:&headL];
     //实际包不足解析，继续接收下一个包
     if (headL + contentL > self.receiveData.length) return;
