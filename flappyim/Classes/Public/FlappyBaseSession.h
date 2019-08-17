@@ -6,7 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SessionSingleData.h"
 #import "FlappyIM.h"
 #import "PostTool.h"
 #import "ChatImage.h"

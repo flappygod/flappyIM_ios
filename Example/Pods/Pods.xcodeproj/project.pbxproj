@@ -59,7 +59,6 @@
 		34FCC2D9D4ED04D787C028446F16B3C9 /* GPBExtensionRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD091741DC6A54E1E6B48F2621E1944 /* GPBExtensionRegistry.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		36C9A045325FDEDEF36C88EC23EBEC4E /* FlappyConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 60D355DD94C3AF92F6E8FDB5F9BA5A1B /* FlappyConfig.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		37296B38A55A40BEF65ECFC9B0527D8E /* FMDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C0CD78230FE43A4CF287127C5E1071 /* FMDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		376E89BD0BCA9A5058348F9C10822ADD /* SessionSingleData.h in Headers */ = {isa = PBXBuildFile; fileRef = 93CBAD50B51EF46D735EAD8CC15A466D /* SessionSingleData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A186F3A7711FAAB8C60562D63FF0D9F /* UIProgressView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = AFA3EA99EF69DCB5D6905D1A07AA392A /* UIProgressView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A436A475B69B306B7C4270170668F7C /* GPBUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 084529EB4FECD35B51521D57F2434119 /* GPBUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3BAA6DDBE44238B40D6A72A16EF41814 /* MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DB43B3F14ACA5A78BCD114CB3253BE5 /* MJProperty.m */; };
@@ -124,7 +123,6 @@
 		76CEC0CBAED6B0BEF3CC50F0583BBD36 /* GPBRuntimeTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = E881F07B06606ED2D97B44FD066FD469 /* GPBRuntimeTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		77876997CA63145CC72A2D6FB5758513 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2774DC1DA0AAE1FD06A5393C2F9F0109 /* AFHTTPSessionManager.m */; };
 		793672E9792741D31579AAAE57FDE118 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE92BED710E57A29C4780FF76AC02D16 /* Foundation.framework */; };
-		795E7DD2F468D8199D8C27F91AD860CE /* SessionSingleData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F7B0B27494A4369F75BC33B9757E05F /* SessionSingleData.m */; };
 		7BE71B62F38458AC771581F60006F9CE /* NSObject+MJCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 827525CBCF0DD5D2BCBFD44231994E99 /* NSObject+MJCoding.m */; };
 		7D4E0D91FE60904C9FB50F6D447B8A30 /* FMDB-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DD2AEE5943F532AC081147F299854 /* FMDB-dummy.m */; };
 		7F0333B430CF34B052243FC2AEF726C5 /* SourceContext.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57020D5347BBA29C02E41F324E4775A0 /* SourceContext.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -433,7 +431,6 @@
 		5DEFC3FD6A8E851E381631AD8049FE05 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = src/fmdb/FMDatabaseAdditions.h; sourceTree = "<group>"; };
 		5E26D1B4D26B72318B0F8EF98CA41F0D /* UIButton+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIButton+AFNetworking.h"; path = "UIKit+AFNetworking/UIButton+AFNetworking.h"; sourceTree = "<group>"; };
 		5F48D81FB960B4882ABF7C6A6E34A816 /* MJFoundation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MJFoundation.h; path = MJExtension/MJFoundation.h; sourceTree = "<group>"; };
-		5F7B0B27494A4369F75BC33B9757E05F /* SessionSingleData.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SessionSingleData.m; sourceTree = "<group>"; };
 		60CF475157752EDE227105F86C0ADE5C /* AFAutoPurgingImageCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFAutoPurgingImageCache.h; path = "UIKit+AFNetworking/AFAutoPurgingImageCache.h"; sourceTree = "<group>"; };
 		60D355DD94C3AF92F6E8FDB5F9BA5A1B /* FlappyConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyConfig.h; sourceTree = "<group>"; };
 		61510CEC79C208BFE5C02E33E948AD25 /* Any.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Any.pbobjc.h; path = objectivec/google/protobuf/Any.pbobjc.h; sourceTree = "<group>"; };
@@ -490,7 +487,6 @@
 		91E210B4D65591F7FD00BE959627E36E /* GPBDescriptor_PackagePrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBDescriptor_PackagePrivate.h; path = objectivec/GPBDescriptor_PackagePrivate.h; sourceTree = "<group>"; };
 		91F938D8F65DA68B33ED5278D5C9CB50 /* FlappyBaseSession.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = FlappyBaseSession.m; sourceTree = "<group>"; };
 		92562C28E60BE4E3050793F2B663933C /* Reachability.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Reachability.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		93CBAD50B51EF46D735EAD8CC15A466D /* SessionSingleData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SessionSingleData.h; sourceTree = "<group>"; };
 		94ADD80C9976CEF07944D407815D5146 /* AFAutoPurgingImageCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFAutoPurgingImageCache.m; path = "UIKit+AFNetworking/AFAutoPurgingImageCache.m"; sourceTree = "<group>"; };
 		94B3FE0C49D3E57593533D1BC68A7590 /* Api.pbobjc.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Api.pbobjc.m; path = objectivec/google/protobuf/Api.pbobjc.m; sourceTree = "<group>"; };
 		94B5E1FFE5FCEBFEED3F9F51040E86C6 /* Pods-flappyim_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-flappyim_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -984,8 +980,6 @@
 				50DB3761BCF912DE27C3785A965CB604 /* PostTool.m */,
 				A5BF97B003EAA7ABA2F684AC375F92BE /* SessionGroupData.h */,
 				2AD2851BAF4DCC4A9A3DE6C28CAB242E /* SessionGroupData.m */,
-				93CBAD50B51EF46D735EAD8CC15A466D /* SessionSingleData.h */,
-				5F7B0B27494A4369F75BC33B9757E05F /* SessionSingleData.m */,
 			);
 			name = Public;
 			path = flappyim/Classes/Public;
@@ -1401,7 +1395,6 @@
 				5C3C3F15C2B3BFA775E035AD8D0A54D7 /* NetTool.h in Headers */,
 				81D3E5DF30740A67CF77E2FB599083B0 /* PostTool.h in Headers */,
 				BA9CB0D3C4396B6DC72D8E5B41A52128 /* SessionGroupData.h in Headers */,
-				376E89BD0BCA9A5058348F9C10822ADD /* SessionSingleData.h in Headers */,
 				A0224EC3C3A3B6321BA34B2024DD3245 /* StringTool.h in Headers */,
 				F7B57F386DCBEEB82376127A18F3F726 /* UploadImageTool.h in Headers */,
 				C7F178F061CAC5D077FEBA65970CC090 /* UploadModel.h in Headers */,
@@ -1782,7 +1775,6 @@
 				1EF0089D7446F7E594CC1B04CEB1AA03 /* NetTool.m in Sources */,
 				13410B002968D79F7A31080896AEB7AC /* PostTool.m in Sources */,
 				B872B3B601787103BD7E81034B38182B /* SessionGroupData.m in Sources */,
-				795E7DD2F468D8199D8C27F91AD860CE /* SessionSingleData.m in Sources */,
 				BE8DA2B50930E6F6D3D605160AE3C618 /* StringTool.m in Sources */,
 				412514986E05978B4019E5E17572C2BA /* UploadImageTool.m in Sources */,
 				61358A24F089ACEECE341C4B5F9C6E0F /* UploadModel.m in Sources */,

@@ -28,6 +28,43 @@
     return self;
 }
 
+
+//获取当前的用户
+-(ChatUser*)getMine{
+    return [FlappyData getUser];
+}
+
+//获取对方的ID
+-(NSString*)getPeerID{
+    if(self.session.sessionType==TYPE_SINGLE){
+        for(int s=0;s<self.session.users.count;s++){
+            ChatUser* user=[self.session.users objectAtIndex:s];
+            if(![user.userId isEqualToString:[self getMine].userId]){
+                return user.userId;
+            }
+        }
+    }else if(self.session.sessionType==TYPE_GROUP){
+        return self.session.sessionId;
+    }
+    return nil;
+}
+
+//对方的ID
+-(NSString*)getPeerExtendID{
+    if(self.session.sessionType==TYPE_SINGLE){
+        for(int s=0;s<self.session.users.count;s++){
+            ChatUser* user=[self.session.users objectAtIndex:s];
+            if(![user.userId isEqualToString:[self getMine].userId]){
+                return user.userExtendId;
+            }
+        }
+    }else if(self.session.sessionType==TYPE_GROUP){
+        return self.session.sessionExtendId;
+    }
+    return nil;
+}
+
+
 //设置消息的监听
 -(void)addMessageListener:(MessageListener)listener{
     //添加ID
@@ -89,8 +126,10 @@
     chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=self.session.userOne.userId;
-    chatmsg.messageRecieve=self.session.userTwo.userId;
+    chatmsg.messageSend=[self getMine].userId;
+    chatmsg.messageSendExtendid=[self getMine].userExtendId;
+    chatmsg.messageRecieve=[self getPeerID];
+    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_TEXT;
     chatmsg.messageContent=text;
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
@@ -118,8 +157,10 @@
     chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=self.session.userOne.userId;
-    chatmsg.messageRecieve=self.session.userTwo.userId;
+    chatmsg.messageSend=[self getMine].userId;
+    chatmsg.messageSendExtendid=[self getMine].userExtendId;
+    chatmsg.messageRecieve=[self getPeerID];
+    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
     chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[image mj_keyValues]];
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
@@ -143,8 +184,10 @@
     chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=self.session.userOne.userId;
-    chatmsg.messageRecieve=self.session.userTwo.userId;
+    chatmsg.messageSend=[self getMine].userId;
+    chatmsg.messageSendExtendid=[self getMine].userExtendId;
+    chatmsg.messageRecieve=[self getPeerID];
+    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
     chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[image mj_keyValues]];
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
@@ -171,8 +214,10 @@
     chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=self.session.userOne.userId;
-    chatmsg.messageRecieve=self.session.userTwo.userId;
+    chatmsg.messageSend=[self getMine].userId;
+    chatmsg.messageSendExtendid=[self getMine].userExtendId;
+    chatmsg.messageRecieve=[self getPeerID];
+    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
     chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[voice mj_keyValues]];
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
@@ -197,8 +242,10 @@
     chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=self.session.userOne.userId;
-    chatmsg.messageRecieve=self.session.userTwo.userId;
+    chatmsg.messageSend=[self getMine].userId;
+    chatmsg.messageSendExtendid=[self getMine].userExtendId;
+    chatmsg.messageRecieve=[self getPeerID];
+    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VOICE;
     chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[voice mj_keyValues]];
     chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];

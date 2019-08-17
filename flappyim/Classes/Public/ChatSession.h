@@ -9,6 +9,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+
+//单聊
+#define TYPE_SINGLE 1
+//群聊
+#define TYPE_GROUP 2
+
 //会话
 @interface ChatSession : NSObject
 

@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SessionSingleData.h"
+#import "SessionGroupData.h"
 #import "FlappyIM.h"
 #import "PostTool.h"
 #import "ChatImage.h"
@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //session
-@property(nonatomic,strong) SessionSingleData*  session;
+@property(nonatomic,strong) SessionGroupData*  session;
 
 
 //设置消息的监听
