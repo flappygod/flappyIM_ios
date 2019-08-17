@@ -92,18 +92,30 @@
     
     //成功
     req.successBlock=^(id data){
-        //字典
-        NSDictionary* dic=data;
-        //地址赋值
-        chatVoice.path=dic[@"resultData"];
-        //设置
-        chatMsg.messageContent=[FlappyJsonTool DicToJSONString:[chatVoice mj_keyValues]];
-        //上传完成发送消息
-        [safeSelf sendMessage:chatMsg
-                   andSuccess:success
-                   andFailure:failure];
-        //移除请求释放资源
-        [safeSelf.reqArray removeObject:safeReq];
+        
+        NSString* resultCode=dic[@"resultCode"];
+        //成功
+        if(resultCode.integerValue==RESULT_SUCCESS){
+            //字典
+            NSDictionary* dic=data;
+            //地址赋值
+            chatVoice.path=dic[@"resultData"];
+            //设置
+            chatMsg.messageContent=[FlappyJsonTool DicToJSONString:[chatVoice mj_keyValues]];
+            //上传完成发送消息
+            [safeSelf sendMessage:chatMsg
+                       andSuccess:success
+                       andFailure:failure];
+            //移除请求释放资源
+            [safeSelf.reqArray removeObject:safeReq];
+        }else{
+            [safeSelf msgFailure:chatMsg];
+            //上传失败了
+            failure([NSError errorWithDomain:@"图片上传失败" code:0 userInfo:nil],
+                    RESULT_NETERROR);
+            //移除请求释放资源
+            [safeSelf.reqArray removeObject:safeReq];
+        }
     };
     
     //失败
@@ -189,19 +201,32 @@
     
     //成功
     req.successBlock=^(id data){
-        //字典
-        NSDictionary* dic=data;
-        //地址
-        NSString* imgPath=dic[@"resultData"];
-        //地址赋值
-        chatImg.path=imgPath;
-        //设置
-        chatMsg.messageContent=[FlappyJsonTool DicToJSONString:[chatImg mj_keyValues]];
-        //上传完成发送消息
-        [safeSelf sendMessage:chatMsg
-                   andSuccess:success
-                   andFailure:failure];
-        [safeSelf.reqArray removeObject:safeReq];
+        
+        
+        NSString* resultCode=dic[@"resultCode"];
+        //成功
+        if(resultCode.integerValue==RESULT_SUCCESS){
+            //字典
+            NSDictionary* dic=data;
+            //地址
+            NSString* imgPath=dic[@"resultData"];
+            //地址赋值
+            chatImg.path=imgPath;
+            //设置
+            chatMsg.messageContent=[FlappyJsonTool DicToJSONString:[chatImg mj_keyValues]];
+            //上传完成发送消息
+            [safeSelf sendMessage:chatMsg
+                       andSuccess:success
+                       andFailure:failure];
+            [safeSelf.reqArray removeObject:safeReq];
+        }else{
+            [safeSelf msgFailure:chatMsg];
+            //上传失败了
+            failure([NSError errorWithDomain:@"文件上传失败" code:0 userInfo:nil],
+                    RESULT_NETERROR);
+            [safeSelf.reqArray removeObject:safeReq];
+        }
+        
     };
     //失败
     req.errorBlock=^(NSException*  error){
