@@ -47,7 +47,7 @@
         return;
     }
     //4.数据库中创建表（可创建多张）
-    NSString *sql = @"create table if not exists message ('messageId' TEXT PRIMARY KEY,'messageSession' TEXT,'messageSessionType' INTEGER,'messageSessionOffset' INTEGER,'messageTableSeq' TEXT,'messageType' INTEGER ,'messageSend' TEXT,'messageRecieve' TEXT,'messageContent' TEXT,'messageSended' INTEGER,'messageReaded' INTEGER,'messageDate' TEXT,'messageDeletedDate' TEXT,'messageDeleted' INTEGER)";
+    NSString *sql = @"create table if not exists message ('messageId' TEXT PRIMARY KEY,'messageSession' TEXT,'messageSessionType' INTEGER,'messageSessionOffset' INTEGER,'messageTableSeq' TEXT,'messageType' INTEGER ,'messageSend' TEXT,'messageRecieveExtendid' TEXT,'messageRecieve' TEXT,'messageRecieveExtendid' TEXT,'messageContent' TEXT,'messageSended' INTEGER,'messageReaded' INTEGER,'messageDate' TEXT,'messageDeletedDate' TEXT,'messageDeleted' INTEGER)";
     //5.执行更新操作 此处database直接操作，不考虑多线程问题，多线程问题，用FMDatabaseQueue 每次数据库操作之后都会返回bool数值，YES，表示success，NO，表示fail,可以通过 @see lastError @see lastErrorCode @see lastErrorMessage
     BOOL result = [db executeUpdate:sql];
     if (result) {
