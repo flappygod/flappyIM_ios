@@ -13,14 +13,14 @@
 #import "ChatImage.h"
 #import "ChatMessage.h"
 #import "ChatSession.h"
-#import "ChatSingleSession.h"
 #import "ChatUser.h"
 #import "ChatVoice.h"
 #import "Flappy.pbobjc.h"
+#import "FlappyApiRequest.h"
 #import "FlappyBaseSession.h"
+#import "FlappyChatSession.h"
 #import "FlappyIM.h"
-#import "PostTool.h"
-#import "SessionGroupData.h"
+#import "SessionData.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
 FOUNDATION_EXPORT const unsigned char flappyimVersionString[];
