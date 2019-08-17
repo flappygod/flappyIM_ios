@@ -5,7 +5,7 @@
 //  Created by lijunlin on 2019/8/9.
 //
 
-#import "ChatSingleSession.h"
+#import "FlappyChatSession.h"
 #import "DataBase.h"
 #import "DateTimeTool.h"
 #import "FlappySender.h"
@@ -14,7 +14,7 @@
 #import "FlappyData.h"
 #import "MJExtension.h"
 
-@implementation ChatSingleSession
+@implementation FlappyChatSession
 {
     NSMutableArray* _listeners;
 }

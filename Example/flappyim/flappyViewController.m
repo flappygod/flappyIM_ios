@@ -13,7 +13,7 @@
 
 @interface flappyViewController ()
 
-@property(nonatomic,strong) ChatSingleSession* session;
+@property(nonatomic,strong) FlappyChatSession* session;
 
 @end
 
@@ -90,7 +90,7 @@
                                  }];
 }
 
--(void)sessionSuccess:(ChatSingleSession*)session{
+-(void)sessionSuccess:(FlappyChatSession*)session{
     __weak typeof(self) safeSelf=self;
     [session addMessageListener:^(ChatMessage * _Nullable message) {
         safeSelf.lable.text=message.messageContent;

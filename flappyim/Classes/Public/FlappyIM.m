@@ -506,7 +506,7 @@
                   //获取model
                   SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
                   //创建session
-                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
+                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   session.session=model;
                   success(session);
               } withFailure:^(NSError * error, NSInteger code) {
@@ -540,7 +540,7 @@
                   //获取model
                   SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
                   //创建session
-                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
+                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   session.session=model;
                   success(session);
               } withFailure:^(NSError * error, NSInteger code) {
@@ -579,7 +579,7 @@
                   //获取model
                   SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
                   //创建session
-                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
+                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   session.session=model;
                   success(session);
               } withFailure:^(NSError * error, NSInteger code) {
@@ -612,7 +612,7 @@
                   //获取model
                   SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
                   //创建session
-                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
+                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   //数据
                   session.session=model;
                   //成功
@@ -646,7 +646,7 @@
                   //获取model
                   SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
                   //创建session
-                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
+                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   //数据
                   session.session=model;
                   //成功
@@ -680,7 +680,7 @@
                   //获取model
                   SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
                   //创建session
-                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
+                  FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
                   //数据
                   session.session=model;
                   //成功

@@ -92,7 +92,7 @@
 		5D614BBA844FCC1AED0AA36E5A819050 /* Reachability-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F9A5C8FD30DE40334384F1454A517755 /* Reachability-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6036B2EBE8417E574720923F13F8ED6A /* ChatSession.m in Sources */ = {isa = PBXBuildFile; fileRef = BD190C2C25EC5C0FC39814AC863350D7 /* ChatSession.m */; };
 		61358A24F089ACEECE341C4B5F9C6E0F /* UploadModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AD16ECC897FD5B62F681CCE0D88100B7 /* UploadModel.m */; };
-		61C2B7DE831E3AB6ABEC97F6AE4DC0A6 /* ChatSingleSession.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A2E356852FEB73D93225E51F8C9AC6 /* ChatSingleSession.m */; };
+		61C2B7DE831E3AB6ABEC97F6AE4DC0A6 /* FlappyChatSession.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A2E356852FEB73D93225E51F8C9AC6 /* FlappyChatSession.m */; };
 		627BF0E397B72F4A6E6644F56B23B0C0 /* FieldMask.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 5936EA8E7C00E2FBE443B60AE84E83C9 /* FieldMask.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		634E11CA470DB7ADB8F054E30E042B25 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE92BED710E57A29C4780FF76AC02D16 /* Foundation.framework */; };
 		66943401DD09465785E2A68D17F00A2A /* GPBUnknownFieldSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE4D470C1CADB329616D79518C8983A /* GPBUnknownFieldSet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -202,7 +202,7 @@
 		D6FDBF820AABDC8687EC9C6B7DAB8A2A /* GPBRootObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 67A0202DE0B93632713414E5D749DDC9 /* GPBRootObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DA034560405CB06AC543471AB1972407 /* FlappyData.h in Headers */ = {isa = PBXBuildFile; fileRef = B4D2F7C4C621A4E8B6D5F1D1744B26F0 /* FlappyData.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		DC2186197E507C0C73DFB0600D54867A /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE08734249CD987FB74DDA36FEDBE5B /* UIWebView+AFNetworking.m */; };
-		DD3DEB3E74A2995E2BB44F25B3856678 /* ChatSingleSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E0736F25CA7F4FD4BF3F0722443CC8C /* ChatSingleSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DD3DEB3E74A2995E2BB44F25B3856678 /* FlappyChatSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E0736F25CA7F4FD4BF3F0722443CC8C /* FlappyChatSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DF77DA76BD5962EE7DD383126BBBBAC8 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 74D840D63307FDB47325E612145CD483 /* GCDAsyncSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E05884116239A76C8B50715938D15AC4 /* Duration.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = F2CCB7737BB2EE8A05C1356E6B3E09B6 /* Duration.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E17973BC9CEAE4ED0A7492450F95ACEF /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CD8456D6399C7BF9F46666B77E6FDA /* AFURLRequestSerialization.m */; };
@@ -362,7 +362,7 @@
 		1B667300102D1F54193C9E57A0531866 /* Pods-flappyim_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-flappyim_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		1C439CFD3E244E32D8B2CB0BD9559FCA /* Flappy.pbobjc.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = Flappy.pbobjc.m; sourceTree = "<group>"; };
 		1CB32627D2EA72646AA62B6440EA0F18 /* GPBExtensionInternals.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBExtensionInternals.m; path = objectivec/GPBExtensionInternals.m; sourceTree = "<group>"; };
-		1E0736F25CA7F4FD4BF3F0722443CC8C /* ChatSingleSession.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChatSingleSession.h; sourceTree = "<group>"; };
+		1E0736F25CA7F4FD4BF3F0722443CC8C /* FlappyChatSession.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyChatSession.h; sourceTree = "<group>"; };
 		1F1F2BAD0968E79327FF17897D6365AA /* DataBase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = DataBase.m; sourceTree = "<group>"; };
 		1FC42D19DBE98D33F66031313468EC8C /* Reachability.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Reachability.modulemap; sourceTree = "<group>"; };
 		20D958B55C4D02120FB0B540260FAA92 /* GPBWellKnownTypes.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBWellKnownTypes.m; path = objectivec/GPBWellKnownTypes.m; sourceTree = "<group>"; };
@@ -529,7 +529,7 @@
 		B231930C934A29CCE96DE9281CD44FD6 /* MJProperty.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MJProperty.h; path = MJExtension/MJProperty.h; sourceTree = "<group>"; };
 		B32116535FE1456BB808FBB47D14EE6B /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B39BBBC1380CCC77A691DBA806A65273 /* CocoaAsyncSocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = CocoaAsyncSocket.modulemap; sourceTree = "<group>"; };
-		B3A2E356852FEB73D93225E51F8C9AC6 /* ChatSingleSession.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChatSingleSession.m; sourceTree = "<group>"; };
+		B3A2E356852FEB73D93225E51F8C9AC6 /* FlappyChatSession.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = FlappyChatSession.m; sourceTree = "<group>"; };
 		B3E5A0A0B9A6879C11C1B49E119A5C78 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIWebView+AFNetworking.h"; path = "UIKit+AFNetworking/UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		B40870893404EE27B23DC3C4EFEFB6A0 /* GPBWellKnownTypes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBWellKnownTypes.h; path = objectivec/GPBWellKnownTypes.h; sourceTree = "<group>"; };
 		B4629E3109471BBBCEFB4F6A5C08FF35 /* UIActivityIndicatorView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIActivityIndicatorView+AFNetworking.m"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.m"; sourceTree = "<group>"; };
@@ -958,8 +958,8 @@
 				1094CA22F4AA78678FA7639C2FB55E43 /* ChatMessage.m */,
 				48FBF57DC0E1A098A7F7288F7D29DC0A /* ChatSession.h */,
 				BD190C2C25EC5C0FC39814AC863350D7 /* ChatSession.m */,
-				1E0736F25CA7F4FD4BF3F0722443CC8C /* ChatSingleSession.h */,
-				B3A2E356852FEB73D93225E51F8C9AC6 /* ChatSingleSession.m */,
+				1E0736F25CA7F4FD4BF3F0722443CC8C /* FlappyChatSession.h */,
+				B3A2E356852FEB73D93225E51F8C9AC6 /* FlappyChatSession.m */,
 				BAA3083AE2E6E6E17D98D109E426A77D /* ChatUser.h */,
 				0B256EB4D2756CD703CA54A68D528E4A /* ChatUser.m */,
 				CBD0A2E752DA22A1990344428A4EB8EB /* ChatVoice.h */,
@@ -1370,7 +1370,7 @@
 				5D2AD36559223F24020980339A8F4342 /* ChatImage.h in Headers */,
 				C8F9B312A47A864F709B667BD6679BBD /* ChatMessage.h in Headers */,
 				5493A80292C5CF2EDE4953A2DC7C57E2 /* ChatSession.h in Headers */,
-				DD3DEB3E74A2995E2BB44F25B3856678 /* ChatSingleSession.h in Headers */,
+				DD3DEB3E74A2995E2BB44F25B3856678 /* FlappyChatSession.h in Headers */,
 				83942A419C670CE92D0C5D4EA605573A /* ChatUser.h in Headers */,
 				0061CA56F44D59A3C46134CE92A18491 /* ChatVoice.h in Headers */,
 				6FDC69CB0EEAFA263AEFCA4B0AF7FC72 /* CommonDef.h in Headers */,
@@ -1751,7 +1751,7 @@
 				404E07E5C47C3FDCC4542CFFC5A947EA /* ChatImage.m in Sources */,
 				50594FA4EF1F835FA140FB5B5839CDA4 /* ChatMessage.m in Sources */,
 				6036B2EBE8417E574720923F13F8ED6A /* ChatSession.m in Sources */,
-				61C2B7DE831E3AB6ABEC97F6AE4DC0A6 /* ChatSingleSession.m in Sources */,
+				61C2B7DE831E3AB6ABEC97F6AE4DC0A6 /* FlappyChatSession.m in Sources */,
 				673FB875B77F2679583CCC680B90EB65 /* ChatUser.m in Sources */,
 				98E2FD320FB2888BCCE6F56111377F75 /* ChatVoice.m in Sources */,
 				B82A6F2DCCB317F983BAE2FCBD817211 /* DataBase.m in Sources */,
