@@ -29,7 +29,11 @@
     
     msg.messageSend=chatmsg.messageSend;
     
+    msg.messageSendExtendid=chatmsg.messageSendExtendid;
+    
     msg.messageRecieve=chatmsg.messageRecieve;
+    
+    msg.messageRecieveExtendid=chatmsg.messageRecieveExtendid;
     
     msg.messageType=(int32_t)chatmsg.messageType;
     
