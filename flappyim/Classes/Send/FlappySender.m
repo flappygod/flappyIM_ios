@@ -92,12 +92,12 @@
     
     //成功
     req.successBlock=^(id data){
+        //字典
+        NSDictionary* dic=data;
         
         NSString* resultCode=dic[@"resultCode"];
         //成功
         if(resultCode.integerValue==RESULT_SUCCESS){
-            //字典
-            NSDictionary* dic=data;
             //地址赋值
             chatVoice.path=dic[@"resultData"];
             //设置
@@ -202,12 +202,12 @@
     //成功
     req.successBlock=^(id data){
         
+        //字典
+        NSDictionary* dic=data;
         
         NSString* resultCode=dic[@"resultCode"];
         //成功
         if(resultCode.integerValue==RESULT_SUCCESS){
-            //字典
-            NSDictionary* dic=data;
             //地址
             NSString* imgPath=dic[@"resultData"];
             //地址赋值
