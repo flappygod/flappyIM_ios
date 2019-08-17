@@ -48,6 +48,9 @@
 //获取多人会话
 #define URL_getSessionByID [NSString stringWithFormat:@"%@/api/getSessionByID",BaseUrl]
 
+//获取当前用户的所有会话
+#define URL_getUserSessions [NSString stringWithFormat:@"%@/api/getUserSessions",BaseUrl]
+
 //添加用户到会话
 #define URL_addUserToSession [NSString stringWithFormat:@"%@/api/addUserToSession",BaseUrl]
 

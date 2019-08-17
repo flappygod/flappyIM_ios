@@ -630,6 +630,40 @@
               }];
 }
 
+//获取用户的sessions
+-(void)getUserSessions:(FlappySuccess)success
+            andFailure:(FlappyFailure)failure{
+    
+    //为空直接出错
+    if([FlappyData getUser]==nil){
+        //返回没有登录
+        failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
+        return ;
+    }
+    
+    //创建群组会话
+    NSString *urlString = URL_getUserSessions;
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"userExtendID":[FlappyData getUser].userExtendId};
+    //请求数据
+    [FlappyApiRequest postRequest:urlString
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+                          //解析
+                          NSArray* array=data;
+                          NSMutableArray* sessions=[[NSMutableArray alloc]init];
+                          for(int s=0;s<array.count;s++){
+                              [sessions addObject:[ChatSession mj_objectWithKeyValues:[array objectAtIndex:s]]]
+                          }
+                          //成功
+                          success(sessions);
+                      } withFailure:^(NSError * error, NSInteger code) {
+                          //登录失败，清空回调
+                          failure(error,code);
+                      }];
+}
+
+
 //添加用户到群组
 -(void)addUserToSession:(NSString*)userID
             withGroupID:(NSString*)groupID
