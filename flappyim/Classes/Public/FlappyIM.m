@@ -26,8 +26,7 @@
 @property (nonatomic,strong) Reachability* hostReachability;
 //用于监听网络变化
 @property (nonatomic,strong) Reachability* internetReachability;
-
-
+//用于联网的socket
 @property (nonatomic,strong) FlappySocket* flappysocket;
 
 
