@@ -12,7 +12,6 @@
 #import "ChatUser.h"
 #import "Flappy.pbobjc.h"
 #import "ChatSingleSession.h"
-#import "ChatGroupSession.h"
 #import "PostTool.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
@@ -58,10 +57,15 @@ NS_ASSUME_NONNULL_BEGIN
    andFailure:(FlappyFailure)failure;
 
 
-//创建session
--(void)createSession:(NSString*)userTwo
-          andSuccess:(FlappySuccess)success
-          andFailure:(FlappyFailure)failure;
+//创建单聊session
+-(void)createSingleSession:(NSString*)userTwo
+                andSuccess:(FlappySuccess)success
+                andFailure:(FlappyFailure)failure;
+
+//获取单聊会话
+-(void)getSingleSession:(NSString*)userTwo
+             andSuccess:(FlappySuccess)success
+             andFailure:(FlappyFailure)failure;
 
 
 //创建群组会话
@@ -72,7 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
                andFailure:(FlappyFailure)failure;
 
 //获取群组会话
--(void)getGroupSession:(NSString*)groupID
+-(void)getSessionByID:(NSString*)groupID
             andSuccess:(FlappySuccess)success
             andFailure:(FlappyFailure)failure;
 

@@ -35,13 +35,17 @@
 #define URL_autoLogin [NSString stringWithFormat:@"%@/api/autoLogin",BaseUrl]
 
 //创建会话
-#define URL_createSession [NSString stringWithFormat:@"%@/api/createSession",BaseUrl]
+#define URL_createSingleSession [NSString stringWithFormat:@"%@/api/createSingleSession",BaseUrl]
+
+//获取单聊会话
+#define URL_getSingleSession [NSString stringWithFormat:@"%@/api/getSingleSession",BaseUrl]
+
 
 //创建多人会话
 #define URL_createGroupSession [NSString stringWithFormat:@"%@/api/createGroupSession",BaseUrl]
 
 //获取多人会话
-#define URL_getGroupSession [NSString stringWithFormat:@"%@/api/getGroupSession",BaseUrl]
+#define URL_getSessionByID [NSString stringWithFormat:@"%@/api/getSessionByID",BaseUrl]
 
 //添加用户到会话
 #define URL_addUserToSession [NSString stringWithFormat:@"%@/api/addUserToSession",BaseUrl]

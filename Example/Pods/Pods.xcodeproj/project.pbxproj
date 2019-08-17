@@ -30,7 +30,6 @@
 		1520633FF4BAA6D0DBA952E993CD0062 /* FlappySender.h in Headers */ = {isa = PBXBuildFile; fileRef = AD7AA1DCCC1571A4FA2AB478A21AF4EC /* FlappySender.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		15FD347619E3774003BFDCF78E371FF2 /* FlappyIM.h in Headers */ = {isa = PBXBuildFile; fileRef = 74D7BCA916AB7F60268C175820030970 /* FlappyIM.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		165816E10F031A2BB600A35ACB23C61B /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 544E0DC88A672B7B0713947AC2058B1F /* Reachability.m */; };
-		1683AC23EE77D219357BFC6589B29C6B /* ChatGroupSession.h in Headers */ = {isa = PBXBuildFile; fileRef = F740F466DD822F56C44986F5F022E2B9 /* ChatGroupSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		169B3FC2BD33B8FBC2D4C35A1C1DC6BF /* AFHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BE13EA9F45B5642CF9721FB3354176CA /* AFHTTPSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		17D6A066C5F987FEFF8B89D7EFDFD375 /* AFURLRequestSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = E373DAEAC903320691B1EDDCD4CEF157 /* AFURLRequestSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1AC36159DEDD4452C304D5B1FFB688D1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6758D80F7FAB803F3A03D757AADEBA /* MobileCoreServices.framework */; };
@@ -118,7 +117,6 @@
 		74563EEA24DD0BD11D320B72A92BA465 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B32116535FE1456BB808FBB47D14EE6B /* FMDB.framework */; };
 		74A3A02AE4DE3D281DD0FC18F4B7DC5C /* GPBArray.h in Headers */ = {isa = PBXBuildFile; fileRef = A864B46455DF5F2AE0CAE208156A1F65 /* GPBArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		766DE9D490D7BB0A5393D9ED9F86E89B /* GPBUnknownField.m in Sources */ = {isa = PBXBuildFile; fileRef = A5AD4F079EB66747AC8278F0A0687BC4 /* GPBUnknownField.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		769B3E8CB40F32161A751EAA160DC296 /* ChatGroupSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE36B1E39F571A97399A78CABE93212 /* ChatGroupSession.m */; };
 		769B6260247C5624A11411541C0AA4E2 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 115EEFF50244BD2590FBF62FED393C0A /* AFSecurityPolicy.m */; };
 		76CEC0CBAED6B0BEF3CC50F0583BBD36 /* GPBRuntimeTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = E881F07B06606ED2D97B44FD066FD469 /* GPBRuntimeTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		77876997CA63145CC72A2D6FB5758513 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2774DC1DA0AAE1FD06A5393C2F9F0109 /* AFHTTPSessionManager.m */; };
@@ -450,7 +448,6 @@
 		6CCD20CA7D3B41BFBC4CD115F2994EC1 /* CocoaAsyncSocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CocoaAsyncSocket-dummy.m"; sourceTree = "<group>"; };
 		6D358FAA9EDB638C8A1FFF069FEBDE47 /* MJPropertyType.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJPropertyType.m; path = MJExtension/MJPropertyType.m; sourceTree = "<group>"; };
 		6DB7E31D5DB75EB5CB37286E3CDAF927 /* Reachability-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Reachability-prefix.pch"; sourceTree = "<group>"; };
-		6EE36B1E39F571A97399A78CABE93212 /* ChatGroupSession.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChatGroupSession.m; sourceTree = "<group>"; };
 		7138EFE07A984524F4E8A61EA346F2F2 /* NSString+MJExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSString+MJExtension.h"; path = "MJExtension/NSString+MJExtension.h"; sourceTree = "<group>"; };
 		739B164C44D2DE0DCD16BFA0070946A2 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseQueue.h; path = src/fmdb/FMDatabaseQueue.h; sourceTree = "<group>"; };
 		74D7BCA916AB7F60268C175820030970 /* FlappyIM.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyIM.h; sourceTree = "<group>"; };
@@ -592,7 +589,6 @@
 		F5C0CD78230FE43A4CF287127C5E1071 /* FMDatabase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = src/fmdb/FMDatabase.h; sourceTree = "<group>"; };
 		F6A995FB4FD368FB0FB6D4B328DDCBB2 /* Any.pbobjc.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Any.pbobjc.m; path = objectivec/google/protobuf/Any.pbobjc.m; sourceTree = "<group>"; };
 		F6E396FD491D018CDB9EFB8113D2F1D5 /* CocoaAsyncSocket-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaAsyncSocket-umbrella.h"; sourceTree = "<group>"; };
-		F740F466DD822F56C44986F5F022E2B9 /* ChatGroupSession.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChatGroupSession.h; sourceTree = "<group>"; };
 		F888CEB58D668EDA53C9B14E47A788F0 /* MJExtensionConst.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MJExtensionConst.h; path = MJExtension/MJExtensionConst.h; sourceTree = "<group>"; };
 		F8F0EA3796E12CD6986688E12BE9E7FF /* GPBCodedOutputStream.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBCodedOutputStream.h; path = objectivec/GPBCodedOutputStream.h; sourceTree = "<group>"; };
 		F912647369FC98CB77E2B9475E45F0E1 /* NSObject+MJProperty.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSObject+MJProperty.h"; path = "MJExtension/NSObject+MJProperty.h"; sourceTree = "<group>"; };
@@ -956,8 +952,6 @@
 		73BCC523A55CBC64A34CE28BADC6F378 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				F740F466DD822F56C44986F5F022E2B9 /* ChatGroupSession.h */,
-				6EE36B1E39F571A97399A78CABE93212 /* ChatGroupSession.m */,
 				04BB5A7DF01707B8CDFC6EB19FB586C0 /* ChatImage.h */,
 				E79E616EEC95529E0340BDD22956D875 /* ChatImage.m */,
 				D3746917802A9D6414F148B3B5078380 /* ChatMessage.h */,
@@ -1373,7 +1367,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1683AC23EE77D219357BFC6589B29C6B /* ChatGroupSession.h in Headers */,
 				5D2AD36559223F24020980339A8F4342 /* ChatImage.h in Headers */,
 				C8F9B312A47A864F709B667BD6679BBD /* ChatMessage.h in Headers */,
 				5493A80292C5CF2EDE4953A2DC7C57E2 /* ChatSession.h in Headers */,
@@ -1755,7 +1748,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				769B3E8CB40F32161A751EAA160DC296 /* ChatGroupSession.m in Sources */,
 				404E07E5C47C3FDCC4542CFFC5A947EA /* ChatImage.m in Sources */,
 				50594FA4EF1F835FA140FB5B5839CDA4 /* ChatMessage.m in Sources */,
 				6036B2EBE8417E574720923F13F8ED6A /* ChatSession.m in Sources */,

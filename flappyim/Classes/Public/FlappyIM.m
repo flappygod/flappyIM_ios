@@ -482,7 +482,7 @@
 
 
 //创建两个人的会话
--(void)createSession:(NSString*)userTwo
+-(void)createSingleSession:(NSString*)userTwo
           andSuccess:(FlappySuccess)success
           andFailure:(FlappyFailure)failure{
     
@@ -494,7 +494,7 @@
     }
     
     //注册地址
-    NSString *urlString = URL_createSession;
+    NSString *urlString = URL_createSingleSession;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userOne":[FlappyData getUser].userExtendId,
                                  @"userTwo":userTwo,
@@ -504,7 +504,7 @@
            withParameters:parameters
               withSuccess:^(id data) {
                   //获取model
-                  SessionSingleData* model=[SessionSingleData mj_objectWithKeyValues:data];
+                  SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
                   //创建session
                   ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
                   session.session=model;
@@ -514,6 +514,41 @@
                   failure(error,code);
               }];
 }
+
+
+-(void)getSingleSession:(NSString*)userTwo
+             andSuccess:(FlappySuccess)success
+             andFailure:(FlappyFailure)failure{
+    
+    //为空直接出错
+    if([FlappyData getUser]==nil){
+        //返回没有登录
+        failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
+        return ;
+    }
+    
+    //注册地址
+    NSString *urlString = URL_getSingleSession;
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"userOne":[FlappyData getUser].userExtendId,
+                                 @"userTwo":userTwo,
+                                 };
+    //请求数据
+    [PostTool postRequest:urlString
+           withParameters:parameters
+              withSuccess:^(id data) {
+                  //获取model
+                  SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
+                  //创建session
+                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
+                  session.session=model;
+                  success(session);
+              } withFailure:^(NSError * error, NSInteger code) {
+                  //登录失败，清空回调
+                  failure(error,code);
+              }];
+}
+
 
 //创建群组会话
 -(void)createGroupSession:(NSString*)users
@@ -544,7 +579,7 @@
                   //获取model
                   SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
                   //创建session
-                  ChatGroupSession* session=[ChatGroupSession mj_objectWithKeyValues:data];
+                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
                   session.session=model;
                   success(session);
               } withFailure:^(NSError * error, NSInteger code) {
@@ -556,7 +591,7 @@
 
 
 //获取群组会话
--(void)getGroupSession:(NSString*)groupID
+-(void)getSessionByID:(NSString*)groupID
             andSuccess:(FlappySuccess)success
             andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -567,7 +602,7 @@
     }
     
     //创建群组会话
-    NSString *urlString = URL_getGroupSession;
+    NSString *urlString = URL_getSessionByID;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"extendID":groupID};
     //请求数据
@@ -577,7 +612,7 @@
                   //获取model
                   SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
                   //创建session
-                  ChatGroupSession* session=[ChatGroupSession mj_objectWithKeyValues:data];
+                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
                   //数据
                   session.session=model;
                   //成功
@@ -611,7 +646,7 @@
                   //获取model
                   SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
                   //创建session
-                  ChatGroupSession* session=[ChatGroupSession mj_objectWithKeyValues:data];
+                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
                   //数据
                   session.session=model;
                   //成功
@@ -645,7 +680,7 @@
                   //获取model
                   SessionGroupData* model=[SessionGroupData mj_objectWithKeyValues:data];
                   //创建session
-                  ChatGroupSession* session=[ChatGroupSession mj_objectWithKeyValues:data];
+                  ChatSingleSession* session=[ChatSingleSession mj_objectWithKeyValues:data];
                   //数据
                   session.session=model;
                   //成功
