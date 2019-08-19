@@ -79,14 +79,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //创建群组会话
--(void)createGroupSession:(NSString*)users
+-(void)createGroupSession:(NSArray*)users
               withGroupID:(NSString*)groupID
             withGroupName:(NSString*)groupName
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure;
 
 //获取群组会话
--(void)getSessionByID:(NSString*)groupID
+-(void)getSessionByID:(NSString*)extendID
             andSuccess:(FlappySuccess)success
             andFailure:(FlappyFailure)failure;
 

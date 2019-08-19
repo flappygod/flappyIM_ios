@@ -549,7 +549,7 @@
                       }];
 }
 
-
+//获取单聊的会话
 -(void)getSingleSession:(NSString*)userTwo
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure{
@@ -585,7 +585,7 @@
 
 
 //创建群组会话
--(void)createGroupSession:(NSString*)users
+-(void)createGroupSession:(NSArray*)users
               withGroupID:(NSString*)groupID
             withGroupName:(NSString*)groupName
                andSuccess:(FlappySuccess)success
@@ -598,10 +598,20 @@
         return ;
     }
     
+    
+    //转换为data
+    NSData *usersData=[NSJSONSerialization dataWithJSONObject:users
+                                                      options:NSJSONWritingPrettyPrinted
+                                                        error:nil];
+    //转换为字符串
+    NSString *jsonStr=[[NSString alloc]initWithData:usersData
+                                           encoding:NSUTF8StringEncoding];
+    
+    
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_createGroupSession;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"users":users,
+    NSDictionary *parameters = @{@"users":jsonStr,
                                  @"createUser":[FlappyData getUser].userId,
                                  @"extendID":groupID,
                                  @"sessionName":groupName
@@ -624,8 +634,8 @@
 }
 
 
-//获取群组会话
--(void)getSessionByID:(NSString*)groupID
+//通过extendID获取
+-(void)getSessionByID:(NSString*)extendID
            andSuccess:(FlappySuccess)success
            andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -638,7 +648,7 @@
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_getSessionByID;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"extendID":groupID};
+    NSDictionary *parameters = @{@"extendID":extendID};
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
