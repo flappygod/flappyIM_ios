@@ -26,7 +26,7 @@
 		1181C2BC2FF0283D42D002DABFE4F39C /* ChatUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 237F686AABFD0C81B0DCD5B9FCB63CB3 /* ChatUser.m */; };
 		1218D55DD79DAF6A74B83FA9C6CD0F9D /* FlappyBaseSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 360CA15AF6DDC1A1D9909D92220A4EF2 /* FlappyBaseSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		12A3CDE7D436A78F26B67256A2604CD3 /* GPBBootstrap.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B321865045BB42355757EA4219E84B1 /* GPBBootstrap.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		13E696F80E14FA738FF76BCF8F5ECE55 /* DataBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 72D3EC8329A4764D1B768F7AD9447460 /* DataBase.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		13E696F80E14FA738FF76BCF8F5ECE55 /* FlappyDataBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 72D3EC8329A4764D1B768F7AD9447460 /* FlappyDataBase.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		14703875367641811BD5FE75ACD67C96 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE92BED710E57A29C4780FF76AC02D16 /* Foundation.framework */; };
 		165816E10F031A2BB600A35ACB23C61B /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 544E0DC88A672B7B0713947AC2058B1F /* Reachability.m */; };
 		169B3FC2BD33B8FBC2D4C35A1C1DC6BF /* AFHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BE13EA9F45B5642CF9721FB3354176CA /* AFHTTPSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -55,7 +55,7 @@
 		2D5A690A8C1922979E617C3639433E83 /* FlappyIM.h in Headers */ = {isa = PBXBuildFile; fileRef = 796CDCD7E261D63E280D7814114C48BD /* FlappyIM.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D78A2BEBE087A041CE82E6DE990C853 /* FlappyApiConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 21F6A6565A0C29C68DD714919CAEBDB9 /* FlappyApiConfig.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		2DF2D1F81613A563F60651D9C9011CFE /* GPBUnknownFieldSet_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 0FFDC228C8CA8A9A216AC29DA1CC34DF /* GPBUnknownFieldSet_PackagePrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2EC98FE9F2B499E84E43FEB1F6EA0731 /* DataBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 555B26802DC74F62E8C9B9F1F8DC3E61 /* DataBase.m */; };
+		2EC98FE9F2B499E84E43FEB1F6EA0731 /* FlappyDataBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 555B26802DC74F62E8C9B9F1F8DC3E61 /* FlappyDataBase.m */; };
 		3033C2DE9CB2085ECBB95717CFB6425A /* AFAutoPurgingImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 94ADD80C9976CEF07944D407815D5146 /* AFAutoPurgingImageCache.m */; };
 		34A7C5747B4C0825465453E196E57FAA /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8DD5925E90AC12C69C9F770B1D9D5E /* UIButton+AFNetworking.m */; };
 		34FCC2D9D4ED04D787C028446F16B3C9 /* GPBExtensionRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD091741DC6A54E1E6B48F2621E1944 /* GPBExtensionRegistry.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -423,7 +423,7 @@
 		544E0DC88A672B7B0713947AC2058B1F /* Reachability.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		548F7845BA1B508838899586F7463E20 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54E2C2B36BF56575F8DFDA9CF38FD4C4 /* Empty.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Empty.pbobjc.h; path = objectivec/google/protobuf/Empty.pbobjc.h; sourceTree = "<group>"; };
-		555B26802DC74F62E8C9B9F1F8DC3E61 /* DataBase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = DataBase.m; sourceTree = "<group>"; };
+		555B26802DC74F62E8C9B9F1F8DC3E61 /* FlappyDataBase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = FlappyDataBase.m; sourceTree = "<group>"; };
 		568115F8520585EF789E31A97471F9F2 /* Protobuf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Protobuf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		56A53DB3874AA19DF5459B1130ACBAF2 /* FMDatabasePool.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabasePool.h; path = src/fmdb/FMDatabasePool.h; sourceTree = "<group>"; };
 		56ABAF901CBE8BB43B176E3FBD0790BB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
@@ -458,7 +458,7 @@
 		6DB7E31D5DB75EB5CB37286E3CDAF927 /* Reachability-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Reachability-prefix.pch"; sourceTree = "<group>"; };
 		70006468CC26567EB6E3CB5CF18EE4DB /* FlappyChatSession.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyChatSession.h; sourceTree = "<group>"; };
 		7138EFE07A984524F4E8A61EA346F2F2 /* NSString+MJExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSString+MJExtension.h"; path = "MJExtension/NSString+MJExtension.h"; sourceTree = "<group>"; };
-		72D3EC8329A4764D1B768F7AD9447460 /* DataBase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = DataBase.h; sourceTree = "<group>"; };
+		72D3EC8329A4764D1B768F7AD9447460 /* FlappyDataBase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyDataBase.h; sourceTree = "<group>"; };
 		739B164C44D2DE0DCD16BFA0070946A2 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseQueue.h; path = src/fmdb/FMDatabaseQueue.h; sourceTree = "<group>"; };
 		73FC90B0523C05B4D6B6697CB28C3200 /* flappyim-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "flappyim-Info.plist"; sourceTree = "<group>"; };
 		74D840D63307FDB47325E612145CD483 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Source/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
@@ -723,8 +723,8 @@
 			isa = PBXGroup;
 			children = (
 				7BBA08D6BD08296412860B64F2FAD908 /* FlappyDef.h */,
-				72D3EC8329A4764D1B768F7AD9447460 /* DataBase.h */,
-				555B26802DC74F62E8C9B9F1F8DC3E61 /* DataBase.m */,
+				72D3EC8329A4764D1B768F7AD9447460 /* FlappyDataBase.h */,
+				555B26802DC74F62E8C9B9F1F8DC3E61 /* FlappyDataBase.m */,
 				FB9DA7CA838A084F9FBD979DD08B1CFD /* FlappyData.h */,
 				DC74F905981C454249544405AC6CEF11 /* FlappyData.m */,
 			);
@@ -1377,7 +1377,7 @@
 				45B3F76C867EE926B91EA3E37FD32A0D /* ChatUser.h in Headers */,
 				D8D0625D0C47C0DFCBDCA19389B74053 /* ChatVoice.h in Headers */,
 				7E94F4246BB9E86BD192E8826EB6450B /* FlappyDef.h in Headers */,
-				13E696F80E14FA738FF76BCF8F5ECE55 /* DataBase.h in Headers */,
+				13E696F80E14FA738FF76BCF8F5ECE55 /* FlappyDataBase.h in Headers */,
 				EC1303E36235FF6DF040D04C77C362A4 /* FlappyDateTool.h in Headers */,
 				7497CB7F613E80F031058AE3F362FA55 /* Flappy.pbobjc.h in Headers */,
 				2D78A2BEBE087A041CE82E6DE990C853 /* FlappyApiConfig.h in Headers */,
@@ -1825,7 +1825,7 @@
 				DB9F3AA0288EA3A86CC824D3AFD0A15E /* ChatSession.m in Sources */,
 				1181C2BC2FF0283D42D002DABFE4F39C /* ChatUser.m in Sources */,
 				8B3B1D4FBDE8A1FD7139E8BA7BA54121 /* ChatVoice.m in Sources */,
-				2EC98FE9F2B499E84E43FEB1F6EA0731 /* DataBase.m in Sources */,
+				2EC98FE9F2B499E84E43FEB1F6EA0731 /* FlappyDataBase.m in Sources */,
 				8E518A0F530E24FDB358601015A889B3 /* FlappyDateTool.m in Sources */,
 				280742AF9D18BFF9968BC2FE4D989DDD /* Flappy.pbobjc.m in Sources */,
 				AC26FD66D5FB35084270933A5A1E40FB /* FlappyApiConfig.m in Sources */,

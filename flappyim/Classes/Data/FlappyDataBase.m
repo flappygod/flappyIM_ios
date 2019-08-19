@@ -5,15 +5,15 @@
 //  Created by lijunlin on 2019/8/8.
 //
 
-#import "DataBase.h"
+#import "FlappyDataBase.h"
 #import "FMDatabase.h"
 #import "FlappyStringTool.h"
 
-@implementation DataBase
+@implementation FlappyDataBase
 
 //使用单例模式
 + (instancetype)shareInstance {
-    static DataBase *_sharedSingleton = nil;
+    static FlappyDataBase *_sharedSingleton = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //不能再使用alloc方法
@@ -26,17 +26,17 @@
 
 //防止外部调用alloc或者new
 +(instancetype)allocWithZone:(struct _NSZone *)zone {
-    return [DataBase shareInstance];
+    return [FlappyDataBase shareInstance];
 }
 
 // 防止外部调用copy
 - (id)copyWithZone:(nullable NSZone *)zone {
-    return [DataBase shareInstance];
+    return [FlappyDataBase shareInstance];
 }
 
 // 防止外部调用mutableCopy
 - (id)mutableCopyWithZone:(nullable NSZone *)zone {
-    return [DataBase shareInstance];
+    return [FlappyDataBase shareInstance];
 }
 
 //初始化数据库

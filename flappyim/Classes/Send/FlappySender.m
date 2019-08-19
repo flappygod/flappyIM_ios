@@ -11,7 +11,7 @@
 #import "MJExtension.h"
 #import "FlappyJsonTool.h"
 #import "FlappyImageTool.h"
-#import "DataBase.h"
+#import "FlappyDataBase.h"
 #import "FlappyData.h"
 #import "FlappyApiConfig.h"
 #import <AVFoundation/AVAsset.h>
@@ -337,12 +337,12 @@
     //还没发送成功，那么放在最后一条
     msg.messageTableSeq=str;
     //之前有没有
-    ChatMessage* former=[[DataBase shareInstance] getMessageByID:msg.messageId];
+    ChatMessage* former=[[FlappyDataBase shareInstance] getMessageByID:msg.messageId];
     //没有就插入，有就更新
     if(former==nil){
-        [[DataBase shareInstance] insert:msg];
+        [[FlappyDataBase shareInstance] insert:msg];
     }else{
-        [[DataBase shareInstance] updateMessage:msg];
+        [[FlappyDataBase shareInstance] updateMessage:msg];
     }
 }
 
@@ -351,7 +351,7 @@
     //发送成功了
     msg.messageSended=SEND_STATE_SENDED;
     //放入指定的位置
-    [[DataBase shareInstance] updateMessage:msg];
+    [[FlappyDataBase shareInstance] updateMessage:msg];
 }
 
 //发送失败
@@ -359,7 +359,7 @@
     //发送成功了
     msg.messageSended=SEND_STATE_FAILURE;
     //放入指定的位置
-    [[DataBase shareInstance] updateMessage:msg];
+    [[FlappyDataBase shareInstance] updateMessage:msg];
 }
 
 //成功

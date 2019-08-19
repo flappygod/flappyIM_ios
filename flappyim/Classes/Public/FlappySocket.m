@@ -14,7 +14,7 @@
 #import <unistd.h>
 #import "FlappyConfig.h"
 #import "FlappyData.h"
-#import "DataBase.h"
+#import "FlappyDataBase.h"
 #import "FlappyNetTool.h"
 #import "FlappySender.h"
 #import "FlappyApiConfig.h"
@@ -334,14 +334,14 @@
             //接收成功
             chatMsg.messageSended=SEND_STATE_REACHED;
             //获取之前的消息ID
-            ChatMessage* former=[[DataBase shareInstance]getMessageByID:chatMsg.messageId];
+            ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId];
             //之前不存在
             if(former==nil){
                 //添加数据
-                [[DataBase shareInstance] insert:chatMsg];
+                [[FlappyDataBase shareInstance] insert:chatMsg];
                 [self notifyNewMessage:chatMsg];
             }else{
-                [[DataBase shareInstance] updateMessage:chatMsg];
+                [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
         }
         //最后一条的数据保存
@@ -363,14 +363,14 @@
             //接收成功
             chatMsg.messageSended=SEND_STATE_REACHED;
             //获取之前的消息ID
-            ChatMessage* former=[[DataBase shareInstance]getMessageByID:chatMsg.messageId];
+            ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId];
             //之前不存在
             if(former==nil){
                 //添加数据
-                [[DataBase shareInstance] insert:chatMsg];
+                [[FlappyDataBase shareInstance] insert:chatMsg];
                 [self notifyNewMessage:chatMsg];
             }else{
-                [[DataBase shareInstance] updateMessage:chatMsg];
+                [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
             //保存最近的时间
             self.user.latest=chatMsg.messageTableSeq;

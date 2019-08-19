@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DataBase : NSObject
+@interface FlappyDataBase : NSObject
 
 //单例模式
 + (instancetype)shareInstance;

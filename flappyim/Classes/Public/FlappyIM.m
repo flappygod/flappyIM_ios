@@ -14,7 +14,7 @@
 #import <unistd.h>
 #import "FlappyConfig.h"
 #import "FlappyData.h"
-#import "DataBase.h"
+#import "FlappyDataBase.h"
 #import "FlappyNetTool.h"
 #import "FlappySender.h"
 #import "FlappyApiConfig.h"
@@ -192,7 +192,7 @@
 #pragma database
 -(void)setupDataBase{
     //初始化数据库
-    [[DataBase shareInstance] setup];
+    [[FlappyDataBase shareInstance] setup];
 }
 
 #pragma  NOTIFY 网络状态监听通知

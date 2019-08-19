@@ -7,7 +7,7 @@
 
 #import "FlappyData.h"
 #import "FlappyJsonTool.h"
-#import "CommonDef.h"
+#import "FlappyDef.h"
 #import "MJExtension.h"
 
 
