@@ -1,13 +1,13 @@
 //
-//  CommonDef.h
+//  FlappyDef.h
 //  Istudy
 //
 //  Created by macbook air on 16/7/8.
 //  Copyright © 2016年 lipo. All rights reserved.
 //
 
-#ifndef CommonDef_h
-#define CommonDef_h
+#ifndef FlappyDef_h
+#define FlappyDef_h
 
 
 // View 坐标(x,y)和宽高(width,height)
@@ -70,4 +70,4 @@ if(key!=nil){ \
 
 #define UNColorAlpha(r, g, b ,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 
-#endif /* CommonDef_h */
+#endif /* FlappyDef_h */

@@ -125,7 +125,7 @@
 		793672E9792741D31579AAAE57FDE118 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE92BED710E57A29C4780FF76AC02D16 /* Foundation.framework */; };
 		7BE71B62F38458AC771581F60006F9CE /* NSObject+MJCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 827525CBCF0DD5D2BCBFD44231994E99 /* NSObject+MJCoding.m */; };
 		7D4E0D91FE60904C9FB50F6D447B8A30 /* FMDB-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DD2AEE5943F532AC081147F299854 /* FMDB-dummy.m */; };
-		7E94F4246BB9E86BD192E8826EB6450B /* CommonDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BBA08D6BD08296412860B64F2FAD908 /* CommonDef.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		7E94F4246BB9E86BD192E8826EB6450B /* FlappyDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BBA08D6BD08296412860B64F2FAD908 /* FlappyDef.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		7F0333B430CF34B052243FC2AEF726C5 /* SourceContext.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57020D5347BBA29C02E41F324E4775A0 /* SourceContext.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		7F372985CE80B69B5524CC3277E1C1AF /* AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = DF004980A3568F466B12E44DB9685E81 /* AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8256464199F4953DB1C7433F1CB9A690 /* Protobuf-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 633868944B357A15D053A84B0521DFC4 /* Protobuf-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -467,7 +467,7 @@
 		796CDCD7E261D63E280D7814114C48BD /* FlappyIM.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyIM.h; sourceTree = "<group>"; };
 		7A6DD2AEE5943F532AC081147F299854 /* FMDB-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FMDB-dummy.m"; sourceTree = "<group>"; };
 		7A9A1277E9B55C18BF74F06737F73BE3 /* FlappyBaseSession.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = FlappyBaseSession.m; sourceTree = "<group>"; };
-		7BBA08D6BD08296412860B64F2FAD908 /* CommonDef.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CommonDef.h; sourceTree = "<group>"; };
+		7BBA08D6BD08296412860B64F2FAD908 /* FlappyDef.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyDef.h; sourceTree = "<group>"; };
 		7C715A182732A10688B3FCE5527BDA60 /* Pods-flappyim_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-flappyim_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		7CBE99CEF8FB2A8EF8024A6DB3453B39 /* Timestamp.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Timestamp.pbobjc.h; path = objectivec/google/protobuf/Timestamp.pbobjc.h; sourceTree = "<group>"; };
 		7FA9D9333D9E1F98D8E8E53E05A94360 /* MJExtension.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = MJExtension.modulemap; sourceTree = "<group>"; };
@@ -722,7 +722,7 @@
 		0B8839C57702AB6C84E2D1D665D70E89 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				7BBA08D6BD08296412860B64F2FAD908 /* CommonDef.h */,
+				7BBA08D6BD08296412860B64F2FAD908 /* FlappyDef.h */,
 				72D3EC8329A4764D1B768F7AD9447460 /* DataBase.h */,
 				555B26802DC74F62E8C9B9F1F8DC3E61 /* DataBase.m */,
 				FB9DA7CA838A084F9FBD979DD08B1CFD /* FlappyData.h */,
@@ -1376,7 +1376,7 @@
 				E0EFCA61709B64C5F3FA06C10B099AB4 /* ChatSession.h in Headers */,
 				45B3F76C867EE926B91EA3E37FD32A0D /* ChatUser.h in Headers */,
 				D8D0625D0C47C0DFCBDCA19389B74053 /* ChatVoice.h in Headers */,
-				7E94F4246BB9E86BD192E8826EB6450B /* CommonDef.h in Headers */,
+				7E94F4246BB9E86BD192E8826EB6450B /* FlappyDef.h in Headers */,
 				13E696F80E14FA738FF76BCF8F5ECE55 /* DataBase.h in Headers */,
 				EC1303E36235FF6DF040D04C77C362A4 /* FlappyDateTool.h in Headers */,
 				7497CB7F613E80F031058AE3F362FA55 /* Flappy.pbobjc.h in Headers */,
