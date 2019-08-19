@@ -38,10 +38,7 @@
 
 //保存
 +(void)savePush:(NSString*)pushID{
-    
-    //装环为字符串
-    NSString*  str=pushID];
-    UNSaveObject(str, KEY_PUSHID);
+    UNSaveObject(pushID, KEY_PUSHID);
 }
 
 //获取推送ID
