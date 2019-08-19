@@ -347,7 +347,7 @@
         //最后一条的数据保存
         if(array.count>0){
             ChatMessage* last=[array objectAtIndex:array.count-1];
-            //获取
+            
             ChatUser* user=[FlappyData getUser];
             user.latest=last.messageTableSeq;
             [FlappyData saveUser:user];
@@ -374,9 +374,8 @@
             }else{
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
-            //获取
             ChatUser* user=[FlappyData getUser];
-            user.latest=last.messageTableSeq;
+            user.latest=chatMsg.messageTableSeq;
             [FlappyData saveUser:user];
         }
     }
