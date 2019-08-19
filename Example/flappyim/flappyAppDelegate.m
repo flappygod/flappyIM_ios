@@ -7,6 +7,7 @@
 //
 
 #import "flappyAppDelegate.h"
+#import <flappyim/FlappyIM.h>
 
 @implementation flappyAppDelegate
 
@@ -115,6 +116,7 @@
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
     //[[EaseMob sharedInstance] application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
     
+    [[FlappyIM shareInstance] registerDeviceToken:deviceToken];
 }
 
 // 注册deviceToken失败
