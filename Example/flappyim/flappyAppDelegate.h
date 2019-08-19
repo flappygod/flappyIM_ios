@@ -7,8 +7,9 @@
 //
 
 @import UIKit;
+#import <UserNotifications/UserNotifications.h>
 
-@interface flappyAppDelegate : UIResponder <UIApplicationDelegate>
+@interface flappyAppDelegate : UIResponder <UIApplicationDelegate,UNUserNotificationCenterDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

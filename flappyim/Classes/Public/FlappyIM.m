@@ -48,11 +48,65 @@
         //不能再使用alloc方法
         //因为已经重写了allocWithZone方法，所以这里要调用父类的分配空间的方法
         _sharedSingleton = [[super allocWithZone:NULL] init];
-        //推送ID
-        _sharedSingleton.pushID=@"123456";
+        //设置一个唯一的UUID
+        _sharedSingleton.pushID=[self UUID];
+        //回调
         _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
     });
     return _sharedSingleton;
+}
+
+//获取唯一的ID
+-(NSString *)UUID {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"flappyimID"
+                                                                       accessGroup:@"com.flappydo.flappyim"];
+    NSString *UUID = [wrapper objectForKey:(__bridge id)kSecValueData];
+    if (UUID.length == 0) {
+        UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [wrapper setObject:UUID forKey:(__bridge id)kSecValueData];
+    }
+    return UUID;
+}
+
+//设备的token
+-(void) setUUID:(NSString*)token{
+    //获取
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"flappyimID"
+                                                                       accessGroup:@"com.flappydo.flappyim"];
+    //设置
+    NSString *UUID = [wrapper objectForKey:(__bridge id)kSecValueData];
+    //设置
+    [wrapper setObject:UUID forKey:(__bridge id)kSecValueData];
+    //获取唯一的推送ID
+    self.pushID=token;
+}
+
+//压制大法好
+#pragmaclang diagnostic push
+#pragmaclang diagnostic ignored "-Wdeprecated-declarations"
+-(void)registerRemoteNotice:(UIApplication *)application{
+    //iOS8以上 注册APNs
+    if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
+        [application registerForRemoteNotifications];
+        UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge |
+        UIUserNotificationTypeSound |
+        UIUserNotificationTypeAlert;
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
+        [application registerUserNotificationSettings:settings];
+    }
+    else{
+        UIRemoteNotificationType notificationTypes = UIRemoteNotificationTypeBadge |
+        UIRemoteNotificationTypeSound |
+        UIRemoteNotificationTypeAlert;
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:notificationTypes];
+    }
+}
+#pragmaclang diagnostic pop
+
+
+//注册
+-(void)registerDeviceToken:(NSData *)deviceToken{
+    
 }
 
 

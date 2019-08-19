@@ -13,8 +13,57 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    //
+    //    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    //
+    //    center.delegate = self;
+    //    //消息推送注册
+    //    [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert +
+    //                                             UNAuthorizationOptionSound +
+    //                                             UNAuthorizationOptionBadge )
+    //                          completionHandler:^(BOOL granted, NSError * _Nullable error) {
+    //                              if (!granted)
+    //                              {
+    //                                  NSLog(@"请开启推送功能否则无法收到推送通知");
+    //                              }
+    //                          }];
+    //
+    //
+    //
+    //    if (@available(iOS 11.0, *))
+    //    {
+    //        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    //        [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+    //            if (!granted)
+    //            {
+    //                NSLog(@"请开启推送功能否则无法收到推送通知");
+    //            }
+    //        }];
+    //    }
+    //    else {
+    //        UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+    //        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types
+    //                                                                                 categories:nil];
+    //        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    //    }
+    //    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    //
+    //
+    //
+    //    // 注册push权限，用于显示本地推送
+    //    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+    //
+    
+    
+    
+    
+    
     return YES;
 }
+
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -41,6 +90,37 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+
+#pragma mark - UNUserNotificationCenterDelegate
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+    
+    //1. 处理通知
+    
+    
+    
+    //2. 处理完成后条用 completionHandler ，用于指示在前台显示通知的形式
+    
+    completionHandler(UNNotificationPresentationOptionAlert);
+    
+}
+
+
+// 将得到的deviceToken传给SDK
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    //[[EaseMob sharedInstance] application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    
+}
+
+// 注册deviceToken失败
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
+    //[[EaseMob sharedInstance] application:application didFailToRegisterForRemoteNotificationsWithError:error];
+    
 }
 
 @end

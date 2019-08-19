@@ -39,6 +39,14 @@ NS_ASSUME_NONNULL_BEGIN
 //单例模式
 + (instancetype)shareInstance;
 
+
+//注册远程的通知
+-(void)registerRemoteNotice:(UIApplication *)application;
+
+
+//注册设备信息
+-(void)registerDeviceToken:(NSData *)deviceToken;
+
 //初始化
 -(void)setup;
 
@@ -87,8 +95,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 //获取群组会话
 -(void)getSessionByID:(NSString*)extendID
-            andSuccess:(FlappySuccess)success
-            andFailure:(FlappyFailure)failure;
+           andSuccess:(FlappySuccess)success
+           andFailure:(FlappyFailure)failure;
 
 
 //获取用户的所有会话列表
