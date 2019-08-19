@@ -7,10 +7,10 @@
 
 #import "FlappySender.h"
 #import "FlappyBaseSession.h"
-#import "UploadImageTool.h"
+#import "FlappyUploadTool.h"
 #import "MJExtension.h"
 #import "FlappyJsonTool.h"
-#import "ImageTool.h"
+#import "FlappyImageTool.h"
 #import "DataBase.h"
 #import "FlappyData.h"
 #import "FlappyApiConfig.h"
@@ -85,7 +85,7 @@
     ChatVoice* chatVoice=[ChatVoice mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:chatMsg.messageContent]];
     
     //开始请求
-    UploadImageTool* req=[[UploadImageTool alloc]init];
+    FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
     
     //自己
     __weak typeof(self) safeSelf=self;
@@ -193,7 +193,7 @@
     ChatImage* chatImg=[ChatImage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:chatMsg.messageContent]];
     
     //开始请求
-    UploadImageTool* req=[[UploadImageTool alloc]init];
+    FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
     
     //自己
     __weak typeof(self) safeSelf=self;

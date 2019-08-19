@@ -7,7 +7,7 @@
 
 #import "FlappyApiRequest.h"
 #import "FlappyConfig.h"
-#import "StringTool.h"
+#import "FlappyStringTool.h"
 
 @implementation FlappyApiRequest
 
@@ -39,9 +39,9 @@
                  //消息
                  NSString* resultStr=responseObject[@"resultMessage"];
                  //返回代码
-                 NSString* resultCode=[StringTool toUnNullZeroStr:responseObject[@"resultCode"]];
+                 NSString* resultCode=[FlappyStringTool toUnNullZeroStr:responseObject[@"resultCode"]];
                  //请求失败
-                 failure([[NSError alloc]initWithDomain:[StringTool toUnNullStr:resultStr]
+                 failure([[NSError alloc]initWithDomain:[FlappyStringTool toUnNullStr:resultStr]
                                                    code:RESULT_FAILURE
                                                userInfo:nil],
                          [resultCode integerValue]);

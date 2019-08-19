@@ -6,9 +6,9 @@
 //  Copyright © 2016年 airportexpress. All rights reserved.
 //
 
-#import "DateTimeTool.h"
+#import "FlappyDateTool.h"
 
-@implementation DateTimeTool
+@implementation FlappyDateTool
 
 
 //获取这个时间和当前时间的对比字符串显示

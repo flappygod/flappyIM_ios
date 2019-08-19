@@ -6,9 +6,9 @@
 //  Copyright (c) 2015年 NINEWEI. All rights reserved.
 //
 
-#import "ImageTool.h"
+#import "FlappyImageTool.h"
 
-@implementation ImageTool
+@implementation FlappyImageTool
 
 
 

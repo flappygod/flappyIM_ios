@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface StringTool : NSObject
+@interface FlappyStringTool : NSObject
 
 //判断字符串是不是空的
 +(Boolean)isStringEmpty:(NSString* )str;

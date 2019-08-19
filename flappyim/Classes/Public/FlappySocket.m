@@ -15,7 +15,7 @@
 #import "FlappyConfig.h"
 #import "FlappyData.h"
 #import "DataBase.h"
-#import "NetTool.h"
+#import "FlappyNetTool.h"
 #import "FlappySender.h"
 #import "FlappyApiConfig.h"
 

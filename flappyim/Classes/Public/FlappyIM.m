@@ -15,7 +15,7 @@
 #import "FlappyConfig.h"
 #import "FlappyData.h"
 #import "DataBase.h"
-#import "NetTool.h"
+#import "FlappyNetTool.h"
 #import "FlappySender.h"
 #import "FlappyApiConfig.h"
 
@@ -266,7 +266,7 @@
     //开始
     __weak typeof(self) safeSelf=self;
     //如果网络是正常连接的
-    if([NetTool getCurrentNetworkState]!=0){
+    if([FlappyNetTool getCurrentNetworkState]!=0){
         //防止重复请求
         [self autoLogin:^(id data) {
             

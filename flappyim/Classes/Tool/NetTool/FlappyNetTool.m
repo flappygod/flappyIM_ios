@@ -5,10 +5,10 @@
 //  Created by lijunlin on 2019/8/8.
 //
 
-#import "NetTool.h"
+#import "FlappyNetTool.h"
 #import <AFNetworking/AFNetworking.h>
 
-@implementation NetTool
+@implementation FlappyNetTool
 
 
 /**

@@ -6,12 +6,12 @@
 //  Copyright © 2016年 airportexpress. All rights reserved.
 //
 
-#import "UploadImageTool.h"
-#import "StringTool.h"
+#import "FlappyUploadTool.h"
+#import "FlappyStringTool.h"
 #import <AFNetworking/AFNetworking.h>
 
 
-@implementation UploadImageTool
+@implementation FlappyUploadTool
 
 
 
@@ -103,7 +103,7 @@
         if(safeSelf.errorBlock!=nil)
         {
             safeSelf.errorBlock([[NSException alloc]initWithName:@"upload error"
-                                                          reason:[StringTool toUnNullStr:error.description]
+                                                          reason:[FlappyStringTool toUnNullStr:error.description]
                                                         userInfo:nil]);
         }
     }];

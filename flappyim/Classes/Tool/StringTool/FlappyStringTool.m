@@ -6,9 +6,9 @@
 //  Copyright © 2016年 airportexpress. All rights reserved.
 //
 
-#import "StringTool.h"
+#import "FlappyStringTool.h"
 
-@implementation StringTool
+@implementation FlappyStringTool
 
 
 + (BOOL)checkEmail:(NSString *)email{

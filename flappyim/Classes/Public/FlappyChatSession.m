@@ -7,7 +7,7 @@
 
 #import "FlappyChatSession.h"
 #import "DataBase.h"
-#import "DateTimeTool.h"
+#import "FlappyDateTool.h"
 #import "FlappySender.h"
 #import "FlappyConfig.h"
 #import "FlappyJsonTool.h"
@@ -132,7 +132,7 @@
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_TEXT;
     [chatmsg setChatText:text];
-    chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
     //发送消息
@@ -163,7 +163,7 @@
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
     chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[image mj_keyValues]];
-    chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
     [[FlappySender shareInstance] uploadImageAndSend:chatmsg
@@ -190,7 +190,7 @@
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
     chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[image mj_keyValues]];
-    chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
     [[FlappySender shareInstance] sendMessage:chatmsg
@@ -220,7 +220,7 @@
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
     chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[voice mj_keyValues]];
-    chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
     [[FlappySender shareInstance] uploadVoiceAndSend:chatmsg
@@ -248,7 +248,7 @@
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VOICE;
     chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[voice mj_keyValues]];
-    chatmsg.messageDate=[DateTimeTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
     [[FlappySender shareInstance] sendMessage:chatmsg

@@ -14,7 +14,7 @@ typedef void(^ErrorBlock) (NSException *);
 //请求正确数据
 typedef void(^SuccessBlock) (id);
 //工具
-@interface UploadImageTool : NSObject
+@interface FlappyUploadTool : NSObject
 
 
 //异步请求时接收数据的data

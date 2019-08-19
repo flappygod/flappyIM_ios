@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NetTool : NSObject
+@interface FlappyNetTool : NSObject
 
 //获取当前的网络状态
 +(NSInteger)getCurrentNetworkState;

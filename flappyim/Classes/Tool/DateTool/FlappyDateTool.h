@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface DateTimeTool : NSObject
+@interface FlappyDateTool : NSObject
 
 
 //格式化字符串，替换不正常
