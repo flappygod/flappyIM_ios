@@ -56,7 +56,8 @@
     //    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
     //
     
-    
+    //注册远程通知
+    [[FlappyIM shareInstance]registerRemoteNotice:application];
     
     
     

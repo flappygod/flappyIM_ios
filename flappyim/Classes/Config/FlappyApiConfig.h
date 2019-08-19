@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @property(nonatomic,copy) NSString* URL_uploadUrl;
+
+
+@property(nonatomic,copy) NSString* URL_changePush;
 @property(nonatomic,copy) NSString* URL_register;
 @property(nonatomic,copy) NSString* URL_login;
 @property(nonatomic,copy) NSString* URL_logout;

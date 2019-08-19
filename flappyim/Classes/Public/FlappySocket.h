@@ -31,7 +31,7 @@
 //失败
 @property (nonatomic,strong)  FlappyFailure  failure;
 //正在登录的用户
-@property (nonatomic,strong) ChatUser*  user;
+@property (nonatomic,strong)  ChatUser*  user;
 //登录成功之后非正常退出的情况
 @property (nonatomic,strong)  FlappyDead  dead;
 

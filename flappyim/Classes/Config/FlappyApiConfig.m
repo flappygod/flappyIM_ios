@@ -54,8 +54,12 @@
     //上传地址
     self.BaseUploadUrl=upload;
     
+    
     //上传文件的地址
     self.URL_uploadUrl= [NSString stringWithFormat:@"%@/upload/fileUpload",self.BaseUploadUrl];
+    
+    //修改推送ID
+    self.URL_changePush= [NSString stringWithFormat:@"%@/upload/changePush",self.BaseUploadUrl];
     
     //创建账户
     self.URL_register= [NSString stringWithFormat:@"%@/api/register",self.BaseUrl];

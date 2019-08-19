@@ -106,6 +106,51 @@
 
 //注册
 -(void)registerDeviceToken:(NSData *)deviceToken{
+    NSMutableString *deviceTokenStr = [NSMutableString string];
+    const char *bytes = deviceToken.bytes;
+    int iCount = deviceToken.length;
+    for (int i = 0; i < iCount; i++) {
+        [deviceTokenStr appendFormat:@"%02x", bytes[i]&0x000000FF];
+    }
+    //设置token
+    [self setUUID:deviceTokenStr];
+    
+    //如果当前是登录的状态
+    if([FlappyData getUser]!=nil&&[FlappyData getUser].login==true){
+        
+        //没有设置或者不相同
+        if([FlappyData getUser].pushID==nil||![[FlappyData getUser].pushID isEqualToString:deviceTokenStr]){
+            //请求体，参数（NSDictionary 类型）
+            NSDictionary *parameters = @{@"userID":@"",
+                                         @"userExtendID":[FlappyData getUser].userExtendId,
+                                         @"device":DEVICE_TYPE,
+                                         @"pushid":deviceTokenStr
+                                         };
+            //创建
+            self.flappysocket=[[FlappySocket alloc] init];
+            
+            //注册地址
+            NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
+            
+            __weak typeof(self) safeSelf=self;
+            //请求数据
+            [FlappyApiRequest postRequest:urlString
+                           withParameters:parameters
+                              withSuccess:^(id data) {
+                                  //保存
+                                  ChatUser* user=[FlappyData getUser];
+                                  user.pushID=deviceTokenStr;
+                                  [FlappyData saveUser:user];
+                                  
+                              } withFailure:^(NSError * error, NSInteger code) {
+                                  //登录失败，清空回调
+                                  failure(error,code);
+                              }];
+        }
+        
+        
+        
+    }
     
 }
 
@@ -280,12 +325,12 @@
     
     NetworkStatus netStatus = [reachability currentReachabilityStatus];
     switch (netStatus) {
-        case 0:
+            case 0:
             break;
-        case 1:
+            case 1:
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
             break;
-        case 2:
+            case 2:
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
             break;
         default:
@@ -532,6 +577,7 @@
                           ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
                           //更新信息
                           ChatUser* newUser=[FlappyData getUser];
+                          
                           //最后的时间保存起来
                           newUser.userName=user.userName;
                           //头像

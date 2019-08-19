@@ -30,7 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString* userData;
 
 
-
+//推送的ID
+@property(nonatomic,copy) NSString* pushID;
 //最后的消息序号
 @property(nonatomic,copy) NSString* latest;
 //是否登录过
