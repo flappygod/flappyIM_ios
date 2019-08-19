@@ -47,5 +47,6 @@ Pod::Spec.new do |s|
   s.dependency 'CocoaAsyncSocket', '~> 7.6.3'
   s.dependency 'Reachability', '~> 3.2'
   s.dependency 'FMDB', '~> 2.7.5'
+  KeychainItemWrapper
 
 end

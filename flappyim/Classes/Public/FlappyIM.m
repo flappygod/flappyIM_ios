@@ -6,7 +6,7 @@
 //
 
 #import "FlappyIM.h"
-
+#import <Security/Security.h>
 #import "MJExtension.h"
 #import <sys/socket.h>
 #import <netinet/in.h>
@@ -18,6 +18,7 @@
 #import "FlappyNetTool.h"
 #import "FlappySender.h"
 #import "FlappyApiConfig.h"
+#import "FlappyStringTool.h"
 
 
 @interface FlappyIM ()
@@ -58,25 +59,18 @@
 
 //获取唯一的ID
 -(NSString *)UUID {
-    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"flappyimID"
-                                                                       accessGroup:@"com.flappydo.flappyim"];
-    NSString *UUID = [wrapper objectForKey:(__bridge id)kSecValueData];
-    if (UUID.length == 0) {
-        UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        [wrapper setObject:UUID forKey:(__bridge id)kSecValueData];
+    NSString* former=[FlappyData getPush];
+    if([FlappyStringTool isStringEmpty:former]){
+       NSString* UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [FlappyData savePush:UUID];
     }
-    return UUID;
+    return [FlappyData getPush];
 }
 
 //设备的token
 -(void) setUUID:(NSString*)token{
-    //获取
-    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"flappyimID"
-                                                                       accessGroup:@"com.flappydo.flappyim"];
     //设置
-    NSString *UUID = [wrapper objectForKey:(__bridge id)kSecValueData];
-    //设置
-    [wrapper setObject:UUID forKey:(__bridge id)kSecValueData];
+     [FlappyData savePush:token];
     //获取唯一的推送ID
     self.pushID=token;
 }

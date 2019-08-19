@@ -12,6 +12,7 @@
 
 
 #define  KEY_USER  @"KEY_USER"
+#define  KEY_PUSHID  @"KEY_PUSHID"
 
 @implementation FlappyData
 
@@ -34,6 +35,21 @@
     }
     return nil;
 }
+
+//保存
++(void)savePush:(NSString*)pushID{
+    
+    //装环为字符串
+    NSString*  str=pushID];
+    UNSaveObject(str, KEY_PUSHID);
+}
+
+//获取推送ID
++(NSString*)getPush{
+    NSString* str=UNGetObject(KEY_PUSHID);
+    return str;
+}
+
 
 //清空用户
 +(void)clearUser{
