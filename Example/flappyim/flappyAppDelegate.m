@@ -123,7 +123,7 @@
 // 注册deviceToken失败
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
     //[[EaseMob sharedInstance] application:application didFailToRegisterForRemoteNotificationsWithError:error];
-    
+    NSLog(@"失败");
 }
 
 @end

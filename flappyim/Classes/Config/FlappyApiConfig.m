@@ -8,8 +8,8 @@
 #import "FlappyApiConfig.h"
 
 
-#define FLAPPY_BASE @"http://49.234.106.91"
-
+//#define FLAPPY_BASE @"http://49.234.106.91"
+#define FLAPPY_BASE @"http://192.168.124.105"
 
 @implementation FlappyApiConfig
 
