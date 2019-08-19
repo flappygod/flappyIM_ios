@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "UploadModel.h"
+#import "FlappyUploadModel.h"
 
 //错误请求数据
 typedef void(^ErrorBlock) (NSException *);
@@ -32,7 +32,7 @@ typedef void(^SuccessBlock) (id);
 
 //上传文件到服务器
 - (void)uploadImageAndMovieBaseModel:(NSString*)urlPath
-                            andModel:(UploadModel *)model;
+                            andModel:(FlappyUploadModel *)model;
 
 
 @end

@@ -5,8 +5,8 @@
 //  Created by lijunlin on 2019/8/13.
 //
 
-#import "UploadModel.h"
+#import "FlappyUploadModel.h"
 
-@implementation UploadModel
+@implementation FlappyUploadModel
 
 @end

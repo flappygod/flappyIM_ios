@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UploadModel : NSObject
+@interface FlappyUploadModel : NSObject
 
 @property (nonatomic, strong) NSString *path;
 @property (nonatomic, strong) NSString *type;

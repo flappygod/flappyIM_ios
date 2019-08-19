@@ -74,7 +74,7 @@
 		45B3F76C867EE926B91EA3E37FD32A0D /* ChatUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A0BC98BD1F1534A7FA66643C6739CA7 /* ChatUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		463401790F5CB5F6544D1C010FE5E2B3 /* GPBCodedInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = A9B945B46DFA2F5E156A5706016A5066 /* GPBCodedInputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		464CE8C80CCDE76674FFE69EF55A0470 /* Wrappers.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 56B5A908E93564E17BCDC4DB0876AF83 /* Wrappers.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		472660D39171A0B0C9D4923E672DA564 /* UploadModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 3877966E05B22CC4D1B0A7F578F363E4 /* UploadModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		472660D39171A0B0C9D4923E672DA564 /* FlappyUploadModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 3877966E05B22CC4D1B0A7F578F363E4 /* FlappyUploadModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		47FF1D17418AB1144FDE0E46427F4877 /* AFURLResponseSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 295E349F1B214D4F3A230268E846535D /* AFURLResponseSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		485FBAEAE2CBBE8E408413B26C1F6452 /* FlappyApiRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD015B8D8FA93002EED534BAEEED61D /* FlappyApiRequest.m */; };
 		48B1116292BB263B65B23AA2D6FD35BD /* Any.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 61510CEC79C208BFE5C02E33E948AD25 /* Any.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -199,7 +199,7 @@
 		D59E2A517A48D101120EB57F90F140A5 /* AFURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = C5A0A065C77BB277E9CFBF7AE6B1D06A /* AFURLSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D6FDBF820AABDC8687EC9C6B7DAB8A2A /* GPBRootObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 67A0202DE0B93632713414E5D749DDC9 /* GPBRootObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D8D0625D0C47C0DFCBDCA19389B74053 /* ChatVoice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DE5038BE262478B2229BD2F29F907E7 /* ChatVoice.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8E6D75DBAD3E1BB375017FD95F14329 /* UploadModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BF791B3F8CCD00E3F7D875CD9AC0157 /* UploadModel.m */; };
+		D8E6D75DBAD3E1BB375017FD95F14329 /* FlappyUploadModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BF791B3F8CCD00E3F7D875CD9AC0157 /* FlappyUploadModel.m */; };
 		DB9F3AA0288EA3A86CC824D3AFD0A15E /* ChatSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E5272F8ADFE71AC11DB475CBFBA25548 /* ChatSession.m */; };
 		DC2186197E507C0C73DFB0600D54867A /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE08734249CD987FB74DDA36FEDBE5B /* UIWebView+AFNetworking.m */; };
 		DF77DA76BD5962EE7DD383126BBBBAC8 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 74D840D63307FDB47325E612145CD483 /* GCDAsyncSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -399,7 +399,7 @@
 		345086CDA7550E21A40A433B96688A98 /* GPBMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBMessage.h; path = objectivec/GPBMessage.h; sourceTree = "<group>"; };
 		360CA15AF6DDC1A1D9909D92220A4EF2 /* FlappyBaseSession.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyBaseSession.h; sourceTree = "<group>"; };
 		3728DA4702C16DA54168607F455CE2C1 /* SessionData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SessionData.h; sourceTree = "<group>"; };
-		3877966E05B22CC4D1B0A7F578F363E4 /* UploadModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = UploadModel.h; sourceTree = "<group>"; };
+		3877966E05B22CC4D1B0A7F578F363E4 /* FlappyUploadModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyUploadModel.h; sourceTree = "<group>"; };
 		38B16EF7B715E2A25DC29AEDA5FA64D5 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+AFNetworking.m"; path = "UIKit+AFNetworking/UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		3BDA5675491019DF3C1107AE994CC503 /* AFNetworking.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = AFNetworking.modulemap; sourceTree = "<group>"; };
 		3CED5C95AC5A602F5860EC80DEBFF7AB /* Pods_flappyim_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_flappyim_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -451,7 +451,7 @@
 		67F4663202943ECE7C9A9EC621139750 /* Pods-flappyim_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-flappyim_Example.modulemap"; sourceTree = "<group>"; };
 		68F72A76DA84D604FC307196E60358AE /* SessionData.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SessionData.m; sourceTree = "<group>"; };
 		6A5095F0FE92965C5B9A786ACF33CEC6 /* GPBDictionary.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBDictionary.h; path = objectivec/GPBDictionary.h; sourceTree = "<group>"; };
-		6BF791B3F8CCD00E3F7D875CD9AC0157 /* UploadModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = UploadModel.m; sourceTree = "<group>"; };
+		6BF791B3F8CCD00E3F7D875CD9AC0157 /* FlappyUploadModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = FlappyUploadModel.m; sourceTree = "<group>"; };
 		6CBEFE4F9E22AFDC6347A739BB35FF8C /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CocoaAsyncSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CCD20CA7D3B41BFBC4CD115F2994EC1 /* CocoaAsyncSocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CocoaAsyncSocket-dummy.m"; sourceTree = "<group>"; };
 		6D358FAA9EDB638C8A1FFF069FEBDE47 /* MJPropertyType.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJPropertyType.m; path = MJExtension/MJPropertyType.m; sourceTree = "<group>"; };
@@ -1091,8 +1091,8 @@
 				F92BB17D259C1B806FEBC621944EDB07 /* FlappyImageTool.m */,
 				8A5B9494115713819B8C842D57E3D64A /* FlappyUploadTool.h */,
 				E66357C75C6F190F024D6941B514A7EF /* FlappyUploadTool.m */,
-				3877966E05B22CC4D1B0A7F578F363E4 /* UploadModel.h */,
-				6BF791B3F8CCD00E3F7D875CD9AC0157 /* UploadModel.m */,
+				3877966E05B22CC4D1B0A7F578F363E4 /* FlappyUploadModel.h */,
+				6BF791B3F8CCD00E3F7D875CD9AC0157 /* FlappyUploadModel.m */,
 			);
 			path = UploadImage;
 			sourceTree = "<group>";
@@ -1396,7 +1396,7 @@
 				9B5D9BA0B55CF6B06DF6D613F07FA64B /* SessionData.h in Headers */,
 				F1DE0E0DD90C3FBDF8ECA9C34AB6D0C3 /* FlappyStringTool.h in Headers */,
 				375E0ED3C27769DBAA4AD47E686DB563 /* FlappyUploadTool.h in Headers */,
-				472660D39171A0B0C9D4923E672DA564 /* UploadModel.h in Headers */,
+				472660D39171A0B0C9D4923E672DA564 /* FlappyUploadModel.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1843,7 +1843,7 @@
 				F739CD06A2EFF7EBA7AA4F914F88D057 /* SessionData.m in Sources */,
 				F3F10DB70D083841A3EAD673F7A89D17 /* FlappyStringTool.m in Sources */,
 				08E4BE04580C52D3B6D05108EE762F41 /* FlappyUploadTool.m in Sources */,
-				D8E6D75DBAD3E1BB375017FD95F14329 /* UploadModel.m in Sources */,
+				D8E6D75DBAD3E1BB375017FD95F14329 /* FlappyUploadModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

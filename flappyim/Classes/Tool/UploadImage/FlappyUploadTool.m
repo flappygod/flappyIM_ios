@@ -17,7 +17,7 @@
 
 //上传图片和视频
 - (void)uploadImageAndMovieBaseModel:(NSString*)urlPath
-                            andModel:(UploadModel *)model {
+                            andModel:(FlappyUploadModel *)model {
     
     //文件名
     NSString *fileName = [model.path componentsSeparatedByString:@"/"].lastObject;

@@ -168,7 +168,7 @@
     }
     
     //上传文件
-    UploadModel* uploadReq=[[UploadModel alloc]init];
+    FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
     uploadReq.path=chatVoice.sendPath;
     uploadReq.name=@"file";
     uploadReq.type=@"video";
@@ -265,7 +265,7 @@
     }
     
     //上传
-    UploadModel* uploadReq=[[UploadModel alloc]init];
+    FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
     uploadReq.path=chatImg.sendPath;
     uploadReq.name=@"file";
     uploadReq.type=@"image";
