@@ -50,7 +50,7 @@
         //因为已经重写了allocWithZone方法，所以这里要调用父类的分配空间的方法
         _sharedSingleton = [[super allocWithZone:NULL] init];
         //设置一个唯一的UUID
-        _sharedSingleton.pushID=[self UUID];
+        _sharedSingleton.pushID=[FlappyIM getUUID];
         //回调
         _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
     });
@@ -58,7 +58,7 @@
 }
 
 //获取唯一的ID
--(NSString *)UUID {
++(NSString*)getUUID{
     NSString* former=[FlappyData getPush];
     if([FlappyStringTool isStringEmpty:former]){
        NSString* UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
@@ -68,16 +68,13 @@
 }
 
 //设备的token
--(void) setUUID:(NSString*)token{
+-(void)setUUID:(NSString*)token{
     //设置
      [FlappyData savePush:token];
     //获取唯一的推送ID
     self.pushID=token;
 }
 
-//压制大法好
-#pragmaclang diagnostic push
-#pragmaclang diagnostic ignored "-Wdeprecated-declarations"
 -(void)registerRemoteNotice:(UIApplication *)application{
     //iOS8以上 注册APNs
     if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
@@ -95,15 +92,14 @@
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:notificationTypes];
     }
 }
-#pragmaclang diagnostic pop
 
 
 //注册
 -(void)registerDeviceToken:(NSData *)deviceToken{
     NSMutableString *deviceTokenStr = [NSMutableString string];
     const char *bytes = deviceToken.bytes;
-    int iCount = deviceToken.length;
-    for (int i = 0; i < iCount; i++) {
+    long iCount = deviceToken.length;
+    for (long i = 0; i < iCount; i++) {
         [deviceTokenStr appendFormat:@"%02x", bytes[i]&0x000000FF];
     }
     //设置token
@@ -125,8 +121,6 @@
             
             //注册地址
             NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
-            
-            __weak typeof(self) safeSelf=self;
             //请求数据
             [FlappyApiRequest postRequest:urlString
                            withParameters:parameters
@@ -137,8 +131,7 @@
                                   [FlappyData saveUser:user];
                                   
                               } withFailure:^(NSError * error, NSInteger code) {
-                                  //登录失败，清空回调
-                                  failure(error,code);
+                                  //修改失败
                               }];
         }
         
