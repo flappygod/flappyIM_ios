@@ -49,9 +49,9 @@
     //创建账号
     [[FlappyIM shareInstance] createAccount:@"101" andUserName:@"李俊霖" andUserHead:@"waha" andSuccess:^(id data) {
         //登录成功
-        NSLog(@"登录成功");
+        NSLog(@"创建成功");
     } andFailure:^(NSError * error, NSInteger code) {
-        NSLog(@"登录失败");
+        NSLog(@"创建失败");
     }];
    
     
