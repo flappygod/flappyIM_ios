@@ -4,7 +4,7 @@
 //
 //  Created by lijunlin on 2019/8/6.
 //
-
+#import <UserNotifications/UserNotifications.h>
 #import "FlappyIM.h"
 #import <Security/Security.h>
 #import "MJExtension.h"
@@ -74,6 +74,8 @@
     NSString *title = @"消息提醒";
     //新的信息
     NSString *body =  @"您有一条新的信息";
+    //新的信息
+    NSString *subtitle =  @"新消息";
     //消息类型
     if(msg.messageType==MSG_TYPE_TEXT){
         //邓肯
