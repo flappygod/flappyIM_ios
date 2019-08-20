@@ -53,7 +53,7 @@
     } andFailure:^(NSError * error, NSInteger code) {
         NSLog(@"创建失败");
     }];
-   
+    
     
     //踢下线
     [[FlappyIM shareInstance] setKnickedListener:^{
@@ -85,17 +85,17 @@
     //创建session
     __weak typeof(self) safeSelf=self;
     [[FlappyIM shareInstance] createSingleSession:@"100"
-                                 andSuccess:^(id _Nullable data) {
-                                     NSLog(@"会话创建成功");
-                                     safeSelf.session=data;
-                                     [self sessionSuccess:data];
-                                     
-                                     ChatMessage* ms=[safeSelf.session getLatestMessage];
-                                     safeSelf.lable.text=[ms getChatText];
-                                     
-                                 } andFailure:^(NSError * _Nullable error, NSInteger code) {
-                                     NSLog(@"会话创建失败");
-                                 }];
+                                       andSuccess:^(id _Nullable data) {
+                                           NSLog(@"会话创建成功");
+                                           safeSelf.session=data;
+                                           [self sessionSuccess:data];
+                                           
+                                           ChatMessage* ms=[safeSelf.session getLatestMessage];
+                                           safeSelf.lable.text=[ms getChatText];
+                                           
+                                       } andFailure:^(NSError * _Nullable error, NSInteger code) {
+                                           NSLog(@"会话创建失败");
+                                       }];
 }
 
 -(void)sessionSuccess:(FlappyChatSession*)session{
