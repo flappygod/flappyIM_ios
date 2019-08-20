@@ -61,6 +61,7 @@
         [_sharedSingleton addGloableListener:^(ChatMessage * _Nullable message) {
             //判断当前是在后台还是前台，如果是在后台，那么
             UIApplicationState state = [UIApplication sharedApplication].applicationState;
+            //如果再后台
             if(state == UIApplicationStateBackground){
                 //判断当前是在后台还是在前台
                 [safeSingle sendLocalNotification:message];
