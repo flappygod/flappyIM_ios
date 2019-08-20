@@ -382,15 +382,18 @@
 }
 //发送已经到达的消息
 -(void)sendMessageArrive:(ChatMessage*)message{
-    //连接到服务器开始请求登录
-    FlappyRequest* request=[[FlappyRequest alloc]init];
-    //登录请求
-    request.type=REQ_RECIEVE;
-    request.latest=message.messageTableSeq;
-    //请求数据，已经GPBComputeRawVarint32SizeForInteger
-    NSData* reqData=[request delimitedData];
-    //写入数据请求
-    [self.socket writeData:reqData withTimeout:-1 tag:0];
+    ChatUser* user=[FlappyData getUser];
+    if(user!=nil&&![user.userId isEqualToString:message.messageSend]){
+        //连接到服务器开始请求登录
+        FlappyRequest* request=[[FlappyRequest alloc]init];
+        //登录请求
+        request.type=REQ_RECIEVE;
+        request.latest=message.messageTableSeq;
+        //请求数据，已经GPBComputeRawVarint32SizeForInteger
+        NSData* reqData=[request delimitedData];
+        //写入数据请求
+        [self.socket writeData:reqData withTimeout:-1 tag:0];
+    }
 }
 
 //通知有新的消息
