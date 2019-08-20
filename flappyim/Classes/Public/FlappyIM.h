@@ -140,7 +140,8 @@ NS_ASSUME_NONNULL_BEGIN
 //设置被踢下线的监听
 -(void)setKnickedListener:(__nullable FlappyKnicked)knicked;
 
-
+//设置notification被点击的通知
+-(void)setNotifyClickListener:(__nullable NotifyClickListener)clicked;
 
 
 @end

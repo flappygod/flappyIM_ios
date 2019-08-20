@@ -59,6 +59,8 @@
         NSLog(@"当前设备已经被踢下线了");
     }];
     
+    
+    
 }
 
 -(void)chooseImag:(id)sender{

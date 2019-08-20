@@ -321,7 +321,7 @@
 }
 
 //收到点击事件时候的通知
--(void)setNotifyClickListener:(__nullable )clicked{
+-(void)setNotifyClickListener:(__nullable NotifyClickListener)clicked{
     //保留
     _notifyClicked=clicked;
 }
