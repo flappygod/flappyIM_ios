@@ -23,19 +23,18 @@
 
 @interface FlappyIM ()
     
-    //用于监听网络变化
-    @property (nonatomic,strong) Reachability* hostReachability;
-    //用于监听网络变化
-    @property (nonatomic,strong) Reachability* internetReachability;
-    //用于联网的socket
-    @property (nonatomic,strong) FlappySocket* flappysocket;
-    
-    
-    //被踢下线了
-    @property (nonatomic,strong) FlappyKnicked knicked;
-    
-    
-    @end
+//用于监听网络变化
+@property (nonatomic,strong) Reachability* hostReachability;
+//用于监听网络变化
+@property (nonatomic,strong) Reachability* internetReachability;
+//用于联网的socket
+@property (nonatomic,strong) FlappySocket* flappysocket;
+
+//被踢下线了
+@property (nonatomic,strong) FlappyKnicked knicked;
+
+
+@end
 
 
 @implementation FlappyIM
@@ -55,6 +54,7 @@
         _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
         //后台了，但是还没有被墓碑的情况
         __weak typeof(_sharedSingleton) safeSingle=_sharedSingleton;
+        //监听是否发送本地通知
         [_sharedSingleton addGloableListener:^(ChatMessage * _Nullable message) {
             //判断当前是在后台还是前台，如果是在后台，那么
             UIApplicationState state = [UIApplication sharedApplication].applicationState;
@@ -114,21 +114,21 @@
         [content setValue:@(YES) forKeyPath:@"shouldAlwaysAlertWhileAppIsForeground"];
         content.sound = [UNNotificationSound defaultSound];
         content.title = title;
-        content.subtitle = subtitle;
         content.body = body;
         content.badge = @(badge);
         
         content.userInfo = userInfo;
         
-        // 2.设置通知附件内容
-        NSError *error = nil;
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"logo_img_02@2x" ofType:@"png"];
-        UNNotificationAttachment *att = [UNNotificationAttachment attachmentWithIdentifier:@"att1" URL:[NSURL fileURLWithPath:path] options:nil error:&error];
-        if (error) {
-            NSLog(@"attachment error %@", error);
-        }
-        content.attachments = @[att];
-        content.launchImageName = @"icon_certification_status1@2x";
+        //// 2.设置通知附件内容
+        //NSError *error = nil;
+        //NSString *path = [[NSBundle mainBundle] pathForResource:@"logo_img_02@2x" ofType:@"png"];
+        //UNNotificationAttachment *att = [UNNotificationAttachment attachmentWithIdentifier:@"att1" URL:[NSURL fileURLWithPath:path] options:nil error:&error];
+        //if (error) {
+        //    NSLog(@"attachment error %@", error);
+        //}
+        //content.attachments = @[att];
+        //content.launchImageName = @"icon_certification_status1@2x";
+        
         // 2.设置声音
         UNNotificationSound *sound = [UNNotificationSound soundNamed:@"sound01.wav"];
         // [UNNotificationSound defaultSound];
@@ -137,7 +137,9 @@
         UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:timeInteval repeats:NO];
         
         // 4.设置UNNotificationRequest
-        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:LocalNotiReqIdentifer content:content trigger:trigger];
+        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:msg.messageId
+                                                                              content:content
+                                                                              trigger:trigger];
         
         // 5.把通知加到UNUserNotificationCenter, 到指定触发点会被触发
         [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
@@ -197,6 +199,35 @@
         UIRemoteNotificationTypeSound |
         UIRemoteNotificationTypeAlert;
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:notificationTypes];
+    }
+    
+    //发送通知
+    if (@available(iOS 11.0, *))
+    {
+        // 使用 UNUserNotificationCenter 来管理通知
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        //监听回调事件
+        center.delegate = self;
+        //iOS 10 使用以下方法注册，才能得到授权，注册通知以后，会自动注册 deviceToken，如果获取不到 deviceToken，Xcode8下要注意开启 Capability->Push Notification。
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert + UNAuthorizationOptionSound+ UNAuthorizationOptionBadge)
+                              completionHandler:^(BOOL granted, NSError * _Nullable error) {
+                                  // Enable or disable features based on authorization.
+                                  if (!granted)
+                                  {
+                                      NSLog(@"Xcode8下要注意开启 Capability->Push Notification。");
+                                  }
+                              }];
+        
+        //获取当前的通知设置，UNNotificationSettings 是只读对象，不能直接修改，只能通过以下方法获取
+        [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+            
+        }];
+    }
+    else {
+        UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types
+                                                                                 categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     }
 }
     
@@ -1002,6 +1033,17 @@
     [self  stopOberver];
     //清空
     [self.callbacks removeAllObjects];
+}
+    
+    
+#pragma mark - UNUserNotificationCenterDelegate
+    //在展示通知前进行处理，即有机会在展示通知前再修改通知内容。
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center
+      willPresentNotification:(UNNotification *)notification
+        withCompletionHandler:(void(^)(UNNotificationPresentationOptions))completionHandler{
+    //1. 处理通知
+    //2. 处理完成后条用 completionHandler ，用于指示在前台显示通知的形式
+    completionHandler(UNNotificationPresentationOptionAlert);
 }
     
     
