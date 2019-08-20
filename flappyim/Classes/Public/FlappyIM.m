@@ -32,7 +32,7 @@
 //被踢下线了
 @property (nonatomic,strong) FlappyKnicked knicked;
 //消息通知被点击了
-@property (nonatomic,strong) NotificateClick notifyClicked;
+@property (nonatomic,strong) NotifyClickListener notifyClicked;
 
 
 
@@ -187,6 +187,7 @@
     self.pushID=token;
 }
 
+//注册远程推送和本地消息通知
 -(void)registerRemoteNotice:(UIApplication *)application{
     //iOS8以上 注册APNs
     if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
@@ -235,6 +236,12 @@
     }
 }
 
+//监听到本地的通知
+-(void)didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    if(self.notifyClicked!=nil){
+        [self.notifyClicked:[ChatMessage mj_objectWithKeyValues:userInfo]];
+    }
+}
 
 //注册
 -(void)registerDeviceToken:(NSData *)deviceToken{
@@ -311,6 +318,12 @@
             self.knicked();
         }
     }
+}
+
+//收到点击事件时候的通知
+-(void)setNotifyClickListener:(__nullable )clicked{
+    //保留
+    _notifyClicked=clicked;
 }
 
 

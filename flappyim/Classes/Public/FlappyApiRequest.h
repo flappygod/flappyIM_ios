@@ -10,7 +10,7 @@
 #import "ChatMessage.h"
 
 //消息通知被点击
-typedef void(^NotificateClick) (ChatMessage*_Nullable message);
+typedef void(^NotifyClickListener) (ChatMessage*_Nullable message);
 
 //被踢下线了
 typedef void(^FlappyKnicked) (void);

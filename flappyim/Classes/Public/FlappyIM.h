@@ -43,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 //注册远程的通知
 -(void)registerRemoteNotice:(UIApplication *)application;
 
+//点击通知
+-(void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
 
 //注册设备信息
 -(void)registerDeviceToken:(NSData *)deviceToken;
