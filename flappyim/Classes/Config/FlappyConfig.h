@@ -43,6 +43,8 @@
 #define REQ_MSG  2
 //心跳消息
 #define REQ_PING  3
+//已经接收到的消息
+#define REQ_RECIEVE  4
 
 
 
