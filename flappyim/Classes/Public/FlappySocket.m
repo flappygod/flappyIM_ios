@@ -340,6 +340,7 @@
                 //添加数据
                 [[FlappyDataBase shareInstance] insert:chatMsg];
                 [self notifyNewMessage:chatMsg];
+                [self sendMessageArrive:chatMsg];
             }else{
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
@@ -371,6 +372,7 @@
                 //添加数据
                 [[FlappyDataBase shareInstance] insert:chatMsg];
                 [self notifyNewMessage:chatMsg];
+                [self sendMessageArrive:chatMsg];
             }else{
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
@@ -398,8 +400,6 @@
 
 //通知有新的消息
 -(void)notifyNewMessage:(ChatMessage*)message{
-    
-    
     //在主线程之中执行
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
