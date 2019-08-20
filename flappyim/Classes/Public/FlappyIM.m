@@ -22,26 +22,26 @@
 
 
 @interface FlappyIM ()
-
-//用于监听网络变化
-@property (nonatomic,strong) Reachability* hostReachability;
-//用于监听网络变化
-@property (nonatomic,strong) Reachability* internetReachability;
-//用于联网的socket
-@property (nonatomic,strong) FlappySocket* flappysocket;
-
-
-//被踢下线了
-@property (nonatomic,strong) FlappyKnicked knicked;
-
-
-@end
+    
+    //用于监听网络变化
+    @property (nonatomic,strong) Reachability* hostReachability;
+    //用于监听网络变化
+    @property (nonatomic,strong) Reachability* internetReachability;
+    //用于联网的socket
+    @property (nonatomic,strong) FlappySocket* flappysocket;
+    
+    
+    //被踢下线了
+    @property (nonatomic,strong) FlappyKnicked knicked;
+    
+    
+    @end
 
 
 @implementation FlappyIM
-
-
-//使用单例模式
+    
+    
+    //使用单例模式
 + (instancetype)shareInstance {
     static FlappyIM *_sharedSingleton = nil;
     static dispatch_once_t onceToken;
@@ -53,28 +53,105 @@
         _sharedSingleton.pushID=[FlappyIM getUUID];
         //回调
         _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
+        
+        
     });
     return _sharedSingleton;
 }
-
-//获取唯一的ID
+    
+//发送本地通知
+- (void)sendLocalNotification:(ChatMessage*)msg{
+    //标题
+    NSString *title = @"消息提醒";
+    //新的信息
+    NSString *body = @"您有一条新的信息";
+    //消息类型
+    if(msg.messageType==MSG_TYPE_TEXT){
+        //邓肯
+        ChatUser* user=[FlappyData getUser];
+        
+    }
+    //badge
+    NSInteger badge = 1;
+    //时间
+    NSInteger timeInteval = 5;
+    //用户信息
+    NSDictionary *userInfo = [msg mj_keyValues];
+    
+    if (@available(iOS 10.0, *)) {
+        // 1.创建通知内容
+        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+        [content setValue:@(YES) forKeyPath:@"shouldAlwaysAlertWhileAppIsForeground"];
+        content.sound = [UNNotificationSound defaultSound];
+        content.title = title;
+        content.subtitle = subtitle;
+        content.body = body;
+        content.badge = @(badge);
+        
+        content.userInfo = userInfo;
+        
+        // 2.设置通知附件内容
+        NSError *error = nil;
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"logo_img_02@2x" ofType:@"png"];
+        UNNotificationAttachment *att = [UNNotificationAttachment attachmentWithIdentifier:@"att1" URL:[NSURL fileURLWithPath:path] options:nil error:&error];
+        if (error) {
+            NSLog(@"attachment error %@", error);
+        }
+        content.attachments = @[att];
+        content.launchImageName = @"icon_certification_status1@2x";
+        // 2.设置声音
+        UNNotificationSound *sound = [UNNotificationSound soundNamed:@"sound01.wav"];
+        // [UNNotificationSound defaultSound];
+        content.sound = sound;
+        // 3.触发模式
+        UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:timeInteval repeats:NO];
+        
+        // 4.设置UNNotificationRequest
+        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:LocalNotiReqIdentifer content:content trigger:trigger];
+        
+        // 5.把通知加到UNUserNotificationCenter, 到指定触发点会被触发
+        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+        }];
+        
+    } else {
+        
+        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+        // 1.设置触发时间（如果要立即触发，无需设置）
+        localNotification.timeZone = [NSTimeZone defaultTimeZone];
+        localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:5];
+        // 2.设置通知标题
+        localNotification.alertBody = title;
+        // 3.设置通知动作按钮的标题
+        localNotification.alertAction = @"查看";
+        // 4.设置提醒的声音
+        localNotification.soundName = @"sound01.wav";
+        // 5.设置通知的 传递的userInfo
+        localNotification.userInfo = userInfo;
+        // 6.在规定的日期触发通知
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        // 6.立即触发一个通知
+        //[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+    }
+}
+    
+    //获取唯一的ID
 +(NSString*)getUUID{
     NSString* former=[FlappyData getPush];
     if([FlappyStringTool isStringEmpty:former]){
-       NSString* UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        NSString* UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
         [FlappyData savePush:UUID];
     }
     return [FlappyData getPush];
 }
-
-//设备的token
+    
+    //设备的token
 -(void)setUUID:(NSString*)token{
     //设置
-     [FlappyData savePush:token];
+    [FlappyData savePush:token];
     //获取唯一的推送ID
     self.pushID=token;
 }
-
+    
 -(void)registerRemoteNotice:(UIApplication *)application{
     //iOS8以上 注册APNs
     if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
@@ -92,9 +169,9 @@
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:notificationTypes];
     }
 }
-
-
-//注册
+    
+    
+    //注册
 -(void)registerDeviceToken:(NSData *)deviceToken{
     NSMutableString *deviceTokenStr = [NSMutableString string];
     const char *bytes = deviceToken.bytes;
@@ -140,24 +217,24 @@
     }
     
 }
-
-
-// 防止外部调用alloc或者new
+    
+    
+    // 防止外部调用alloc或者new
 + (instancetype)allocWithZone:(struct _NSZone *)zone {
     return [FlappyIM shareInstance];
 }
-
-// 防止外部调用copy
+    
+    // 防止外部调用copy
 - (id)copyWithZone:(nullable NSZone *)zone {
     return [FlappyIM shareInstance];
 }
-
-// 防止外部调用mutableCopy
+    
+    // 防止外部调用mutableCopy
 - (id)mutableCopyWithZone:(nullable NSZone *)zone {
     return [FlappyIM shareInstance];
 }
-
-//设置被踢下线的监听
+    
+    //设置被踢下线的监听
 -(void)setKnickedListener:(__nullable FlappyKnicked)knicked{
     //保留
     _knicked=knicked;
@@ -170,9 +247,9 @@
         }
     }
 }
-
-
-//初始化
+    
+    
+    //初始化
 -(void)setup{
     //重新连接
     [self setupReconnect];
@@ -181,9 +258,9 @@
     //初始化数据库
     [self setupDataBase];
 }
-
-
-//初始化
+    
+    
+    //初始化
 -(void)setup:(NSString*)serverUrl  withUploadUrl:(NSString*)uploadUrl{
     //重新设置服务器地址
     [[FlappyApiConfig shareInstance] resetServer:serverUrl andUploadUrl:uploadUrl];
@@ -195,9 +272,9 @@
     //初始化数据库
     [self setupDataBase];
 }
-
-
-//增加消息的监听
+    
+    
+    //增加消息的监听
 -(void)addGloableListener:(MessageListener)listener{
     //监听所有消息
     if(listener!=nil){
@@ -215,8 +292,8 @@
         }
     }
 }
-
-//移除监听
+    
+    //移除监听
 -(void)removeGloableListener:(MessageListener)listener{
     //监听所有消息
     if(listener!=nil){
@@ -234,8 +311,8 @@
         }
     }
 }
-
-//增加某个session的监听
+    
+    //增加某个session的监听
 -(void)addListener:(MessageListener)listener
      withSessionID:(NSString*)sessionID{
     //监听所有消息
@@ -254,8 +331,8 @@
         }
     }
 }
-
-//移除会话的
+    
+    //移除会话的
 -(void)removeListener:(MessageListener)listener
         withSessionID:(NSString*)sessionID{
     //监听所有消息
@@ -274,13 +351,13 @@
         }
     }
 }
-
+    
 #pragma database
 -(void)setupDataBase{
     //初始化数据库
     [[FlappyDataBase shareInstance] setup];
 }
-
+    
 #pragma  NOTIFY 网络状态监听通知
 -(void)setupNotify{
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -298,20 +375,20 @@
     [self.internetReachability startNotifier];
     [self updateInterfaceWithReachability:self.internetReachability];
 }
-
-//变化监听
-- (void) reachabilityChanged:(NSNotification *)note
-{
-    Reachability* curReach = [note object];
-    [self updateInterfaceWithReachability:curReach];
-}
-
-//更新网络状态
-- (void)updateInterfaceWithReachability:(Reachability *)reachability
-{
     
-    NetworkStatus netStatus = [reachability currentReachabilityStatus];
-    switch (netStatus) {
+    //变化监听
+- (void) reachabilityChanged:(NSNotification *)note
+    {
+        Reachability* curReach = [note object];
+        [self updateInterfaceWithReachability:curReach];
+    }
+    
+    //更新网络状态
+- (void)updateInterfaceWithReachability:(Reachability *)reachability
+    {
+        
+        NetworkStatus netStatus = [reachability currentReachabilityStatus];
+        switch (netStatus) {
             case 0:
             break;
             case 1:
@@ -320,20 +397,20 @@
             case 2:
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
             break;
-        default:
+            default:
             break;
+        }
     }
-}
-
-//停止监听
+    
+    //停止监听
 -(void)stopOberver{
     //移除监听
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:kReachabilityChangedNotification
                                                   object:nil];
 }
-
-//进行初始化
+    
+    //进行初始化
 -(void)setupReconnect{
     //自动登录
     ChatUser* user=[FlappyData getUser];
@@ -379,9 +456,9 @@
         }];
     }
 }
-
-
-//创建账号
+    
+    
+    //创建账号
 -(void)createAccount:(NSString*)userID
          andUserName:(NSString*)userName
          andUserHead:(NSString*)userHead
@@ -403,10 +480,10 @@
                       withFailure:failure];
     
 }
-
-
-
-//登录账号
+    
+    
+    
+    //登录账号
 -(void)login:(NSString*)userExtendID
   andSuccess:(FlappySuccess)success
   andFailure:(FlappyFailure)failure{
@@ -475,9 +552,9 @@
                           failure(error,code);
                       }];
 }
-
-
-//退出登录下线
+    
+    
+    //退出登录下线
 -(void)logout:(FlappySuccess)success
    andFailure:(FlappyFailure)failure{
     
@@ -517,8 +594,8 @@
                       }];
     
 }
-
-//自动登录
+    
+    //自动登录
 -(void)autoLogin:(FlappySuccess)success
       andFailure:(FlappyFailure)failure{
     
@@ -599,10 +676,10 @@
                           failure(error,code);
                       }];
 }
-
-
-
-//创建两个人的会话
+    
+    
+    
+    //创建两个人的会话
 -(void)createSingleSession:(NSString*)userTwo
                 andSuccess:(FlappySuccess)success
                 andFailure:(FlappyFailure)failure{
@@ -635,8 +712,8 @@
                           failure(error,code);
                       }];
 }
-
-//获取单聊的会话
+    
+    //获取单聊的会话
 -(void)getSingleSession:(NSString*)userTwo
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure{
@@ -669,9 +746,9 @@
                           failure(error,code);
                       }];
 }
-
-
-//创建群组会话
+    
+    
+    //创建群组会话
 -(void)createGroupSession:(NSArray*)users
               withGroupID:(NSString*)groupID
             withGroupName:(NSString*)groupName
@@ -719,9 +796,9 @@
                       }];
     
 }
-
-
-//通过extendID获取
+    
+    
+    //通过extendID获取
 -(void)getSessionByID:(NSString*)extendID
            andSuccess:(FlappySuccess)success
            andFailure:(FlappyFailure)failure{
@@ -753,8 +830,8 @@
                           failure(error,code);
                       }];
 }
-
-//获取用户的sessions
+    
+    //获取用户的sessions
 -(void)getUserSessions:(FlappySuccess)success
             andFailure:(FlappyFailure)failure{
     
@@ -786,9 +863,9 @@
                           failure(error,code);
                       }];
 }
-
-
-//添加用户到群组
+    
+    
+    //添加用户到群组
 -(void)addUserToSession:(NSString*)userID
             withGroupID:(NSString*)groupID
              andSuccess:(FlappySuccess)success
@@ -821,8 +898,8 @@
                           failure(error,code);
                       }];
 }
-
-//删除会话
+    
+    //删除会话
 -(void)delUserInSession:(NSString*)userID
             withGroupID:(NSString*)groupID
              andSuccess:(FlappySuccess)success
@@ -855,9 +932,9 @@
                           failure(error,code);
                       }];
 }
-
-
-//判断当前用户是否登录
+    
+    
+    //判断当前用户是否登录
 -(Boolean)isLogin{
     //获取当前账户
     ChatUser* user=[FlappyData getUser];
@@ -868,9 +945,9 @@
     //返回状态
     return true;
 }
-
+    
 #pragma  dealloc
-//销毁逻辑
+    //销毁逻辑
 -(void)dealloc{
     //下线
     [self.flappysocket  offline:false];
@@ -879,6 +956,6 @@
     //清空
     [self.callbacks removeAllObjects];
 }
-
-
-@end
+    
+    
+    @end

@@ -65,8 +65,6 @@
 }
 
 
-
-
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -105,10 +103,10 @@
     //1. 处理通知
     
     
+    completionHandler(UNNotificationPresentationOptionBadge
+                      |UNNotificationPresentationOptionSound
+                      |UNNotificationPresentationOptionAlert);
     
-    //2. 处理完成后条用 completionHandler ，用于指示在前台显示通知的形式
-    
-    completionHandler(UNNotificationPresentationOptionAlert);
     
 }
 
