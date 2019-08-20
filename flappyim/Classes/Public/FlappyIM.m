@@ -31,6 +31,10 @@
 @property (nonatomic,strong) FlappySocket* flappysocket;
 //被踢下线了
 @property (nonatomic,strong) FlappyKnicked knicked;
+//消息通知被点击了
+@property (nonatomic,strong) NotificateClick notifyClicked;
+
+
 
 
 @end

@@ -9,6 +9,10 @@
 #import <AFNetworking/AFNetworking.h>
 #import "ChatMessage.h"
 
+//消息通知被点击
+typedef void(^NotificateClick) (ChatMessage*_Nullable message);
+
+//被踢下线了
 typedef void(^FlappyKnicked) (void);
 
 //登录之后非正常关闭
