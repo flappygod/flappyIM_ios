@@ -55,11 +55,19 @@
         _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
         
         
+        __weak typeof(_sharedSingleton) safeSingle=_sharedSingleton;
+        [_sharedSingleton addGloableListener:^(ChatMessage * _Nullable message) {
+            
+            //判断当前是在后台还是在前台
+            [safeSingle sendLocalNotification];
+            
+        }];
+        
     });
     return _sharedSingleton;
 }
     
-//发送本地通知
+    //发送本地通知
 - (void)sendLocalNotification:(ChatMessage*)msg{
     //标题
     NSString *title = @"消息提醒";
@@ -68,8 +76,27 @@
     //消息类型
     if(msg.messageType==MSG_TYPE_TEXT){
         //邓肯
-        ChatUser* user=[FlappyData getPushType:<#(nonnull NSString *)#>];
-        
+        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[FlappyData getPushType]].integerValue;
+        //普通
+        if(pushTy==0){
+            body=[msg getChatText];
+        }
+    }
+    else if(msg.messageType==MSG_TYPE_IMG){
+        //邓肯
+        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[FlappyData getPushType]].integerValue;
+        //普通
+        if(pushTy==0){
+            body=@"您有一条图片信息";
+        }
+    }
+    else if(msg.messageType==MSG_TYPE_TEXT){
+        //邓肯
+        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[FlappyData getPushType]].integerValue;
+        //普通
+        if(pushTy==0){
+            body=@"您有一条语音信息";
+        }
     }
     //badge
     NSInteger badge = 1;
