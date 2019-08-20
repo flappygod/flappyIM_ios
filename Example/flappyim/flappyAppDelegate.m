@@ -66,14 +66,8 @@
     //NSLog(@"%@",userInfo);
     //为了测试在应用程序退出后，该方法是否执行
     //所以往第一个界面上添加一个label，看标签是否会显示一些内容
-    UILabel *label = [[UILabel alloc]init];
-    label.frame = CGRectMake(0, 250, 300, 200);
-    label.numberOfLines = 0;
-    label.textColor = [UIColor whiteColor];
-    label.font = [UIFont systemFontOfSize:24];
-    label.backgroundColor = [UIColor grayColor];
-    label.text =[NSString stringWithFormat:@"%@",userInfo];
-    [self.window.rootViewController.view addSubview:label];
+    [[FlappyIM shareInstance] didReceiveRemoteNotification:userInfo];
+    
 }
 
 /*
@@ -88,14 +82,8 @@
  其中content-availabel就是为了配合后台刷新而添加的内容，999可以随意定义
  */
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    UILabel *label = [[UILabel alloc]init];
-    label.frame = CGRectMake(0, 250, 300, 200);
-    label.numberOfLines = 0;
-    label.textColor = [UIColor whiteColor];
-    label.font = [UIFont systemFontOfSize:24];
-    label.backgroundColor = [UIColor grayColor];
-    label.text =[NSString stringWithFormat:@"%@",userInfo];
-    [self.window.rootViewController.view addSubview:label];
+    
+    [[FlappyIM shareInstance] didReceiveRemoteNotification:userInfo];
     //NewData就是使用新的数据 更新界面，响应点击通知这个动作
     completionHandler(UIBackgroundFetchResultNewData);
 }
