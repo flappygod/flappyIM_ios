@@ -194,6 +194,7 @@
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
         [application registerUserNotificationSettings:settings];
     }
+    //以下注册APNS
     else{
         UIRemoteNotificationType notificationTypes = UIRemoteNotificationTypeBadge |
         UIRemoteNotificationTypeSound |
@@ -201,7 +202,7 @@
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:notificationTypes];
     }
     
-    //发送通知
+    //注册本地通知
     if (@available(iOS 11.0, *))
     {
         // 使用 UNUserNotificationCenter 来管理通知
