@@ -239,7 +239,7 @@
 //监听到本地的通知
 -(void)didReceiveRemoteNotification:(NSDictionary *)userInfo{
     if(self.notifyClicked!=nil){
-        [self.notifyClicked:[ChatMessage mj_objectWithKeyValues:userInfo]];
+        self.notifyClicked([ChatMessage mj_objectWithKeyValues:userInfo]);
     }
 }
 
