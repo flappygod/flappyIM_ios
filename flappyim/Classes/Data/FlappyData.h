@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(void)savePushType:(NSString*)type;
 
 //获取推送展示类型
-+(void)getPushType;
++(NSString*)getPushType;
 
 
 @end
