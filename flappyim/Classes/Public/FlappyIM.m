@@ -12,6 +12,7 @@
 #import <netinet/in.h>
 #import <arpa/inet.h>
 #import <unistd.h>
+#import "FlappyJsonTool.h"
 #import "FlappyConfig.h"
 #import "FlappyData.h"
 #import "FlappyDataBase.h"
@@ -239,7 +240,10 @@
 //监听到本地的通知
 -(void)didReceiveRemoteNotification:(NSDictionary *)userInfo{
     if(self.notifyClicked!=nil){
-        self.notifyClicked([ChatMessage mj_objectWithKeyValues:userInfo]);
+        //获取消息
+        NSString* msg=userInfo[@"message"];
+        //转换为消息体
+        self.notifyClicked([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
     }
 }
 
