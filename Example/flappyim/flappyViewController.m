@@ -46,6 +46,7 @@
                           action:@selector(chooseImag:)
                 forControlEvents:UIControlEventTouchUpInside];
     
+    //创建账号
     [[FlappyIM shareInstance] createAccount:@"101" andUserName:@"李俊霖" andUserHead:@"waha" andSuccess:^(id data) {
         //登录成功
         NSLog(@"登录成功");
@@ -59,7 +60,11 @@
         NSLog(@"当前设备已经被踢下线了");
     }];
     
-    
+    //消息被点击
+    [[FlappyIM shareInstance] setNotifyClickListener:^(ChatMessage * _Nullable message) {
+        
+        
+    }];
     
 }
 
