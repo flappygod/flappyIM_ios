@@ -1053,6 +1053,7 @@
 }
 
 
+//IOS 10以上预处理
 #pragma mark - UNUserNotificationCenterDelegate
 //在展示通知前进行处理，即有机会在展示通知前再修改通知内容。
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center
@@ -1060,7 +1061,42 @@
         withCompletionHandler:(void(^)(UNNotificationPresentationOptions))completionHandler{
     //1. 处理通知
     //2. 处理完成后条用 completionHandler ，用于指示在前台显示通知的形式
-    completionHandler(UNNotificationPresentationOptionAlert);
+    completionHandler(UNNotificationPresentationOptionAlert+UNNotificationPresentationOptionSound+UNNotificationPresentationOptionBadge);
+}
+
+
+// 通知的点击事件
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void(^)(void))completionHandler{
+    //用户推送的信息
+    NSDictionary * userInfo = response.notification.request.content.userInfo;
+    // 收到推送的请求
+    UNNotificationRequest *request = response.notification.request;
+    // 收到推送的消息内容
+    UNNotificationContent *content = request.content;
+    // 推送消息的角标
+    NSNumber *badge = content.badge;
+    // 推送消息体
+    NSString *body = content.body;
+    // 推送消息的声音
+    UNNotificationSound *sound = content.sound;
+    // 推送消息的副标题
+    NSString *subtitle = content.subtitle;
+    // 推送消息的标题
+    NSString *title = content.title;
+    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        //远程通知
+        [self didReceiveRemoteNotification:userInfo];
+    }
+    else {
+        //本地通知
+        [self didReceiveRemoteNotification:userInfo];
+    }
+    // Warning: UNUserNotificationCenter delegate received call to -userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler: but the completion handler was never called.
+    // 系统要求执行这个方法
+    completionHandler();
+    
 }
 
 

@@ -17,8 +17,6 @@
     //注册远程通知
     [[FlappyIM shareInstance]registerRemoteNotice:application];
     
-    
-    
     return YES;
 }
 
@@ -49,6 +47,7 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
 
 
 
@@ -89,19 +88,10 @@
 }
 
 
-#pragma mark - UNUserNotificationCenterDelegate
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center
-       willPresentNotification:(UNNotification *)notification
-         withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
-    
-    //1. 处理通知
-    completionHandler(UNNotificationPresentationOptionBadge
-                      |UNNotificationPresentationOptionSound
-                      |UNNotificationPresentationOptionAlert);
-    
-    
-}
+
+
+
 
 
 // 将得到的deviceToken传给SDK
