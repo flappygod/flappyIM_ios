@@ -23,12 +23,17 @@ NS_ASSUME_NONNULL_BEGIN
 //清空用户
 +(void)clearUser;
 
-
 //保存
 +(void)savePush:(NSString*)pushID;
 
 //获取推送ID
 +(NSString*)getPush;
+
+
++(void)savePushType:(NSString*)type;
+
++(void)getPushType:(NSString*)type;
+
 
 @end
 
