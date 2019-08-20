@@ -48,7 +48,7 @@
     return str;
 }
     
-    
+
 +(void)savePushType:(NSString*)type{
     UNSaveObject(type, KEY_PUSHTYPE);
 }
@@ -59,7 +59,7 @@
 }
     
     
-    //清空用户
+//清空用户
 +(void)clearUser{
     UNSaveObject(@"", KEY_USER);
 }
