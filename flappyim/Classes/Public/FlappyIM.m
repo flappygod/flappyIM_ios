@@ -29,7 +29,6 @@
 @property (nonatomic,strong) Reachability* internetReachability;
 //用于联网的socket
 @property (nonatomic,strong) FlappySocket* flappysocket;
-
 //被踢下线了
 @property (nonatomic,strong) FlappyKnicked knicked;
 
