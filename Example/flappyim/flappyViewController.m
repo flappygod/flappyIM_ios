@@ -7,7 +7,7 @@
 //
 
 #import "flappyViewController.h"
-#import "MJEXtension.h"
+#import "MJExtension.h"
 #import <flappyim/FlappyIM.h>
 
 
