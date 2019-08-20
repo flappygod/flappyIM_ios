@@ -53,14 +53,15 @@
         _sharedSingleton.pushID=[FlappyIM getUUID];
         //回调
         _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
-        
-        
+        //后台了，但是还没有被墓碑的情况
         __weak typeof(_sharedSingleton) safeSingle=_sharedSingleton;
         [_sharedSingleton addGloableListener:^(ChatMessage * _Nullable message) {
-            
-            //判断当前是在后台还是在前台
-            [safeSingle sendLocalNotification];
-            
+            //判断当前是在后台还是前台，如果是在后台，那么
+            UIApplicationState state = [UIApplication sharedApplication].applicationState;
+            if(state == UIApplicationStateBackground){
+                //判断当前是在后台还是在前台
+                [safeSingle sendLocalNotification:message];
+            }
         }];
         
     });
