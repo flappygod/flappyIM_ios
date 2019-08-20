@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UserNotifications/UserNotifications.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <CocoaAsyncSocket/GCDAsyncUdpSocket.h>
 #import "ChatMessage.h"
@@ -26,7 +27,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface FlappyIM : NSObject<GCDAsyncSocketDelegate>
+@interface FlappyIM : NSObject<GCDAsyncSocketDelegate,UNUserNotificationCenterDelegate>
 
 
 //推送的ID

@@ -4,7 +4,6 @@
 //
 //  Created by lijunlin on 2019/8/6.
 //
-#import <UserNotifications/UserNotifications.h>
 #import "FlappyIM.h"
 #import <Security/Security.h>
 #import "MJExtension.h"
