@@ -7,7 +7,7 @@
 //
 
 #import "flappyViewController.h"
-
+#import "MJEXtension.h"
 #import <flappyim/FlappyIM.h>
 
 
@@ -62,7 +62,8 @@
     
     //消息被点击
     [[FlappyIM shareInstance] setNotifyClickListener:^(ChatMessage * _Nullable message) {
-        
+        //打印
+        NSLog([ChatMessage mj_keyValues]);
         
     }];
     
