@@ -250,6 +250,7 @@ typedef struct KafkaMsg__storage_ {
 @dynamic userId;
 @dynamic device;
 @dynamic pushid;
+@dynamic pushType;
 @dynamic time;
 
 typedef struct Route__storage_ {
@@ -257,6 +258,7 @@ typedef struct Route__storage_ {
   NSString *userId;
   NSString *device;
   NSString *pushid;
+  NSString *pushType;
   NSString *time;
 } Route__storage_;
 
@@ -294,10 +296,19 @@ typedef struct Route__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
+        .name = "pushType",
+        .dataTypeSpecific.className = NULL,
+        .number = Route_FieldNumber_PushType,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(Route__storage_, pushType),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "time",
         .dataTypeSpecific.className = NULL,
         .number = Route_FieldNumber_Time,
-        .hasIndex = 3,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(Route__storage_, time),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
@@ -313,7 +324,7 @@ typedef struct Route__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\001\005A\000";
+        "\002\001\005A\000\004\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG

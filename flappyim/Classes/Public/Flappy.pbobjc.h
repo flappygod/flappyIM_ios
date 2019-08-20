@@ -136,7 +136,8 @@ typedef GPB_ENUM(Route_FieldNumber) {
   Route_FieldNumber_UserId = 1,
   Route_FieldNumber_Device = 2,
   Route_FieldNumber_Pushid = 3,
-  Route_FieldNumber_Time = 4,
+  Route_FieldNumber_PushType = 4,
+  Route_FieldNumber_Time = 5,
 };
 
 /**
@@ -149,6 +150,8 @@ typedef GPB_ENUM(Route_FieldNumber) {
 @property(nonatomic, readwrite, copy, null_resettable) NSString *device;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *pushid;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *pushType;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *time;
 
