@@ -526,6 +526,14 @@
                    withParameters:parameters
                       withSuccess:^(id data) {
                           
+                          @try {
+                              //推送类型
+                              NSInteger type=data[@"route"][@"routePushType"];
+                              [FlappyData savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
+                          } @catch (NSException *exception) {
+                          } @finally {
+                          }
+                          
                           //得到当前的用户数据
                           NSDictionary* dic=data[@"user"];
                           //用户
@@ -634,6 +642,15 @@
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
+                          
+                          //保存推送类型
+                          @try {
+                              //推送类型
+                              NSInteger type=data[@"route"][@"routePushType"];
+                              [FlappyData savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
+                          } @catch (NSException *exception) {
+                          } @finally {
+                          }
                           
                           //得到当前的用户数据
                           NSDictionary* dic=data[@"user"];
