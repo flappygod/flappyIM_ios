@@ -13,48 +13,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-    
-    //
-    //    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-    //
-    //    center.delegate = self;
-    //    //消息推送注册
-    //    [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert +
-    //                                             UNAuthorizationOptionSound +
-    //                                             UNAuthorizationOptionBadge )
-    //                          completionHandler:^(BOOL granted, NSError * _Nullable error) {
-    //                              if (!granted)
-    //                              {
-    //                                  NSLog(@"请开启推送功能否则无法收到推送通知");
-    //                              }
-    //                          }];
-    //
-    //
-    //
-    //    if (@available(iOS 11.0, *))
-    //    {
-    //        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-    //        [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert) completionHandler:^(BOOL granted, NSError * _Nullable error) {
-    //            if (!granted)
-    //            {
-    //                NSLog(@"请开启推送功能否则无法收到推送通知");
-    //            }
-    //        }];
-    //    }
-    //    else {
-    //        UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-    //        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types
-    //                                                                                 categories:nil];
-    //        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    //    }
-    //    [[UIApplication sharedApplication] registerForRemoteNotifications];
-    //
-    //
-    //
-    //    // 注册push权限，用于显示本地推送
-    //    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-    //
     
     //注册远程通知
     [[FlappyIM shareInstance]registerRemoteNotice:application];
@@ -94,6 +52,55 @@
 
 
 
+
+/*
+ 用户点击了通知，进入到应用程序中，需要捕获到这个时机
+ 从而决定这一次的进入应用程序，到底要显示或执行什么动作，下面的方法就会在点击通知时自动调用
+ */
+/*
+ 1.应用程序在前台时：通知到，该方法自动执行
+ 2.应用程序在后台且没有退出时：通知到，只有点击了通知查看时，该方法自动执行
+ 3.应用程序退出：通知到，点击查看通知，不会执行下面的didReceive方法，而是只执行didFinishLauncing方法
+ */
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    //NSLog(@"%@",userInfo);
+    //为了测试在应用程序退出后，该方法是否执行
+    //所以往第一个界面上添加一个label，看标签是否会显示一些内容
+    UILabel *label = [[UILabel alloc]init];
+    label.frame = CGRectMake(0, 250, 300, 200);
+    label.numberOfLines = 0;
+    label.textColor = [UIColor whiteColor];
+    label.font = [UIFont systemFontOfSize:24];
+    label.backgroundColor = [UIColor grayColor];
+    label.text =[NSString stringWithFormat:@"%@",userInfo];
+    [self.window.rootViewController.view addSubview:label];
+}
+
+/*
+ 此方法是新的用于响应远程推送通知的方法
+ 1.如果应用程序在后台，则通知到，点击查看，该方法自动执行
+ 2.如果应用程序在前台，则通知到，该方法自动执行
+ 3.如果应用程序被关闭，则通知到，点击查看，先执行didFinish方法，再执行该方法
+ 4.可以开启后台刷新数据的功能
+ step1：点击target-->Capabilities-->Background Modes-->Remote Notification勾上
+ step2：在给APNs服务器发送的要推送的信息中，添加一组字符串如：
+ {"aps":{"content-available":"999","alert":"bbbbb.","badge":1}}
+ 其中content-availabel就是为了配合后台刷新而添加的内容，999可以随意定义
+ */
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    UILabel *label = [[UILabel alloc]init];
+    label.frame = CGRectMake(0, 250, 300, 200);
+    label.numberOfLines = 0;
+    label.textColor = [UIColor whiteColor];
+    label.font = [UIFont systemFontOfSize:24];
+    label.backgroundColor = [UIColor grayColor];
+    label.text =[NSString stringWithFormat:@"%@",userInfo];
+    [self.window.rootViewController.view addSubview:label];
+    //NewData就是使用新的数据 更新界面，响应点击通知这个动作
+    completionHandler(UIBackgroundFetchResultNewData);
+}
+
+
 #pragma mark - UNUserNotificationCenterDelegate
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
@@ -101,8 +108,6 @@
          withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
     
     //1. 处理通知
-    
-    
     completionHandler(UNNotificationPresentationOptionBadge
                       |UNNotificationPresentationOptionSound
                       |UNNotificationPresentationOptionAlert);
