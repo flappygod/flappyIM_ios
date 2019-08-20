@@ -63,7 +63,7 @@
     //消息被点击
     [[FlappyIM shareInstance] setNotifyClickListener:^(ChatMessage * _Nullable message) {
         //打印字符串
-        NSLog([ChatMessage mj_keyValues].mj_JSONString);
+        NSLog([ChatMessage mj_JSONString]);
         
     }];
     
