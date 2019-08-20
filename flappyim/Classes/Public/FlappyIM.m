@@ -68,7 +68,7 @@
     //消息类型
     if(msg.messageType==MSG_TYPE_TEXT){
         //邓肯
-        ChatUser* user=[FlappyData getUser];
+        ChatUser* user=[FlappyData getPushType:<#(nonnull NSString *)#>];
         
     }
     //badge

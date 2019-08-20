@@ -29,10 +29,11 @@ NS_ASSUME_NONNULL_BEGIN
 //获取推送ID
 +(NSString*)getPush;
 
-
+//保存推送展示类型
 +(void)savePushType:(NSString*)type;
 
-+(void)getPushType:(NSString*)type;
+//获取推送展示类型
++(void)getPushType;
 
 
 @end

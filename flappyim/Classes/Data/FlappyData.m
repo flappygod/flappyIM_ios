@@ -54,7 +54,7 @@
     UNSaveObject(pushID, KEY_PUSHTYPE);
 }
     
-+(void)getPushType:(NSString*)type{
++(void)getPushType{
     
     NSString* str=UNGetObject(KEY_PUSHTYPE);
     return str;
