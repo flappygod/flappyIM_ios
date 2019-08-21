@@ -55,22 +55,26 @@
         _sharedSingleton.pushID=[FlappyIM getUUID];
         //回调
         _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
-        //后台了，但是还没有被墓碑的情况
-        __weak typeof(_sharedSingleton) safeSingle=_sharedSingleton;
-        //监听是否发送本地通知
-        [_sharedSingleton addGloableListener:^(ChatMessage * _Nullable message) {
-            //判断当前是在后台还是前台，如果是在后台，那么
-            UIApplicationState state = [UIApplication sharedApplication].applicationState;
-            //如果再后台
-            if(state == UIApplicationStateBackground){
-                //判断当前是在后台还是在前台
-                [safeSingle sendLocalNotification:message];
-            }
-        }];
-        
     });
     return _sharedSingleton;
 }
+
+//增加本地通知
+-(void)initLocalNotification{
+    //后台了，但是还没有被墓碑的情况
+    __weak typeof(self) safeSelf=self;
+    //监听是否发送本地通知
+    [self addGloableListener:^(ChatMessage * _Nullable message) {
+        //判断当前是在后台还是前台，如果是在后台，那么
+        UIApplicationState state = [UIApplication sharedApplication].applicationState;
+        //如果再后台
+        if(state == UIApplicationStateBackground){
+            //判断当前是在后台还是在前台
+            [safeSelf sendLocalNotification:message];
+        }
+    }];
+}
+
 
 //发送本地通知
 - (void)sendLocalNotification:(ChatMessage*)msg{
