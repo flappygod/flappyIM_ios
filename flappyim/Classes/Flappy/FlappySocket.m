@@ -321,7 +321,7 @@
         [array sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             ChatMessage* one=obj1;
             ChatMessage* two=obj2;
-            if(one.messageTableSeq.integerValue>two.messageTableSeq.integerValue){
+            if(one.messageTableSeq>two.messageTableSeq){
                 return NSOrderedDescending;
             }
             return NSOrderedAscending;
@@ -350,7 +350,7 @@
             ChatMessage* last=[array objectAtIndex:array.count-1];
             
             ChatUser* user=[FlappyData getUser];
-            user.latest=last.messageTableSeq;
+            user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
             [FlappyData saveUser:user];
         }
         
@@ -377,7 +377,7 @@
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
             ChatUser* user=[FlappyData getUser];
-            user.latest=chatMsg.messageTableSeq;
+            user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
             [FlappyData saveUser:user];
         }
     }
@@ -390,7 +390,7 @@
         FlappyRequest* request=[[FlappyRequest alloc]init];
         //登录请求
         request.type=REQ_RECIEVE;
-        request.latest=message.messageTableSeq;
+        request.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
         NSData* reqData=[request delimitedData];
         //写入数据请求
