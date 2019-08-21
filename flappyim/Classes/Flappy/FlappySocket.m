@@ -390,7 +390,7 @@
         FlappyRequest* request=[[FlappyRequest alloc]init];
         //登录请求
         request.type=REQ_RECIEVE;
-        request.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
+        request.latest=[NSString stringWithFormat:@"%ld",(long)message.messageTableSeq];
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
         NSData* reqData=[request delimitedData];
         //写入数据请求
