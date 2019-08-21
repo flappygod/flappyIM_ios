@@ -55,6 +55,8 @@
         _sharedSingleton.pushID=[FlappyIM getUUID];
         //回调
         _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
+        //初始化本地推送
+        [_sharedSingleton initLocalNotification];
     });
     return _sharedSingleton;
 }
