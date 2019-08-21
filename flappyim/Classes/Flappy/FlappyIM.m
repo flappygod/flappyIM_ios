@@ -126,7 +126,6 @@
         content.title = title;
         content.body = body;
         content.badge = @(badge);
-        
         content.userInfo = userInfo;
         
         //// 2.设置通知附件内容
