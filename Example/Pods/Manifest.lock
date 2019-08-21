@@ -15,7 +15,7 @@ PODS:
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
   - CocoaAsyncSocket (7.6.3)
-  - flappyim (0.1.4):
+  - flappyim (0.1.6):
     - AFNetworking (~> 3.2.1)
     - CocoaAsyncSocket (~> 7.6.3)
     - FMDB (~> 2.7.5)
@@ -48,7 +48,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
-  flappyim: a7700dba72755ed8875beb186dc655f8b25538e4
+  flappyim: 8c079b553ffcd2d89ffa00ff5bff1ed2f34abc81
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   MJExtension: 6b69b3bef2864fd550ce1a184eda219e321209d2
   Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
