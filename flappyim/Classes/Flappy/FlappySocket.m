@@ -377,7 +377,7 @@
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
             ChatUser* user=[FlappyData getUser];
-            user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
+            user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
             [FlappyData saveUser:user];
         }
     }
