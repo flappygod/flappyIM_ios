@@ -114,7 +114,9 @@
     //时间
     NSInteger timeInteval = 5;
     //用户信息
-    NSDictionary *userInfo = [msg mj_keyValues];
+    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc]init];
+    
+    userInfo[@"message"]=[FlappyJsonTool JSONObjectToJSONString:[msg mj_keyValues]];
     
     if (@available(iOS 10.0, *)) {
         // 1.创建通知内容
