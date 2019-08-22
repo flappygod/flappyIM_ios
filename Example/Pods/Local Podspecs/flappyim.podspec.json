@@ -1,6 +1,6 @@
 {
   "name": "flappyim",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "summary": "A im named flappyim",
   "description": "flappyIM  for  IOS",
   "homepage": "https://github.com/flappygod/flappyIM_ios",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/flappygod/flappyIM_ios.git",
-    "tag": "0.1.6"
+    "tag": "0.1.7"
   },
   "platforms": {
     "ios": "8.0"

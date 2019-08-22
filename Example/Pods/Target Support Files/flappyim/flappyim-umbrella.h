@@ -11,6 +11,7 @@
 #endif
 
 #import "ChatImage.h"
+#import "ChatLocation.h"
 #import "ChatMessage.h"
 #import "ChatSession.h"
 #import "ChatUser.h"
