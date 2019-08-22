@@ -265,7 +265,6 @@
     }
     //设置token
     [self setUUID:deviceTokenStr];
-    
     //如果当前是登录的状态
     if([FlappyData getUser]!=nil&&[FlappyData getUser].login==true){
         
