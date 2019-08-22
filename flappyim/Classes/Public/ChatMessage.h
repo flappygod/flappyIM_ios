@@ -32,10 +32,10 @@ NS_ASSUME_NONNULL_BEGIN
 #define MSG_TYPE_IMG  2
 //语音消息
 #define MSG_TYPE_VOICE  3
-//表情消息
-#define MSG_TYPE_EMOJ  4
-//红包消息
-#define MSG_TYPE_REDBACKET 5
+//位置消息
+#define MSG_TYPE_LOCATE  4
+//短视频
+#define MSG_TYPE_VIDEO  5
 
 
 
