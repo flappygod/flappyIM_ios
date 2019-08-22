@@ -352,12 +352,12 @@
     //重新设置服务器地址
     [[FlappyApiConfig shareInstance] resetServer:serverUrl andUploadUrl:uploadUrl];
     
-    //重新连接
-    [self setupReconnect];
-    //通知
-    [self setupNotify];
     //初始化数据库
     [self setupDataBase];
+    //通知
+    [self setupNotify];
+    //重新连接
+    [self setupReconnect];
 }
 
 
