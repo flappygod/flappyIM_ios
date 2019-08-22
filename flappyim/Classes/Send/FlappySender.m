@@ -14,6 +14,7 @@
 #import "FlappyDataBase.h"
 #import "FlappyData.h"
 #import "FlappyApiConfig.h"
+#import "FlappyStringTool.h"
 #import <AVFoundation/AVAsset.h>
 #import <CoreMedia/CoreMedia.h>
 #import <AVFoundation/AVFoundation.h>
@@ -77,6 +78,15 @@
 -(void)uploadVoiceAndSend:(ChatMessage*)chatMsg
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure{
+    
+    //已经上传了
+    if(![FlappyStringTool isStringEmpty:[chatMsg getChatImage].path]){
+        
+        [self sendMessage:chatMsg
+               andSuccess:success
+               andFailure:failure];
+        return;
+    }
     
     //消息
     [self msgInsert:chatMsg];
@@ -185,6 +195,15 @@
 -(void)uploadImageAndSend:(ChatMessage*)chatMsg
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure{
+    
+    //已经上传了
+    if(![FlappyStringTool isStringEmpty:[chatMsg getChatImage].path]){
+        
+        [self sendMessage:chatMsg
+               andSuccess:success
+               andFailure:failure];
+        return;
+    }
     
     //消息
     [self msgInsert:chatMsg];

@@ -314,22 +314,33 @@
 -(void)resendMessage:(ChatMessage*)chatmsg
           andSuccess:(FlappySuccess)success
           andFailure:(FlappyFailure)failure{
+    //重新发送文本消息
     if(chatmsg.messageType==MSG_TYPE_TEXT){
         [[FlappySender shareInstance] sendMessage:chatmsg
                                        andSuccess:success
                                        andFailure:failure];
-    }else if(chatmsg.messageType==MSG_TYPE_IMG){
+    }
+    //重新发送图片消息
+    else if(chatmsg.messageType==MSG_TYPE_IMG){
         
         
         [[FlappySender shareInstance] uploadImageAndSend:chatmsg
                                               andSuccess:success
                                               andFailure:failure];
         
-    }else if(chatmsg.messageType==MSG_TYPE_VOICE){
+    }
+    //重新发送语音消息
+    else if(chatmsg.messageType==MSG_TYPE_VOICE){
         
         [[FlappySender shareInstance] uploadVoiceAndSend:chatmsg
                                               andSuccess:success
                                               andFailure:failure];
+    }
+    //重新发送位置消息
+    if(chatmsg.messageType==MSG_TYPE_LOCATE){
+        [[FlappySender shareInstance] sendMessage:chatmsg
+                                       andSuccess:success
+                                       andFailure:failure];
     }
     
 }
