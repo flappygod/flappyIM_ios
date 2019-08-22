@@ -35,15 +35,14 @@
 @property (nonatomic,strong) NotifyClickListener notifyClicked;
 
 
+//被踢下线了
+@property (nonatomic,assign) bool isSetup;
 
 
 @end
 
 
 @implementation FlappyIM
-{
-    bool _isSetup=false;
-}
 
 
 //使用单例模式
@@ -58,6 +57,9 @@
         _sharedSingleton.pushID=[FlappyIM getUUID];
         //回调
         _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
+        
+        _sharedSingleton.isSetup=false;
+        
         //初始化本地推送
         [_sharedSingleton initLocalNotification];
     });
@@ -341,7 +343,7 @@
 //初始化
 -(void)setup{
     
-    if(!_isSetup){
+    if(!self.isSetup){
         
         //初始化数据库
         [self setupDataBase];
@@ -357,7 +359,7 @@
 -(void)setup:(NSString*)serverUrl  withUploadUrl:(NSString*)uploadUrl{
     //重新设置服务器地址
     [[FlappyApiConfig shareInstance] resetServer:serverUrl andUploadUrl:uploadUrl];
-    if(!_isSetup){
+    if(!self.isSetup){
         //初始化数据库
         [self setupDataBase];
         //通知

@@ -263,7 +263,8 @@
 -(ChatMessage*)sendLocation:(ChatLocation*)location
                  andSuccess:(FlappySuccess)success
                  andFailure:(FlappyFailure)failure{
-    ChatLocation* chatmsg=[[ChatLocation alloc]init];
+    
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
     chatmsg.messageSession=self.session.sessionId;
