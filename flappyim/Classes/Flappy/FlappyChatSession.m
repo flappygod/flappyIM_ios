@@ -274,7 +274,7 @@
     chatmsg.messageRecieve=[self getPeerID];
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_LOCATE;
-    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[location mj_keyValues]];
+    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[video mj_keyValues]];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
