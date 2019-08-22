@@ -391,8 +391,8 @@
     //不为空
     if(success!=nil){
         //移除
-        success(msg);
         [self msgSuccess:msg];
+        success(msg);
         [self.successCallbacks removeObjectForKey:dateTimeStr];
         [self.failureCallbacks removeObjectForKey:dateTimeStr];
         [self.successMsgs removeObjectForKey:dateTimeStr];
