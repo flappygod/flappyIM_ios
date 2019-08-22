@@ -340,7 +340,6 @@
                 //添加数据
                 [[FlappyDataBase shareInstance] insert:chatMsg];
                 [self notifyNewMessage:chatMsg];
-                [self sendMessageArrive:chatMsg];
             }else{
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
@@ -348,10 +347,10 @@
         //最后一条的数据保存
         if(array.count>0){
             ChatMessage* last=[array objectAtIndex:array.count-1];
-            
             ChatUser* user=[FlappyData getUser];
             user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
             [FlappyData saveUser:user];
+            [self sendMessageArrive:last];
         }
         
     }
