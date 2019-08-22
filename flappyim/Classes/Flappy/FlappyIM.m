@@ -41,6 +41,9 @@
 
 
 @implementation FlappyIM
+{
+    bool _isSetup=false;
+}
 
 
 //使用单例模式
@@ -338,12 +341,16 @@
 
 //初始化
 -(void)setup{
-    //初始化数据库
-    [self setupDataBase];
-    //重新连接
-    [self setupReconnect];
-    //通知
-    [self setupNotify];
+    
+    if(!_isSetup){
+        
+        //初始化数据库
+        [self setupDataBase];
+        //重新连接
+        [self setupReconnect];
+        //通知
+        [self setupNotify];
+    }
 }
 
 
@@ -351,13 +358,14 @@
 -(void)setup:(NSString*)serverUrl  withUploadUrl:(NSString*)uploadUrl{
     //重新设置服务器地址
     [[FlappyApiConfig shareInstance] resetServer:serverUrl andUploadUrl:uploadUrl];
-    
-    //初始化数据库
-    [self setupDataBase];
-    //通知
-    [self setupNotify];
-    //重新连接
-    [self setupReconnect];
+    if(!_isSetup){
+        //初始化数据库
+        [self setupDataBase];
+        //通知
+        [self setupNotify];
+        //重新连接
+        [self setupReconnect];
+    }
 }
 
 
