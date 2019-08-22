@@ -338,12 +338,12 @@
 
 //初始化
 -(void)setup{
+    //初始化数据库
+    [self setupDataBase];
     //重新连接
     [self setupReconnect];
     //通知
     [self setupNotify];
-    //初始化数据库
-    [self setupDataBase];
 }
 
 
