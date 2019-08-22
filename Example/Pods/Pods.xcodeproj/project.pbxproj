@@ -142,7 +142,7 @@
 		87A1F2C0A149B91ED404939E51CE3B39 /* Duration.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 041353FF25CA596457D93ECEE16E4CD9 /* Duration.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		882A23552AC465A05C07F792E21C9EC4 /* ChatLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 355409A18F1D78CA7962A86B88E7622B /* ChatLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		88A4AEB2230ED33400D5AD33 /* ChatVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = 88A4AEB0230ED33400D5AD33 /* ChatVideo.h */; };
-		88A4AEB3230ED33400D5AD33 /* ChatVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A4AEB1230ED33400D5AD33 /* ChatVideo.m */; };
+		88A4AEB4230ED3DB00D5AD33 /* ChatVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A4AEB1230ED33400D5AD33 /* ChatVideo.m */; };
 		8980273D30E01B29383FD08BE0C4510C /* Timestamp.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CBE99CEF8FB2A8EF8024A6DB3453B39 /* Timestamp.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8A2E1E487FBFC3DF55C12C056BFA36A1 /* MJPropertyType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D358FAA9EDB638C8A1FFF069FEBDE47 /* MJPropertyType.m */; };
 		8DFF55C1A76DC6D56F2D33B696B7B357 /* FlappyDataBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B6D7F984AB2B1C22903AE33D43E6426 /* FlappyDataBase.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -922,7 +922,6 @@
 				828A8F54BE099AE764040D506B29104E /* FlappySocket.h */,
 				7CE13B31C5B6D8C55E5786AC1B0D011A /* SessionData.h */,
 				88A4AEB0230ED33400D5AD33 /* ChatVideo.h */,
-				88A4AEB1230ED33400D5AD33 /* ChatVideo.m */,
 			);
 			name = Public;
 			path = flappyim/Classes/Public;
@@ -1240,6 +1239,7 @@
 		DAC49929BE0166B6983B1211FA607120 /* Flappy */ = {
 			isa = PBXGroup;
 			children = (
+				88A4AEB1230ED33400D5AD33 /* ChatVideo.m */,
 				6BF3D251B1973B86FBEB890680144283 /* ChatLocation.m */,
 				84DEB1D1E13D59174CE88F06EDAFEB15 /* ChatImage.m */,
 				4121518BA2C5B688B189404B64BFA64A /* ChatMessage.m */,
@@ -1880,6 +1880,7 @@
 				656024D7C4DA557D575019C547352FD9 /* FlappyUploadModel.m in Sources */,
 				550D9F377D7FCDCDD713B01642610EEF /* FlappyUploadTool.m in Sources */,
 				77C845653B0F270076E71F847F502A58 /* SessionData.m in Sources */,
+				88A4AEB4230ED3DB00D5AD33 /* ChatVideo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1892,7 +1893,6 @@
 				0D40EE6956924384435BBBD4B718DEC8 /* AFImageDownloader.m in Sources */,
 				6E4C66ABA27A0F4EFDAA3E8B21A9384F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				3BDC8FBDB7922AA1ABA2C90DBA2DBB35 /* AFNetworking-dummy.m in Sources */,
-				88A4AEB3230ED33400D5AD33 /* ChatVideo.m in Sources */,
 				95DAE5AD46A86973A77907D38716F694 /* AFNetworkReachabilityManager.m in Sources */,
 				769B6260247C5624A11411541C0AA4E2 /* AFSecurityPolicy.m in Sources */,
 				E17973BC9CEAE4ED0A7492450F95ACEF /* AFURLRequestSerialization.m in Sources */,

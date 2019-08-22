@@ -11,6 +11,9 @@
 #import <CocoaAsyncSocket/GCDAsyncUdpSocket.h>
 #import "ChatMessage.h"
 #import "ChatUser.h"
+#import "ChatVideo.h"
+#import "ChatVoice.h"
+#import "ChatImage.h"
 #import "Flappy.pbobjc.h"
 #import "FlappyChatSession.h"
 #import "FlappyApiRequest.h"
