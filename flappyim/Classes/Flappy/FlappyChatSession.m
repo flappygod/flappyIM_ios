@@ -258,6 +258,31 @@
     return chatmsg;
 }
 
+
+//发送位置信息
+-(ChatMessage*)sendLocation:(ChatLocation*)location
+                 andSuccess:(FlappySuccess)success
+                 andFailure:(FlappyFailure)failure{
+    ChatLocation* chatmsg=[[ChatLocation alloc]init];
+    
+    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionType=self.session.sessionType;
+    chatmsg.messageSend=[self getMine].userId;
+    chatmsg.messageSendExtendid=[self getMine].userExtendId;
+    chatmsg.messageRecieve=[self getPeerID];
+    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
+    chatmsg.messageType=MSG_TYPE_LOCATE;
+    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[location mj_keyValues]];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageSended=SEND_STATE_CREATE;
+    
+    [[FlappySender shareInstance] sendMessage:chatmsg
+                                   andSuccess:success
+                                   andFailure:failure];
+    return chatmsg;
+}
+
 //重新发送
 -(void)resendMessage:(ChatMessage*)chatmsg
           andSuccess:(FlappySuccess)success

@@ -11,6 +11,7 @@
 #import "FlappyApiRequest.h"
 #import "ChatImage.h"
 #import "ChatVoice.h"
+#import "ChatLocation.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -69,6 +70,12 @@ NS_ASSUME_NONNULL_BEGIN
 -(ChatMessage*)sendVoice:(ChatVoice*)image
               andSuccess:(FlappySuccess)success
               andFailure:(FlappyFailure)failure;
+
+
+//发送位置
+-(ChatMessage*)sendLocation:(ChatLocation*)location
+                 andSuccess:(FlappySuccess)success
+                 andFailure:(FlappyFailure)failure;
 
 
 //重新发送
