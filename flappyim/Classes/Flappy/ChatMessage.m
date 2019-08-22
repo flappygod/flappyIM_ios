@@ -49,6 +49,28 @@
     return nil;
 }
 
+//获取视频
+-(ChatVideo*)getChatVideo{
+    if(_messageContent!=nil&&self.messageType==MSG_TYPE_VIDEO){
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:_messageContent];
+        if(dic!=nil){
+            return [ChatVideo mj_objectWithKeyValues:dic];
+        }
+    }
+    return nil;
+}
+
+//获取位置
+-(ChatLocation*)getChatLocation{
+    if(_messageContent!=nil&&self.messageType==MSG_TYPE_LOCATE){
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:_messageContent];
+        if(dic!=nil){
+            return [ChatLocation mj_objectWithKeyValues:dic];
+        }
+    }
+    return nil;
+}
+
 
 #pragma mark -对一个字符串进行base64编码，并返回
 -(NSString *)base64EncodeString:(NSString *)string{

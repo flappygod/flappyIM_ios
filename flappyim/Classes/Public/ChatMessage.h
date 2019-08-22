@@ -8,6 +8,8 @@
 #import <Foundation/Foundation.h>
 #import "ChatImage.h"
 #import "ChatVoice.h"
+#import "ChatVideo.h"
+#import "ChatLocation.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -91,6 +93,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 //获取声音
 -(ChatVoice*)getChatVoice;
+
+//获取视频
+-(ChatVideo*)getChatVideo;
+
+//获取位置
+-(ChatLocation*)getChatLocation;
+
 
 @end
 
