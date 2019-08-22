@@ -332,10 +332,8 @@
     msg.messageSended=SEND_STATE_CREATE;
     //数据
     NSInteger value=(user.latest!=nil? user.latest.integerValue:0)+1;
-    //最后一条
-    NSString* str=[NSString stringWithFormat:@"%ld",(long)value];
     //还没发送成功，那么放在最后一条
-    msg.messageTableSeq=str;
+    msg.messageTableSeq=value;
     //之前有没有
     ChatMessage* former=[[FlappyDataBase shareInstance] getMessageByID:msg.messageId];
     //没有就插入，有就更新
