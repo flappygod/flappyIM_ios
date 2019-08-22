@@ -342,9 +342,7 @@
 
 //初始化
 -(void)setup{
-    
     if(!self.isSetup){
-        
         //初始化数据库
         [self setupDataBase];
         //重新连接
