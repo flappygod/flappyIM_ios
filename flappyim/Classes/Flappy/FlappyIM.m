@@ -144,7 +144,7 @@
         //content.launchImageName = @"icon_certification_status1@2x";
         
         // 2.设置声音
-        UNNotificationSound *sound = [UNNotificationSound soundNamed:@"sound01.wav"];
+        UNNotificationSound *sound = [UNNotificationSound defaultSound];
         // [UNNotificationSound defaultSound];
         content.sound = sound;
         // 3.触发模式
