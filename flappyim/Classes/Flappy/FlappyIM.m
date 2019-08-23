@@ -348,6 +348,8 @@
         [self setupReconnect];
         //通知
         [self setupNotify];
+        //当前是活跃的
+        self.isActive=true;
     }
 }
 
@@ -363,6 +365,8 @@
         [self setupNotify];
         //重新连接
         [self setupReconnect];
+        //当前是活跃的
+        self.isActive=true;
     }
 }
 
@@ -467,6 +471,25 @@
     self.internetReachability = [Reachability reachabilityForInternetConnection];
     [self.internetReachability startNotifier];
     [self updateInterfaceWithReachability:self.internetReachability];
+    
+    //监听是否触发home键挂起程序，（把程序放在后台执行其他操作）
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:)
+                                                 name:UIApplicationWillResignActiveNotification object:nil];
+    //监听是否重新进入程序程序.（回到程序)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+//监听被home键盘
+-(void)applicationWillResignActive:(NSNotification *)notification{
+    NSLog("触发home按下,在该区域书写点击home键的逻辑");
+    self.isActive=false;
+}
+
+//监听进入页面
+-(void)applicationDidBecomeActive:(NSNotification *)notification{
+    NSLog("重新进来后响应，该区域编写重新进入页面的逻辑");
+    self.isActive=true;
 }
 
 //变化监听
@@ -490,7 +513,7 @@
         case 2:
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
             break;
-            default:
+        default:
             break;
     }
 }
