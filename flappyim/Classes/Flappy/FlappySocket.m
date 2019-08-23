@@ -383,17 +383,23 @@
 }
 //发送已经到达的消息
 -(void)sendMessageArrive:(ChatMessage*)message{
-    ChatUser* user=[FlappyData getUser];
-    if(user!=nil&&![user.userId isEqualToString:message.messageSend]){
-        //连接到服务器开始请求登录
-        FlappyRequest* request=[[FlappyRequest alloc]init];
-        //登录请求
-        request.type=REQ_RECIEVE;
-        request.latest=[NSString stringWithFormat:@"%ld",(long)message.messageTableSeq];
-        //请求数据，已经GPBComputeRawVarint32SizeForInteger
-        NSData* reqData=[request delimitedData];
-        //写入数据请求
-        [self.socket writeData:reqData withTimeout:-1 tag:0];
+    //判断当前是在后台还是前台，如果是在后台，那么
+    UIApplicationState state = [UIApplication sharedApplication].applicationState;
+    //如果再后台
+    if(state == UIApplicationStateActive ){
+        //存活状态才返回信息
+        ChatUser* user=[FlappyData getUser];
+        if(user!=nil&&![user.userId isEqualToString:message.messageSend]){
+            //连接到服务器开始请求登录
+            FlappyRequest* request=[[FlappyRequest alloc]init];
+            //登录请求
+            request.type=REQ_RECIEVE;
+            request.latest=[NSString stringWithFormat:@"%ld",(long)message.messageTableSeq];
+            //请求数据，已经GPBComputeRawVarint32SizeForInteger
+            NSData* reqData=[request delimitedData];
+            //写入数据请求
+            [self.socket writeData:reqData withTimeout:-1 tag:0];
+        }
     }
 }
 
