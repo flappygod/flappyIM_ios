@@ -482,13 +482,13 @@
 
 //监听被home键盘
 -(void)applicationWillResignActive:(NSNotification *)notification{
-    NSLog("触发home按下,在该区域书写点击home键的逻辑");
+    NSLog(@"触发home按下,在该区域书写点击home键的逻辑");
     self.isActive=false;
 }
 
 //监听进入页面
 -(void)applicationDidBecomeActive:(NSNotification *)notification{
-    NSLog("重新进来后响应，该区域编写重新进入页面的逻辑");
+    NSLog(@"重新进来后响应，该区域编写重新进入页面的逻辑");
     self.isActive=true;
 }
 
