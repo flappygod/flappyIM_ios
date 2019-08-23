@@ -387,6 +387,7 @@
     UIApplicationState state = [UIApplication sharedApplication].applicationState;
     //如果再后台
     if(state == UIApplicationStateActive ){
+        NSLog(@"当前处于UIApplicationStateActive,收到信息");
         //存活状态才返回信息
         ChatUser* user=[FlappyData getUser];
         //如果不为空
@@ -395,6 +396,7 @@
             FlappyRequest* request=[[FlappyRequest alloc]init];
             //登录请求
             request.type=REQ_RECIEVE;
+            //最后的时间
             request.latest=[NSString stringWithFormat:@"%ld",(long)message.messageTableSeq];
             //请求数据，已经GPBComputeRawVarint32SizeForInteger
             NSData* reqData=[request delimitedData];
