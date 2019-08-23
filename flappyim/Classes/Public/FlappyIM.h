@@ -36,13 +36,15 @@ NS_ASSUME_NONNULL_BEGIN
 //推送的ID
 @property (nonatomic,copy) NSString*  pushID;
 
+//当前是否活跃
+@property (nonatomic,assign) bool  isActive;
+
 //回调
 @property (nonatomic,strong) NSMutableDictionary*  callbacks;
 
 
 //单例模式
 + (instancetype)shareInstance;
-
 
 //注册远程的通知
 -(void)registerRemoteNotice:(UIApplication *)application;
