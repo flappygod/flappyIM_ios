@@ -769,7 +769,7 @@
                           //连接服务器
                           [safeSelf.flappysocket connectSocket:data[@"serverIP"]
                                                       withPort:data[@"serverPort"]
-                                                      withUser:user
+                                                      withUser:newUser
                                                    withSuccess:success
                                                    withFailure:failure
                                                           dead:^{
