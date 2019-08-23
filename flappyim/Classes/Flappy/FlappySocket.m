@@ -389,6 +389,7 @@
     if(state == UIApplicationStateActive ){
         //存活状态才返回信息
         ChatUser* user=[FlappyData getUser];
+        //如果不为空
         if(user!=nil&&![user.userId isEqualToString:message.messageSend]){
             //连接到服务器开始请求登录
             FlappyRequest* request=[[FlappyRequest alloc]init];
