@@ -524,6 +524,18 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:kReachabilityChangedNotification
                                                   object:nil];
+    
+    
+    //移除监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                 name:UIApplicationWillResignActiveNotification
+                                                  object:nil];
+    
+    //移除监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                                  object:nil];
+    
 }
 
 //进行初始化
