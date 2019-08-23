@@ -75,7 +75,7 @@
         //判断当前是在后台还是前台，如果是在后台，那么
         UIApplicationState state = [UIApplication sharedApplication].applicationState;
         //如果再后台
-        if(state == UIApplicationStateBackground){
+        if(state == UIApplicationStateBackground || state == UIApplicationStateInactive){
             //判断当前是在后台还是在前台
             [safeSelf sendLocalNotification:message];
         }
@@ -491,7 +491,7 @@
         case 2:
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
             break;
-        default:
+            default:
             break;
     }
 }
