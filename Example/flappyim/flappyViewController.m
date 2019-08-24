@@ -120,9 +120,9 @@
 -(void)sendMessage:(id)sender{
     if(self.session!=nil){
         [self.session sendText:self.sendText.text
-                    andSuccess:^(id _Nullable data) {
+                    andSuccess:^(ChatMessage* _Nullable data) {
                         NSLog(@"发送成功");
-                    } andFailure:^(NSError * _Nullable error, NSInteger code) {
+                    } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
                         NSLog(@"发送失败");
                     }];
     }
@@ -151,9 +151,9 @@
     if(self.session!=nil){
         NSString* str=[url.absoluteString substringWithRange:NSMakeRange(7, url.absoluteString.length-7)];
         [self.session sendLocalVoice:str
-                          andSuccess:^(id _Nullable data) {
+                          andSuccess:^(ChatMessage* _Nullable data) {
                               NSLog(@"发送成功");
-                          } andFailure:^(NSError * _Nullable error, NSInteger code) {
+                          } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
                               NSLog(@"发送失败");
                           }];
     }

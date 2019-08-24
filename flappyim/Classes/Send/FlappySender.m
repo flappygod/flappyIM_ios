@@ -25,10 +25,10 @@
 
 
 //成功
-@property(nonatomic,strong) NSMutableDictionary<FlappySendSuccess>* successCallbacks;
+@property(nonatomic,strong) NSMutableDictionary* successCallbacks;
 
 //失败
-@property(nonatomic,strong) NSMutableDictionary<FlappySendFailure>* failureCallbacks;
+@property(nonatomic,strong) NSMutableDictionary* failureCallbacks;
 
 //消息
 @property(nonatomic,strong) NSMutableDictionary* successMsgs;
@@ -253,7 +253,7 @@
     req.errorBlock=^(NSException*  error){
         [safeSelf msgFailure:chatMsg];
         //上传失败了
-        failure([NSError errorWithDomain:error.description code:0 userInfo:nil],
+        failure(chatMsg,[NSError errorWithDomain:error.description code:0 userInfo:nil],
                 RESULT_NETERROR);
         [safeSelf.reqArray removeObject:safeReq];
     };
@@ -264,7 +264,7 @@
         //不为空
         if(image==nil){
             [self msgFailure:chatMsg];
-            failure([NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
+            failure(chatMsg,[NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
                     RESULT_FILEERR);
             return;
         }

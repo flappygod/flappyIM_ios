@@ -45,50 +45,50 @@ NS_ASSUME_NONNULL_BEGIN
 
 //发送文本
 -(ChatMessage*)sendText:(NSString*)text
-             andSuccess:(FlappySuccess)success
-             andFailure:(FlappyFailure)failure;
+             andSuccess:(FlappySendSuccess)success
+             andFailure:(FlappySendFailure)failure;
 
 
 //发送本地图片
 -(ChatMessage*)sendLocalImage:(NSString*)path
-                   andSuccess:(FlappySuccess)success
-                   andFailure:(FlappyFailure)failure;
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure;
 
 //发送图片
 -(ChatMessage*)sendImage:(ChatImage*)image
-              andSuccess:(FlappySuccess)success
-              andFailure:(FlappyFailure)failure;
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure;
 
 
 //发送本地的图片
 -(ChatMessage*)sendLocalVoice:(NSString*)path
-                   andSuccess:(FlappySuccess)success
-                   andFailure:(FlappyFailure)failure;
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure;
 
 
 //发送语音
 -(ChatMessage*)sendVoice:(ChatVoice*)image
-              andSuccess:(FlappySuccess)success
-              andFailure:(FlappyFailure)failure;
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure;
 
 
 
 //发送视频
 -(ChatMessage*)sendLocalVideo:(ChatVideo*)video
-                   andSuccess:(FlappySuccess)success
-                   andFailure:(FlappyFailure)failure;
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure;
 
 
 //发送视频
 -(ChatMessage*)sendVideo:(ChatVideo*)video
-              andSuccess:(FlappySuccess)success
-              andFailure:(FlappyFailure)failure;
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure;
 
 
 //发送位置
 -(ChatMessage*)sendLocation:(ChatLocation*)location
-                 andSuccess:(FlappySuccess)success
-                 andFailure:(FlappyFailure)failure;
+                 andSuccess:(FlappySendSuccess)success
+                 andFailure:(FlappySendFailure)failure;
 
 
 //重新发送

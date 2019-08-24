@@ -28,8 +28,13 @@
                andSuccess:(FlappySendSuccess)success
                andFailure:(FlappySendFailure)failure;
 
-
+//上传语音并发送
 -(void)uploadVoiceAndSend:(ChatMessage*)chatMsg
+               andSuccess:(FlappySendSuccess)success
+               andFailure:(FlappySendFailure)failure;
+
+//上传短视频并发送
+-(void)uploadVideoAndSend:(ChatMessage*)chatMsg
                andSuccess:(FlappySendSuccess)success
                andFailure:(FlappySendFailure)failure;
 
