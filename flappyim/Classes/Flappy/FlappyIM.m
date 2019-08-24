@@ -656,8 +656,7 @@
                           
                           @try {
                               //推送类型
-                              NSInteger type=data[@"route"][@"routePushType"];
-                              [FlappyData savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
+                              [FlappyData savePushType:[NSString stringWithFormat:@"%ld",(long)data[@"route"][@"routePushType"]]];
                           } @catch (NSException *exception) {
                           } @finally {
                           }
