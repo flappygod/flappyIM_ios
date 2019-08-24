@@ -74,7 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //发送视频
--(ChatMessage*)sendLocalVideo:(ChatVideo*)video
+-(ChatMessage*)sendLocalVideo:(NSString*)video
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure;
 
