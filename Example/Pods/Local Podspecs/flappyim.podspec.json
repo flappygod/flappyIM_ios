@@ -1,6 +1,6 @@
 {
   "name": "flappyim",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "summary": "A im named flappyim",
   "description": "flappyIM  for  IOS",
   "homepage": "https://github.com/flappygod/flappyIM_ios",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/flappygod/flappyIM_ios.git",
-    "tag": "0.2.2"
+    "tag": "0.2.3"
   },
   "platforms": {
     "ios": "8.0"
@@ -31,7 +31,8 @@
     "Foundation",
     "AVFoundation",
     "CoreMedia",
-    "UserNotifications"
+    "UserNotifications",
+    "AVKit"
   ],
   "dependencies": {
     "AFNetworking": [
