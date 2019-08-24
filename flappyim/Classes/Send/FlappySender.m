@@ -24,10 +24,10 @@
 
 
 //成功
-@property(nonatomic,strong) NSMutableDictionary* successCallbacks;
+@property(nonatomic,strong) NSMutableDictionary<FlappySendSuccess>* successCallbacks;
 
 //失败
-@property(nonatomic,strong) NSMutableDictionary* failureCallbacks;
+@property(nonatomic,strong) NSMutableDictionary<FlappySendFailure>* failureCallbacks;
 
 //消息
 @property(nonatomic,strong) NSMutableDictionary* successMsgs;
@@ -76,8 +76,8 @@
 
 //发送音频文件
 -(void)uploadVoiceAndSend:(ChatMessage*)chatMsg
-               andSuccess:(FlappySuccess)success
-               andFailure:(FlappyFailure)failure{
+               andSuccess:(FlappySendSuccess)success
+               andFailure:(FlappySendFailure)failure{
     
     //已经上传了
     if(![FlappyStringTool isStringEmpty:[chatMsg getChatImage].path]){
@@ -193,8 +193,8 @@
 
 //上传图片并发送
 -(void)uploadImageAndSend:(ChatMessage*)chatMsg
-               andSuccess:(FlappySuccess)success
-               andFailure:(FlappyFailure)failure{
+               andSuccess:(FlappySendSuccess)success
+               andFailure:(FlappySendFailure)failure{
     
     //已经上传了
     if(![FlappyStringTool isStringEmpty:[chatMsg getChatImage].path]){
@@ -242,7 +242,7 @@
         }else{
             [safeSelf msgFailure:chatMsg];
             //上传失败了
-            failure([NSError errorWithDomain:@"文件上传失败" code:0 userInfo:nil],
+            failure(chatMsg,[NSError errorWithDomain:@"文件上传失败" code:0 userInfo:nil],
                     RESULT_NETERROR);
             [safeSelf.reqArray removeObject:safeReq];
         }
@@ -275,7 +275,7 @@
         //失败了
         [self msgFailure:chatMsg];
         //图片读取失败
-        failure([NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
+        failure(chatMsg,[NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
                 RESULT_FILEERR);
         //返回
         return;
@@ -300,8 +300,8 @@
 
 //发送消息
 -(void)sendMessage:(ChatMessage*)chatMsg
-        andSuccess:(FlappySuccess)success
-        andFailure:(FlappyFailure) failure{
+        andSuccess:(FlappySendSuccess)success
+        andFailure:(FlappySendFailure)failure{
     
     //消息
     [self msgInsert:chatMsg];
@@ -312,7 +312,7 @@
     //连接已经断开了
     if(socket==nil){
         [self msgFailure:chatMsg];
-        failure([NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
+        failure(chatMsg,[NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
         return;
     }
     
@@ -385,7 +385,7 @@
     NSString* dateTimeStr=[NSString stringWithFormat:@"%ld",(long)call];
     
     //获取回调
-    FlappySuccess success=[self.successCallbacks objectForKey:dateTimeStr];
+    FlappySendSuccess success=[self.successCallbacks objectForKey:dateTimeStr];
     //消息
     ChatMessage* msg=[self.successMsgs objectForKey:dateTimeStr];
     //不为空
@@ -403,7 +403,7 @@
 -(void)failureCallback:(NSInteger)call{
     NSString* dateTimeStr=[NSString stringWithFormat:@"%ld",(long)call];
     //获取回调
-    FlappyFailure failure=[self.failureCallbacks objectForKey:dateTimeStr];
+    FlappySendFailure failure=[self.failureCallbacks objectForKey:dateTimeStr];
     //消息
     ChatMessage* msg=[self.successMsgs objectForKey:dateTimeStr];
     //不为空
@@ -411,7 +411,7 @@
         //发送失败
         [self msgFailure:msg];
         //移除
-        failure([NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
+        failure(msg,[NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
         [self.successCallbacks removeObjectForKey:dateTimeStr];
         [self.failureCallbacks removeObjectForKey:dateTimeStr];
         [self.successMsgs removeObjectForKey:dateTimeStr];

@@ -118,8 +118,8 @@
 
 //发送文本
 -(ChatMessage*)sendText:(NSString*)text
-             andSuccess:(FlappySuccess)success
-             andFailure:(FlappyFailure)failure{
+             andSuccess:(FlappySendSuccess)success
+             andFailure:(FlappySendFailure)failure{
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
@@ -145,8 +145,8 @@
 
 //发送本地的图片
 -(ChatMessage*)sendLocalImage:(NSString*)path
-                   andSuccess:(FlappySuccess)success
-                   andFailure:(FlappyFailure)failure{
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure{
     
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -175,8 +175,8 @@
 
 //发送图片
 -(ChatMessage*)sendImage:(ChatImage*)image
-              andSuccess:(FlappySuccess)success
-              andFailure:(FlappyFailure)failure{
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure{
     
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -202,8 +202,8 @@
 
 //发送本地的图片
 -(ChatMessage*)sendLocalVoice:(NSString*)path
-                   andSuccess:(FlappySuccess)success
-                   andFailure:(FlappyFailure)failure{
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure{
     
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -232,8 +232,8 @@
 
 //发送语音
 -(ChatMessage*)sendVoice:(ChatVoice*)voice
-              andSuccess:(FlappySuccess)success
-              andFailure:(FlappyFailure)failure{
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure{
     
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -260,8 +260,8 @@
 
 //发送本地短视频
 -(ChatMessage*)sendLocalVideo:(NSString*)path
-                   andSuccess:(FlappySuccess)success
-                   andFailure:(FlappyFailure)failure{
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure{
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     //创建发送地址
     ChatVideo* voice=[[ChatVideo alloc]init];
@@ -288,8 +288,8 @@
 
 //发送视频
 -(ChatMessage*)sendVideo:(ChatVideo*)video
-              andSuccess:(FlappySuccess)success
-              andFailure:(FlappyFailure)failure{
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure{
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
@@ -314,8 +314,8 @@
 
 //发送位置信息
 -(ChatMessage*)sendLocation:(ChatLocation*)location
-                 andSuccess:(FlappySuccess)success
-                 andFailure:(FlappyFailure)failure{
+                 andSuccess:(FlappySendSuccess)success
+                 andFailure:(FlappySendFailure)failure{
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
@@ -339,8 +339,8 @@
 
 //重新发送
 -(void)resendMessage:(ChatMessage*)chatmsg
-          andSuccess:(FlappySuccess)success
-          andFailure:(FlappyFailure)failure{
+          andSuccess:(FlappySendSuccess)success
+          andFailure:(FlappySendFailure)failure{
     //重新发送文本消息
     if(chatmsg.messageType==MSG_TYPE_TEXT){
         [[FlappySender shareInstance] sendMessage:chatmsg
