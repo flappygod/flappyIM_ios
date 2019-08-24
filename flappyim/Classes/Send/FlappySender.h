@@ -25,18 +25,18 @@
 
 //上传图片并发送
 -(void)uploadImageAndSend:(ChatMessage*)chatMsg
-               andSuccess:(FlappySuccess)success
-               andFailure:(FlappyFailure)failure;
+               andSuccess:(FlappySendSuccess)success
+               andFailure:(FlappySendFailure)failure;
 
 
 -(void)uploadVoiceAndSend:(ChatMessage*)chatMsg
-               andSuccess:(FlappySuccess)success
-               andFailure:(FlappyFailure)failure;
+               andSuccess:(FlappySendSuccess)success
+               andFailure:(FlappySendFailure)failure;
 
 //发送消息
 -(void)sendMessage:(ChatMessage*)chatMsg
-        andSuccess:(FlappySuccess)success
-        andFailure:(FlappyFailure) failure;
+        andSuccess:(FlappySendSuccess)success
+        andFailure:(FlappySendFailure)failure;
 
 //成功
 -(void)successCallback:(NSInteger)call;

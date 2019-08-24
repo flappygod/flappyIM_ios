@@ -15,6 +15,7 @@
 #import "FlappyData.h"
 #import "FlappyApiConfig.h"
 #import "FlappyStringTool.h"
+#import "FlappyApiRequest.h"
 #import <AVFoundation/AVAsset.h>
 #import <CoreMedia/CoreMedia.h>
 #import <AVFoundation/AVFoundation.h>
@@ -122,7 +123,7 @@
         }else{
             [safeSelf msgFailure:chatMsg];
             //上传失败了
-            failure([NSError errorWithDomain:@"图片上传失败" code:0 userInfo:nil],
+            failure(chatMsg,[NSError errorWithDomain:@"图片上传失败" code:0 userInfo:nil],
                     RESULT_NETERROR);
             //移除请求释放资源
             [safeSelf.reqArray removeObject:safeReq];
@@ -133,7 +134,7 @@
     req.errorBlock=^(NSException*  error){
         [safeSelf msgFailure:chatMsg];
         //上传失败了
-        failure([NSError errorWithDomain:error.reason code:0 userInfo:nil],
+        failure(chatMsg,[NSError errorWithDomain:error.reason code:0 userInfo:nil],
                 RESULT_NETERROR);
         //移除请求释放资源
         [safeSelf.reqArray removeObject:safeReq];
@@ -157,7 +158,7 @@
         //获取长度
         if(audioAsset==nil){
             [self msgFailure:chatMsg];
-            failure([NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
+            failure(chatMsg,[NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
                     RESULT_FILEERR);
             return;
         }
@@ -170,7 +171,7 @@
         chatVoice.seconds=[NSString stringWithFormat:@"%ld",(long)audioDurationSeconds*1000];
     } @catch (NSException *exception) {
         [self msgFailure:chatMsg];
-        failure([NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
+        failure(chatMsg,[NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
                 RESULT_FILEERR);
         return;
     } @finally {
