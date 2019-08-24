@@ -471,8 +471,9 @@
     //消息ID保存
     [self.successMsgs setObject:chatMsg forKey:chatMsg.messageId];
     
+    long time=(long)[NSDate date].timeIntervalSince1970*1000;
     //写入请求数据
-    [socket writeData:reqData withTimeout:-1 tag:0];
+    [socket writeData:reqData withTimeout:-1 tag:time];
     
 }
 
