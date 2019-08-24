@@ -86,10 +86,8 @@ NS_ASSUME_NONNULL_BEGIN
 //获取聊天文本
 -(NSString*)getChatText;
 
-
 //获取图像
 -(ChatImage*)getChatImage;
-
 
 //获取声音
 -(ChatVoice*)getChatVoice;

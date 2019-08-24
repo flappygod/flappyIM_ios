@@ -19,6 +19,7 @@
         _messageContent=[self base64EncodeString:chatText];
     }
 }
+
 //获取聊天文本
 -(NSString*)getChatText{
     if(_messageContent!=nil&&self.messageType==MSG_TYPE_TEXT){
@@ -40,7 +41,7 @@
 
 //获取声音
 -(ChatVoice*)getChatVoice{
-    if(_messageContent!=nil&&self.messageType==MSG_TYPE_IMG){
+    if(_messageContent!=nil&&self.messageType==MSG_TYPE_VOICE){
         NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:_messageContent];
         if(dic!=nil){
             return [ChatVoice mj_objectWithKeyValues:dic];
@@ -79,6 +80,7 @@
     //2、对二进制数据进行base64编码，完成后返回字符串
     return [data base64EncodedStringWithOptions:0];
 }
+#pragma mark -对一个字符串进行base64解码，并返回
 -(NSString *)base64DecodeString:(NSString *)string{
     //注意：该字符串是base64编码后的字符串
     //1、转换为二进制数据（完成了解码的过程）

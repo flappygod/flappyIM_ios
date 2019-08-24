@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 //会话的用户
 @interface ChatUser : NSObject
 
+
 //用户ID
 @property(nonatomic,copy) NSString* userId;
 //用户的扩展ID
@@ -35,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 //最后的消息序号
 @property(nonatomic,copy) NSString* latest;
 //是否登录过
-@property(nonatomic,assign) Boolean login;
+@property(nonatomic,assign) NSInteger login;
 
 
 

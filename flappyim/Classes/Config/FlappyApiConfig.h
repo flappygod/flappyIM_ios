@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 //基础地址
 @property(nonatomic,copy) NSString* BaseUploadUrl;
 
-
+//上传文件的地址
 @property(nonatomic,copy) NSString* URL_uploadUrl;
 
 
