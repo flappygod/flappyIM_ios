@@ -383,10 +383,8 @@
 }
 //发送已经到达的消息
 -(void)sendMessageArrive:(ChatMessage*)message{
-    //判断当前是在后台还是前台，如果是在后台，那么
-    UIApplicationState state = [UIApplication sharedApplication].applicationState;
     //如果再后台
-    if(state == UIApplicationStateActive&&[FlappyIM shareInstance].isActive){
+    if([FlappyIM shareInstance].isActive){
         NSLog(@"当前处于UIApplicationStateActive,收到信息");
         //存活状态才返回信息
         ChatUser* user=[FlappyData getUser];
