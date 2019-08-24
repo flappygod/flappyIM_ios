@@ -16,6 +16,7 @@
 #import "FlappyApiConfig.h"
 #import "FlappyStringTool.h"
 #import "FlappyApiRequest.h"
+#import "FlappyVideoInfo.h"
 #import <AVFoundation/AVAsset.h>
 #import <CoreMedia/CoreMedia.h>
 #import <AVFoundation/AVFoundation.h>
@@ -74,6 +75,7 @@
 - (id)mutableCopyWithZone:(nullable NSZone *)zone {
     return [FlappySender shareInstance];
 }
+
 
 //发送音频文件
 -(void)uploadVoiceAndSend:(ChatMessage*)chatMsg
@@ -299,6 +301,142 @@
 }
 
 
+
+
+//发送音频文件
+-(void)uploadVideoAndSend:(ChatMessage*)chatMsg
+               andSuccess:(FlappySendSuccess)success
+               andFailure:(FlappySendFailure)failure{
+    
+    //已经上传了
+    if(![FlappyStringTool isStringEmpty:[chatMsg getChatImage].path]){
+        
+        [self sendMessage:chatMsg
+               andSuccess:success
+               andFailure:failure];
+        return;
+    }
+    
+    //消息
+    [self msgInsert:chatMsg];
+    
+    //视频信息
+    ChatVideo* chatVideo=[ChatVideo mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:chatMsg.messageContent]];
+    
+    //开始请求
+    FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
+    
+    //自己
+    __weak typeof(self) safeSelf=self;
+    __weak typeof (req) safeReq=req;
+    
+    //成功
+    req.successBlock=^(id data){
+        //字典
+        NSDictionary* dic=data;
+        
+        NSString* resultCode=dic[@"resultCode"];
+        //成功
+        if(resultCode.integerValue==RESULT_SUCCESS){
+            //地址
+            chatVideo.path=dic[@"resultData"][@"filePath"];
+            chatVideo.coverPath=dic[@"resultData"][@"overFilePath"];
+            //设置
+            chatMsg.messageContent=[FlappyJsonTool DicToJSONString:[chatVideo mj_keyValues]];
+            //上传完成发送消息
+            [safeSelf sendMessage:chatMsg
+                       andSuccess:success
+                       andFailure:failure];
+            //移除请求释放资源
+            [safeSelf.reqArray removeObject:safeReq];
+        }else{
+            [safeSelf msgFailure:chatMsg];
+            //上传失败了
+            failure(chatMsg,[NSError errorWithDomain:@"图片上传失败" code:0 userInfo:nil],
+                    RESULT_NETERROR);
+            //移除请求释放资源
+            [safeSelf.reqArray removeObject:safeReq];
+        }
+    };
+    
+    //失败
+    req.errorBlock=^(NSException*  error){
+        [safeSelf msgFailure:chatMsg];
+        //上传失败了
+        failure(chatMsg,[NSError errorWithDomain:error.reason code:0 userInfo:nil],
+                RESULT_NETERROR);
+        //移除请求释放资源
+        [safeSelf.reqArray removeObject:safeReq];
+    };
+    
+    NSMutableArray* uplaods=[[NSMutableArray alloc]init];
+    
+    
+    @try {
+        //根据地址来
+        NSURL* url;
+        
+        //如果以file开头
+        if([chatVideo.sendPath hasPrefix:@"file"]){
+            //直接
+            url=[NSURL URLWithString:chatVideo.sendPath];
+        }else{
+            //否则不用了
+            url=[NSURL URLWithString:[NSString stringWithFormat:@"file://%@",chatVideo.sendPath]];
+        }
+        
+        //获取视频信息
+        FlappyVideoInfo* info=[self videoInfoForUrl:url
+                                               size:CGSizeMake(512, 512)];
+        
+        //返回数据
+        if(info!=nil&&info.overPath!=nil&&info.duration!=nil&&info.vwidth!=nil&&info.vheight!=nil){
+            
+        }else{
+            @throw [[NSException alloc]initWithName:@"视频解析失败"
+                                             reason:@"视频解析失败"
+                                           userInfo:nil];
+        }
+        
+        chatVideo.width=info.vwidth;
+        chatVideo.height=info.vheight;
+        chatVideo.duration=info.duration;
+        
+        //上传文件
+        FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
+        uploadReq.path=info.overPath;
+        uploadReq.name=@"overFile";
+        uploadReq.type=@"image";
+        [uplaods addObject:uploadReq];
+        
+    } @catch (NSException *exception) {
+        [self msgFailure:chatMsg];
+        failure(chatMsg,[NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
+                RESULT_FILEERR);
+        return;
+    } @finally {
+        
+    }
+    
+    //上传文件
+    FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
+    //发送地址
+    uploadReq.path=chatVideo.sendPath;
+    //文件
+    uploadReq.name=@"file";
+    //视频
+    uploadReq.type=@"video";
+    //上传
+    [uplaods addObject:uploadReq];
+    
+    [req uploadImageAndMovieBaseModel:[FlappyApiConfig shareInstance].URL_fileUpload
+                            andModels:uplaods];
+    //添加进入请求列表，方式请求被回收
+    [self.reqArray addObject:req];
+    
+}
+
+
 //发送消息
 -(void)sendMessage:(ChatMessage*)chatMsg
         andSuccess:(FlappySendSuccess)success
@@ -427,6 +565,83 @@
     {
         [self failureCallback:[time integerValue]];
     }
+}
+
+
+
+// 获取视频第一帧
+#pragma mark ---- 获取图片第一帧
+
+//生成一个临时的图片地址用于保存封面图片
+-(NSString*)generateSaveImagePath{
+    return nil;
+}
+
+- (FlappyVideoInfo*)videoInfoForUrl:(NSURL *)url size:(CGSize)size
+{
+    
+    FlappyVideoInfo* info=[[FlappyVideoInfo alloc] init];
+    
+    // 获取视频第一帧
+    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
+                                                     forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+    //获取
+    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:url options:opts];
+    //获取到文件的时长
+    CMTime audioDuration = urlAsset.duration;
+    //seconds
+    float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
+    //长度
+    info.duration=[NSString stringWithFormat:@"%ld",(long)audioDurationSeconds*1000];
+    //获取到图片
+    AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlAsset];
+    generator.appliesPreferredTrackTransform = YES;
+    generator.maximumSize = CGSizeMake(size.width, size.height);
+    NSError *error = nil;
+    CGImageRef img = [generator copyCGImageAtTime:CMTimeMake(0, 10) actualTime:NULL error:&error];
+    UIImage *videoImage = [[UIImage alloc] initWithCGImage:img];
+    info.vwidth=[NSString stringWithFormat:@"%ld",(long)videoImage.size.width];
+    info.vheight=[NSString stringWithFormat:@"%ld",(long)videoImage.size.height];
+    CGImageRelease(img);
+    
+    NSString* savePath=[self generateSaveImagePath];
+    
+    [self saveToDocument:videoImage withFilePath:savePath];
+    
+    info.overPath=savePath;
+    
+    return info;
+}
+
+//将选取的图片保存到目录文件夹下
+-(BOOL)saveToDocument:(UIImage *) image withFilePath:(NSString *) filePath
+{
+    if ((image == nil) || (filePath == nil) || [filePath isEqualToString:@""]) {
+        return NO;
+    }
+    @try {
+        NSData *imageData = nil;
+        //获取文件扩展名
+        NSString *extention = [filePath pathExtension];
+        if ([extention isEqualToString:@"png"]) {
+            //返回PNG格式的图片数据
+            imageData = UIImagePNGRepresentation(image);
+        }else{
+            //返回JPG格式的图片数据，第二个参数为压缩质量：0:best 1:lost
+            imageData = UIImageJPEGRepresentation(image, 0);
+        }
+        if (imageData == nil || [imageData length] <= 0) {
+            return NO;
+        }
+        //将图片写入指定路径
+        [imageData writeToFile:filePath atomically:YES];
+        return  YES;
+    }
+    @catch (NSException *exception) {
+        NSLog(@"保存图片失败");
+    }
+    return NO;
+    
 }
 
 
