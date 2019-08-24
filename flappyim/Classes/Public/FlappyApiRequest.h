@@ -18,11 +18,17 @@ typedef void(^FlappyKnicked) (void);
 //登录之后非正常关闭
 typedef void(^FlappyDead) (void);
 
+//请求成功
+typedef void(^FlappySuccess) (id _Nullable);
+
 //请求失败
 typedef void(^FlappyFailure) (NSError *_Nullable,NSInteger);
 
-//请求成功
-typedef void(^FlappySuccess) (id _Nullable);
+//发送消息成功
+typedef void(^FlappySendSuccess) (ChatMessage* _Nullable message);
+
+//发送消息失败
+typedef void(^FlappySendFailure) (ChatMessage* _Nullable,NSError *_Nullable,NSInteger);
 
 //消息监听
 typedef void(^MessageListener) (ChatMessage* _Nullable message);

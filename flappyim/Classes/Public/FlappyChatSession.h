@@ -72,6 +72,13 @@ NS_ASSUME_NONNULL_BEGIN
               andFailure:(FlappyFailure)failure;
 
 
+
+//发送视频
+-(ChatMessage*)sendLocalVideo:(ChatVideo*)video
+                   andSuccess:(FlappySuccess)success
+                   andFailure:(FlappyFailure)failure;
+
+
 //发送视频
 -(ChatMessage*)sendVideo:(ChatVideo*)video
               andSuccess:(FlappySuccess)success
