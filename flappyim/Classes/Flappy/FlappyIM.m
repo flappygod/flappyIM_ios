@@ -883,7 +883,7 @@
                           //获取model
                           SessionData* model=[SessionData mj_objectWithKeyValues:data];
                           //创建session
-                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+                          FlappyChatSession* session=[[FlappyChatSession alloc] init];
                           session.session=model;
                           success(session);
                       } withFailure:^(NSError * error, NSInteger code) {
@@ -932,7 +932,7 @@
                           //获取model
                           SessionData* model=[SessionData mj_objectWithKeyValues:data];
                           //创建session
-                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+                          FlappyChatSession* session=[[FlappyChatSession alloc] init];
                           session.session=model;
                           success(session);
                       } withFailure:^(NSError * error, NSInteger code) {
@@ -965,7 +965,7 @@
                           //获取model
                           SessionData* model=[SessionData mj_objectWithKeyValues:data];
                           //创建session
-                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+                          FlappyChatSession* session=[[FlappyChatSession alloc] init];
                           //数据
                           session.session=model;
                           //成功
@@ -995,14 +995,20 @@
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-                          //解析
-                          NSArray* array=data;
-                          NSMutableArray* sessions=[[NSMutableArray alloc]init];
+                          
+                          NSMutableArray* array=data;
+                          NSMutableArray* ret=[[NSMutableArray alloc]init];
+                          
                           for(int s=0;s<array.count;s++){
-                              [sessions addObject:[ChatSession mj_objectWithKeyValues:[array objectAtIndex:s]]];
+                              //获取model
+                              SessionData* model=[SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
+                              FlappyChatSession* session=[[FlappyChatSession alloc] init];
+                              session.session=model;
+                              [ret addObject:session];
                           }
                           //成功
-                          success(sessions);
+                          success(ret);
+                          
                       } withFailure:^(NSError * error, NSInteger code) {
                           //登录失败，清空回调
                           failure(error,code);
