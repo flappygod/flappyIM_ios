@@ -44,10 +44,10 @@
         andFailure:(FlappySendFailure)failure;
 
 //成功
--(void)successCallback:(NSInteger)call;
+-(void)successCallback:(NSString*)messageid;
 
 //失败
--(void)failureCallback:(NSInteger)call;
+-(void)failureCallback:(NSString*)messageid;
 
 //全部失败
 -(void)failureAllCallbacks;

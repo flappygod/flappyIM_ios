@@ -515,52 +515,65 @@
 }
 
 //成功
--(void)successCallback:(NSInteger)call{
+-(void)successCallback:(NSString*)messageid{
     
-    NSString* dateTimeStr=[NSString stringWithFormat:@"%ld",(long)call];
+    if(messageid==nil){
+        return;
+    }
     
     //获取回调
-    FlappySendSuccess success=[self.successCallbacks objectForKey:dateTimeStr];
+    FlappySendSuccess success=[self.successCallbacks objectForKey:messageid];
     //消息
-    ChatMessage* msg=[self.successMsgs objectForKey:dateTimeStr];
+    ChatMessage* msg=[self.successMsgs objectForKey:messageid];
     //不为空
     if(success!=nil){
         //移除
         [self msgSuccess:msg];
         success(msg);
-        [self.successCallbacks removeObjectForKey:dateTimeStr];
-        [self.failureCallbacks removeObjectForKey:dateTimeStr];
-        [self.successMsgs removeObjectForKey:dateTimeStr];
+        [self.successCallbacks removeObjectForKey:messageid];
+        [self.failureCallbacks removeObjectForKey:messageid];
+        [self.successMsgs removeObjectForKey:messageid];
     }
 }
 
 //失败
--(void)failureCallback:(NSInteger)call{
-    NSString* dateTimeStr=[NSString stringWithFormat:@"%ld",(long)call];
+-(void)failureCallback:(NSString*)messageid{
+    if(messageid==nil){
+        return;
+    }
     //获取回调
-    FlappySendFailure failure=[self.failureCallbacks objectForKey:dateTimeStr];
+    FlappySendFailure failure=[self.failureCallbacks objectForKey:messageid];
     //消息
-    ChatMessage* msg=[self.successMsgs objectForKey:dateTimeStr];
+    ChatMessage* msg=[self.successMsgs objectForKey:messageid];
     //不为空
-    if(failure!=nil){
+    if(failure!=nil&&msg!=nil){
         //发送失败
         [self msgFailure:msg];
         //移除
         failure(msg,[NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
-        [self.successCallbacks removeObjectForKey:dateTimeStr];
-        [self.failureCallbacks removeObjectForKey:dateTimeStr];
-        [self.successMsgs removeObjectForKey:dateTimeStr];
+        [self.successCallbacks removeObjectForKey:messageid];
+        [self.failureCallbacks removeObjectForKey:messageid];
+        [self.successMsgs removeObjectForKey:messageid];
     }
 }
 
 
 //全部失败
 -(void)failureAllCallbacks{
-    NSMutableDictionary* dic=self.failureCallbacks;
-    for(NSString* time in dic)
-    {
-        [self failureCallback:[time integerValue]];
+    //没有的时候饭很好
+    if(self.failureCallbacks==nil||self.failureCallbacks.count==0){
+        return;
     }
+    //回调信息
+    NSMutableDictionary* dic=self.failureCallbacks;
+    //所有的
+    NSArray* array=dic.allKeys;
+    //都失败
+    for(int s=0;s<array.count;s++){
+        NSString* messageid=[array objectAtIndex:s];
+        [self failureCallback:messageid];
+    }
+    
 }
 
 
