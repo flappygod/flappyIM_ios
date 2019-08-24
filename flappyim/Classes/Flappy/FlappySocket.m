@@ -164,14 +164,7 @@
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
-    //在主线程之中执行
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [[FlappySender shareInstance]successCallback:tag];
-            
-        });
-    });
+   
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
@@ -343,6 +336,7 @@
             }else{
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
+            [self sendMessageSuccess:chatMsg];
         }
         //最后一条的数据保存
         if(array.count>0){
@@ -375,12 +369,27 @@
             }else{
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
+            [self sendMessageSuccess:chatMsg];
+            //更新最近一条的时间
             ChatUser* user=[FlappyData getUser];
             user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
             [FlappyData saveUser:user];
         }
     }
 }
+
+
+//信息发送成功
+-(void)sendMessageSuccess:(ChatMessage*)message{
+    //在主线程之中执行
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[FlappySender shareInstance]successCallback:message.messageId];
+        });
+    });
+}
+
+
 //发送已经到达的消息
 -(void)sendMessageArrive:(ChatMessage*)message{
     //如果再后台

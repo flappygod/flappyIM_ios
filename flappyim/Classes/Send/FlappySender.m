@@ -472,7 +472,7 @@
     [self.successMsgs setObject:chatMsg forKey:chatMsg.messageId];
     
     //写入请求数据
-    [socket writeData:reqData withTimeout:-1 tag:dateTime];
+    [socket writeData:reqData withTimeout:-1 tag:nil];
     
 }
 
