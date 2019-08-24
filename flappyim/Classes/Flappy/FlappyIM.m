@@ -125,7 +125,6 @@
     if (@available(iOS 10.0, *)) {
         // 1.创建通知内容
         UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-        [content setValue:@(YES) forKeyPath:@"shouldAlwaysAlertWhileAppIsForeground"];
         content.sound = [UNNotificationSound defaultSound];
         content.title = title;
         content.body = body;

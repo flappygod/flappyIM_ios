@@ -385,7 +385,7 @@
 -(void)sendMessageArrive:(ChatMessage*)message{
     //如果再后台
     if([FlappyIM shareInstance].isActive){
-        NSLog(@"当前处于UIApplicationStateActive,收到信息");
+        NSLog(@"当前处于UNMutableNotificationContent,收到信息");
         //存活状态才返回信息
         ChatUser* user=[FlappyData getUser];
         //如果不为空
