@@ -67,6 +67,12 @@
         
     }];
     
+    [[FlappyIM shareInstance]  getUserSessions:^(id _Nullable data) {
+        NSLog(@"data");
+    } andFailure:^(NSError * _Nullable err, NSInteger code) {
+        
+    }];
+    
 }
 
 -(void)chooseImag:(id)sender{
