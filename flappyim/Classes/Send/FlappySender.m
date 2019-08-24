@@ -429,7 +429,7 @@
     //上传
     [uplaods addObject:uploadReq];
     
-    [req uploadImageAndMovieBaseModel:[FlappyApiConfig shareInstance].URL_fileUpload
+    [req uploadImageAndMovieBaseModel:[FlappyApiConfig shareInstance].URL_videoUpload
                             andModels:uplaods];
     //添加进入请求列表，方式请求被回收
     [self.reqArray addObject:req];
