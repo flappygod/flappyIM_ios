@@ -258,6 +258,33 @@
     return chatmsg;
 }
 
+//发送本地短视频
+-(ChatMessage*)sendLocalVideo:(NSString*)path
+                   andSuccess:(FlappySuccess)success
+                   andFailure:(FlappyFailure)failure{
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    //创建发送地址
+    ChatVideo* voice=[[ChatVideo alloc]init];
+    voice.sendPath=path;
+    
+    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionType=self.session.sessionType;
+    chatmsg.messageSend=[self getMine].userId;
+    chatmsg.messageSendExtendid=[self getMine].userExtendId;
+    chatmsg.messageRecieve=[self getPeerID];
+    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
+    chatmsg.messageType=MSG_TYPE_VIDEO;
+    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[voice mj_keyValues]];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageSended=SEND_STATE_CREATE;
+    
+    [[FlappySender shareInstance] uploadVideoAndSend:chatmsg
+                                          andSuccess:success
+                                          andFailure:failure];
+    return chatmsg;
+}
+
 
 //发送视频
 -(ChatMessage*)sendVideo:(ChatVideo*)video
@@ -273,7 +300,7 @@
     chatmsg.messageSendExtendid=[self getMine].userExtendId;
     chatmsg.messageRecieve=[self getPeerID];
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
-    chatmsg.messageType=MSG_TYPE_LOCATE;
+    chatmsg.messageType=MSG_TYPE_VIDEO;
     chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[video mj_keyValues]];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
