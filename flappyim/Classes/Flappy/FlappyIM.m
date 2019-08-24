@@ -19,6 +19,7 @@
 #import "FlappySender.h"
 #import "FlappyApiConfig.h"
 #import "FlappyStringTool.h"
+#import "FlappyDef.h"
 
 
 @interface FlappyIM ()
@@ -346,7 +347,7 @@
     NSString* message=UNGetObject(@"flappy_message");
     if(message!=nil){
         //转换为消息体
-        _notifyClicked([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
+        _notifyClicked([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:message]]);
         //移除
         UNRemoveObject(@"flappy_message");
     }
