@@ -57,7 +57,10 @@
     
     
     //上传文件的地址
-    self.URL_uploadUrl= [NSString stringWithFormat:@"%@/upload/fileUpload",self.BaseUploadUrl];
+    self.URL_fileUpload= [NSString stringWithFormat:@"%@/upload/fileUpload",self.BaseUploadUrl];
+    
+    //上传文件的地址
+    self.URL_videoUpload= [NSString stringWithFormat:@"%@/upload/videoUpload",self.BaseUploadUrl];
     
     //修改推送ID
     self.URL_changePush= [NSString stringWithFormat:@"%@/upload/changePush",self.BaseUploadUrl];

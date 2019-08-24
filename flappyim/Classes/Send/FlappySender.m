@@ -183,7 +183,7 @@
     uploadReq.name=@"file";
     uploadReq.type=@"video";
     
-    [req uploadImageAndMovieBaseModel:[FlappyApiConfig shareInstance].URL_uploadUrl
+    [req uploadImageAndMovieBaseModel:[FlappyApiConfig shareInstance].URL_fileUpload
                              andModel:uploadReq];
     //添加进入请求列表，方式请求被回收
     [self.reqArray addObject:req];
@@ -288,7 +288,7 @@
     uploadReq.path=chatImg.sendPath;
     uploadReq.name=@"file";
     uploadReq.type=@"image";
-    [req uploadImageAndMovieBaseModel:[FlappyApiConfig shareInstance].URL_uploadUrl
+    [req uploadImageAndMovieBaseModel:[FlappyApiConfig shareInstance].URL_fileUpload
                              andModel:uploadReq];
     
     

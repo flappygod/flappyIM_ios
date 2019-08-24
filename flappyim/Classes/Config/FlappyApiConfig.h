@@ -20,7 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString* BaseUploadUrl;
 
 //上传文件的地址
-@property(nonatomic,copy) NSString* URL_uploadUrl;
+@property(nonatomic,copy) NSString* URL_fileUpload;
+@property(nonatomic,copy) NSString* URL_videoUpload;
 
 
 @property(nonatomic,copy) NSString* URL_changePush;
