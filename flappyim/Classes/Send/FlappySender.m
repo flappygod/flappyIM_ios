@@ -574,7 +574,22 @@
 
 //生成一个临时的图片地址用于保存封面图片
 -(NSString*)generateSaveImagePath{
-    return nil;
+    /*
+     项目中的应用场景是，本地视频在显示的时候需要显示缩略图，通过AVURLAsset等部分代码获取之后，将图片保存到本地做一下缓存，下次搜索是否有图片，有就直接加载
+     */
+    //获取路径也是一样的
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    /*
+     拼接最后完整的路径，这块做的时候遇到个坑，记录如下
+     拿到上述路径之后，下面部分代码在于将最后文件的路径补全，首先要加上‘/'这个分隔符,然后后面的是文件的名字,最后的效果如下,
+     /var/mobile/Containers/Data/Application/400BC47D-FBC5-412F-8F55-163E5FBB8264/Documents/thumImage2017_0818_101305_0028_F.jpg
+     -----之前这个没有加'/’这个分隔符，导致怎么保存之后都拿不到图片
+     */
+    NSString* str=[NSString stringWithFormat:@"%ld",(long)[NSDate date].timeIntervalSince1970*1000];
+    //拼接地址
+    NSString *imagePath = [path stringByAppendingString:[NSString stringWithFormat:@"/%@.jpg",str]];
+    //返回地址
+    return imagePath;
 }
 
 - (FlappyVideoInfo*)videoInfoForUrl:(NSURL *)url size:(CGSize)size
