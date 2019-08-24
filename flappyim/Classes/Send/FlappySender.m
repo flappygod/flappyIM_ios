@@ -455,11 +455,11 @@
         return;
     }
     
-    //连接到服务器开始请求登录
+    //发送消息轻轻
     FlappyRequest* request=[[FlappyRequest alloc]init];
-    //登录请求
+    //消息请求
     request.type=REQ_MSG;
-    //登录信息
+    //消息内容
     request.msg=[FlappyBaseSession changeToMessage:chatMsg];
     
     //请求数据，已经GPBComputeRawVarint32SizeForInteger
