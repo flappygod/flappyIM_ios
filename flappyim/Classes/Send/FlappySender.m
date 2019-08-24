@@ -110,8 +110,8 @@
         NSString* resultCode=dic[@"resultCode"];
         //成功
         if(resultCode.integerValue==RESULT_SUCCESS){
-            //地址赋值
-            chatVoice.path=dic[@"resultData"];
+            //地址
+            chatVoice.path=dic[@"resultData"][@"filePath"];
             //设置
             chatMsg.messageContent=[FlappyJsonTool DicToJSONString:[chatVoice mj_keyValues]];
             //上传完成发送消息
@@ -230,7 +230,7 @@
         //成功
         if(resultCode.integerValue==RESULT_SUCCESS){
             //地址
-            NSString* imgPath=dic[@"resultData"];
+            NSString* imgPath=dic[@"resultData"][@"filePath"];
             //地址赋值
             chatImg.path=imgPath;
             //设置
