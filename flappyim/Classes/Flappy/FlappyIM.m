@@ -252,6 +252,13 @@
         NSString* msg=userInfo[@"message"];
         //转换为消息体
         self.notifyClicked([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
+        //移除
+        UNRemoveObject(@"flappy_message");
+    }else{
+        //获取消息
+        NSString* msg=userInfo[@"message"];
+        //保存本地
+        UNSaveObject(msg,@"flappy_message");
     }
 }
 
@@ -335,6 +342,14 @@
 -(void)setNotifyClickListener:(__nullable NotifyClickListener)clicked{
     //保留
     _notifyClicked=clicked;
+    //消息
+    NSString* message=UNGetObject(@"flappy_message");
+    if(message!=nil){
+        //转换为消息体
+        _notifyClicked([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
+        //移除
+        UNRemoveObject(@"flappy_message");
+    }
 }
 
 
