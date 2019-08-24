@@ -464,16 +464,12 @@
     
     //请求数据，已经GPBComputeRawVarint32SizeForInteger
     NSData* reqData=[request delimitedData];
-    //当前的时间戳
-    NSInteger  dateTime=(NSInteger)([[NSDate date] timeIntervalSince1970]*1000);
-    //设置
-    NSString* dateTimeStr=[NSString stringWithFormat:@"%ld",(long)dateTime];
-    //发送成功
-    [self.successCallbacks setObject:success forKey:dateTimeStr];
-    //发送失败
-    [self.failureCallbacks setObject:failure forKey:dateTimeStr];
-    //保存消息
-    [self.successMsgs setObject:chatMsg forKey:dateTimeStr];
+    //消息ID保存
+    [self.successCallbacks setObject:success forKey:chatMsg.messageId];
+    //消息ID保存
+    [self.failureCallbacks setObject:failure forKey:chatMsg.messageId];
+    //消息ID保存
+    [self.successMsgs setObject:chatMsg forKey:chatMsg.messageId];
     
     //写入请求数据
     [socket writeData:reqData withTimeout:-1 tag:dateTime];
