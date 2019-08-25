@@ -455,6 +455,13 @@
         return;
     }
     
+    //之前的回调错误信息
+    ChatMessage* former=[self.successMsgs objectForKey:chatMsg.messageId];
+    if(former!=nil){
+        [self failureCallback:chatMsg.messageId];
+    }
+    
+    
     //发送消息轻轻
     FlappyRequest* request=[[FlappyRequest alloc]init];
     //消息请求
