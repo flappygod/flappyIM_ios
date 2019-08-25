@@ -164,7 +164,7 @@
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
-   
+    
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
@@ -324,8 +324,8 @@
             Message* message=[array objectAtIndex:s];
             //转换一下
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
-            //接收成功
-            chatMsg.messageSended=SEND_STATE_SENDED;
+            //修改消息状态
+            [self messageArrivedState:chatMsg];
             //获取之前的消息ID
             ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId];
             //之前不存在
@@ -344,7 +344,7 @@
             ChatUser* user=[FlappyData getUser];
             user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
             [FlappyData saveUser:user];
-            [self sendMessageArrive:last];
+            [self messageArrived:last];
         }
         
     }
@@ -356,8 +356,8 @@
             Message* message=[array objectAtIndex:s];
             //转换一下
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
-            //接收成功
-            chatMsg.messageSended=SEND_STATE_SENDED;
+            //修改消息状态
+            [self messageArrivedState:chatMsg];
             //获取之前的消息ID
             ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId];
             //之前不存在
@@ -365,7 +365,7 @@
                 //添加数据
                 [[FlappyDataBase shareInstance] insert:chatMsg];
                 [self notifyNewMessage:chatMsg];
-                [self sendMessageArrive:chatMsg];
+                [self messageArrived:chatMsg];
             }else{
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
@@ -389,9 +389,24 @@
     });
 }
 
+//消息收到状态
+-(void)messageArrivedState:(ChatMessage*)message{
+    ChatUser* user=[FlappyData getUser];
+    if(user!=nil){
+        //自己发送的消息，已经发送
+        if([user.userId isEqualToString:message.messageSend]){
+            message.messageSended=SEND_STATE_SENDED;
+        }
+        //用户发送的消息已经送达
+        else{
+            message.messageSended=SEND_STATE_REACHED;
+        }
+    }
+}
+
 
 //发送已经到达的消息
--(void)sendMessageArrive:(ChatMessage*)message{
+-(void)messageArrived:(ChatMessage*)message{
     //如果再后台
     if([FlappyIM shareInstance].isActive){
         NSLog(@"当前处于UNMutableNotificationContent,收到信息");
