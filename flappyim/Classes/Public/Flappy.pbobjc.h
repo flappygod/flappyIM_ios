@@ -65,7 +65,7 @@ typedef GPB_ENUM(FlappyRequest_FieldNumber) {
 /** 类型 */
 @property(nonatomic, readwrite) int32_t type;
 
-/** 时间 */
+/** 最近一条消息的offset */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *latest;
 
 /** 消息 */
@@ -191,7 +191,7 @@ typedef GPB_ENUM(Message_FieldNumber) {
 
 @property(nonatomic, readwrite) int32_t messageSessionOffset;
 
-@property(nonatomic, readwrite, copy, null_resettable) NSString *messageTableSeq;
+@property(nonatomic, readwrite) int32_t messageTableSeq;
 
 @property(nonatomic, readwrite) int32_t messageType;
 

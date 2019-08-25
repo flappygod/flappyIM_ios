@@ -362,13 +362,13 @@ typedef struct Message__storage_ {
   uint32_t _has_storage_[1];
   int32_t messageSessionType;
   int32_t messageSessionOffset;
+  int32_t messageTableSeq;
   int32_t messageType;
   int32_t messageSended;
   int32_t messageReaded;
   int32_t messageDeleted;
   NSString *messageId;
   NSString *messageSession;
-  NSString *messageTableSeq;
   NSString *messageSend;
   NSString *messageSendExtendid;
   NSString *messageRecieve;
@@ -427,7 +427,7 @@ typedef struct Message__storage_ {
         .hasIndex = 4,
         .offset = (uint32_t)offsetof(Message__storage_, messageTableSeq),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
+        .dataType = GPBDataTypeInt32,
       },
       {
         .name = "messageType",
