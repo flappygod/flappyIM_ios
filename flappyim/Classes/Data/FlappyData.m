@@ -16,6 +16,9 @@
 #define  KEY_PUSHTYPE  @"KEY_PUSHTYPE"
 
 @implementation FlappyData
+{
+    ChatUser* _user;
+}
     
 
 //使用单例模式
@@ -33,6 +36,7 @@
     
 //保存用户
 -(void)saveUser:(ChatUser*)user{
+    _user=user;
     //装环为字符串
     NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[user mj_keyValues]];
     UNSaveObject(str, KEY_USER);
@@ -40,10 +44,14 @@
     
 //获取用户
 -(ChatUser*)getUser{
+    if(_user!=nil){
+        return _user;
+    }
     NSString* str=UNGetObject(KEY_USER);
     if(str!=nil){
         NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:str];
         ChatUser* ret=[ChatUser mj_objectWithKeyValues:dic];
+        _user=ret;
         return ret;
     }
     return nil;
