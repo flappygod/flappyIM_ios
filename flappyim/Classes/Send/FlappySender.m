@@ -502,6 +502,7 @@
     if(former==nil){
         [[FlappyDataBase shareInstance] insert:msg];
     }else{
+        //否则更新
         [[FlappyDataBase shareInstance] updateMessage:msg];
     }
 }
