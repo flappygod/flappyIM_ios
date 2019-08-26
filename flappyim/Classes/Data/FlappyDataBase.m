@@ -115,7 +115,7 @@
         msg.messageReaded = [result intForColumn:@"messageReaded"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.messageDeleted = [result intForColumn:@"messageDeleted"];
-        msg.messageStamp = [result longForColumn:@"messageDeleted"];
+        msg.messageStamp = [result longForColumn:@"messageStamp"];
         msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
         [db close];
         //返回消息
@@ -167,7 +167,7 @@
         msg.messageReaded = [result intForColumn:@"messageReaded"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.messageDeleted = [result intForColumn:@"messageDeleted"];
-        msg.messageStamp = [result longForColumn:@"messageDeleted"];
+        msg.messageStamp = [result longForColumn:@"messageStamp"];
         msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
         [db close];
         //返回消息
@@ -208,7 +208,7 @@
         msg.messageReaded = [result intForColumn:@"messageReaded"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.messageDeleted = [result intForColumn:@"messageDeleted"];
-        msg.messageStamp = [result longForColumn:@"messageDeleted"];
+        msg.messageStamp = [result longForColumn:@"messageStamp"];
         msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
         [retArray addObject:msg];
     }
@@ -266,7 +266,7 @@
         msg.messageReaded = [result intForColumn:@"messageReaded"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.messageDeleted = [result intForColumn:@"messageDeleted"];
-        msg.messageStamp = [result longForColumn:@"messageDeleted"];
+        msg.messageStamp = [result longForColumn:@"messageStamp"];
         msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
         [listArray addObject:msg];
     }
