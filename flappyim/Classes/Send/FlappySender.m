@@ -507,13 +507,7 @@
     }
 }
 
-//发送成功
--(void)msgSuccess:(ChatMessage*)msg{
-    //发送成功了
-    msg.messageSended=SEND_STATE_SENDED;
-    //放入指定的位置
-    [[FlappyDataBase shareInstance] updateMessage:msg];
-}
+
 
 //发送失败
 -(void)msgFailure:(ChatMessage*)msg{
@@ -526,22 +520,21 @@
 //成功
 -(void)successCallback:(ChatMessage*)chatMsg{
     
-    if(messageid==nil){
+    if(chatMsg==nil){
         return;
     }
     
     //获取回调
-    FlappySendSuccess success=[self.successCallbacks objectForKey:messageid];
+    FlappySendSuccess success=[self.successCallbacks objectForKey:chatMsg.messageId];
     //消息
-    ChatMessage* msg=[self.successMsgs objectForKey:messageid];
+    ChatMessage* msg=[self.successMsgs objectForKey:chatMsg.messageId];
     //不为空
     if(success!=nil){
-        //移除
-        [self msgSuccess:msg];
+        //消息回调，成功的消息已经正常写入了
         success(chatMsg);
-        [self.successCallbacks removeObjectForKey:messageid];
-        [self.failureCallbacks removeObjectForKey:messageid];
-        [self.successMsgs removeObjectForKey:messageid];
+        [self.successCallbacks removeObjectForKey:chatMsg.messageId];
+        [self.failureCallbacks removeObjectForKey:chatMsg.messageId];
+        [self.successMsgs removeObjectForKey:chatMsg.messageId];
     }
 }
 
