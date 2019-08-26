@@ -148,7 +148,7 @@
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? order by messageTableSeq,messageStamp desc limit 1" withArgumentsInArray:@[sessionID]];
+    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? order by messageTableSeq desc,messageStamp desc limit 1" withArgumentsInArray:@[sessionID]];
     //返回消息
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
@@ -243,7 +243,7 @@
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq<? order by messageTableSeq,messageStamp  desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableSeq],[NSNumber numberWithInteger:size]]];
+    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq<? order by messageTableSeq desc,messageStamp  desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableSeq],[NSNumber numberWithInteger:size]]];
     
     //创建消息列表
     NSMutableArray* listArray=[[NSMutableArray alloc]init];
