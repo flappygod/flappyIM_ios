@@ -31,7 +31,7 @@
 
 //获取当前的用户
 -(ChatUser*)getMine{
-    return [FlappyData getUser];
+    return [[FlappyData shareInstance]getUser];
 }
 
 //获取对方的ID

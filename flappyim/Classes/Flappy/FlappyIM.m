@@ -92,7 +92,7 @@
     //消息类型
     if(msg.messageType==MSG_TYPE_TEXT){
         //邓肯
-        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[FlappyData getPushType]].integerValue;
+        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[[FlappyData shareInstance]getPushType]].integerValue;
         //普通
         if(pushTy==0){
             body=[msg getChatText];
@@ -100,7 +100,7 @@
     }
     else if(msg.messageType==MSG_TYPE_IMG){
         //邓肯
-        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[FlappyData getPushType]].integerValue;
+        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[[FlappyData shareInstance]getPushType]].integerValue;
         //普通
         if(pushTy==0){
             body=@"您有一条图片信息";
@@ -108,7 +108,7 @@
     }
     else if(msg.messageType==MSG_TYPE_TEXT){
         //邓肯
-        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[FlappyData getPushType]].integerValue;
+        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[[FlappyData shareInstance]getPushType]].integerValue;
         //普通
         if(pushTy==0){
             body=@"您有一条语音信息";
@@ -181,18 +181,18 @@
 
 //获取唯一的ID
 +(NSString*)getUUID{
-    NSString* former=[FlappyData getPush];
+    NSString* former=[[FlappyData shareInstance]getPush];
     if([FlappyStringTool isStringEmpty:former]){
         NSString* UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        [FlappyData savePush:UUID];
+        [[FlappyData shareInstance]savePush:UUID];
     }
-    return [FlappyData getPush];
+    return [[FlappyData shareInstance]getPush];
 }
 
 //设备的token
 -(void)setUUID:(NSString*)token{
     //设置
-    [FlappyData savePush:token];
+    [[FlappyData shareInstance]savePush:token];
     //获取唯一的推送ID
     self.pushID=token;
 }
@@ -274,13 +274,13 @@
     //设置token
     [self setUUID:deviceTokenStr];
     //如果当前是登录的状态
-    if([FlappyData getUser]!=nil&&[FlappyData getUser].login==true){
+    if([[FlappyData shareInstance]getUser]!=nil&&[[FlappyData shareInstance]getUser].login==true){
         
         //没有设置或者不相同
-        if([FlappyData getUser].pushID==nil||![[FlappyData getUser].pushID isEqualToString:deviceTokenStr]){
+        if([[FlappyData shareInstance]getUser].pushID==nil||![[[FlappyData shareInstance]getUser].pushID isEqualToString:deviceTokenStr]){
             //请求体，参数（NSDictionary 类型）
             NSDictionary *parameters = @{@"userID":@"",
-                                         @"userExtendID":[FlappyData getUser].userExtendId,
+                                         @"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                          @"device":DEVICE_TYPE,
                                          @"pushid":deviceTokenStr
                                          };
@@ -294,9 +294,9 @@
                            withParameters:parameters
                               withSuccess:^(id data) {
                                   //保存
-                                  ChatUser* user=[FlappyData getUser];
+                                  ChatUser* user=[[FlappyData shareInstance]getUser];
                                   user.pushID=deviceTokenStr;
-                                  [FlappyData saveUser:user];
+                                  [[FlappyData shareInstance]saveUser:user];
                                   
                               } withFailure:^(NSError * error, NSInteger code) {
                                   //修改失败
@@ -330,7 +330,7 @@
     //保留
     _knicked=knicked;
     //查看当前的登录状态
-    ChatUser* user=[FlappyData getUser];
+    ChatUser* user=[[FlappyData shareInstance]getUser];
     //用户存在，但是登录状态不对，代表已经被踢下线了
     if(user!=nil&&user.login==false){
         if(self.knicked!=nil){
@@ -556,7 +556,7 @@
 //进行初始化
 -(void)setupReconnect{
     //自动登录
-    ChatUser* user=[FlappyData getUser];
+    ChatUser* user=[[FlappyData shareInstance]getUser];
     
     //当前用户没有登录或者被踢下线的情况
     if(user==nil||user.login==false){
@@ -582,9 +582,9 @@
             //当前账户已经被踢下线了
             if(code==RESULT_KNICKED){
                 //清空user
-                ChatUser* uesr=[FlappyData getUser];
+                ChatUser* uesr=[[FlappyData shareInstance]getUser];
                 uesr.login=false;
-                [FlappyData saveUser:uesr];
+                [[FlappyData shareInstance]saveUser:uesr];
                 //当前账户被踢下线
                 if(self.knicked!=nil){
                     self.knicked();
@@ -671,7 +671,7 @@
                           
                           @try {
                               //推送类型
-                              [FlappyData savePushType:[NSString stringWithFormat:@"%ld",(long)data[@"route"][@"routePushType"]]];
+                              [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)data[@"route"][@"routePushType"]]];
                           } @catch (NSException *exception) {
                           } @finally {
                           }
@@ -709,7 +709,7 @@
    andFailure:(FlappyFailure)failure{
     
     //为空直接出错
-    if([FlappyData getUser]==nil){
+    if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
         failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
@@ -726,7 +726,7 @@
     
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userID":@"",
-                                 @"userExtendID":[FlappyData getUser].userExtendId,
+                                 @"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"device":DEVICE_TYPE,
                                  @"pushid":self.pushID
                                  };
@@ -737,7 +737,7 @@
                           //退出登录成功
                           success(data);
                           //清空当前相应的用户信息
-                          [FlappyData clearUser];
+                          [[FlappyData shareInstance]clearUser];
                       } withFailure:^(NSError * error, NSInteger code) {
                           //登录失败，清空回调
                           failure(error,code);
@@ -771,7 +771,7 @@
     NSString *urlString = [FlappyApiConfig shareInstance].URL_autoLogin;
     
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"userID":[FlappyData getUser].userId,
+    NSDictionary *parameters = @{@"userID":[[FlappyData shareInstance]getUser].userId,
                                  @"device":DEVICE_TYPE,
                                  @"pushid":self.pushID
                                  };
@@ -789,7 +789,7 @@
                           @try {
                               //推送类型
                               NSInteger type=data[@"route"][@"routePushType"];
-                              [FlappyData savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
+                              [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
                           } @catch (NSException *exception) {
                           } @finally {
                           }
@@ -799,7 +799,7 @@
                           //用户
                           ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
                           //更新信息
-                          ChatUser* newUser=[FlappyData getUser];
+                          ChatUser* newUser=[[FlappyData shareInstance]getUser];
                           
                           //最后的时间保存起来
                           newUser.userName=user.userName;
@@ -809,7 +809,7 @@
                           newUser.login =true;
                           
                           //保存
-                          [FlappyData saveUser:newUser];
+                          [[FlappyData shareInstance]saveUser:newUser];
                           
                           
                           //设置登录返回的数据
@@ -844,7 +844,7 @@
                 andFailure:(FlappyFailure)failure{
     
     //为空直接出错
-    if([FlappyData getUser]==nil){
+    if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
         failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
@@ -853,7 +853,7 @@
     //注册地址
     NSString *urlString = [FlappyApiConfig shareInstance].URL_createSingleSession;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"userOne":[FlappyData getUser].userExtendId,
+    NSDictionary *parameters = @{@"userOne":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"userTwo":userTwo,
                                  };
     //请求数据
@@ -878,7 +878,7 @@
              andFailure:(FlappyFailure)failure{
     
     //为空直接出错
-    if([FlappyData getUser]==nil){
+    if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
         failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
@@ -887,7 +887,7 @@
     //注册地址
     NSString *urlString = [FlappyApiConfig shareInstance].URL_getSingleSession;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"userOne":[FlappyData getUser].userExtendId,
+    NSDictionary *parameters = @{@"userOne":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"userTwo":userTwo,
                                  };
     //请求数据
@@ -915,7 +915,7 @@
                andFailure:(FlappyFailure)failure{
     
     //为空直接出错
-    if([FlappyData getUser]==nil){
+    if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
         failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
@@ -935,7 +935,7 @@
     NSString *urlString = [FlappyApiConfig shareInstance].URL_createGroupSession;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"users":jsonStr,
-                                 @"createUser":[FlappyData getUser].userId,
+                                 @"createUser":[[FlappyData shareInstance]getUser].userId,
                                  @"extendID":groupID,
                                  @"sessionName":groupName
                                  };
@@ -962,7 +962,7 @@
            andSuccess:(FlappySuccess)success
            andFailure:(FlappyFailure)failure{
     //为空直接出错
-    if([FlappyData getUser]==nil){
+    if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
         failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
@@ -995,7 +995,7 @@
             andFailure:(FlappyFailure)failure{
     
     //为空直接出错
-    if([FlappyData getUser]==nil){
+    if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
         failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
@@ -1004,7 +1004,7 @@
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_getUserSessions;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"userExtendID":[FlappyData getUser].userExtendId};
+    NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId};
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
@@ -1036,7 +1036,7 @@
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure{
     //为空直接出错
-    if([FlappyData getUser]==nil){
+    if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
         failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
@@ -1070,7 +1070,7 @@
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure{
     //为空直接出错
-    if([FlappyData getUser]==nil){
+    if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
         failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
@@ -1102,7 +1102,7 @@
 //判断当前用户是否登录
 -(Boolean)isLogin{
     //获取当前账户
-    ChatUser* user=[FlappyData getUser];
+    ChatUser* user=[[FlappyData shareInstance]getUser];
     //如果当前账户不是登录的状态
     if(user==nil||user.login==false){
         return false;

@@ -489,7 +489,7 @@
 //插入数据库
 -(void)msgInsert:(ChatMessage*)msg{
     //我们先姑且认为它是最后一条
-    ChatUser* user=[FlappyData getUser];
+    ChatUser* user=[[FlappyData shareInstance]getUser];
     //创建
     msg.messageSended=SEND_STATE_CREATE;
     //数据

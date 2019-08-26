@@ -114,8 +114,8 @@
     //登录信息
     request.login=info;
     //登录信息
-    if([FlappyData getUser]!=nil){
-        request.latest=[FlappyData getUser].latest;
+    if([[FlappyData shareInstance]getUser]!=nil){
+        request.latest=[[FlappyData shareInstance]getUser].latest;
     }
     
     //请求数据，已经GPBComputeRawVarint32SizeForInteger
@@ -300,7 +300,7 @@
             //用户已经登录过了
             self.user.login=true;
             //保存用户登录数据
-            [FlappyData saveUser:self.user];
+            [[FlappyData shareInstance] saveUser:self.user];
             //登录成功
             self.success(self.loginData);
             //清空回调和数据
@@ -341,9 +341,9 @@
         //最后一条的数据保存
         if(array.count>0){
             ChatMessage* last=[array objectAtIndex:array.count-1];
-            ChatUser* user=[FlappyData getUser];
+            ChatUser* user=[[FlappyData shareInstance]getUser];
             user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
-            [FlappyData saveUser:user];
+            [[FlappyData shareInstance]saveUser:user];
             [self messageArrived:last];
         }
         
@@ -371,9 +371,9 @@
             }
             [self sendMessageSuccess:chatMsg];
             //更新最近一条的时间
-            ChatUser* user=[FlappyData getUser];
+            ChatUser* user=[[FlappyData shareInstance]getUser];
             user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
-            [FlappyData saveUser:user];
+            [[FlappyData shareInstance]saveUser:user];
         }
     }
 }
@@ -391,7 +391,7 @@
 
 //消息收到状态
 -(void)messageArrivedState:(ChatMessage*)message{
-    ChatUser* user=[FlappyData getUser];
+    ChatUser* user=[[FlappyData shareInstance]getUser];
     if(user!=nil){
         //自己发送的消息，已经发送
         if([user.userId isEqualToString:message.messageSend]){
@@ -411,7 +411,7 @@
     if([FlappyIM shareInstance].isActive){
         NSLog(@"当前处于UNMutableNotificationContent,收到信息");
         //存活状态才返回信息
-        ChatUser* user=[FlappyData getUser];
+        ChatUser* user=[[FlappyData shareInstance]getUser];
         //如果不为空
         if(user!=nil&&![user.userId isEqualToString:message.messageSend]){
             //连接到服务器开始请求登录
