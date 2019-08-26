@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //通过sessionID，获取之前的
 -(NSMutableArray*)getSessionMessage:(NSString*)sessionID
-                         withOffset:(NSInteger)offset
+                      withMessageID:(NSString*)messageId
                            withSize:(NSInteger)size;
 
 @end

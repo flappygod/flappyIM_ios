@@ -107,11 +107,12 @@
 
 
 //获取某条信息之前的消息
--(NSMutableArray*)getMessagesByOffset:(NSInteger)offset
+-(NSMutableArray*)getMessagesByOffset:(NSString*)messageID
                              withSize:(NSInteger)size{
-    NSMutableArray* arr=[[FlappyDataBase shareInstance]getSessionMessage:self.session.sessionId
-                                                        withOffset:offset
-                                                          withSize:size];
+    NSMutableArray* arr=[[FlappyDataBase shareInstance]
+                         getSessionMessage:self.session.sessionId
+                         withMessageID:messageID
+                         withSize:size];
     return arr;
 }
 

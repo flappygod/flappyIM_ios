@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //获取某条信息之前的消息
--(NSMutableArray*)getMessagesByOffset:(NSInteger)offset
+-(NSMutableArray*)getMessagesByOffset:(NSString*)messageID
                              withSize:(NSInteger)size;
 
 

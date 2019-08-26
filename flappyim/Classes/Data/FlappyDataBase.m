@@ -219,7 +219,7 @@
 
 //通过sessionID，获取之前的
 -(NSMutableArray*)getSessionMessage:(NSString*)sessionID
-                         withOffset:(NSString*)messageId
+                         withMessageID:(NSString*)messageId
                            withSize:(NSInteger)size{
     
     NSMutableArray* retArray=[[NSMutableArray alloc] init];
@@ -229,7 +229,7 @@
     
     //当前的
     NSMutableArray* sequeceArray=[self getSessionSequeceMessage:sessionID
-                                                     withOffset:msg.messageTableSeq];
+                                                     withOffset:[NSString stringWithFormat:@"%ld",(long)msg.messageTableSeq]];
     
     for(int s=0;s<sequeceArray.count;s++){
         ChatMessage* mem=[sequeceArray objectAtIndex:s];
@@ -243,7 +243,7 @@
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq<? order by messageTableSeq,messageStamp  desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:offset],[NSNumber numberWithInteger:size]]];
+    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq<? order by messageTableSeq,messageStamp  desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableSeq],[NSNumber numberWithInteger:size]]];
     
     //创建消息列表
     NSMutableArray* listArray=[[NSMutableArray alloc]init];

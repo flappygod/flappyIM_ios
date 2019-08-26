@@ -99,6 +99,19 @@
                                            ChatMessage* ms=[safeSelf.session getLatestMessage];
                                            safeSelf.lable.text=[ms getChatText];
                                            
+                                           ChatMessage* msg=[safeSelf.session getLatestMessage];
+                                           
+                                           NSLog(@"%ld",(long)msg.messageTableSeq);
+                                           
+                                           NSMutableArray* formers=[safeSelf.session getMessagesByOffset:msg.messageId
+                                                                                                withSize:10];
+                                           
+                                           for(int s=0;s<formers.count;s++){
+                                               ChatMessage* message=[formers objectAtIndex:s];
+                                            
+                                               NSLog(@"%ld",(long)message.messageTableSeq);
+                                           }
+                                           
                                        } andFailure:^(NSError * _Nullable error, NSInteger code) {
                                            NSLog(@"会话创建失败");
                                        }];
