@@ -115,6 +115,7 @@
         msg.messageReaded = [result intForColumn:@"messageReaded"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+        msg.messageStamp = [result longForColumn:@"messageDeleted"];
         msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
         [db close];
         //返回消息
@@ -166,6 +167,7 @@
         msg.messageReaded = [result intForColumn:@"messageReaded"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+        msg.messageStamp = [result longForColumn:@"messageDeleted"];
         msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
         [db close];
         //返回消息
@@ -175,16 +177,15 @@
     return nil;
 }
 
-//通过sessionID，获取之前的
--(NSMutableArray*)getSessionMessage:(NSString*)sessionID
-                         withOffset:(NSInteger)offset
-                           withSize:(NSInteger)size{
+//获取消息
+-(NSMutableArray*)getSessionSequeceMessage:(NSString*)sessionID
+                                withOffset:(NSString*)tabSequece{
     //获取db
     FMDatabase* db=[self openDB];
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq<=? order by messageTableSeq,messageStamp  desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:offset],[NSNumber numberWithInteger:size]]];
+    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq=? order by messageStamp  desc" withArgumentsInArray:@[sessionID,tabSequece]];
     
     //创建消息列表
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
@@ -207,10 +208,81 @@
         msg.messageReaded = [result intForColumn:@"messageReaded"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+        msg.messageStamp = [result longForColumn:@"messageDeleted"];
         msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
         [retArray addObject:msg];
     }
     [db close];
+    return retArray;
+}
+
+
+//通过sessionID，获取之前的
+-(NSMutableArray*)getSessionMessage:(NSString*)sessionID
+                         withOffset:(NSString*)messageId
+                           withSize:(NSInteger)size{
+    
+    NSMutableArray* retArray=[[NSMutableArray alloc] init];
+    
+    //获取当前的消息ID
+    ChatMessage* msg=[self getMessageByID:messageId];
+    
+    //当前的
+    NSMutableArray* sequeceArray=[self getSessionSequeceMessage:sessionID
+                                                     withOffset:msg.messageTableSeq];
+    
+    for(int s=0;s<sequeceArray.count;s++){
+        ChatMessage* mem=[sequeceArray objectAtIndex:s];
+        if(mem.messageStamp<msg.messageStamp){
+            [retArray addObject:mem];
+        }
+    }
+    
+    //获取db
+    FMDatabase* db=[self openDB];
+    if(db==nil){
+        return nil;
+    }
+    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq<? order by messageTableSeq,messageStamp  desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:offset],[NSNumber numberWithInteger:size]]];
+    
+    //创建消息列表
+    NSMutableArray* listArray=[[NSMutableArray alloc]init];
+    //返回消息
+    while ([result next]) {
+        //获取之前的消息
+        ChatMessage *msg = [ChatMessage new];
+        msg.messageId = [result stringForColumn:@"messageId"];
+        msg.messageSession = [result stringForColumn:@"messageSession"];
+        msg.messageSessionType = [result intForColumn:@"messageSessionType"];
+        msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
+        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+        msg.messageType = [result intForColumn:@"messageType"];
+        msg.messageSend = [result stringForColumn:@"messageSend"];
+        msg.messageSendExtendid = [result stringForColumn:@"messageSendExtendid"];
+        msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
+        msg.messageRecieveExtendid = [result stringForColumn:@"messageRecieveExtendid"];
+        msg.messageContent = [result stringForColumn:@"messageContent"];
+        msg.messageSended = [result intForColumn:@"messageSended"];
+        msg.messageReaded = [result intForColumn:@"messageReaded"];
+        msg.messageDate = [result stringForColumn:@"messageDate"];
+        msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+        msg.messageStamp = [result longForColumn:@"messageDeleted"];
+        msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+        [listArray addObject:msg];
+    }
+    
+    [db close];
+    
+    [retArray addObjectsFromArray:listArray];
+    
+    if(retArray.count>size){
+        NSMutableArray* newArray=[[NSMutableArray alloc]init];
+        for(int s=0;s<size;s++){
+            [newArray addObject: [retArray objectAtIndex:s]];
+        }
+        retArray=newArray;
+    }
+    
     return retArray;
 }
 
