@@ -44,7 +44,7 @@
         andFailure:(FlappySendFailure)failure;
 
 //成功
--(void)successCallback:(NSString*)messageid;
+-(void)successCallback:(ChatMessage*)messageid;
 
 //失败
 -(void)failureCallback:(NSString*)messageid;

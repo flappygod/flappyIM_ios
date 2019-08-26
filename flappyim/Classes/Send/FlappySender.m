@@ -524,7 +524,7 @@
 }
 
 //成功
--(void)successCallback:(NSString*)messageid{
+-(void)successCallback:(ChatMessage*)chatMsg{
     
     if(messageid==nil){
         return;
@@ -538,7 +538,7 @@
     if(success!=nil){
         //移除
         [self msgSuccess:msg];
-        success(msg);
+        success(chatMsg);
         [self.successCallbacks removeObjectForKey:messageid];
         [self.failureCallbacks removeObjectForKey:messageid];
         [self.successMsgs removeObjectForKey:messageid];
