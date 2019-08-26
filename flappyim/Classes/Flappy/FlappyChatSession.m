@@ -107,7 +107,7 @@
 
 
 //获取某条信息之前的消息
--(NSMutableArray*)getMessagesByOffset:(NSString*)messageID
+-(NSMutableArray*)getFormerMessages:(NSString*)messageID
                              withSize:(NSInteger)size{
     NSMutableArray* arr=[[FlappyDataBase shareInstance]
                          getSessionMessage:self.session.sessionId

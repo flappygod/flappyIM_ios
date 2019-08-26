@@ -103,7 +103,7 @@
                                            
                                            NSLog(@"%ld",(long)msg.messageTableSeq);
                                            
-                                           NSMutableArray* formers=[safeSelf.session getMessagesByOffset:msg.messageId
+                                           NSMutableArray* formers=[safeSelf.session getFormerMessages:msg.messageId
                                                                                                 withSize:10];
                                            
                                            for(int s=0;s<formers.count;s++){
