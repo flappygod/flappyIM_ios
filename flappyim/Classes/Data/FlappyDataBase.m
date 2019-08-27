@@ -162,12 +162,12 @@
             }
         }
     }
-    //如果全部成功了
     if(needCommit){
+        //如果全部成功了
         [db commit];
     }
-    //失败了就回滚
     else{
+        //失败了就回滚
         [db rollback];
     }
     [db close];
@@ -400,7 +400,7 @@
         }
     }
     
-   
+    
     [db close];
     if (totalSuccess) {
         return true;
@@ -426,12 +426,13 @@
     //遍历
     for(int s=0;s<array.count;s++){
         ChatMessage* msg=[array objectAtIndex:s];
-       
+        
         //查询当前用户是否存在一条当前一样的会话
         FMResultSet *formers = [db executeQuery:@"select * from message where messageId = ?"
                            withArgumentsInArray:@[msg.messageId]];
         
         if([formers next]){
+            
             BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?"
                        withArgumentsInArray:@[
                                               [FlappyStringTool toUnNullStr:msg.messageSession],
