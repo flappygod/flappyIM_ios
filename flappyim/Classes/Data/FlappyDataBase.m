@@ -297,8 +297,6 @@
         //返回消息
         if ([result next]) {
             
-            [result close];
-            
             SessionData *msg = [SessionData new];
             msg.sessionId = [result stringForColumn:@"sessionId"];
             msg.sessionExtendId = [result stringForColumn:@"sessionExtendId"];
@@ -319,12 +317,13 @@
                 [usersArr addObject:session];
             }
             msg.users=usersArr;
+            
+            [result close];
             [db close];
             return msg;
         }
         
         [result close];
-        
         [db close];
         //没有拿到用户会话
         return nil;
