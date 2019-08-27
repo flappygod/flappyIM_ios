@@ -1056,8 +1056,8 @@
     SessionData* data=[[FlappyDataBase shareInstance] getUserSessionsByExtend:[FlappyData shareInstance].getUser.userExtendId
                                                            andExtendSessionID:extendID];
     //成功
-    if(ret!=nil){
-        success(ret);
+    if(data!=nil){
+        success(data);
     }else{
         //获取用户会话
         [self getUserSessionsHttp:success
