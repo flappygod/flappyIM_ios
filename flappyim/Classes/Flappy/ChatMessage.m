@@ -12,6 +12,17 @@
 @implementation ChatMessage
 
 
+//获取系统消息
+-(ChatSystem*)getChatSystem{
+    if(_messageContent!=nil&&self.messageType==MSG_TYPE_IMG){
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:_messageContent];
+        if(dic!=nil){
+            return [ChatSystem mj_objectWithKeyValues:dic];
+        }
+    }
+    return nil;
+}
+
 //设置聊天文本
 -(void)setChatText:(NSString*)chatText{
     //不为空

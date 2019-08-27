@@ -10,6 +10,7 @@
 #import "ChatVoice.h"
 #import "ChatVideo.h"
 #import "ChatLocation.h"
+#import "ChatSystem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,7 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-
+//系统消息
+#define MSG_TYPE_SYSTEM  0
 //文本消息
 #define MSG_TYPE_TEXT  1
 //图片消息
@@ -82,6 +84,8 @@ NS_ASSUME_NONNULL_BEGIN
 //设置聊天文本
 -(void)setChatText:(NSString*)chatText;
 
+//获取系统消息
+-(ChatSystem*)getChatSystem;
 
 //获取聊天文本
 -(NSString*)getChatText;
@@ -97,6 +101,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //获取位置
 -(ChatLocation*)getChatLocation;
+
 
 
 @end
