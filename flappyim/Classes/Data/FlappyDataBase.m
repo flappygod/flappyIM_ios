@@ -85,14 +85,14 @@
 
 //插入多条会话，如果存在就更新
 -(Boolean)insertSessions:(NSMutableArray*)array{
+    //没有的情况下就是成功
+    if(array==nil||array.count==0){
+        return true;
+    }
     //获取db
     FMDatabase* db=[self openDB];
     if(db==nil){
         return false;
-    }
-    //没有的情况下就是成功
-    if(array==nil||array.count==0){
-        return true;
     }
     [db beginTransaction];
     //是否成功
@@ -411,13 +411,13 @@
 
 //插入消息列表
 -(Boolean)insertMsgs:(NSMutableArray*)array{
+    if(array==nil||array.count==0){
+        return true;
+    }
     //获取db
     FMDatabase* db=[self openDB];
     if(db==nil){
         return false;
-    }
-    if(array==nil||array.count==0){
-        return true;
     }
     //开始事务
     [db beginTransaction];
