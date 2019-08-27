@@ -103,14 +103,17 @@
                                            
                                            NSLog(@"%ld",(long)msg.messageTableSeq);
                                            
-                                           NSMutableArray* formers=[safeSelf.session getFormerMessages:msg.messageId
-                                                                                                withSize:10];
-                                           
-                                           for(int s=0;s<formers.count;s++){
-                                               ChatMessage* message=[formers objectAtIndex:s];
-                                            
-                                               NSLog(@"%ld",(long)message.messageTableSeq);
+                                           if(msg!=nil){
+                                               NSMutableArray* formers=[safeSelf.session getFormerMessages:msg.messageId
+                                                                                                  withSize:10];
+                                               
+                                               for(int s=0;s<formers.count;s++){
+                                                   ChatMessage* message=[formers objectAtIndex:s];
+                                                   
+                                                   NSLog(@"%ld",(long)message.messageTableSeq);
+                                               }
                                            }
+                                          
                                            
                                        } andFailure:^(NSError * _Nullable error, NSInteger code) {
                                            NSLog(@"会话创建失败");
