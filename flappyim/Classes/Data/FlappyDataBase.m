@@ -296,6 +296,9 @@
                           withArgumentsInArray:@[userExtendID,sessionExtendId]];
         //返回消息
         if ([result next]) {
+            
+            [result close];
+            
             SessionData *msg = [SessionData new];
             msg.sessionId = [result stringForColumn:@"sessionId"];
             msg.sessionExtendId = [result stringForColumn:@"sessionExtendId"];
