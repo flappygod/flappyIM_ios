@@ -89,7 +89,7 @@
     if(array==nil||array.count==0){
         return true;
     }
-    db.beginTransaction;
+    [db beginTransaction];
     //是否成功
     Boolean needCommit=true;
     //遍历
@@ -327,7 +327,7 @@
         return true;
     }
     //开始事务
-    db.beginTransaction;
+    [db beginTransaction];
     //是否成功
     Boolean needCommit=true;
     //遍历
