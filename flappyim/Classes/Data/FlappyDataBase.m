@@ -108,6 +108,8 @@
                            withArgumentsInArray:@[[FlappyData shareInstance].getUser.userExtendId,data.sessionExtendId]];
         //如果存在
         if([formers next]){
+            
+            [formers close];
             //插入数据
             BOOL result = [db executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionInsertUser = ? and sessionExtendId=?"
                        withArgumentsInArray:@[
@@ -136,6 +138,9 @@
                 break;
             }
         }else{
+            
+            [formers close];
+            
             BOOL result = [db executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
                        withArgumentsInArray:@[
                                               
@@ -194,6 +199,10 @@
                        withArgumentsInArray:@[[FlappyData shareInstance].getUser.userExtendId,data.sessionExtendId]];
     //如果存在
     if([formers next]){
+        
+        
+        [formers close];
+        
         //插入数据
         BOOL result = [db executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionInsertUser = ? and sessionExtendId=?"
                    withArgumentsInArray:@[
@@ -221,6 +230,10 @@
             totalSuccess=false;
         }
     }else{
+        
+        
+        [formers close];
+        
         BOOL result = [db executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
                    withArgumentsInArray:@[
                                           
@@ -351,6 +364,9 @@
                        withArgumentsInArray:@[msg.messageId]];
     
     if([formers next]){
+        
+        [formers close];
+        
         BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?"
                    withArgumentsInArray:@[
                                           [FlappyStringTool toUnNullStr:msg.messageSession],
@@ -373,6 +389,9 @@
             totalSuccess=false;
         }
     }else{
+        
+        [formers close];
+        
         BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                    withArgumentsInArray:@[
                                           //插入部分
@@ -431,7 +450,10 @@
         FMResultSet *formers = [db executeQuery:@"select * from message where messageId = ?"
                            withArgumentsInArray:@[msg.messageId]];
         
+        
         if([formers next]){
+            //关闭
+            [formers close];
             
             BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?"
                        withArgumentsInArray:@[
@@ -455,6 +477,9 @@
                 totalSuccess=false;
             }
         }else{
+            //关闭
+            [formers close];
+            
             BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                        withArgumentsInArray:@[
                                               //插入部分
