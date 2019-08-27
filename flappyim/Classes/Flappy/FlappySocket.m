@@ -319,25 +319,31 @@
             }
             return NSOrderedAscending;
         }];
+        
+        NSMutableArray* inserts=[[NSMutableArray alloc]init];
+        
         //转换
         for(long s=0;s<array.count;s++){
             Message* message=[array objectAtIndex:s];
             //转换一下
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
+            //需要更新
+            [inserts addObject:chatMsg];
             //修改消息状态
             [self messageArrivedState:chatMsg];
             //获取之前的消息ID
             ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId];
             //之前不存在
             if(former==nil){
-                //添加数据
-                [[FlappyDataBase shareInstance] insertMsg:chatMsg];
                 [self notifyNewMessage:chatMsg];
-            }else{
-                [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
+            //消息发送成功
             [self sendMessageSuccess:chatMsg];
         }
+        
+        //批量插入列表
+        [[FlappyDataBase shareInstance] insertMsgs:inserts];
+        
         //最后一条的数据保存
         if(array.count>0){
             ChatMessage* last=[array objectAtIndex:array.count-1];
