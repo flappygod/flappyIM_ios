@@ -402,7 +402,7 @@
     
    
     [db close];
-    if (result) {
+    if (totalSuccess) {
         return true;
     } else {
         return false;
@@ -422,7 +422,7 @@
     //开始事务
     [db beginTransaction];
     //是否成功
-    Boolean needCommit=true;
+    Boolean totalSuccess=true;
     //遍历
     for(int s=0;s<array.count;s++){
         ChatMessage* msg=[array objectAtIndex:s];
@@ -483,7 +483,7 @@
         
     }
     //如果全部成功了
-    if(needCommit){
+    if(totalSuccess){
         [db commit];
     }
     //失败了就回滚
@@ -492,7 +492,7 @@
     }
     [db close];
     //是否成功
-    if (needCommit) {
+    if (totalSuccess) {
         return true;
     } else {
         return false;
