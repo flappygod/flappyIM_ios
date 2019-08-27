@@ -322,6 +322,9 @@
             [db close];
             return msg;
         }
+        
+        [result close];
+        
         [db close];
         //没有拿到用户会话
         return nil;
@@ -366,6 +369,9 @@
             //加入其中
             [retSessions addObject:msg];
         }
+        
+        [result close];
+        
         [db close];
         return retSessions;
     }
@@ -575,7 +581,7 @@
         }
         FMResultSet *result = [db executeQuery:@"select * from message where messageId = ?" withArgumentsInArray:@[messageID]];
         //返回消息
-        while ([result next]) {
+        if ([result next]) {
             ChatMessage *msg = [ChatMessage new];
             msg.messageId = [result stringForColumn:@"messageId"];
             msg.messageSession = [result stringForColumn:@"messageSession"];
@@ -594,10 +600,12 @@
             msg.messageDeleted = [result intForColumn:@"messageDeleted"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
             msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+            [result close];
             [db close];
             //返回消息
             return msg;
         }
+        [result close];
         [db close];
         return nil;
     }
@@ -648,7 +656,7 @@
         }
         FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? order by messageTableSeq desc,messageStamp desc limit 1" withArgumentsInArray:@[sessionID]];
         //返回消息
-        while ([result next]) {
+        if ([result next]) {
             ChatMessage *msg = [ChatMessage new];
             msg.messageId = [result stringForColumn:@"messageId"];
             msg.messageSession = [result stringForColumn:@"messageSession"];
@@ -667,10 +675,12 @@
             msg.messageDeleted = [result intForColumn:@"messageDeleted"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
             msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+            [result close];
             [db close];
             //返回消息
             return msg;
         }
+        [result close];
         [db close];
         return nil;
     }
@@ -711,6 +721,7 @@
         msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
         [retArray addObject:msg];
     }
+    [result close];
     [db close];
     return retArray;
 }
@@ -772,6 +783,7 @@
             [listArray addObject:msg];
         }
         
+        [result close];
         [db close];
         
         [retArray addObjectsFromArray:listArray];
