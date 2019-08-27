@@ -526,8 +526,6 @@
     
     //获取回调
     FlappySendSuccess success=[self.successCallbacks objectForKey:chatMsg.messageId];
-    //消息
-    ChatMessage* msg=[self.successMsgs objectForKey:chatMsg.messageId];
     //不为空
     if(success!=nil){
         //消息回调，成功的消息已经正常写入了
