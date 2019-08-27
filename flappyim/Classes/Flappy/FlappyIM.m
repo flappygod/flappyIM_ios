@@ -1024,6 +1024,10 @@
         return ;
     }
     
+    
+    NSMutableArray* sessions=[FlappyDataBase shareInstance]
+    
+    
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_getUserSessions;
     //请求体，参数（NSDictionary 类型）

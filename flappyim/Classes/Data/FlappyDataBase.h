@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 //插入多条会话
 -(Boolean)insertSessions:(NSMutableArray*)array;
 
+//获取当前用户的所有会话
+-(NSMutableArray*)getUserSessions:(NSString*)userExtendID;
+
 //插入单条消息
 -(Boolean)insertMsg:(ChatMessage*)msg;
 
@@ -37,8 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
 //更新数据
 -(Boolean)updateMessage:(ChatMessage*)msg;
 
+
 //通过会话ID获取最近的一次会话
--(ChatMessage*)getLatestMessageBySession:(NSString*)sessionID;
+-(ChatMessage*)getSessionLatestMessage:(NSString*)sessionID;
 
 
 //通过sessionID，获取之前的

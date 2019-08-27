@@ -100,7 +100,7 @@
 //获取最近的一条消息
 -(ChatMessage*)getLatestMessage{
     //获取消息
-    ChatMessage* message=[[FlappyDataBase shareInstance]getLatestMessageBySession:self.session.sessionId];
+    ChatMessage* message=[[FlappyDataBase shareInstance]getSessionLatestMessage:self.session.sessionId];
     //返回
     return message;
 }
