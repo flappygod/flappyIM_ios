@@ -81,10 +81,11 @@ NS_ASSUME_NONNULL_BEGIN
    andFailure:(FlappyFailure)failure;
 
 
-//创建单聊session
+//创建单聊会话
 -(void)createSingleSession:(NSString*)userTwo
                 andSuccess:(FlappySuccess)success
                 andFailure:(FlappyFailure)failure;
+
 
 //获取单聊会话
 -(void)getSingleSession:(NSString*)userTwo
@@ -108,11 +109,6 @@ NS_ASSUME_NONNULL_BEGIN
 //获取用户的所有会话列表
 -(void)getUserSessions:(FlappySuccess)success
             andFailure:(FlappyFailure)failure;
-
-
-//获取用户的所有会话列表
--(void)getUserSessionsForceUpdate:(FlappySuccess)success
-                       andFailure:(FlappyFailure)failure;
 
 
 //添加用户到群组

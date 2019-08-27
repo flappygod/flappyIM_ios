@@ -895,11 +895,10 @@
                       }];
 }
 
-//获取单聊的会话
--(void)getSingleSession:(NSString*)userTwo
-             andSuccess:(FlappySuccess)success
-             andFailure:(FlappyFailure)failure{
-    
+//网络获取单聊用户的会话，没有就会创建
+-(void)getSingleSessionHttp:(NSString*)userTwo
+                 andSuccess:(FlappySuccess)success
+                 andFailure:(FlappyFailure)failure{
     //为空直接出错
     if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
@@ -907,8 +906,9 @@
         return ;
     }
     
+    
     //注册地址
-    NSString *urlString = [FlappyApiConfig shareInstance].URL_getSingleSession;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_createSingleSession;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userOne":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"userTwo":userTwo,
@@ -929,6 +929,40 @@
                       }];
 }
 
+//获取单聊的会话
+-(void)getSingleSession:(NSString*)userTwo
+             andSuccess:(FlappySuccess)success
+             andFailure:(FlappyFailure)failure{
+    
+    //为空直接出错
+    if([[FlappyData shareInstance]getUser]==nil){
+        //返回没有登录
+        failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
+        return ;
+    }
+    //创建
+    NSMutableArray* array=[[NSMutableArray alloc]init];
+    [array addObject:userTwo];
+    [array addObject:[FlappyData shareInstance].getUser.userExtendId];
+    NSArray *newArray = [array sortedArrayUsingComparator:^(NSString * obj1, NSString * obj2){
+        return (NSComparisonResult)[obj1 compare:obj2 options:NSNumericSearch];
+    }];
+    //拼接
+    NSString* extendID=[NSString stringWithFormat:@"%@-%@",newArray[0],newArray[1]];
+    //获取当前用户下，当前的会话
+    SessionData* data=[[FlappyDataBase shareInstance] getUserSessionsByExtend:[FlappyData shareInstance].getUser.userExtendId
+                                                           andExtendSessionID:extendID];
+    if(data!=nil){
+        FlappyChatSession* session=[[FlappyChatSession alloc] init];
+        session.session=data;
+        success(session);
+    }else{
+        [self getSingleSessionHttp:userTwo
+                        andSuccess:success
+                        andFailure:failure];
+    }
+}
+
 
 //创建群组会话
 -(void)createGroupSession:(NSArray*)users
@@ -943,8 +977,6 @@
         failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
-    
-    
     //转换为data
     NSData *usersData=[NSJSONSerialization dataWithJSONObject:users
                                                       options:NSJSONWritingPrettyPrinted
@@ -952,10 +984,9 @@
     //转换为字符串
     NSString *jsonStr=[[NSString alloc]initWithData:usersData
                                            encoding:NSUTF8StringEncoding];
-    
-    
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_createGroupSession;
+    
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"users":jsonStr,
                                  @"createUser":[[FlappyData shareInstance]getUser].userId,
@@ -979,11 +1010,10 @@
     
 }
 
-
-//通过extendID获取
--(void)getSessionByID:(NSString*)extendID
-           andSuccess:(FlappySuccess)success
-           andFailure:(FlappyFailure)failure{
+//通过获取会话
+-(void)getSessionByIDHttp:(NSString*)extendID
+               andSuccess:(FlappySuccess)success
+               andFailure:(FlappyFailure)failure{
     //为空直接出错
     if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
@@ -1012,11 +1042,32 @@
                           failure(error,code);
                       }];
 }
+//通过extendID获取
+-(void)getSessionByID:(NSString*)extendID
+           andSuccess:(FlappySuccess)success
+           andFailure:(FlappyFailure)failure{
+    //为空直接出错
+    if([[FlappyData shareInstance]getUser]==nil){
+        //返回没有登录
+        failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
+        return ;
+    }
+    //获取当前用户下，当前的会话
+    SessionData* data=[[FlappyDataBase shareInstance] getUserSessionsByExtend:[FlappyData shareInstance].getUser.userExtendId
+                                                           andExtendSessionID:extendID];
+    //成功
+    if(ret!=nil){
+        success(ret);
+    }else{
+        //获取用户会话
+        [self getUserSessionsHttp:success
+                       andFailure:failure];
+    }
+}
 
 //获取用户的sessions
 -(void)getUserSessions:(FlappySuccess)success
             andFailure:(FlappyFailure)failure{
-    
     //为空直接出错
     if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
@@ -1038,14 +1089,16 @@
     if(ret!=nil){
         success(ret);
     }else{
-        failure([NSError errorWithDomain:@"数据库打开失败" code:0 userInfo:nil],RESULT_FAILURE);
+        //没有拿到就联网去拿
+        [self getUserSessionsHttp:success
+                       andFailure:failure];
     }
 }
 
 
 //获取用户的sessions
--(void)getUserSessionsForceUpdate:(FlappySuccess)success
-                       andFailure:(FlappyFailure)failure{
+-(void)getUserSessionsHttp:(FlappySuccess)success
+                andFailure:(FlappyFailure)failure{
     
     //为空直接出错
     if([[FlappyData shareInstance]getUser]==nil){

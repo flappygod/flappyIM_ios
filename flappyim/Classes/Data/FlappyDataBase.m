@@ -194,6 +194,47 @@
 }
 
 //获取用户的会话
+-(SessionData*)getUserSessionsByExtend:(NSString*)userExtendID
+                    andExtendSessionID:(NSString*)sessionExtendId{
+    //获取db
+    FMDatabase* db=[self openDB];
+    if(db==nil){
+        return nil;
+    }
+    FMResultSet *result = [db executeQuery:@"select * from 'session' where sessionInsertUser = ? and sessionExtendId=?"
+                      withArgumentsInArray:@[userExtendID,sessionExtendId]];
+    //创建
+    NSMutableArray* retSessions=[[NSMutableArray alloc] init];
+    //返回消息
+    if ([result next]) {
+        SessionData *msg = [SessionData new];
+        msg.sessionId = [result stringForColumn:@"sessionId"];
+        msg.sessionExtendId = [result stringForColumn:@"sessionExtendId"];
+        msg.sessionType = [result intForColumn:@"sessionType"];
+        msg.sessionName = [result stringForColumn:@"sessionName"];
+        msg.sessionImage = [result stringForColumn:@"sessionImage"];
+        msg.sessionOffset = [result stringForColumn:@"sessionOffset"];
+        msg.sessionStamp = [result intForColumn:@"sessionStamp"];
+        msg.sessionCreateDate = [result stringForColumn:@"sessionCreateDate"];
+        msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
+        msg.sessionDeleted = [result intForColumn:@"sessionDeleted"];
+        msg.sessionDeletedDate = [result stringForColumn:@"sessionDeletedDate"];
+        //转换
+        NSArray* array=[FlappyJsonTool JSONStringToDictionary:[result stringForColumn:@"users"]];
+        NSMutableArray* usersArr=[[NSMutableArray alloc]init];
+        for(int s=0;s<array.count;s++){
+            SessionData* session=[SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
+            [usersArr addObject:session];
+        }
+        msg.users=usersArr;
+        [db close];
+        return msg;
+    }
+    //没有拿到用户会话
+    return nil;
+}
+
+//获取用户的会话
 -(NSMutableArray*)getUserSessions:(NSString*)userExtendID{
     //获取db
     FMDatabase* db=[self openDB];
