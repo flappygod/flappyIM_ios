@@ -9,6 +9,7 @@
 #import "FMDatabase.h"
 #import "SessionData.h"
 #import "FlappyStringTool.h"
+#import "FlappyJsonTool.h"
 
 @implementation FlappyDataBase
 
@@ -74,6 +75,73 @@
     return db;
 }
 
+
+//插入多条会话
+-(Boolean)insertSessions:(NSMutableArray*)array{
+    //获取db
+    FMDatabase* db=[self openDB];
+    if(db==nil){
+        return false;
+    }
+    
+    
+    Boolean needCommit=true;
+    
+    for(int s=0;s<array.count;s++){
+        SessionData* data=[array objectAtIndex:s];
+        BOOL result = [db executeUpdate:@"insert into 'session'(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE session set sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionId=?"
+                   withArgumentsInArray:@[
+                                          
+                                          [FlappyStringTool toUnNullStr:data.sessionId],
+                                          [FlappyStringTool toUnNullStr:data.sessionExtendId],
+                                          [NSNumber numberWithInteger:data.sessionType],
+                                          [FlappyStringTool toUnNullStr:data.sessionName],
+                                          [FlappyStringTool toUnNullStr:data.sessionImage],
+                                          [FlappyStringTool toUnNullStr:data.sessionOffset],
+                                          [NSNumber numberWithInteger:data.sessionStamp],
+                                          [FlappyStringTool toUnNullStr:data.sessionCreateDate],
+                                          [FlappyStringTool toUnNullStr:data.sessionCreateUser],
+                                          [NSNumber numberWithInteger:data.sessionDeleted],
+                                          [FlappyStringTool toUnNullStr:data.sessionDeletedDate],
+                                          [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:data.users]],
+                                          
+                                          [NSNumber numberWithInteger:data.sessionType],
+                                          [FlappyStringTool toUnNullStr:data.sessionName],
+                                          [FlappyStringTool toUnNullStr:data.sessionImage],
+                                          [FlappyStringTool toUnNullStr:data.sessionOffset],
+                                          [NSNumber numberWithInteger:data.sessionStamp],
+                                          [FlappyStringTool toUnNullStr:data.sessionCreateDate],
+                                          [FlappyStringTool toUnNullStr:data.sessionCreateUser],
+                                          [NSNumber numberWithInteger:data.sessionDeleted],
+                                          [FlappyStringTool toUnNullStr:data.sessionDeletedDate],
+                                          [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:data.users]],
+                                          [FlappyStringTool toUnNullStr:data.sessionId]
+                                          
+                                          ]];
+        
+        //如果一条失败了，就回滚
+        if(result==false){
+            needCommit=false;
+            break;
+        }
+    }
+    //如果全部成功了
+    if(needCommit){
+        [db commit];
+    }
+    //失败了就回滚
+    else{
+        [db rollback];
+    }
+    [db close];
+    //是否成功
+    if (needCommit) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 //插入单条会话
 -(Boolean)insertSession:(SessionData*)data{
     //获取db
@@ -81,8 +149,9 @@
     if(db==nil){
         return false;
     }
-    BOOL result = [db executeUpdate:@"insert into 'session'(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users) values(?,?,?,?,?,?,?,?,?,?,?,?)"
+    BOOL result = [db executeUpdate:@"insert into 'session'(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE session set sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionId=?"
                withArgumentsInArray:@[
+                                      
                                       [FlappyStringTool toUnNullStr:data.sessionId],
                                       [FlappyStringTool toUnNullStr:data.sessionExtendId],
                                       [NSNumber numberWithInteger:data.sessionType],
@@ -94,7 +163,21 @@
                                       [FlappyStringTool toUnNullStr:data.sessionCreateUser],
                                       [NSNumber numberWithInteger:data.sessionDeleted],
                                       [FlappyStringTool toUnNullStr:data.sessionDeletedDate],
-                                      [FlappyStringTool toUnNullStr:data.users]]];
+                                      [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:data.users]],
+                                      
+                                      [NSNumber numberWithInteger:data.sessionType],
+                                      [FlappyStringTool toUnNullStr:data.sessionName],
+                                      [FlappyStringTool toUnNullStr:data.sessionImage],
+                                      [FlappyStringTool toUnNullStr:data.sessionOffset],
+                                      [NSNumber numberWithInteger:data.sessionStamp],
+                                      [FlappyStringTool toUnNullStr:data.sessionCreateDate],
+                                      [FlappyStringTool toUnNullStr:data.sessionCreateUser],
+                                      [NSNumber numberWithInteger:data.sessionDeleted],
+                                      [FlappyStringTool toUnNullStr:data.sessionDeletedDate],
+                                      [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:data.users]],
+                                      [FlappyStringTool toUnNullStr:data.sessionId]
+                                      
+                                      ]];
     [db close];
     if (result) {
         return true;

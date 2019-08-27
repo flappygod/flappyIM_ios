@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ChatMessage.h"
+#import "SessionData.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,6 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 //初始化数据库
 -(void)setup;
+
+//插入单条会话
+-(Boolean)insertSession:(SessionData*)data;
+
+//插入多条会话
+-(Boolean)insertSessions:(NSMutableArray*)array;
+
 
 //插入消息
 -(Boolean)insertMsg:(ChatMessage*)msg;
