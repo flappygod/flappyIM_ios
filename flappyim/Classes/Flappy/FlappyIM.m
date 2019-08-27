@@ -922,8 +922,7 @@
     //拼接
     NSString* extendID=[NSString stringWithFormat:@"%@-%@",newArray[0],newArray[1]];
     //获取当前用户下，当前的会话
-    SessionData* data=[[FlappyDataBase shareInstance] getUserSessionsByExtend:[FlappyData shareInstance].getUser.userExtendId
-                                                           andExtendSessionID:extendID];
+    SessionData* data=[[FlappyDataBase shareInstance] getUserSessionByExtendID:extendID];
     if(data!=nil){
         FlappyChatSession* session=[[FlappyChatSession alloc] init];
         session.session=data;
@@ -1025,8 +1024,7 @@
         return ;
     }
     //获取当前用户下，当前的会话
-    SessionData* data=[[FlappyDataBase shareInstance] getUserSessionsByExtend:[FlappyData shareInstance].getUser.userExtendId
-                                                           andExtendSessionID:extendID];
+    SessionData* data=[[FlappyDataBase shareInstance] getUserSessionByExtendID:extendID];
     //成功
     if(data!=nil){
         success(data);

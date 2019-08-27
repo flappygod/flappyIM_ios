@@ -29,8 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSMutableArray*)getUserSessions:(NSString*)userExtendID;
 
 //获取用户的指定会话
--(SessionData*)getUserSessionsByExtend:(NSString*)userExtendID
-                    andExtendSessionID:(NSString*)sessionExtendId;
+-(SessionData*)getUserSessionByExtendID:(NSString*)sessionExtendId;
 
 //插入单条消息
 -(Boolean)insertMsg:(ChatMessage*)msg;
@@ -50,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //通过sessionID，获取之前的
--(NSMutableArray*)getSessionMessage:(NSString*)sessionID
+-(NSMutableArray*)getSessionFormerMessage:(NSString*)sessionID
                       withMessageID:(NSString*)messageId
                            withSize:(NSInteger)size;
 

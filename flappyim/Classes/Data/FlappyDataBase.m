@@ -284,9 +284,11 @@
 }
 
 //获取用户的会话
--(SessionData*)getUserSessionsByExtend:(NSString*)userExtendID
-                    andExtendSessionID:(NSString*)sessionExtendId{
+-(SessionData*)getUserSessionByExtendID:(NSString*)sessionExtendId{
     @synchronized (self) {
+        
+        NSString* userExtendID=[FlappyData shareInstance].getUser.userExtendId;
+        
         //获取db
         FMDatabase* db=[self openDB];
         if(db==nil){
@@ -727,7 +729,7 @@
 
 
 //通过sessionID，获取之前的
--(NSMutableArray*)getSessionMessage:(NSString*)sessionID
+-(NSMutableArray*)getSessionFormerMessage:(NSString*)sessionID
                       withMessageID:(NSString*)messageId
                            withSize:(NSInteger)size{
     

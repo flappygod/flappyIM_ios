@@ -110,7 +110,7 @@
 -(NSMutableArray*)getFormerMessages:(NSString*)messageID
                              withSize:(NSInteger)size{
     NSMutableArray* arr=[[FlappyDataBase shareInstance]
-                         getSessionMessage:self.session.sessionId
+                         getSessionFormerMessage:self.session.sessionId
                          withMessageID:messageID
                          withSize:size];
     return arr;
