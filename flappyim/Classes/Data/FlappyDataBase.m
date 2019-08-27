@@ -109,7 +109,7 @@
         //如果存在
         if([formers next]){
             //插入数据
-            BOOL result = [db executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=?) where sessionInsertUser = ? and sessionExtendId=?"
+            BOOL result = [db executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionInsertUser = ? and sessionExtendId=?"
                        withArgumentsInArray:@[
                                               
                                               [FlappyStringTool toUnNullStr:data.sessionId],
@@ -195,7 +195,7 @@
     //如果存在
     if([formers next]){
         //插入数据
-        BOOL result = [db executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=?) where sessionInsertUser = ? and sessionExtendId=?"
+        BOOL result = [db executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionInsertUser = ? and sessionExtendId=?"
                    withArgumentsInArray:@[
                                           
                                           [FlappyStringTool toUnNullStr:data.sessionId],
@@ -217,7 +217,7 @@
                                           ]];
         
         //如果一条失败了，就回滚
-        if(result==false){
+        if(!result){
             totalSuccess=false;
         }
     }else{
@@ -241,7 +241,7 @@
                                           ]];
         
         //如果一条失败了，就回滚
-        if(result==false){
+        if(!result){
             totalSuccess=false;
         }
     }
@@ -342,28 +342,45 @@
     if(db==nil){
         return false;
     }
-    BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-               withArgumentsInArray:@[
-                                      //插入部分
-                                      [FlappyStringTool toUnNullStr:msg.messageId],
-                                      [FlappyStringTool toUnNullStr:msg.messageSession],
-                                      [NSNumber numberWithInteger:msg.messageSessionType],
-                                      [NSNumber numberWithInteger:msg.messageSessionOffset],
-                                      [NSNumber numberWithInteger:msg.messageTableSeq],
-                                      [NSNumber numberWithInteger:msg.messageType],
-                                      [FlappyStringTool toUnNullStr:msg.messageSend],
-                                      [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
-                                      [FlappyStringTool toUnNullStr:msg.messageRecieve],
-                                      [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
-                                      [FlappyStringTool toUnNullStr:msg.messageContent],
-                                      [NSNumber numberWithInteger:msg.messageSended],
-                                      [NSNumber numberWithInteger:msg.messageReaded],
-                                      [FlappyStringTool toUnNullStr:msg.messageDate],
-                                      [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
-                                      [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],
-                                      [NSNumber numberWithInteger:msg.messageDeleted]
-                                      
-                                      ]];
+    
+    //是否成功
+    Boolean totalSuccess=true;
+    
+    //查询当前用户是否存在一条当前一样的会话
+    FMResultSet *formers = [db executeQuery:@"select * from message where messageId = ?"
+                       withArgumentsInArray:@[msg.messageId]];
+    
+    if([formers next]){
+        
+    }else{
+        BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                   withArgumentsInArray:@[
+                                          //插入部分
+                                          [FlappyStringTool toUnNullStr:msg.messageId],
+                                          [FlappyStringTool toUnNullStr:msg.messageSession],
+                                          [NSNumber numberWithInteger:msg.messageSessionType],
+                                          [NSNumber numberWithInteger:msg.messageSessionOffset],
+                                          [NSNumber numberWithInteger:msg.messageTableSeq],
+                                          [NSNumber numberWithInteger:msg.messageType],
+                                          [FlappyStringTool toUnNullStr:msg.messageSend],
+                                          [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
+                                          [FlappyStringTool toUnNullStr:msg.messageRecieve],
+                                          [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
+                                          [FlappyStringTool toUnNullStr:msg.messageContent],
+                                          [NSNumber numberWithInteger:msg.messageSended],
+                                          [NSNumber numberWithInteger:msg.messageReaded],
+                                          [FlappyStringTool toUnNullStr:msg.messageDate],
+                                          [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
+                                          [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],
+                                          [NSNumber numberWithInteger:msg.messageDeleted]
+                                          
+                                          ]];
+        if(!result){
+            totalSuccess=false;
+        }
+    }
+    
+   
     [db close];
     if (result) {
         return true;
