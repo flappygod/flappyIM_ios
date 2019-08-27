@@ -25,9 +25,11 @@ NS_ASSUME_NONNULL_BEGIN
 //插入多条会话
 -(Boolean)insertSessions:(NSMutableArray*)array;
 
-
-//插入消息
+//插入单条消息
 -(Boolean)insertMsg:(ChatMessage*)msg;
+
+//插入消息列表
+-(Boolean)insertMsgs:(NSMutableArray*)array;
 
 //通过ID获取消息
 -(ChatMessage*)getMessageByID:(NSString*)messageID;
