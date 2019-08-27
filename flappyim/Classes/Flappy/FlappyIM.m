@@ -672,6 +672,19 @@
                           @try {
                               //推送类型
                               [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)data[@"route"][@"routePushType"]]];
+                              //修改
+                              NSArray* array=data[@"sessions"];
+                              //修改session
+                              NSMutableArray* sessions=[[NSMutableArray alloc]init];
+                              //遍历
+                              for(int s=0;s<array.count;s++){
+                                  //数据字典
+                                  NSDictionary* dic=[array objectAtIndex:s];
+                                  //数据
+                                  SessionData* data=[SessionData  mj_objectWithKeyValues:dic];
+                                  //添加
+                                  [sessions addObject:data];
+                              }
                           } @catch (NSException *exception) {
                           } @finally {
                           }

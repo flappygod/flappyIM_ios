@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString* sessionOffset;
 
+@property(nonatomic,assign) NSInteger sessionStamp;
+
 @property(nonatomic,copy) NSString* sessionCreateDate;
 
 @property(nonatomic,copy) NSString* sessionCreateUser;
