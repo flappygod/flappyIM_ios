@@ -102,7 +102,7 @@
         //session数据
         SessionData* data=[array objectAtIndex:s];
         //插入数据
-        BOOL result = [db executeUpdate:@"replace into session(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionId=? and sessionInsertUser=?"
+        BOOL result = [db executeUpdate:@"replace into session(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
                    withArgumentsInArray:@[
                                           
                                           [FlappyStringTool toUnNullStr:data.sessionId],
@@ -214,6 +214,7 @@
         [db close];
         return msg;
     }
+    [db close];
     //没有拿到用户会话
     return nil;
 }
