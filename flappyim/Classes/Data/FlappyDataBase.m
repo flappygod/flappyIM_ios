@@ -154,7 +154,7 @@
     if(db==nil){
         return false;
     }
-    BOOL result = [db executeUpdate:@"insert into 'session'(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE 'session' set sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionId=? and sessionInsertUser=?"
+    BOOL result = [db executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE session set sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionId=? and sessionInsertUser=?"
                withArgumentsInArray:@[
                                       
                                       [FlappyStringTool toUnNullStr:data.sessionId],
@@ -201,10 +201,8 @@
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'session' where sessionInsertUser = ? and sessionExtendId=?"
+    FMResultSet *result = [db executeQuery:@"select * from session where sessionInsertUser = ? and sessionExtendId=?"
                       withArgumentsInArray:@[userExtendID,sessionExtendId]];
-    //创建
-    NSMutableArray* retSessions=[[NSMutableArray alloc] init];
     //返回消息
     if ([result next]) {
         SessionData *msg = [SessionData new];
@@ -241,7 +239,7 @@
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'session' where sessionInsertUser = ?"
+    FMResultSet *result = [db executeQuery:@"select * from session where sessionInsertUser = ?"
                       withArgumentsInArray:@[userExtendID]];
     
 
@@ -283,7 +281,7 @@
     if(db==nil){
         return false;
     }
-    BOOL result = [db executeUpdate:@"insert into 'message'(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE 'message' set messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageStamp=?,messageDeleted=? where messageId=?"
+    BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE message set messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageStamp=?,messageDeleted=? where messageId=?"
                withArgumentsInArray:@[
                                       //插入部分
                                       [FlappyStringTool toUnNullStr:msg.messageId],
@@ -342,7 +340,7 @@
     //遍历
     for(int s=0;s<array.count;s++){
         ChatMessage* msg=[array objectAtIndex:s];
-        BOOL result = [db executeUpdate:@"insert into 'message'(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE 'message' set messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageStamp=?,messageDeleted=? where messageId=?"
+        BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE message set messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageStamp=?,messageDeleted=? where messageId=?"
                    withArgumentsInArray:@[
                                           //插入部分
                                           [FlappyStringTool toUnNullStr:msg.messageId],
@@ -414,7 +412,7 @@
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageId = ?" withArgumentsInArray:@[messageID]];
+    FMResultSet *result = [db executeQuery:@"select * from message where messageId = ?" withArgumentsInArray:@[messageID]];
     //返回消息
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
@@ -450,7 +448,7 @@
     if(db==nil){
         return false;
     }
-    BOOL result = [db executeUpdate:@"update 'message' set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?"
+    BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?"
                withArgumentsInArray:@[
                                       [FlappyStringTool toUnNullStr:msg.messageSession],
                                       [NSNumber numberWithInteger:msg.messageSessionType],
@@ -483,7 +481,7 @@
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? order by messageTableSeq desc,messageStamp desc limit 1" withArgumentsInArray:@[sessionID]];
+    FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? order by messageTableSeq desc,messageStamp desc limit 1" withArgumentsInArray:@[sessionID]];
     //返回消息
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
@@ -520,7 +518,7 @@
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq=? order by messageStamp  desc" withArgumentsInArray:@[sessionID,tabSequece]];
+    FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageTableSeq=? order by messageStamp  desc" withArgumentsInArray:@[sessionID,tabSequece]];
     
     //创建消息列表
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
@@ -578,7 +576,7 @@
     if(db==nil){
         return nil;
     }
-    FMResultSet *result = [db executeQuery:@"select * from 'message' where messageSession = ? and messageTableSeq<? order by messageTableSeq desc,messageStamp  desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableSeq],[NSNumber numberWithInteger:size]]];
+    FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageTableSeq<? order by messageTableSeq desc,messageStamp  desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableSeq],[NSNumber numberWithInteger:size]]];
     
     //创建消息列表
     NSMutableArray* listArray=[[NSMutableArray alloc]init];
