@@ -23,7 +23,7 @@
 /*************************
  jsonstring转换为数据字典
  *************************/
-+(NSDictionary*)JSONStringToDictionary:(NSString*)json;
++(id)JSONStringToDictionary:(NSString*)json;
 
 
 @end

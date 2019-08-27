@@ -543,12 +543,12 @@
     
     //移除监听
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                 name:UIApplicationWillResignActiveNotification
+                                                    name:UIApplicationWillResignActiveNotification
                                                   object:nil];
     
     //移除监听
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                 name:UIApplicationDidBecomeActiveNotification
+                                                    name:UIApplicationDidBecomeActiveNotification
                                                   object:nil];
     
 }
@@ -1023,11 +1023,36 @@
         failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
+    //创建返回
+    NSMutableArray* ret=[[NSMutableArray alloc]init];
+    //获取当前用户的所有
+    NSMutableArray* array=[[FlappyDataBase shareInstance] getUserSessions:[FlappyData shareInstance].getUser.userExtendId];
+    for(int s=0;s<array.count;s++){
+        //获取model
+        SessionData* model=[SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
+        FlappyChatSession* session=[[FlappyChatSession alloc] init];
+        session.session=model;
+        [ret addObject:session];
+    }
+    //成功
+    if(ret!=nil){
+        success(ret);
+    }else{
+        failure([NSError errorWithDomain:@"数据库打开失败" code:0 userInfo:nil],RESULT_FAILURE);
+    }
+}
+
+
+//获取用户的sessions
+-(void)getUserSessionsForceUpdate:(FlappySuccess)success
+                       andFailure:(FlappyFailure)failure{
     
-    
-    NSMutableArray* sessions=[FlappyDataBase shareInstance]
-    
-    
+    //为空直接出错
+    if([[FlappyData shareInstance]getUser]==nil){
+        //返回没有登录
+        failure([NSError errorWithDomain:@"账户未登录" code:0 userInfo:nil],RESULT_NOTLOGIN);
+        return ;
+    }
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_getUserSessions;
     //请求体，参数（NSDictionary 类型）

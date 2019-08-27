@@ -54,14 +54,14 @@
     return nil;
 }
 
-+(NSDictionary*)JSONStringToDictionary:(NSString*)json{
-    NSDictionary *respStr;
++(id)JSONStringToDictionary:(NSString*)json{
+    id response;
     @try {
         //如果可以转为JSon
         NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
         if (data!=nil) {
             NSError *error=nil;
-            respStr =[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            response =[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
             //返回一个空的
         }
     }
@@ -71,8 +71,7 @@
     @finally {
         
     }
-    
-    return respStr;
+    return response;
 }
 
 

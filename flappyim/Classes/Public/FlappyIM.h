@@ -110,6 +110,11 @@ NS_ASSUME_NONNULL_BEGIN
             andFailure:(FlappyFailure)failure;
 
 
+//获取用户的所有会话列表
+-(void)getUserSessionsForceUpdate:(FlappySuccess)success
+                       andFailure:(FlappyFailure)failure;
+
+
 //添加用户到群组
 -(void)addUserToSession:(NSString*)userID
             withGroupID:(NSString*)groupID
