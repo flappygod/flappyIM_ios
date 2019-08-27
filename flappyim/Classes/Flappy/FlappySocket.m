@@ -312,7 +312,7 @@
                 //保存
                 [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
                 //修改
-                NSArray* array=data[@"sessions"];
+                NSArray* array=self.loginData[@"sessions"];
                 //修改session
                 NSMutableArray* sessions=[[NSMutableArray alloc]init];
                 //遍历
