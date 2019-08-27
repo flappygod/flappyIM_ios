@@ -7,6 +7,7 @@
 
 #import "FlappyDataBase.h"
 #import "FMDatabase.h"
+#import "SessionData.h"
 #import "FlappyStringTool.h"
 
 @implementation FlappyDataBase
@@ -73,14 +74,60 @@
     return db;
 }
 
-//插入消息
--(Boolean)insert:(ChatMessage*)msg{
+//插入单条会话
+-(Boolean)insertSession:(SessionData*)data{
     //获取db
     FMDatabase* db=[self openDB];
     if(db==nil){
         return false;
     }
-    BOOL result = [db executeUpdate:@"insert into 'message'(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" withArgumentsInArray:@[msg.messageId,msg.messageSession,[NSNumber numberWithInteger:msg.messageSessionType],[NSNumber numberWithInteger:msg.messageSessionOffset],[NSNumber numberWithInteger:msg.messageTableSeq],[NSNumber numberWithInteger:msg.messageType],msg.messageSend,msg.messageSendExtendid,msg.messageRecieve,msg.messageRecieveExtendid,msg.messageContent,[NSNumber numberWithInteger:msg.messageSended],[NSNumber numberWithInteger:msg.messageReaded],[FlappyStringTool toUnNullStr:msg.messageDate],[FlappyStringTool toUnNullStr:msg.messageDeletedDate],[NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],[NSNumber numberWithInteger:msg.messageDeleted]]];
+    BOOL result = [db executeUpdate:@"insert into 'session'(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users) values(?,?,?,?,?,?,?,?,?,?,?,?)"
+               withArgumentsInArray:@[
+                                      [FlappyStringTool toUnNullStr:data.sessionId],
+                                      [FlappyStringTool toUnNullStr:data.sessionExtendId],
+                                      [NSNumber numberWithInteger:data.sessionType],
+                                      [FlappyStringTool toUnNullStr:data.sessionName],
+                                      [FlappyStringTool toUnNullStr:data.sessionImage],
+                                      [FlappyStringTool toUnNullStr:data.sessionOffset],
+                                      [NSNumber numberWithInteger:data.sessionStamp],
+                                      [FlappyStringTool toUnNullStr:data.sessionCreateDate],
+                                      [FlappyStringTool toUnNullStr:data.sessionCreateUser],
+                                      [NSNumber numberWithInteger:data.sessionDeleted],
+                                      [FlappyStringTool toUnNullStr:data.sessionDeletedDate],
+                                      [FlappyStringTool toUnNullStr:data.users]]];
+    [db close];
+    if (result) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//插入消息
+-(Boolean)insertMsg:(ChatMessage*)msg{
+    //获取db
+    FMDatabase* db=[self openDB];
+    if(db==nil){
+        return false;
+    }
+    BOOL result = [db executeUpdate:@"insert into 'message'(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+               withArgumentsInArray:@[[FlappyStringTool toUnNullStr:msg.messageId],
+                                      [FlappyStringTool toUnNullStr:msg.messageSession],
+                                      [NSNumber numberWithInteger:msg.messageSessionType],
+                                      [NSNumber numberWithInteger:msg.messageSessionOffset],
+                                      [NSNumber numberWithInteger:msg.messageTableSeq],
+                                      [NSNumber numberWithInteger:msg.messageType],
+                                      [FlappyStringTool toUnNullStr:msg.messageSend],
+                                      [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
+                                      [FlappyStringTool toUnNullStr:msg.messageRecieve],
+                                      [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
+                                      [FlappyStringTool toUnNullStr:msg.messageContent],
+                                      [NSNumber numberWithInteger:msg.messageSended],
+                                      [NSNumber numberWithInteger:msg.messageReaded],
+                                      [FlappyStringTool toUnNullStr:msg.messageDate],
+                                      [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
+                                      [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],
+                                      [NSNumber numberWithInteger:msg.messageDeleted]]];
     [db close];
     if (result) {
         return true;
@@ -132,7 +179,24 @@
     if(db==nil){
         return false;
     }
-    BOOL result = [db executeUpdate:@"update 'message' set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?" withArgumentsInArray:@[msg.messageSession,[NSNumber numberWithInteger:msg.messageSessionType],[NSNumber numberWithInteger:msg.messageSessionOffset],[NSNumber numberWithInteger:msg.messageTableSeq],[NSNumber numberWithInteger:msg.messageType],msg.messageSend,msg.messageSendExtendid,msg.messageRecieve,msg.messageRecieveExtendid,msg.messageContent,[NSNumber numberWithInteger:msg.messageSended],[NSNumber numberWithInteger:msg.messageReaded],[FlappyStringTool toUnNullStr:msg.messageDate],[FlappyStringTool toUnNullStr:msg.messageDeletedDate],[NSNumber numberWithInteger:msg.messageDeleted],msg.messageId]];
+    BOOL result = [db executeUpdate:@"update 'message' set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?"
+               withArgumentsInArray:@[
+                                      [FlappyStringTool toUnNullStr:msg.messageSession],
+                                      [NSNumber numberWithInteger:msg.messageSessionType],
+                                      [NSNumber numberWithInteger:msg.messageSessionOffset],
+                                      [NSNumber numberWithInteger:msg.messageTableSeq],
+                                      [NSNumber numberWithInteger:msg.messageType],
+                                      [FlappyStringTool toUnNullStr:msg.messageSend],
+                                      [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
+                                      [FlappyStringTool toUnNullStr:msg.messageRecieve],
+                                      [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
+                                      [FlappyStringTool toUnNullStr:msg.messageContent],
+                                      [NSNumber numberWithInteger:msg.messageSended],
+                                      [NSNumber numberWithInteger:msg.messageReaded],
+                                      [FlappyStringTool toUnNullStr:msg.messageDate],
+                                      [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
+                                      [NSNumber numberWithInteger:msg.messageDeleted],
+                                      msg.messageId]];
     [db close];
     if (result) {
         return true;
@@ -219,7 +283,7 @@
 
 //通过sessionID，获取之前的
 -(NSMutableArray*)getSessionMessage:(NSString*)sessionID
-                         withMessageID:(NSString*)messageId
+                      withMessageID:(NSString*)messageId
                            withSize:(NSInteger)size{
     
     NSMutableArray* retArray=[[NSMutableArray alloc] init];

@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setup;
 
 //插入消息
--(Boolean)insert:(ChatMessage*)msg;
+-(Boolean)insertMsg:(ChatMessage*)msg;
 
 //通过ID获取消息
 -(ChatMessage*)getMessageByID:(NSString*)messageID;

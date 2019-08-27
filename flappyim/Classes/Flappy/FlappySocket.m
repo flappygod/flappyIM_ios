@@ -331,7 +331,7 @@
             //之前不存在
             if(former==nil){
                 //添加数据
-                [[FlappyDataBase shareInstance] insert:chatMsg];
+                [[FlappyDataBase shareInstance] insertMsg:chatMsg];
                 [self notifyNewMessage:chatMsg];
             }else{
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
@@ -363,7 +363,7 @@
             //之前不存在
             if(former==nil){
                 //添加数据
-                [[FlappyDataBase shareInstance] insert:chatMsg];
+                [[FlappyDataBase shareInstance] insertMsg:chatMsg];
                 [self notifyNewMessage:chatMsg];
                 [self messageArrived:chatMsg];
             }else{

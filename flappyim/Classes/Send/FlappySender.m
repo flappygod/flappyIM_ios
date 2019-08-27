@@ -500,7 +500,7 @@
     ChatMessage* former=[[FlappyDataBase shareInstance] getMessageByID:msg.messageId];
     //没有就插入，有就更新
     if(former==nil){
-        [[FlappyDataBase shareInstance] insert:msg];
+        [[FlappyDataBase shareInstance] insertMsg:msg];
     }else{
         //否则更新
         [[FlappyDataBase shareInstance] updateMessage:msg];
