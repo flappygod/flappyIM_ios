@@ -1117,7 +1117,7 @@
     //下线
     [self.flappysocket  offline:false];
     //停止
-    [self  stopOberver];
+    [self stopOberver];
     //清空
     [self.callbacks removeAllObjects];
 }
