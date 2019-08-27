@@ -127,7 +127,7 @@
             //会话数据
             SessionData* data=[array objectAtIndex:s];
             //是否包含
-            NSNumber nuber=[contains objectAtIndex:s];
+            NSNumber* nuber=[contains objectAtIndex:s];
             //包含更新
             if(nuber.intValue==1){
                 //存在就更新数据
@@ -154,7 +154,7 @@
                 
                 //如果一条失败了，就回滚
                 if(result==false){
-                    needCommit=false;
+                    totalSuccess=false;
                     break;
                 }
             }else{
@@ -179,12 +179,12 @@
                 
                 //如果一条失败了，就回滚
                 if(result==false){
-                    needCommit=false;
+                    totalSuccess=false;
                     break;
                 }
             }
         }
-        if(needCommit){
+        if(totalSuccess){
             //如果全部成功了
             [db commit];
         }
@@ -194,7 +194,7 @@
         }
         [db close];
         //是否成功
-        if (needCommit) {
+        if (totalSuccess) {
             return true;
         } else {
             return false;
@@ -487,7 +487,7 @@
         for(int s=0;s<array.count;s++){
             ChatMessage* msg=[array objectAtIndex:s];
             //是否包含
-            NSNumber nuber=[contains objectAtIndex:s];
+            NSNumber* nuber=[contains objectAtIndex:s];
             //包含更新
             if(nuber.intValue==1){
                 
