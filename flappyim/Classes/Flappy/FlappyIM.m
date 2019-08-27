@@ -669,34 +669,6 @@
                    withParameters:parameters
                       withSuccess:^(id data) {
                           
-                          @try {
-                              //推送类型
-                              
-                              id dataType=data[@"route"][@"routePushType"];
-                              //推送类型
-                              NSInteger type=(long)dataType;
-                              //保存
-                              [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
-                              //修改
-                              NSArray* array=data[@"sessions"];
-                              //修改session
-                              NSMutableArray* sessions=[[NSMutableArray alloc]init];
-                              //遍历
-                              for(int s=0;s<array.count;s++){
-                                  //数据字典
-                                  NSDictionary* dic=[array objectAtIndex:s];
-                                  //数据
-                                  SessionData* data=[SessionData  mj_objectWithKeyValues:dic];
-                                  //添加
-                                  [sessions addObject:data];
-                              }
-                              //插入会话数据
-                              [[FlappyDataBase shareInstance] insertSessions:sessions];
-                              
-                          } @catch (NSException *exception) {
-                          } @finally {
-                          }
-                          
                           //得到当前的用户数据
                           NSDictionary* dic=data[@"user"];
                           //用户
