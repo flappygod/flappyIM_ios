@@ -351,7 +351,27 @@
                        withArgumentsInArray:@[msg.messageId]];
     
     if([formers next]){
-        
+        BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?"
+                   withArgumentsInArray:@[
+                                          [FlappyStringTool toUnNullStr:msg.messageSession],
+                                          [NSNumber numberWithInteger:msg.messageSessionType],
+                                          [NSNumber numberWithInteger:msg.messageSessionOffset],
+                                          [NSNumber numberWithInteger:msg.messageTableSeq],
+                                          [NSNumber numberWithInteger:msg.messageType],
+                                          [FlappyStringTool toUnNullStr:msg.messageSend],
+                                          [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
+                                          [FlappyStringTool toUnNullStr:msg.messageRecieve],
+                                          [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
+                                          [FlappyStringTool toUnNullStr:msg.messageContent],
+                                          [NSNumber numberWithInteger:msg.messageSended],
+                                          [NSNumber numberWithInteger:msg.messageReaded],
+                                          [FlappyStringTool toUnNullStr:msg.messageDate],
+                                          [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
+                                          [NSNumber numberWithInteger:msg.messageDeleted],
+                                          msg.messageId]];
+        if(!result){
+            totalSuccess=false;
+        }
     }else{
         BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                    withArgumentsInArray:@[
@@ -406,34 +426,61 @@
     //遍历
     for(int s=0;s<array.count;s++){
         ChatMessage* msg=[array objectAtIndex:s];
-        BOOL result = [db executeUpdate:@"replace into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                   withArgumentsInArray:@[
-                                          //插入部分
-                                          [FlappyStringTool toUnNullStr:msg.messageId],
-                                          [FlappyStringTool toUnNullStr:msg.messageSession],
-                                          [NSNumber numberWithInteger:msg.messageSessionType],
-                                          [NSNumber numberWithInteger:msg.messageSessionOffset],
-                                          [NSNumber numberWithInteger:msg.messageTableSeq],
-                                          [NSNumber numberWithInteger:msg.messageType],
-                                          [FlappyStringTool toUnNullStr:msg.messageSend],
-                                          [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
-                                          [FlappyStringTool toUnNullStr:msg.messageRecieve],
-                                          [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
-                                          [FlappyStringTool toUnNullStr:msg.messageContent],
-                                          [NSNumber numberWithInteger:msg.messageSended],
-                                          [NSNumber numberWithInteger:msg.messageReaded],
-                                          [FlappyStringTool toUnNullStr:msg.messageDate],
-                                          [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
-                                          [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],
-                                          [NSNumber numberWithInteger:msg.messageDeleted]
-                                          
-                                          ]];
+       
+        //查询当前用户是否存在一条当前一样的会话
+        FMResultSet *formers = [db executeQuery:@"select * from message where messageId = ?"
+                           withArgumentsInArray:@[msg.messageId]];
         
-        //如果一条失败了，就回滚
-        if(result==false){
-            needCommit=false;
-            break;
+        if([formers next]){
+            BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?"
+                       withArgumentsInArray:@[
+                                              [FlappyStringTool toUnNullStr:msg.messageSession],
+                                              [NSNumber numberWithInteger:msg.messageSessionType],
+                                              [NSNumber numberWithInteger:msg.messageSessionOffset],
+                                              [NSNumber numberWithInteger:msg.messageTableSeq],
+                                              [NSNumber numberWithInteger:msg.messageType],
+                                              [FlappyStringTool toUnNullStr:msg.messageSend],
+                                              [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
+                                              [FlappyStringTool toUnNullStr:msg.messageRecieve],
+                                              [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
+                                              [FlappyStringTool toUnNullStr:msg.messageContent],
+                                              [NSNumber numberWithInteger:msg.messageSended],
+                                              [NSNumber numberWithInteger:msg.messageReaded],
+                                              [FlappyStringTool toUnNullStr:msg.messageDate],
+                                              [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
+                                              [NSNumber numberWithInteger:msg.messageDeleted],
+                                              msg.messageId]];
+            if(!result){
+                totalSuccess=false;
+            }
+        }else{
+            BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                       withArgumentsInArray:@[
+                                              //插入部分
+                                              [FlappyStringTool toUnNullStr:msg.messageId],
+                                              [FlappyStringTool toUnNullStr:msg.messageSession],
+                                              [NSNumber numberWithInteger:msg.messageSessionType],
+                                              [NSNumber numberWithInteger:msg.messageSessionOffset],
+                                              [NSNumber numberWithInteger:msg.messageTableSeq],
+                                              [NSNumber numberWithInteger:msg.messageType],
+                                              [FlappyStringTool toUnNullStr:msg.messageSend],
+                                              [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
+                                              [FlappyStringTool toUnNullStr:msg.messageRecieve],
+                                              [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
+                                              [FlappyStringTool toUnNullStr:msg.messageContent],
+                                              [NSNumber numberWithInteger:msg.messageSended],
+                                              [NSNumber numberWithInteger:msg.messageReaded],
+                                              [FlappyStringTool toUnNullStr:msg.messageDate],
+                                              [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
+                                              [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],
+                                              [NSNumber numberWithInteger:msg.messageDeleted]
+                                              
+                                              ]];
+            if(!result){
+                totalSuccess=false;
+            }
         }
+        
     }
     //如果全部成功了
     if(needCommit){
