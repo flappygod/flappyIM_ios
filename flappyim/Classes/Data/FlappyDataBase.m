@@ -85,6 +85,10 @@
     if(db==nil){
         return false;
     }
+    //没有的情况下就是成功
+    if(array==nil||array.count==0){
+        return true;
+    }
     //是否成功
     Boolean needCommit=true;
     //遍历
