@@ -671,7 +671,12 @@
                           
                           @try {
                               //推送类型
-                              [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)data[@"route"][@"routePushType"]]];
+                              
+                              id dataType=data[@"route"][@"routePushType"];
+                              //推送类型
+                              NSInteger type=(long)dataType;
+                              //保存
+                              [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
                               //修改
                               NSArray* array=data[@"sessions"];
                               //修改session
@@ -685,6 +690,9 @@
                                   //添加
                                   [sessions addObject:data];
                               }
+                              //插入会话数据
+                              [[FlappyDataBase shareInstance] insertSessions:sessions];
+                              
                           } @catch (NSException *exception) {
                           } @finally {
                           }
@@ -800,8 +808,10 @@
                           
                           //保存推送类型
                           @try {
+                              id dataType=data[@"route"][@"routePushType"];
                               //推送类型
-                              NSInteger type=data[@"route"][@"routePushType"];
+                              NSInteger type=(long)dataType;
+                              //设置
                               [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
                           } @catch (NSException *exception) {
                           } @finally {
