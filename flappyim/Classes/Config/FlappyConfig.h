@@ -65,6 +65,12 @@
 #define RES_LOGIN  1
 //消息发送
 #define RES_MSG  2
+//心跳，没用
+#define RES_PING  3
+//回执，没用
+#define RES_RECEIPT  4
+//更新
+#define RES_UPDATE  5
 
 
 
