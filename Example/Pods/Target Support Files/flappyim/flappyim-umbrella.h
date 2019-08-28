@@ -14,6 +14,7 @@
 #import "ChatLocation.h"
 #import "ChatMessage.h"
 #import "ChatSession.h"
+#import "ChatSystem.h"
 #import "ChatUser.h"
 #import "ChatVideo.h"
 #import "ChatVoice.h"
