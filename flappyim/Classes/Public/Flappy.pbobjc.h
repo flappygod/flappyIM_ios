@@ -27,9 +27,12 @@
 
 CF_EXTERN_C_BEGIN
 
-@class LoginInfo;
 @class Message;
+@class ReqLogin;
+@class ReqReceipt;
+@class ReqUpdate;
 @class Route;
+@class Session;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -52,9 +55,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef GPB_ENUM(FlappyRequest_FieldNumber) {
   FlappyRequest_FieldNumber_Type = 1,
-  FlappyRequest_FieldNumber_Latest = 2,
-  FlappyRequest_FieldNumber_Msg = 3,
-  FlappyRequest_FieldNumber_Login = 4,
+  FlappyRequest_FieldNumber_Msg = 2,
+  FlappyRequest_FieldNumber_Login = 3,
+  FlappyRequest_FieldNumber_Update = 4,
+  FlappyRequest_FieldNumber_Receipt = 5,
 };
 
 /**
@@ -65,18 +69,25 @@ typedef GPB_ENUM(FlappyRequest_FieldNumber) {
 /** 类型 */
 @property(nonatomic, readwrite) int32_t type;
 
-/** 最近一条消息的offset */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *latest;
-
-/** 消息 */
+/** 聊天消息 */
 @property(nonatomic, readwrite, strong, null_resettable) Message *msg;
 /** Test to see if @c msg has been set. */
 @property(nonatomic, readwrite) BOOL hasMsg;
 
 /** 登录信息 */
-@property(nonatomic, readwrite, strong, null_resettable) LoginInfo *login;
+@property(nonatomic, readwrite, strong, null_resettable) ReqLogin *login;
 /** Test to see if @c login has been set. */
 @property(nonatomic, readwrite) BOOL hasLogin;
+
+/** 更新信息 */
+@property(nonatomic, readwrite, strong, null_resettable) ReqUpdate *update;
+/** Test to see if @c update has been set. */
+@property(nonatomic, readwrite) BOOL hasUpdate;
+
+/** 信息回执 */
+@property(nonatomic, readwrite, strong, null_resettable) ReqReceipt *receipt;
+/** Test to see if @c receipt has been set. */
+@property(nonatomic, readwrite) BOOL hasReceipt;
 
 @end
 
@@ -85,6 +96,7 @@ typedef GPB_ENUM(FlappyRequest_FieldNumber) {
 typedef GPB_ENUM(FlappyResponse_FieldNumber) {
   FlappyResponse_FieldNumber_Type = 1,
   FlappyResponse_FieldNumber_MsgArray = 2,
+  FlappyResponse_FieldNumber_SessionsArray = 3,
 };
 
 /**
@@ -100,20 +112,25 @@ typedef GPB_ENUM(FlappyResponse_FieldNumber) {
 /** The number of items in @c msgArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger msgArray_Count;
 
+/** 会话 */
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<Session*> *sessionsArray;
+/** The number of items in @c sessionsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger sessionsArray_Count;
+
 @end
 
-#pragma mark - KafkaMsg
+#pragma mark - FlappyKafka
 
-typedef GPB_ENUM(KafkaMsg_FieldNumber) {
-  KafkaMsg_FieldNumber_Type = 1,
-  KafkaMsg_FieldNumber_RouteArray = 2,
-  KafkaMsg_FieldNumber_Msg = 3,
+typedef GPB_ENUM(FlappyKafka_FieldNumber) {
+  FlappyKafka_FieldNumber_Type = 1,
+  FlappyKafka_FieldNumber_RouteArray = 2,
+  FlappyKafka_FieldNumber_Msg = 3,
 };
 
 /**
- * kafka消息
+ * 消息传递
  **/
-@interface KafkaMsg : GPBMessage
+@interface FlappyKafka : GPBMessage
 
 /** 类型 */
 @property(nonatomic, readwrite) int32_t type;
@@ -127,6 +144,122 @@ typedef GPB_ENUM(KafkaMsg_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) Message *msg;
 /** Test to see if @c msg has been set. */
 @property(nonatomic, readwrite) BOOL hasMsg;
+
+@end
+
+#pragma mark - ReqLogin
+
+typedef GPB_ENUM(ReqLogin_FieldNumber) {
+  ReqLogin_FieldNumber_UserId = 1,
+  ReqLogin_FieldNumber_Device = 2,
+  ReqLogin_FieldNumber_Pushid = 3,
+  ReqLogin_FieldNumber_Latest = 4,
+};
+
+/**
+ * 登录信息
+ **/
+@interface ReqLogin : GPBMessage
+
+/** 用户ID */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *userId;
+
+/** 设备信息 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *device;
+
+/** 推送ID */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *pushid;
+
+/** 最后的tableSequece */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *latest;
+
+@end
+
+#pragma mark - ReqUpdate
+
+typedef GPB_ENUM(ReqUpdate_FieldNumber) {
+  ReqUpdate_FieldNumber_UpdateType = 1,
+  ReqUpdate_FieldNumber_UpdateId = 2,
+};
+
+/**
+ * 会话请求的信息
+ **/
+@interface ReqUpdate : GPBMessage
+
+/** 更新的类型 */
+@property(nonatomic, readwrite) int32_t updateType;
+
+/** 更新的ID */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *updateId;
+
+@end
+
+#pragma mark - ReqReceipt
+
+typedef GPB_ENUM(ReqReceipt_FieldNumber) {
+  ReqReceipt_FieldNumber_ReceiptType = 1,
+  ReqReceipt_FieldNumber_ReceiptId = 2,
+};
+
+/**
+ * 回执消息
+ **/
+@interface ReqReceipt : GPBMessage
+
+/** 回执 */
+@property(nonatomic, readwrite) int32_t receiptType;
+
+/** 回执的ID */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *receiptId;
+
+@end
+
+#pragma mark - Session
+
+typedef GPB_ENUM(Session_FieldNumber) {
+  Session_FieldNumber_SessionId = 1,
+  Session_FieldNumber_SessionExtendId = 2,
+  Session_FieldNumber_SessionType = 3,
+  Session_FieldNumber_SessionName = 4,
+  Session_FieldNumber_SessionImage = 5,
+  Session_FieldNumber_SessionOffset = 6,
+  Session_FieldNumber_SessionStamp = 7,
+  Session_FieldNumber_SessionCreateDate = 8,
+  Session_FieldNumber_SessionCreateUser = 9,
+  Session_FieldNumber_SessionDeleted = 10,
+  Session_FieldNumber_SessionDeletedDate = 11,
+  Session_FieldNumber_Users = 12,
+};
+
+/**
+ * 会话返回的信息
+ **/
+@interface Session : GPBMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *sessionId;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *sessionExtendId;
+
+@property(nonatomic, readwrite) int32_t sessionType;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *sessionName;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *sessionImage;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *sessionOffset;
+
+@property(nonatomic, readwrite) int32_t sessionStamp;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *sessionCreateDate;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *sessionCreateUser;
+
+@property(nonatomic, readwrite) int32_t sessionDeleted;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *sessionDeletedDate;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *users;
 
 @end
 
@@ -145,14 +278,19 @@ typedef GPB_ENUM(Route_FieldNumber) {
  **/
 @interface Route : GPBMessage
 
+/** 用户ID */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *userId;
 
+/** 用户设备 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *device;
 
+/** 推送ID */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *pushid;
 
+/** 推送类型 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *pushType;
 
+/** 时间 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *time;
 
 @end
@@ -214,27 +352,6 @@ typedef GPB_ENUM(Message_FieldNumber) {
 @property(nonatomic, readwrite) int32_t messageDeleted;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *messageDeletedDate;
-
-@end
-
-#pragma mark - LoginInfo
-
-typedef GPB_ENUM(LoginInfo_FieldNumber) {
-  LoginInfo_FieldNumber_UserId = 1,
-  LoginInfo_FieldNumber_Device = 2,
-  LoginInfo_FieldNumber_Pushid = 3,
-};
-
-/**
- * 登录信息
- **/
-@interface LoginInfo : GPBMessage
-
-@property(nonatomic, readwrite, copy, null_resettable) NSString *userId;
-
-@property(nonatomic, readwrite, copy, null_resettable) NSString *device;
-
-@property(nonatomic, readwrite, copy, null_resettable) NSString *pushid;
 
 @end
 

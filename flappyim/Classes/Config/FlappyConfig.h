@@ -44,14 +44,25 @@
 //心跳消息
 #define REQ_PING  3
 //已经接收到的消息
-#define REQ_RECIEVE  4
+#define REQ_RECEIPT  4
+//更新消息
+#define REQ_UPDATE  5
+
+
+
+
+//消息接收回执
+#define RECEIPT_MSG_ARRIVE 1
+
+//更新信息
+#define UPDATE_SESSION_SGINGLE 1
+
 
 
 
 
 //登录返回消息
 #define RES_LOGIN  1
-
 //消息发送
 #define RES_MSG  2
 

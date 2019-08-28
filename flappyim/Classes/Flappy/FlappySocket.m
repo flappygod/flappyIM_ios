@@ -99,13 +99,17 @@
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
     
     //组装登录数据
-    LoginInfo* info=[[LoginInfo alloc]init];
+    ReqLogin* info=[[ReqLogin alloc]init];
     //类型
     info.device=DEVICE_TYPE;
     //用户ID
     info.userId=self.user.userId;
     //推送ID
     info.pushid=[FlappyIM shareInstance].pushID;
+    //登录信息
+    if([[FlappyData shareInstance]getUser]!=nil){
+        info.latest=[[FlappyData shareInstance]getUser].latest;
+    }
     
     //连接到服务器开始请求登录
     FlappyRequest* request=[[FlappyRequest alloc]init];
@@ -113,10 +117,6 @@
     request.type=REQ_LOGIN;
     //登录信息
     request.login=info;
-    //登录信息
-    if([[FlappyData shareInstance]getUser]!=nil){
-        request.latest=[[FlappyData shareInstance]getUser].latest;
-    }
     
     //请求数据，已经GPBComputeRawVarint32SizeForInteger
     NSData* reqData=[request delimitedData];
@@ -450,10 +450,14 @@
         if(user!=nil&&![user.userId isEqualToString:message.messageSend]){
             //连接到服务器开始请求登录
             FlappyRequest* request=[[FlappyRequest alloc]init];
-            //登录请求
-            request.type=REQ_RECIEVE;
-            //最后的时间
-            request.latest=[NSString stringWithFormat:@"%ld",(long)message.messageTableSeq];
+            
+            //创建回执请求
+            request.type=REQ_RECEIPT;
+            ReqReceipt* reciept=[[ReqReceipt alloc]init];
+            reciept.receiptType=RECEIPT_MSG_ARRIVE;
+            reciept.receiptId=[NSString stringWithFormat:@"%ld",(long)message.messageTableSeq];
+            //设置请求的回执数据
+            request.receipt=reciept;
             //请求数据，已经GPBComputeRawVarint32SizeForInteger
             NSData* reqData=[request delimitedData];
             //写入数据请求
