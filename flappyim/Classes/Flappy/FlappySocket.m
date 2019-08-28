@@ -513,7 +513,7 @@
 }
 
 //检查是否有会话需要更新
--(void)checkSessionNeedUpdate(){
+-(void)checkSessionNeedUpdate{
    NSMutableArray* array= [[FlappyDataBase shareInstance] getNotActionSystemMessage];
     
     NSMutableDictionary* dic=[[NSMutableDictionary alloc]init];
