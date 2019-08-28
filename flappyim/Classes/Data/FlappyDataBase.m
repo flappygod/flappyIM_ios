@@ -727,6 +727,46 @@
     return retArray;
 }
 
+//获取没有处理的系统消息
+-(NSMutableArray*)getNotActionSystemMessage{
+    @synchronized (self) {
+        //获取db
+        FMDatabase* db=[self openDB];
+        if(db==nil){
+            return nil;
+        }
+        FMResultSet *result = [db executeQuery:@"select * from message where messageReaded = 0 and messageType=0 order by messageTableSeq  desc" withArgumentsInArray:@[sessionID,tabSequece]];
+        
+        //创建消息列表
+        NSMutableArray* retArray=[[NSMutableArray alloc]init];
+        //返回消息
+        while ([result next]) {
+            //获取之前的消息
+            ChatMessage *msg = [ChatMessage new];
+            msg.messageId = [result stringForColumn:@"messageId"];
+            msg.messageSession = [result stringForColumn:@"messageSession"];
+            msg.messageSessionType = [result intForColumn:@"messageSessionType"];
+            msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
+            msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+            msg.messageType = [result intForColumn:@"messageType"];
+            msg.messageSend = [result stringForColumn:@"messageSend"];
+            msg.messageSendExtendid = [result stringForColumn:@"messageSendExtendid"];
+            msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
+            msg.messageRecieveExtendid = [result stringForColumn:@"messageRecieveExtendid"];
+            msg.messageContent = [result stringForColumn:@"messageContent"];
+            msg.messageSended = [result intForColumn:@"messageSended"];
+            msg.messageReaded = [result intForColumn:@"messageReaded"];
+            msg.messageDate = [result stringForColumn:@"messageDate"];
+            msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+            msg.messageStamp = [result longForColumn:@"messageStamp"];
+            msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+            [retArray addObject:msg];
+        }
+        [result close];
+        [db close];
+        return retArray;
+    }
+}
 
 //通过sessionID，获取之前的
 -(NSMutableArray*)getSessionFormerMessage:(NSString*)sessionID

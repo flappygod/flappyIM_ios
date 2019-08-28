@@ -487,6 +487,10 @@
     });
 }
 
+//检查是否有会话需要更新
+-(void)checkSessionNeedUpdate(){
+    [FlappyDataBase shareInstance] 
+}
 
 
 
