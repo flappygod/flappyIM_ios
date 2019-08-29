@@ -429,7 +429,7 @@
                     //消息
                     ChatMessage* msg=[messages objectAtIndex:w];
                     //判断会话时间戳
-                    if(data.sessionStamp>=[msg getChatSystem].sysActionData.integerValue){
+                    if(data.sessionStamp>=[msg getChatSystem].sysActionData.longLongValue){
                         //更新消息设置
                         msg.messageReaded=1;
                         [[FlappyDataBase shareInstance] insertMsg:msg];
