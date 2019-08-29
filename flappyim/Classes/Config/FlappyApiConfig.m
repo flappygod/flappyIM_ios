@@ -8,9 +8,9 @@
 #import "FlappyApiConfig.h"
 
 //线上服务器
-#define FLAPPY_BASE @"http://49.234.106.91"
+//#define FLAPPY_BASE @"http://49.234.106.91"
 //本地测试
-//#define FLAPPY_BASE @"http://192.168.124.105"
+#define FLAPPY_BASE @"http://192.168.124.127"
 
 @implementation FlappyApiConfig
 
