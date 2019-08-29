@@ -514,16 +514,21 @@
 
 //检查是否有会话需要更新
 -(void)checkSessionNeedUpdate{
-   NSMutableArray* array= [[FlappyDataBase shareInstance] getNotActionSystemMessage];
-    
+    //获取未处理的系统消息
+    NSMutableArray* array= [[FlappyDataBase shareInstance] getNotActionSystemMessage];
+    //创建
     NSMutableDictionary* dic=[[NSMutableDictionary alloc]init];
-    
+    //获取需要更新的会话
     for(int s=0;s<array.count;s++){
+        //进行合并
         ChatMessage* message=[array objectAtIndex:s];
+        //合并
         NSString* former=dic[message.messageSession];
+        //获取数据
         if(former==nil){
             dic[message.messageSession]=[message getChatSystem].sysActionData;
         }else{
+            //替换数据
             long stamp=former.integerValue;
             long newStamp=[message getChatSystem].sysActionData.integerValue;
             if (newStamp > stamp) {
@@ -534,13 +539,17 @@
     
     //开始写数据了
     for(NSString* str in dic.allKeys){
-        
+        //创建update
         ReqUpdate* reqUpdate=[[ReqUpdate alloc]init];
+        //ID
         reqUpdate.updateId=str;
+        //更新类型
         reqUpdate.updateType=UPDATE_SESSION_SGINGLE;
-        
+        //更新请求
         FlappyRequest* req=[[FlappyRequest alloc]init];
+        //更新内容
         req.update=reqUpdate;
+        //请求更新
         req.type=REQ_UPDATE;
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
         NSData* reqData=[req delimitedData];
