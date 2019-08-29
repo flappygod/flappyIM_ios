@@ -139,6 +139,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)addMsgListener:(MessageListener)listener
      withSessionID:(NSString*)sessionID;
 
+
 //移除某个session的监听
 -(void)removeMsgListener:(MessageListener)listener
         withSessionID:(NSString*)sessionID;
@@ -147,8 +148,18 @@ NS_ASSUME_NONNULL_BEGIN
 //设置被踢下线的监听
 -(void)setKnickedListener:(__nullable FlappyKnicked)knicked;
 
+
 //设置notification被点击的通知
 -(void)setNotifyClickListener:(__nullable NotifyClickListener)clicked;
+
+
+//新增会话监听
+-(void)addSessinListener:(SessionListener)listener;
+
+
+//移除会话监听
+-(void)removeSessinListener:(SessionListener)listener;
+
 
 
 @end

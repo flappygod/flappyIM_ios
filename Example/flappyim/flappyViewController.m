@@ -55,6 +55,7 @@
     }];
     
     
+    
     //踢下线
     [[FlappyIM shareInstance] setKnickedListener:^{
         NSLog(@"当前设备已经被踢下线了");
