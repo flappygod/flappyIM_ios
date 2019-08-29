@@ -55,8 +55,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 //通过sessionID，获取之前的
 -(NSMutableArray*)getSessionFormerMessage:(NSString*)sessionID
-                      withMessageID:(NSString*)messageId
-                           withSize:(NSInteger)size;
+                            withMessageID:(NSString*)messageId
+                                 withSize:(NSInteger)size;
 
 @end
 
