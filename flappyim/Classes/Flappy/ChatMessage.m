@@ -14,7 +14,7 @@
 
 //获取系统消息
 -(ChatSystem*)getChatSystem{
-    if(_messageContent!=nil&&self.messageType==MSG_TYPE_IMG){
+    if(_messageContent!=nil&&self.messageType==MSG_TYPE_SYSTEM){
         NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:_messageContent];
         if(dic!=nil){
             return [ChatSystem mj_objectWithKeyValues:dic];
