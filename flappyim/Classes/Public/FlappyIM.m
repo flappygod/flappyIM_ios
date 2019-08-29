@@ -57,7 +57,9 @@
         //设置一个唯一的UUID
         _sharedSingleton.pushID=[FlappyIM getUUID];
         //回调
-        _sharedSingleton.callbacks=[[NSMutableDictionary alloc] init];
+        _sharedSingleton.msgListeners=[[NSMutableDictionary alloc] init];
+        //会话的监听
+        _sharedSingleton.sessinListeners=[[NSMutableArray alloc]init];
         //还没有被初始化
         _sharedSingleton.isSetup=false;
         //不再使用本地推送了
@@ -71,7 +73,7 @@
     //后台了，但是还没有被墓碑的情况
     __weak typeof(self) safeSelf=self;
     //监听是否发送本地通知
-    [self addGloableListener:^(ChatMessage * _Nullable message) {
+    [self addGloableMsgListener:^(ChatMessage * _Nullable message) {
         //判断当前是在后台还是前台，如果是在后台，那么
         UIApplicationState state = [UIApplication sharedApplication].applicationState;
         //如果再后台
@@ -387,16 +389,16 @@
 
 
 //增加消息的监听
--(void)addGloableListener:(MessageListener)listener{
+-(void)addGloableMsgListener:(MessageListener)listener{
     //监听所有消息
     if(listener!=nil){
         //获取当前的监听列表
-        NSMutableArray* listeners=[self.callbacks objectForKey:@""];
+        NSMutableArray* listeners=[self.msgListeners objectForKey:@""];
         //创建新的监听
         if(listeners==nil){
             //设置监听
             listeners=[[NSMutableArray alloc]init];
-            [self.callbacks setObject:listeners forKey:@""];
+            [self.msgListeners setObject:listeners forKey:@""];
         }
         //添加监听
         if(listener!=nil){
@@ -406,16 +408,16 @@
 }
 
 //移除监听
--(void)removeGloableListener:(MessageListener)listener{
+-(void)removeGloableMsgListener:(MessageListener)listener{
     //监听所有消息
     if(listener!=nil){
         //获取当前的监听列表
-        NSMutableArray* listeners=[self.callbacks objectForKey:@""];
+        NSMutableArray* listeners=[self.msgListeners objectForKey:@""];
         //创建新的监听
         if(listeners==nil){
             //设置监听
             listeners=[[NSMutableArray alloc]init];
-            [self.callbacks setObject:listeners forKey:@""];
+            [self.msgListeners setObject:listeners forKey:@""];
         }
         //添加监听
         if(listener!=nil){
@@ -425,17 +427,17 @@
 }
 
 //增加某个session的监听
--(void)addListener:(MessageListener)listener
+-(void)addMsgListener:(MessageListener)listener
      withSessionID:(NSString*)sessionID{
     //监听所有消息
     if(listener!=nil){
         //获取当前的监听列表
-        NSMutableArray* listeners=[self.callbacks objectForKey:sessionID];
+        NSMutableArray* listeners=[self.msgListeners objectForKey:sessionID];
         //创建新的监听
         if(listeners==nil){
             //设置监听
             listeners=[[NSMutableArray alloc]init];
-            [self.callbacks setObject:listeners forKey:sessionID];
+            [self.msgListeners setObject:listeners forKey:sessionID];
         }
         //添加监听
         if(listener!=nil){
@@ -445,17 +447,17 @@
 }
 
 //移除会话的
--(void)removeListener:(MessageListener)listener
+-(void)removeMsgListener:(MessageListener)listener
         withSessionID:(NSString*)sessionID{
     //监听所有消息
     if(listener!=nil){
         //获取当前的监听列表
-        NSMutableArray* listeners=[self.callbacks objectForKey:sessionID];
+        NSMutableArray* listeners=[self.msgListeners objectForKey:sessionID];
         //创建新的监听
         if(listeners==nil){
             //设置监听
             listeners=[[NSMutableArray alloc]init];
-            [self.callbacks setObject:listeners forKey:sessionID];
+            [self.msgListeners setObject:listeners forKey:sessionID];
         }
         //添加监听
         if(listener!=nil){
@@ -463,6 +465,17 @@
         }
     }
 }
+
+//新增会话监听
+-(void)addSessinListener:(SessionListener)listener{
+    [self.sessinListeners addObject:listener];
+}
+
+//移除会话监听
+-(void)removeSessinListener:(SessionListener)listener{
+    [self.sessinListeners removeObject:listener];
+}
+
 
 #pragma database
 -(void)setupDataBase{
@@ -1194,7 +1207,7 @@
     //停止
     [self stopOberver];
     //清空
-    [self.callbacks removeAllObjects];
+    [self.msgListeners removeAllObjects];
 }
 
 

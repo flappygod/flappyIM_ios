@@ -424,6 +424,8 @@
                 SessionData* data=[SessionData mj_objectWithKeyValues:[memSession mj_keyValues]];
                 //插入消息
                 [[FlappyDataBase shareInstance] insertSession:data];
+                //会话更新了
+                [self notifySession:data];
                 //消息列表
                 NSMutableArray* messages=[[FlappyDataBase shareInstance] getNotActionSystemMessageWithSession:data.sessionId];
                 //遍历更新
@@ -436,7 +438,6 @@
                         msg.messageReaded=1;
                         //插入消息
                         [[FlappyDataBase shareInstance] insertMsg:msg];
-                        
                     }
                 }
                 //移除正在更新的
@@ -500,17 +501,34 @@
     }
 }
 
+//会话
+-(void)notifySession:(SessionData*)session{
+    //在主线程之中执行
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //新消息
+            NSArray* array=[FlappyIM shareInstance].sessinListeners;
+            //数量
+            for(int s=0;s<array.count;s++){
+                SessionListener listener=[array objectAtIndex:s];
+                FlappyChatSession* session=[[FlappyChatSession alloc]init];
+                listener(session);
+            }
+        });
+    });
+}
+
 //通知有新的消息
 -(void)notifyNewMessage:(ChatMessage*)message{
     //在主线程之中执行
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             //新消息
-            NSArray* array=[FlappyIM shareInstance].callbacks.allKeys;
+            NSArray* array=[FlappyIM shareInstance].msgListeners.allKeys;
             //数量
             for(int s=0;s<array.count;s++){
                 NSString* str=[array objectAtIndex:s];
-                NSMutableArray* listeners=[[FlappyIM shareInstance].callbacks objectForKey:str];
+                NSMutableArray* listeners=[[FlappyIM shareInstance].msgListeners objectForKey:str];
                 //回调监听的事件
                 for(int w=0;w<listeners.count;w++){
                     MessageListener listener=[listeners objectAtIndex:w];

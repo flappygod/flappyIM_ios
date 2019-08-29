@@ -21,6 +21,7 @@
 #import "Flappy.pbobjc.h"
 #import "FlappyApiRequest.h"
 #import "FlappyBaseSession.h"
+#import "FlappyBlocks.h"
 #import "FlappyChatSession.h"
 #import "FlappyIM.h"
 #import "FlappySocket.h"

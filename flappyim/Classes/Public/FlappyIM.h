@@ -38,8 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) bool  isActive;
 
 //回调
-@property (nonatomic,strong) NSMutableDictionary*  callbacks;
+@property (nonatomic,strong) NSMutableDictionary*  msgListeners;
 
+//会话间隔
+@property (nonatomic,strong) NSMutableArray*  sessinListeners;
 
 //单例模式
 + (instancetype)shareInstance;
@@ -127,18 +129,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //增加所有消息的监听
--(void)addGloableListener:(MessageListener)listener;
+-(void)addGloableMsgListener:(MessageListener)listener;
 
 //移除所有消息的监听
--(void)removeGloableListener:(MessageListener)listener;
+-(void)removeGloableMsgListener:(MessageListener)listener;
 
 
 //增加某个session的监听
--(void)addListener:(MessageListener)listener
+-(void)addMsgListener:(MessageListener)listener
      withSessionID:(NSString*)sessionID;
 
 //移除某个session的监听
--(void)removeListener:(MessageListener)listener
+-(void)removeMsgListener:(MessageListener)listener
         withSessionID:(NSString*)sessionID;
 
 

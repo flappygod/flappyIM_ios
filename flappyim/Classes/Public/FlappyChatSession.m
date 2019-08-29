@@ -68,7 +68,7 @@
 //设置消息的监听
 -(void)addMessageListener:(MessageListener)listener{
     //添加ID
-    [[FlappyIM shareInstance] addListener:listener
+    [[FlappyIM shareInstance] addMsgListener:listener
                             withSessionID: self.session.sessionId];
     [_listeners addObject:listener];
 }
@@ -76,7 +76,7 @@
 //清除某个监听
 -(void)removeMessageListener:(MessageListener)listener{
     //移除监听
-    [[FlappyIM shareInstance] removeListener:listener
+    [[FlappyIM shareInstance] removeMsgListener:listener
                                withSessionID:self.session.sessionId];
     [_listeners removeObject:listener];
 }
@@ -91,7 +91,7 @@
     //移除添加的监听
     if(_listeners!=nil&&_listeners.count>0){
         for(int s=0;s<_listeners.count;s++){
-            [[FlappyIM shareInstance] removeListener:[_listeners objectAtIndex:s]
+            [[FlappyIM shareInstance] removeMsgListener:[_listeners objectAtIndex:s]
                                        withSessionID:self.session.sessionId];
         }
     }
