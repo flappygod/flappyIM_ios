@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AFNetworking/AFNetworking.h>
+#import "FlappyChatSession.h"
 #import "ChatMessage.h"
 
 //消息通知被点击
@@ -32,6 +33,9 @@ typedef void(^FlappySendFailure) (ChatMessage* _Nullable,NSError *_Nullable,NSIn
 
 //消息监听
 typedef void(^MessageListener) (ChatMessage* _Nullable message);
+
+//会话更新
+typedef void(^SessionListener) (FlappyChatSession* _Nullable session);
 
 
 NS_ASSUME_NONNULL_BEGIN
