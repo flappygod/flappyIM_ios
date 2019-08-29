@@ -249,7 +249,7 @@ typedef GPB_ENUM(Session_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *sessionOffset;
 
-@property(nonatomic, readwrite) int32_t sessionStamp;
+@property(nonatomic, readwrite) int64_t sessionStamp;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *sessionCreateDate;
 

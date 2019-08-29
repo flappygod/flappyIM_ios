@@ -490,7 +490,6 @@ typedef struct ReqReceipt__storage_ {
 typedef struct Session__storage_ {
   uint32_t _has_storage_[1];
   int32_t sessionType;
-  int32_t sessionStamp;
   int32_t sessionDeleted;
   NSString *sessionId;
   NSString *sessionExtendId;
@@ -501,6 +500,7 @@ typedef struct Session__storage_ {
   NSString *sessionCreateUser;
   NSString *sessionDeletedDate;
   NSString *users;
+  int64_t sessionStamp;
 } Session__storage_;
 
 // This method is threadsafe because it is initially called
@@ -570,7 +570,7 @@ typedef struct Session__storage_ {
         .hasIndex = 6,
         .offset = (uint32_t)offsetof(Session__storage_, sessionStamp),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeInt32,
+        .dataType = GPBDataTypeInt64,
       },
       {
         .name = "sessionCreateDate",
