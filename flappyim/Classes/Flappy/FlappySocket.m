@@ -36,7 +36,7 @@
     self=[super init];
     if(self!=nil){
         self.receiveData=[[NSMutableData alloc]init];
-        self.updateArray=[[NSMutableData alloc]init];
+        self.updateArray=[[NSMutableArray alloc]init];
     }
     return self;
 }
@@ -552,6 +552,9 @@
     for(NSString* str in dic.allKeys){
         
         if(![self.updateArray containsObject: str]){
+            
+            [self.updateArray addObject:str];
+            
             //创建update
             ReqUpdate* reqUpdate=[[ReqUpdate alloc]init];
             //ID
