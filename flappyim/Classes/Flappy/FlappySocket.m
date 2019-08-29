@@ -526,13 +526,15 @@
         NSString* former=dic[message.messageSession];
         //获取数据
         if(former==nil){
-            dic[message.messageSession]=[message getChatSystem].sysActionData;
+            [dic setObject:[message getChatSystem].sysActionData
+                    forKey:message.messageSession];
         }else{
             //替换数据
             long stamp=former.integerValue;
             long newStamp=[message getChatSystem].sysActionData.integerValue;
             if (newStamp > stamp) {
-                dic[message.messageSession]=[message getChatSystem].sysActionData;
+                [dic setObject:[message getChatSystem].sysActionData
+                        forKey:message.messageSession];
             }
         }
     }
