@@ -34,9 +34,8 @@ typedef void(^FlappySendFailure) (ChatMessage* _Nullable,NSError *_Nullable,NSIn
 //消息监听
 typedef void(^MessageListener) (ChatMessage* _Nullable message);
 
-//会话更新
+//会话
 typedef void(^SessionListener) (FlappyChatSession* _Nullable session);
-
 
 NS_ASSUME_NONNULL_BEGIN
 
