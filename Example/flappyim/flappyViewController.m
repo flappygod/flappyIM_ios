@@ -54,7 +54,10 @@
         NSLog(@"创建失败");
     }];
     
-    
+    //会话更新
+    [[FlappyIM shareInstance]  addSessinListener:^(FlappyChatSession*  _Nullable chatsession) {
+        NSLog(@"会话有更新");
+    }];
     
     //踢下线
     [[FlappyIM shareInstance] setKnickedListener:^{
