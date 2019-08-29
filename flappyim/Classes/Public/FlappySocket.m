@@ -365,6 +365,9 @@
             //之前不存在
             if(former==nil){
                 [self notifyNewMessage:chatMsg];
+            }else{
+                //保留是否处理的flag;
+                chatMsg.messageReaded=former.messageReaded;
             }
             //消息发送成功
             [self sendMessageSuccess:chatMsg];
@@ -403,6 +406,8 @@
                 [self notifyNewMessage:chatMsg];
                 [self messageArrived:chatMsg];
             }else{
+                //保留是否已经处理的信息
+                chatMsg.messageReaded=former.messageReaded;
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
             [self sendMessageSuccess:chatMsg];
