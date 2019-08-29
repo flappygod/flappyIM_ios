@@ -90,7 +90,7 @@
 -(void)createSession{
     //创建session
     __weak typeof(self) safeSelf=self;
-    [[FlappyIM shareInstance] getSingleSession:@"100"
+    [[FlappyIM shareInstance] createSingleSession:@"100"
                                        andSuccess:^(id _Nullable data) {
                                            NSLog(@"会话创建成功");
                                            safeSelf.session=data;
