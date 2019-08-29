@@ -416,21 +416,24 @@
     else if(respones.type==RES_UPDATE){
         NSMutableArray* sessions=respones.sessionsArray;
         if(sessions!=nil&&sessions.count>0){
-            //创建
-            SessionData* data=[SessionData mj_objectWithKeyValues:[sessions mj_keyValues]];
-            //插入消息
-            [[FlappyDataBase shareInstance] insertSession:data];
-            //消息列表
-            NSMutableArray* messages=[[FlappyDataBase shareInstance] getNotActionSystemMessageWithSession:data.sessionId];
-            //遍历更新
-            for(int w=0;w<messages.count;w++){
-                //消息
-                ChatMessage* msg=[messages objectAtIndex:w];
-                //判断会话时间戳
-                if(data.sessionStamp>=[msg getChatSystem].sysActionData.integerValue){
-                    //更新消息设置
-                    msg.messageReaded=1;
-                    [[FlappyDataBase shareInstance] insertMsg:msg];
+            for(int x=0;x<sessions.count;x++){
+                Session* memSession=[sessions objectAtIndex:x];
+                //创建
+                SessionData* data=[SessionData mj_objectWithKeyValues:[memSession mj_keyValues]];
+                //插入消息
+                [[FlappyDataBase shareInstance] insertSession:data];
+                //消息列表
+                NSMutableArray* messages=[[FlappyDataBase shareInstance] getNotActionSystemMessageWithSession:data.sessionId];
+                //遍历更新
+                for(int w=0;w<messages.count;w++){
+                    //消息
+                    ChatMessage* msg=[messages objectAtIndex:w];
+                    //判断会话时间戳
+                    if(data.sessionStamp>=[msg getChatSystem].sysActionData.integerValue){
+                        //更新消息设置
+                        msg.messageReaded=1;
+                        [[FlappyDataBase shareInstance] insertMsg:msg];
+                    }
                 }
             }
         }
