@@ -36,6 +36,7 @@
     self=[super init];
     if(self!=nil){
         self.receiveData=[[NSMutableData alloc]init];
+        self.updateArray=[[NSMutableData alloc]init];
     }
     return self;
 }
@@ -417,6 +418,7 @@
         NSMutableArray* sessions=respones.sessionsArray;
         if(sessions!=nil&&sessions.count>0){
             for(int x=0;x<sessions.count;x++){
+                //获取会话
                 Session* memSession=[sessions objectAtIndex:x];
                 //创建
                 SessionData* data=[SessionData mj_objectWithKeyValues:[memSession mj_keyValues]];
@@ -432,9 +434,13 @@
                     if(data.sessionStamp>=[msg getChatSystem].sysActionData.longLongValue){
                         //更新消息设置
                         msg.messageReaded=1;
+                        //插入消息
                         [[FlappyDataBase shareInstance] insertMsg:msg];
+                        
                     }
                 }
+                //移除正在更新的
+                [self.updateArray removeObject:data.sessionId];
             }
         }
     }
@@ -544,22 +550,27 @@
     
     //开始写数据了
     for(NSString* str in dic.allKeys){
-        //创建update
-        ReqUpdate* reqUpdate=[[ReqUpdate alloc]init];
-        //ID
-        reqUpdate.updateId=str;
-        //更新类型
-        reqUpdate.updateType=UPDATE_SESSION_SGINGLE;
-        //更新请求
-        FlappyRequest* req=[[FlappyRequest alloc]init];
-        //更新内容
-        req.update=reqUpdate;
-        //请求更新
-        req.type=REQ_UPDATE;
-        //请求数据，已经GPBComputeRawVarint32SizeForInteger
-        NSData* reqData=[req delimitedData];
-        //写入请求数据
-        [self.socket writeData:reqData withTimeout:-1 tag:0];
+        
+        if(![self.updateArray containsObject: str]){
+            //创建update
+            ReqUpdate* reqUpdate=[[ReqUpdate alloc]init];
+            //ID
+            reqUpdate.updateId=str;
+            //更新类型
+            reqUpdate.updateType=UPDATE_SESSION_SGINGLE;
+            //更新请求
+            FlappyRequest* req=[[FlappyRequest alloc]init];
+            //更新内容
+            req.update=reqUpdate;
+            //请求更新
+            req.type=REQ_UPDATE;
+            //请求数据，已经GPBComputeRawVarint32SizeForInteger
+            NSData* reqData=[req delimitedData];
+            //写入请求数据
+            [self.socket writeData:reqData withTimeout:-1 tag:0];
+        }
+        
+        
     }
     
 }

@@ -34,10 +34,10 @@
 @property (nonatomic,strong)  ChatUser*  user;
 //登录成功之后非正常退出的情况
 @property (nonatomic,strong)  FlappyDead  dead;
-
 //登录的数据
 @property (nonatomic,strong)  id  loginData;
-
+//正在更新的数据
+@property (nonatomic,strong)  NSMutableArray*  updateArray;
 
 
 //建立长连接
