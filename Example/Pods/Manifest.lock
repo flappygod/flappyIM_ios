@@ -33,7 +33,7 @@ DEPENDENCIES:
   - flappyim (from `../`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AFNetworking
     - CocoaAsyncSocket
     - FMDB
@@ -56,4 +56,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: feb42ff4229e00a2f94b2e56c132068f957e7df0
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.9.1

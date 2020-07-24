@@ -68,6 +68,13 @@
     return _sharedSingleton;
 }
 
+//重设用户名和密码
+-(void)resetServer:(NSString*)serverUrl
+      andUploadUrl:(NSString*)upload{
+    [[FlappyApiConfig shareInstance] resetServer:serverUrl
+                                    andUploadUrl:upload];
+}
+
 //增加本地通知
 -(void)initLocalNotification{
     //后台了，但是还没有被墓碑的情况

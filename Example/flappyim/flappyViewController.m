@@ -24,6 +24,10 @@
 {
     [super viewDidLoad];
     
+    //重设服务端账号密码
+    [[FlappyIM shareInstance] resetServer:@"http://49.233.131.151"
+                             andUploadUrl:@"http://49.233.131.151"];
+    
     //初始化
     [[FlappyIM shareInstance] setup];
     

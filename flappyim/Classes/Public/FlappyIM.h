@@ -46,6 +46,10 @@ NS_ASSUME_NONNULL_BEGIN
 //单例模式
 + (instancetype)shareInstance;
 
+//重设用户名和密码
+-(void)resetServer:(NSString*)serverUrl
+      andUploadUrl:(NSString*)upload;
+
 //注册远程的通知
 -(void)registerRemoteNotice:(UIApplication *)application;
 
