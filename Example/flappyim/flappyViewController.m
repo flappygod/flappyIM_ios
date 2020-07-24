@@ -58,6 +58,10 @@
         NSLog(@"创建失败");
     }];
     
+    [[FlappyIM shareInstance] addGloableMsgListener:^(ChatMessage * _Nullable message) {
+        NSLog([message getChatText]);
+    }];
+    
     //会话更新
     [[FlappyIM shareInstance]  addSessinListener:^(FlappyChatSession*  _Nullable chatsession) {
         NSLog(@"会话有更新");
