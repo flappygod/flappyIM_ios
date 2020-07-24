@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString* URL_createSingleSession;
 @property(nonatomic,copy) NSString* URL_getSingleSession;
 @property(nonatomic,copy) NSString* URL_createGroupSession;
-@property(nonatomic,copy) NSString* URL_getSessionByID;
+@property(nonatomic,copy) NSString* URL_getSessionByExtendID;
 @property(nonatomic,copy) NSString* URL_getUserSessions;
 @property(nonatomic,copy) NSString* URL_addUserToSession;
 @property(nonatomic,copy) NSString* URL_delUserInSession;

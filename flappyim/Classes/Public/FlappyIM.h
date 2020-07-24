@@ -103,7 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
                andFailure:(FlappyFailure)failure;
 
 //获取群组会话
--(void)getSessionByID:(NSString*)extendID
+-(void)getSessionByExtendID:(NSString*)extendID
            andSuccess:(FlappySuccess)success
            andFailure:(FlappyFailure)failure;
 

@@ -995,7 +995,7 @@
 }
 
 //通过获取会话
--(void)getSessionByIDHttp:(NSString*)extendID
+-(void)getSessionByExtendIDHttp:(NSString*)extendID
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -1006,7 +1006,7 @@
     }
     
     //创建群组会话
-    NSString *urlString = [FlappyApiConfig shareInstance].URL_getSessionByID;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_getSessionByExtendID;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"extendID":extendID};
     //请求数据
@@ -1027,7 +1027,7 @@
                       }];
 }
 //通过extendID获取
--(void)getSessionByID:(NSString*)extendID
+-(void)getSessionByExtendID:(NSString*)extendID
            andSuccess:(FlappySuccess)success
            andFailure:(FlappyFailure)failure{
     //为空直接出错
