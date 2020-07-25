@@ -682,7 +682,7 @@
     
     //创建
     self.flappysocket=[[FlappySocket alloc] init];
-    
+    //弱引用保证
     __weak typeof(self) safeSelf=self;
     //请求数据
     [FlappyApiRequest postRequest:urlString
