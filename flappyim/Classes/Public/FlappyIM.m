@@ -235,12 +235,12 @@
         //iOS 10 使用以下方法注册，才能得到授权，注册通知以后，会自动注册 deviceToken，如果获取不到 deviceToken，Xcode8下要注意开启 Capability->Push Notification。
         [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert + UNAuthorizationOptionSound+ UNAuthorizationOptionBadge)
                               completionHandler:^(BOOL granted, NSError * _Nullable error) {
-                                  // Enable or disable features based on authorization.
-                                  if (!granted)
-                                  {
-                                      NSLog(@"Xcode8下要注意开启 Capability->Push Notification。");
-                                  }
-                              }];
+            // Enable or disable features based on authorization.
+            if (!granted)
+            {
+                NSLog(@"Xcode8下要注意开启 Capability->Push Notification。");
+            }
+        }];
         
         //获取当前的通知设置，UNNotificationSettings 是只读对象，不能直接修改，只能通过以下方法获取
         [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
@@ -275,11 +275,22 @@
 //注册
 -(void)registerDeviceToken:(NSData *)deviceToken{
     NSMutableString *deviceTokenStr = [NSMutableString string];
-    const char *bytes = deviceToken.bytes;
-    long iCount = deviceToken.length;
-    for (long i = 0; i < iCount; i++) {
-        [deviceTokenStr appendFormat:@"%02x", bytes[i]&0x000000FF];
+    //Xcode11打的包，iOS13获取Token有变化
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 13) {
+        const char *bytes = deviceToken.bytes;
+        long iCount = deviceToken.length;
+        for (long i = 0; i < iCount; i++) {
+            [deviceTokenStr appendFormat:@"%02x", bytes[i]&0x000000FF];
+        }
+    } else {
+        NSString *token = [NSString
+                           stringWithFormat:@"%@",deviceToken];
+        token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
+        token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
+        token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+        deviceTokenStr=token;
     }
+    
     //设置token
     [self setUUID:deviceTokenStr];
     //如果当前是登录的状态
@@ -292,7 +303,7 @@
                                          @"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                          @"device":DEVICE_TYPE,
                                          @"pushid":deviceTokenStr
-                                         };
+            };
             //创建
             self.flappysocket=[[FlappySocket alloc] init];
             
@@ -302,14 +313,14 @@
             [FlappyApiRequest postRequest:urlString
                            withParameters:parameters
                               withSuccess:^(id data) {
-                                  //保存
-                                  ChatUser* user=[[FlappyData shareInstance]getUser];
-                                  user.pushID=deviceTokenStr;
-                                  [[FlappyData shareInstance]saveUser:user];
-                                  
-                              } withFailure:^(NSError * error, NSInteger code) {
-                                  //修改失败
-                              }];
+                //保存
+                ChatUser* user=[[FlappyData shareInstance]getUser];
+                user.pushID=deviceTokenStr;
+                [[FlappyData shareInstance]saveUser:user];
+                
+            } withFailure:^(NSError * error, NSInteger code) {
+                //修改失败
+            }];
         }
         
         
@@ -435,7 +446,7 @@
 
 //增加某个session的监听
 -(void)addMsgListener:(MessageListener)listener
-     withSessionID:(NSString*)sessionID{
+        withSessionID:(NSString*)sessionID{
     //监听所有消息
     if(listener!=nil){
         //获取当前的监听列表
@@ -455,7 +466,7 @@
 
 //移除会话的
 -(void)removeMsgListener:(MessageListener)listener
-        withSessionID:(NSString*)sessionID{
+           withSessionID:(NSString*)sessionID{
     //监听所有消息
     if(listener!=nil){
         //获取当前的监听列表
@@ -634,7 +645,7 @@
     NSDictionary *parameters = @{@"userExtendID":userID,
                                  @"userName":userName,
                                  @"userHead":userHead
-                                 };
+    };
     
     //请求数据
     [FlappyApiRequest postRequest:urlString
@@ -677,7 +688,7 @@
                                  @"userExtendID":userExtendID,
                                  @"device":DEVICE_TYPE,
                                  @"pushid":self.pushID
-                                 };
+    };
     
     
     //创建
@@ -688,32 +699,32 @@
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-                          
-                          //得到当前的用户数据
-                          NSDictionary* dic=data[@"user"];
-                          //用户
-                          ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
-                          //登录成功
-                          user.login=true;
-                          
-                          
-                          safeSelf.flappysocket.loginData=data;
-                          //连接服务器
-                          [safeSelf.flappysocket connectSocket:data[@"serverIP"]
-                                                      withPort:data[@"serverPort"]
-                                                      withUser:user
-                                                   withSuccess:success
-                                                   withFailure:failure
-                                                          dead:^{
-                                                              [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
-                                                                                         withObject:nil
-                                                                                      waitUntilDone:false];
-                                                          }];
-                          
-                      } withFailure:^(NSError * error, NSInteger code) {
-                          //登录失败，清空回调
-                          failure(error,code);
-                      }];
+        
+        //得到当前的用户数据
+        NSDictionary* dic=data[@"user"];
+        //用户
+        ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
+        //登录成功
+        user.login=true;
+        
+        
+        safeSelf.flappysocket.loginData=data;
+        //连接服务器
+        [safeSelf.flappysocket connectSocket:data[@"serverIP"]
+                                    withPort:data[@"serverPort"]
+                                    withUser:user
+                                 withSuccess:success
+                                 withFailure:failure
+                                        dead:^{
+            [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
+                                       withObject:nil
+                                    waitUntilDone:false];
+        }];
+        
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
 }
 
 
@@ -742,19 +753,19 @@
                                  @"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"device":DEVICE_TYPE,
                                  @"pushid":self.pushID
-                                 };
+    };
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-                          //退出登录成功
-                          success(data);
-                          //清空当前相应的用户信息
-                          [[FlappyData shareInstance]clearUser];
-                      } withFailure:^(NSError * error, NSInteger code) {
-                          //登录失败，清空回调
-                          failure(error,code);
-                      }];
+        //退出登录成功
+        success(data);
+        //清空当前相应的用户信息
+        [[FlappyData shareInstance]clearUser];
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
     
 }
 
@@ -787,7 +798,7 @@
     NSDictionary *parameters = @{@"userID":[[FlappyData shareInstance]getUser].userId,
                                  @"device":DEVICE_TYPE,
                                  @"pushid":self.pushID
-                                 };
+    };
     
     //创建新的
     self.flappysocket=[[FlappySocket alloc] init];
@@ -797,58 +808,58 @@
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-                          
-                          //保存推送类型
-                          @try {
-                              id dataType=data[@"route"][@"routePushType"];
-                              //推送类型
-                              NSInteger type=(long)dataType;
-                              //设置
-                              [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
-                          } @catch (NSException *exception) {
-                          } @finally {
-                          }
-                          
-                          //得到当前的用户数据
-                          NSDictionary* dic=data[@"user"];
-                          //用户
-                          ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
-                          //更新信息
-                          ChatUser* newUser=[[FlappyData shareInstance]getUser];
-                          
-                          //最后的时间保存起来
-                          newUser.userName=user.userName;
-                          //头像
-                          newUser.userHead=user.userHead;
-                          //登录成功的
-                          newUser.login =true;
-                          
-                          //保存
-                          [[FlappyData shareInstance]saveUser:newUser];
-                          
-                          
-                          //设置登录返回的数据
-                          safeSelf.flappysocket.loginData=data;
-                          //连接服务器
-                          [safeSelf.flappysocket connectSocket:data[@"serverIP"]
-                                                      withPort:data[@"serverPort"]
-                                                      withUser:newUser
-                                                   withSuccess:success
-                                                   withFailure:failure
-                                                          dead:^{
-                                                              
-                                                              [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
-                                                                                         withObject:nil
-                                                                                      waitUntilDone:false];
-                                                              
-                                                          }];
-                          
-                          
-                          
-                      } withFailure:^(NSError * error, NSInteger code) {
-                          //登录失败，清空回调
-                          failure(error,code);
-                      }];
+        
+        //保存推送类型
+        @try {
+            id dataType=data[@"route"][@"routePushType"];
+            //推送类型
+            NSInteger type=(long)dataType;
+            //设置
+            [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
+        } @catch (NSException *exception) {
+        } @finally {
+        }
+        
+        //得到当前的用户数据
+        NSDictionary* dic=data[@"user"];
+        //用户
+        ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
+        //更新信息
+        ChatUser* newUser=[[FlappyData shareInstance]getUser];
+        
+        //最后的时间保存起来
+        newUser.userName=user.userName;
+        //头像
+        newUser.userHead=user.userHead;
+        //登录成功的
+        newUser.login =true;
+        
+        //保存
+        [[FlappyData shareInstance]saveUser:newUser];
+        
+        
+        //设置登录返回的数据
+        safeSelf.flappysocket.loginData=data;
+        //连接服务器
+        [safeSelf.flappysocket connectSocket:data[@"serverIP"]
+                                    withPort:data[@"serverPort"]
+                                    withUser:newUser
+                                 withSuccess:success
+                                 withFailure:failure
+                                        dead:^{
+            
+            [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
+                                       withObject:nil
+                                    waitUntilDone:false];
+            
+        }];
+        
+        
+        
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
 }
 
 
@@ -870,21 +881,21 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userOne":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"userTwo":userTwo,
-                                 };
+    };
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-                          //获取model
-                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                          //创建session
-                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
-                          session.session=model;
-                          success(session);
-                      } withFailure:^(NSError * error, NSInteger code) {
-                          //登录失败，清空回调
-                          failure(error,code);
-                      }];
+        //获取model
+        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        //创建session
+        FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+        session.session=model;
+        success(session);
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
 }
 
 //网络获取单聊用户的会话，没有就会创建
@@ -904,21 +915,21 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userOne":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"userTwo":userTwo,
-                                 };
+    };
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-                          //获取model
-                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                          //创建session
-                          FlappyChatSession* session=[[FlappyChatSession alloc] init];
-                          session.session=model;
-                          success(session);
-                      } withFailure:^(NSError * error, NSInteger code) {
-                          //登录失败，清空回调
-                          failure(error,code);
-                      }];
+        //获取model
+        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        //创建session
+        FlappyChatSession* session=[[FlappyChatSession alloc] init];
+        session.session=model;
+        success(session);
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
 }
 
 //获取单聊的会话
@@ -983,28 +994,28 @@
                                  @"createUser":[[FlappyData shareInstance]getUser].userId,
                                  @"extendID":groupID,
                                  @"sessionName":groupName
-                                 };
+    };
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-                          //获取model
-                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                          //创建session
-                          FlappyChatSession* session=[[FlappyChatSession alloc] init];
-                          session.session=model;
-                          success(session);
-                      } withFailure:^(NSError * error, NSInteger code) {
-                          //登录失败，清空回调
-                          failure(error,code);
-                      }];
+        //获取model
+        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        //创建session
+        FlappyChatSession* session=[[FlappyChatSession alloc] init];
+        session.session=model;
+        success(session);
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
     
 }
 
 //通过获取会话
 -(void)getSessionByExtendIDHttp:(NSString*)extendID
-               andSuccess:(FlappySuccess)success
-               andFailure:(FlappyFailure)failure{
+                     andSuccess:(FlappySuccess)success
+                     andFailure:(FlappyFailure)failure{
     //为空直接出错
     if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
@@ -1020,23 +1031,23 @@
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-                          //获取model
-                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                          //创建session
-                          FlappyChatSession* session=[[FlappyChatSession alloc] init];
-                          //数据
-                          session.session=model;
-                          //成功
-                          success(session);
-                      } withFailure:^(NSError * error, NSInteger code) {
-                          //登录失败，清空回调
-                          failure(error,code);
-                      }];
+        //获取model
+        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        //创建session
+        FlappyChatSession* session=[[FlappyChatSession alloc] init];
+        //数据
+        session.session=model;
+        //成功
+        success(session);
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
 }
 //通过extendID获取
 -(void)getSessionByExtendID:(NSString*)extendID
-           andSuccess:(FlappySuccess)success
-           andFailure:(FlappyFailure)failure{
+                 andSuccess:(FlappySuccess)success
+                 andFailure:(FlappyFailure)failure{
     //为空直接出错
     if([[FlappyData shareInstance]getUser]==nil){
         //返回没有登录
@@ -1104,24 +1115,24 @@
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-                          
-                          NSMutableArray* array=data;
-                          NSMutableArray* ret=[[NSMutableArray alloc]init];
-                          
-                          for(int s=0;s<array.count;s++){
-                              //获取model
-                              SessionData* model=[SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
-                              FlappyChatSession* session=[[FlappyChatSession alloc] init];
-                              session.session=model;
-                              [ret addObject:session];
-                          }
-                          //成功
-                          success(ret);
-                          
-                      } withFailure:^(NSError * error, NSInteger code) {
-                          //登录失败，清空回调
-                          failure(error,code);
-                      }];
+        
+        NSMutableArray* array=data;
+        NSMutableArray* ret=[[NSMutableArray alloc]init];
+        
+        for(int s=0;s<array.count;s++){
+            //获取model
+            SessionData* model=[SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
+            FlappyChatSession* session=[[FlappyChatSession alloc] init];
+            session.session=model;
+            [ret addObject:session];
+        }
+        //成功
+        success(ret);
+        
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
 }
 
 
@@ -1145,18 +1156,18 @@
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-                          //获取model
-                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                          //创建session
-                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
-                          //数据
-                          session.session=model;
-                          //成功
-                          success(session);
-                      } withFailure:^(NSError * error, NSInteger code) {
-                          //登录失败，清空回调
-                          failure(error,code);
-                      }];
+        //获取model
+        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        //创建session
+        FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+        //数据
+        session.session=model;
+        //成功
+        success(session);
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
 }
 
 //删除会话
@@ -1179,18 +1190,18 @@
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-                          //获取model
-                          SessionData* model=[SessionData mj_objectWithKeyValues:data];
-                          //创建session
-                          FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
-                          //数据
-                          session.session=model;
-                          //成功
-                          success(session);
-                      } withFailure:^(NSError * error, NSInteger code) {
-                          //登录失败，清空回调
-                          failure(error,code);
-                      }];
+        //获取model
+        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        //创建session
+        FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+        //数据
+        session.session=model;
+        //成功
+        success(session);
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
 }
 
 
