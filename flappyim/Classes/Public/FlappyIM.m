@@ -293,22 +293,29 @@
     
     //设置token
     [self setUUID:deviceTokenStr];
+    
+    //更新字符串
+    [self updateDeviceToken:deviceTokenStr];
+}
+
+//更新deviceToken
+-(void)updateDeviceToken:(NSString*)str{
     //如果当前是登录的状态
     if([[FlappyData shareInstance]getUser]!=nil&&[[FlappyData shareInstance]getUser].login==true){
         
         //没有设置或者不相同
         if([[FlappyData shareInstance]getUser].pushID==nil||![[[FlappyData shareInstance]getUser].pushID isEqualToString:deviceTokenStr]){
             //请求体，参数（NSDictionary 类型）
-            NSDictionary *parameters = @{@"userID":@"",
-                                         @"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
+            NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                          @"device":DEVICE_TYPE,
                                          @"pushid":deviceTokenStr
             };
             //创建
             self.flappysocket=[[FlappySocket alloc] init];
-            
             //注册地址
-            NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
+            NSString *urlString = [FlappyApiConfig shareInstance].URL_changePush;
+            //循环引用
+            __weak typeof(self) safeSelf=self;
             //请求数据
             [FlappyApiRequest postRequest:urlString
                            withParameters:parameters
@@ -320,13 +327,12 @@
                 
             } withFailure:^(NSError * error, NSInteger code) {
                 //修改失败
+                [safeSelf performSelector:@selector(updateDeviceToken:)
+                               withObject:str
+                               afterDelay:3];
             }];
         }
-        
-        
-        
     }
-    
 }
 
 
