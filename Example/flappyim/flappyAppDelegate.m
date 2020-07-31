@@ -90,6 +90,8 @@
  */
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     
+    NSLog(@"USREINFO::::%@",userInfo);
+    
     [[FlappyIM shareInstance] didReceiveRemoteNotification:userInfo];
     //NewData就是使用新的数据 更新界面，响应点击通知这个动作
     completionHandler(UIBackgroundFetchResultNewData);
