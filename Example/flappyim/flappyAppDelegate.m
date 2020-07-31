@@ -72,6 +72,7 @@
 //接收到消息
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification NS_DEPRECATED_IOS(4_0, 10_0, "Use UserNotifications Framework's -[UNUserNotificationCenterDelegate willPresentNotification:withCompletionHandler:] or -[UNUserNotificationCenterDelegate didReceiveNotificationResponse:withCompletionHandler:]") __TVOS_PROHIBITED{
     
+    NSLog(@"USREINFO::::%@",notification);
     //所以往第一个界面上添加一个label，看标签是否会显示一些内容
     [[FlappyIM shareInstance] didReceiveRemoteNotification:notification.userInfo];
 }
