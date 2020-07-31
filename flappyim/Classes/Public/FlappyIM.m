@@ -288,7 +288,7 @@
         token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
         token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
         token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-        deviceTokenStr=token;
+        deviceTokenStr=[NSMutableString stringWithFormat:@"%@",token];
     }
     
     //设置token
