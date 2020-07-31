@@ -299,7 +299,7 @@
 }
 
 //更新deviceToken
--(void)updateDeviceToken:(NSString*)str{
+-(void)updateDeviceToken:(NSString*)deviceTokenStr{
     //如果当前是登录的状态
     if([[FlappyData shareInstance]getUser]!=nil&&[[FlappyData shareInstance]getUser].login==true){
         
@@ -328,7 +328,7 @@
             } withFailure:^(NSError * error, NSInteger code) {
                 //修改失败
                 [safeSelf performSelector:@selector(updateDeviceToken:)
-                               withObject:str
+                               withObject:deviceTokenStr
                                afterDelay:3];
             }];
         }
