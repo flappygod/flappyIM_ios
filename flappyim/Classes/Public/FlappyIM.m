@@ -519,23 +519,34 @@
     [self updateInterfaceWithReachability:self.internetReachability];
     
     //监听是否触发home键挂起程序，（把程序放在后台执行其他操作）
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:)
-                                                 name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillResignActive:)
+                                                 name:UIApplicationWillResignActiveNotification
+                                               object:nil];
     //监听是否重新进入程序程序.（回到程序)
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:)
-                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
 }
 
 //监听被home键盘
 -(void)applicationWillResignActive:(NSNotification *)notification{
-    NSLog(@"触发home按下,在该区域书写点击home键的逻辑");
     self.isActive=false;
+    //先下线
+    if(self.flappysocket!=nil){
+        [self.flappysocket offline:true];
+    }
+    NSLog(@"触发home按下,在该区域书写点击home键的逻辑");
 }
 
 //监听进入页面
 -(void)applicationDidBecomeActive:(NSNotification *)notification{
-    NSLog(@"重新进来后响应，该区域编写重新进入页面的逻辑");
     self.isActive=true;
+    [self performSelectorOnMainThread:@selector(setupReconnect)
+                           withObject:nil
+                        waitUntilDone:false];
+    NSLog(@"重新进来后响应，该区域编写重新进入页面的逻辑");
 }
 
 //变化监听
@@ -603,7 +614,7 @@
     //开始
     __weak typeof(self) safeSelf=self;
     //如果网络是正常连接的
-    if([FlappyNetTool getCurrentNetworkState]!=0){
+    if([FlappyNetTool getCurrentNetworkState]!=0&&self.isActive){
         //防止重复请求
         [self autoLogin:^(id data) {
             
@@ -622,7 +633,7 @@
                     self.knicked=nil;
                 }
             }else{
-                //3秒后重新执行登录
+                //5秒后重新执行登录
                 [safeSelf performSelector:@selector(setupReconnect)
                                withObject:nil
                                afterDelay:5];
@@ -1221,7 +1232,7 @@
 //销毁逻辑
 -(void)dealloc{
     //下线
-    [self.flappysocket  offline:false];
+    [self.flappysocket  offline:true];
     //停止
     [self stopOberver];
     //清空
