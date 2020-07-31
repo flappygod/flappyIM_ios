@@ -56,7 +56,8 @@
     }];
     
     [[FlappyIM shareInstance] addGloableMsgListener:^(ChatMessage * _Nullable message) {
-        NSLog([message getChatText]);
+        //打印信息
+        NSLog(@"%@", [message getChatText]);
     }];
     
     //会话更新
