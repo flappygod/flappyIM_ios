@@ -62,7 +62,7 @@
  3.应用程序退出：通知到，点击查看通知，不会执行下面的didReceive方法，而是只执行didFinishLauncing方法
  */
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    //NSLog(@"%@",userInfo);
+    NSLog(@"USREINFO:%@",userInfo);
     //为了测试在应用程序退出后，该方法是否执行
     //所以往第一个界面上添加一个label，看标签是否会显示一些内容
     [[FlappyIM shareInstance] didReceiveRemoteNotification:userInfo];
