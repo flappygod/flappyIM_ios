@@ -14,6 +14,7 @@
 #import "ChatVideo.h"
 #import "ChatVoice.h"
 #import "ChatImage.h"
+#import "FlappyData.h"
 #import "Flappy.pbobjc.h"
 #import "FlappyChatSession.h"
 #import "FlappyApiRequest.h"
@@ -67,6 +68,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //判断当前账号是否登录
 -(Boolean)isLogin;
+
+//获取登录信息
+-(ChatUser*)getLoginInfo;
 
 
 //创建账号

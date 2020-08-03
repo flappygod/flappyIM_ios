@@ -1236,6 +1236,14 @@
     return true;
 }
 
+//获取登录信息
+-(ChatUser*)getLoginInfo{
+    //获取当前账户
+    ChatUser* user=[[FlappyData shareInstance]getUser];
+    //获取当前账户
+    return user;
+}
+
 #pragma  dealloc
 //销毁逻辑
 -(void)dealloc{
