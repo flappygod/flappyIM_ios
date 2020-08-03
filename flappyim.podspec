@@ -45,6 +45,5 @@ Pod::Spec.new do |s|
   s.dependency 'MJExtension', '~> 3.1.0'
   s.dependency 'Protobuf', '~> 3.9.0'
   s.dependency 'CocoaAsyncSocket', '~> 7.6.3'
-  s.dependency 'Reachability', '~> 3.2'
   s.dependency 'FMDB', '~> 2.7.5'
 end

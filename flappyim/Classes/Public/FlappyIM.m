@@ -25,9 +25,9 @@
 @interface FlappyIM ()
 
 //用于监听网络变化
-@property (nonatomic,strong) Reachability* hostReachability;
+@property (nonatomic,strong) ReachabilityFlappy* hostReachability;
 //用于监听网络变化
-@property (nonatomic,strong) Reachability* internetReachability;
+@property (nonatomic,strong) ReachabilityFlappy* internetReachability;
 //用于联网的socket
 @property (nonatomic,strong) FlappySocket* flappysocket;
 //被踢下线了
@@ -513,16 +513,16 @@
 -(void)setupNotify{
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reachabilityChanged:)
-                                                 name:kReachabilityChangedNotification
+                                                 name:kReachabilityChangedNotificationFlappy
                                                object:nil];
     // 设置网络检测的站点
     NSString *remoteHostName = @"www.baidu.com";
     //创建
-    self.hostReachability = [Reachability reachabilityWithHostName:remoteHostName];
+    self.hostReachability = [ReachabilityFlappy reachabilityWithHostName:remoteHostName];
     [self.hostReachability startNotifier];
     [self updateInterfaceWithReachability:self.hostReachability];
     //创建
-    self.internetReachability = [Reachability reachabilityForInternetConnection];
+    self.internetReachability = [ReachabilityFlappy reachabilityForInternetConnection];
     [self.internetReachability startNotifier];
     [self updateInterfaceWithReachability:self.internetReachability];
     
@@ -560,15 +560,15 @@
 //变化监听
 - (void) reachabilityChanged:(NSNotification *)note
 {
-    Reachability* curReach = [note object];
+    ReachabilityFlappy* curReach = [note object];
     [self updateInterfaceWithReachability:curReach];
 }
 
 //更新网络状态
-- (void)updateInterfaceWithReachability:(Reachability *)reachability
+- (void)updateInterfaceWithReachability:(ReachabilityFlappy *)reachability
 {
     
-    NetworkStatus netStatus = [reachability currentReachabilityStatus];
+    NetworkStatusFlappy netStatus = [reachability currentReachabilityStatus];
     switch (netStatus) {
         case 0:
             break;
@@ -587,7 +587,7 @@
 -(void)stopOberver{
     //移除监听
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:kReachabilityChangedNotification
+                                                    name:kReachabilityChangedNotificationFlappy
                                                   object:nil];
     
     

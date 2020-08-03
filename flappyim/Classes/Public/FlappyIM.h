@@ -18,9 +18,9 @@
 #import "FlappyChatSession.h"
 #import "FlappyApiRequest.h"
 #import "FlappySocket.h"
+#import "ReachabilityFlappy.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import <Reachability/Reachability.h>
 #import <AFNetworking/AFNetworking.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
