@@ -14,7 +14,6 @@
 #import "ChatVideo.h"
 #import "ChatVoice.h"
 #import "ChatImage.h"
-#import "FlappyData.h"
 #import "Flappy.pbobjc.h"
 #import "FlappyChatSession.h"
 #import "FlappyApiRequest.h"
