@@ -18,10 +18,7 @@
     [[FlappyIM shareInstance]registerRemoteNotice:application];
     
     //通知处理
-    NSDictionary* pushNotificationKey = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    if(pushNotificationKey!=nil){
-        [[FlappyIM shareInstance] didReceiveRemoteNotification:pushNotificationKey];
-    }
+    [[FlappyIM shareInstance] didReceiveRemoteNotification:[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]];
     
     return YES;
 }

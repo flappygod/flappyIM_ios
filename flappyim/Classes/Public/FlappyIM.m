@@ -257,18 +257,20 @@
 
 //监听到本地的通知
 -(void)didReceiveRemoteNotification:(NSDictionary *)userInfo{
-    if(self.notifyClicked!=nil){
-        //获取消息
-        NSString* msg=userInfo[@"message"];
-        //转换为消息体
-        self.notifyClicked([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
-        //移除
-        UNRemoveObject(@"flappy_message");
-    }else{
-        //获取消息
-        NSString* msg=userInfo[@"message"];
-        //保存本地
-        UNSaveObject(msg,@"flappy_message");
+    if(userInfo!=nil&&userInfo[@"message"]!=nil){
+        if(self.notifyClicked!=nil){
+            //获取消息
+            NSString* msg=userInfo[@"message"];
+            //转换为消息体
+            self.notifyClicked([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
+            //移除
+            UNRemoveObject(@"flappy_message");
+        }else{
+            //获取消息
+            NSString* msg=userInfo[@"message"];
+            //保存本地
+            UNSaveObject(msg,@"flappy_message");
+        }
     }
 }
 
