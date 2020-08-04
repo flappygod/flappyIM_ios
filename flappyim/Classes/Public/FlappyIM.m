@@ -312,8 +312,6 @@
                                          @"device":DEVICE_TYPE,
                                          @"pushid":deviceTokenStr
             };
-            //创建
-            self.flappysocket=[[FlappySocket alloc] init];
             //注册地址
             NSString *urlString = [FlappyApiConfig shareInstance].URL_changePush;
             //循环引用
