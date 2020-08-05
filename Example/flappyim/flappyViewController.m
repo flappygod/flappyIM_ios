@@ -24,9 +24,12 @@
 {
     [super viewDidLoad];
     
+    [[FlappyIM shareInstance] setPlatfrom:@"debug"];
+    
     //初始化
     [[FlappyIM shareInstance] setup:@"http://49.233.131.151"
                       withUploadUrl:@"http://49.233.131.151"];
+    
     
     //创建登录
     UITapGestureRecognizer* gs=[[UITapGestureRecognizer alloc]initWithTarget:self
