@@ -470,271 +470,6 @@ typedef struct ReqReceipt__storage_ {
 
 @end
 
-#pragma mark - Session
-
-@implementation Session
-
-@dynamic sessionId;
-@dynamic sessionExtendId;
-@dynamic sessionType;
-@dynamic sessionName;
-@dynamic sessionImage;
-@dynamic sessionOffset;
-@dynamic sessionStamp;
-@dynamic sessionCreateDate;
-@dynamic sessionCreateUser;
-@dynamic sessionDeleted;
-@dynamic sessionDeletedDate;
-@dynamic users;
-
-typedef struct Session__storage_ {
-  uint32_t _has_storage_[1];
-  int32_t sessionType;
-  int32_t sessionDeleted;
-  NSString *sessionId;
-  NSString *sessionExtendId;
-  NSString *sessionName;
-  NSString *sessionImage;
-  NSString *sessionOffset;
-  NSString *sessionCreateDate;
-  NSString *sessionCreateUser;
-  NSString *sessionDeletedDate;
-  NSString *users;
-  int64_t sessionStamp;
-} Session__storage_;
-
-// This method is threadsafe because it is initially called
-// in +initialize for each subclass.
-+ (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = nil;
-  if (!descriptor) {
-    static GPBMessageFieldDescription fields[] = {
-      {
-        .name = "sessionId",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_SessionId,
-        .hasIndex = 0,
-        .offset = (uint32_t)offsetof(Session__storage_, sessionId),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "sessionExtendId",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_SessionExtendId,
-        .hasIndex = 1,
-        .offset = (uint32_t)offsetof(Session__storage_, sessionExtendId),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "sessionType",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_SessionType,
-        .hasIndex = 2,
-        .offset = (uint32_t)offsetof(Session__storage_, sessionType),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeInt32,
-      },
-      {
-        .name = "sessionName",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_SessionName,
-        .hasIndex = 3,
-        .offset = (uint32_t)offsetof(Session__storage_, sessionName),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "sessionImage",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_SessionImage,
-        .hasIndex = 4,
-        .offset = (uint32_t)offsetof(Session__storage_, sessionImage),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "sessionOffset",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_SessionOffset,
-        .hasIndex = 5,
-        .offset = (uint32_t)offsetof(Session__storage_, sessionOffset),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "sessionStamp",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_SessionStamp,
-        .hasIndex = 6,
-        .offset = (uint32_t)offsetof(Session__storage_, sessionStamp),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeInt64,
-      },
-      {
-        .name = "sessionCreateDate",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_SessionCreateDate,
-        .hasIndex = 7,
-        .offset = (uint32_t)offsetof(Session__storage_, sessionCreateDate),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "sessionCreateUser",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_SessionCreateUser,
-        .hasIndex = 8,
-        .offset = (uint32_t)offsetof(Session__storage_, sessionCreateUser),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "sessionDeleted",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_SessionDeleted,
-        .hasIndex = 9,
-        .offset = (uint32_t)offsetof(Session__storage_, sessionDeleted),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeInt32,
-      },
-      {
-        .name = "sessionDeletedDate",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_SessionDeletedDate,
-        .hasIndex = 10,
-        .offset = (uint32_t)offsetof(Session__storage_, sessionDeletedDate),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "users",
-        .dataTypeSpecific.className = NULL,
-        .number = Session_FieldNumber_Users,
-        .hasIndex = 11,
-        .offset = (uint32_t)offsetof(Session__storage_, users),
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeString,
-      },
-    };
-    GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[Session class]
-                                     rootClass:[FlappyRoot class]
-                                          file:FlappyRoot_FileDescriptor()
-                                        fields:fields
-                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(Session__storage_)
-                                         flags:GPBDescriptorInitializationFlag_None];
-#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    static const char *extraTextFormatInfo =
-        "\013\001\t\000\002\017\000\003\013\000\004\013\000\005\014\000\006\r\000\007\014\000\010\021\000\t\021\000\n\016\000\013\022\000";
-    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
-#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    #if defined(DEBUG) && DEBUG
-      NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif  // DEBUG
-    descriptor = localDescriptor;
-  }
-  return descriptor;
-}
-
-@end
-
-#pragma mark - Route
-
-@implementation Route
-
-@dynamic userId;
-@dynamic device;
-@dynamic pushid;
-@dynamic pushType;
-@dynamic time;
-
-typedef struct Route__storage_ {
-  uint32_t _has_storage_[1];
-  NSString *userId;
-  NSString *device;
-  NSString *pushid;
-  NSString *pushType;
-  NSString *time;
-} Route__storage_;
-
-// This method is threadsafe because it is initially called
-// in +initialize for each subclass.
-+ (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = nil;
-  if (!descriptor) {
-    static GPBMessageFieldDescription fields[] = {
-      {
-        .name = "userId",
-        .dataTypeSpecific.className = NULL,
-        .number = Route_FieldNumber_UserId,
-        .hasIndex = 0,
-        .offset = (uint32_t)offsetof(Route__storage_, userId),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "device",
-        .dataTypeSpecific.className = NULL,
-        .number = Route_FieldNumber_Device,
-        .hasIndex = 1,
-        .offset = (uint32_t)offsetof(Route__storage_, device),
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "pushid",
-        .dataTypeSpecific.className = NULL,
-        .number = Route_FieldNumber_Pushid,
-        .hasIndex = 2,
-        .offset = (uint32_t)offsetof(Route__storage_, pushid),
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "pushType",
-        .dataTypeSpecific.className = NULL,
-        .number = Route_FieldNumber_PushType,
-        .hasIndex = 3,
-        .offset = (uint32_t)offsetof(Route__storage_, pushType),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "time",
-        .dataTypeSpecific.className = NULL,
-        .number = Route_FieldNumber_Time,
-        .hasIndex = 4,
-        .offset = (uint32_t)offsetof(Route__storage_, time),
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeString,
-      },
-    };
-    GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[Route class]
-                                     rootClass:[FlappyRoot class]
-                                          file:FlappyRoot_FileDescriptor()
-                                        fields:fields
-                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(Route__storage_)
-                                         flags:GPBDescriptorInitializationFlag_None];
-#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    static const char *extraTextFormatInfo =
-        "\002\001\005A\000\004\010\000";
-    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
-#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    #if defined(DEBUG) && DEBUG
-      NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif  // DEBUG
-    descriptor = localDescriptor;
-  }
-  return descriptor;
-}
-
-@end
-
 #pragma mark - Message
 
 @implementation Message
@@ -939,6 +674,282 @@ typedef struct Message__storage_ {
     static const char *extraTextFormatInfo =
         "\020\001\t\000\002\016\000\003\022\000\004\024\000\005\017\000\006\013\000\007\013\000\010\023\000\t\016\000\n\026\000\013\016\000\014\r\000\r\r\000"
         "\016\013\000\017\016\000\020\022\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - Session
+
+@implementation Session
+
+@dynamic sessionId;
+@dynamic sessionExtendId;
+@dynamic sessionType;
+@dynamic sessionName;
+@dynamic sessionImage;
+@dynamic sessionOffset;
+@dynamic sessionStamp;
+@dynamic sessionCreateDate;
+@dynamic sessionCreateUser;
+@dynamic sessionDeleted;
+@dynamic sessionDeletedDate;
+@dynamic users;
+
+typedef struct Session__storage_ {
+  uint32_t _has_storage_[1];
+  int32_t sessionType;
+  int32_t sessionDeleted;
+  NSString *sessionId;
+  NSString *sessionExtendId;
+  NSString *sessionName;
+  NSString *sessionImage;
+  NSString *sessionOffset;
+  NSString *sessionCreateDate;
+  NSString *sessionCreateUser;
+  NSString *sessionDeletedDate;
+  NSString *users;
+  int64_t sessionStamp;
+} Session__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sessionId",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_SessionId,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(Session__storage_, sessionId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "sessionExtendId",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_SessionExtendId,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(Session__storage_, sessionExtendId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "sessionType",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_SessionType,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(Session__storage_, sessionType),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt32,
+      },
+      {
+        .name = "sessionName",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_SessionName,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(Session__storage_, sessionName),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "sessionImage",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_SessionImage,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(Session__storage_, sessionImage),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "sessionOffset",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_SessionOffset,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(Session__storage_, sessionOffset),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "sessionStamp",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_SessionStamp,
+        .hasIndex = 6,
+        .offset = (uint32_t)offsetof(Session__storage_, sessionStamp),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "sessionCreateDate",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_SessionCreateDate,
+        .hasIndex = 7,
+        .offset = (uint32_t)offsetof(Session__storage_, sessionCreateDate),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "sessionCreateUser",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_SessionCreateUser,
+        .hasIndex = 8,
+        .offset = (uint32_t)offsetof(Session__storage_, sessionCreateUser),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "sessionDeleted",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_SessionDeleted,
+        .hasIndex = 9,
+        .offset = (uint32_t)offsetof(Session__storage_, sessionDeleted),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt32,
+      },
+      {
+        .name = "sessionDeletedDate",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_SessionDeletedDate,
+        .hasIndex = 10,
+        .offset = (uint32_t)offsetof(Session__storage_, sessionDeletedDate),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "users",
+        .dataTypeSpecific.className = NULL,
+        .number = Session_FieldNumber_Users,
+        .hasIndex = 11,
+        .offset = (uint32_t)offsetof(Session__storage_, users),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[Session class]
+                                     rootClass:[FlappyRoot class]
+                                          file:FlappyRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(Session__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\013\001\t\000\002\017\000\003\013\000\004\013\000\005\014\000\006\r\000\007\014\000\010\021\000\t\021\000\n\016\000\013\022\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - Route
+
+@implementation Route
+
+@dynamic userId;
+@dynamic device;
+@dynamic pushid;
+@dynamic pushType;
+@dynamic time;
+@dynamic pushPlat;
+
+typedef struct Route__storage_ {
+  uint32_t _has_storage_[1];
+  NSString *userId;
+  NSString *device;
+  NSString *pushid;
+  NSString *pushType;
+  NSString *time;
+  NSString *pushPlat;
+} Route__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "userId",
+        .dataTypeSpecific.className = NULL,
+        .number = Route_FieldNumber_UserId,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(Route__storage_, userId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "device",
+        .dataTypeSpecific.className = NULL,
+        .number = Route_FieldNumber_Device,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(Route__storage_, device),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "pushid",
+        .dataTypeSpecific.className = NULL,
+        .number = Route_FieldNumber_Pushid,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(Route__storage_, pushid),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "pushType",
+        .dataTypeSpecific.className = NULL,
+        .number = Route_FieldNumber_PushType,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(Route__storage_, pushType),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "time",
+        .dataTypeSpecific.className = NULL,
+        .number = Route_FieldNumber_Time,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(Route__storage_, time),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "pushPlat",
+        .dataTypeSpecific.className = NULL,
+        .number = Route_FieldNumber_PushPlat,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(Route__storage_, pushPlat),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[Route class]
+                                     rootClass:[FlappyRoot class]
+                                          file:FlappyRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(Route__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\003\001\005A\000\004\010\000\006\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG
