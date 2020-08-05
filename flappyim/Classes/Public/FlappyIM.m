@@ -411,6 +411,11 @@
     }
 }
 
+//设置推送平台
+-(void)setPlatfrom:(NSString*)platform{
+    [FlappyApiConfig shareInstance].pushPlat=platform;
+}
+
 
 //增加消息的监听
 -(void)addGloableMsgListener:(MessageListener)listener{
@@ -704,7 +709,8 @@
     NSDictionary *parameters = @{@"userID":@"",
                                  @"userExtendID":userExtendID,
                                  @"device":DEVICE_TYPE,
-                                 @"pushid":self.pushID
+                                 @"pushid":self.pushID,
+                                 @"pushplat":[FlappyApiConfig shareInstance].pushPlat
     };
     
     
@@ -814,7 +820,8 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userID":[[FlappyData shareInstance]getUser].userId,
                                  @"device":DEVICE_TYPE,
-                                 @"pushid":self.pushID
+                                 @"pushid":self.pushID,
+                                 @"pushplat":[FlappyApiConfig shareInstance].pushPlat
     };
     
     //创建新的

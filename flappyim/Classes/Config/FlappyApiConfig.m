@@ -98,6 +98,11 @@
     
     //删除会话中的用户
     self.URL_delUserInSession= [NSString stringWithFormat:@"%@/api/delUserInSession",self.BaseUrl];
+    
+    //默认生产环境
+    if(self.pushPlat==nil){
+        self.pushPlat=@"release";
+    }
 }
 
 

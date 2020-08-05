@@ -38,6 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString* URL_delUserInSession;
 
 
+//设备
+@property (nonatomic,copy) NSString*  pushPlat;
+
+
 //重新设置服务器地址
 -(void)resetServer:(NSString*)serverUrl
       andUploadUrl:(NSString*)upload;
