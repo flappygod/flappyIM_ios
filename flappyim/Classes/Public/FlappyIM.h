@@ -18,9 +18,9 @@
 #import "FlappyChatSession.h"
 #import "FlappyApiRequest.h"
 #import "FlappySocket.h"
+#import "ReachabilityFlappy.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import <Reachability/Reachability.h>
 #import <AFNetworking/AFNetworking.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
@@ -67,6 +67,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //判断当前账号是否登录
 -(Boolean)isLogin;
+
+//获取登录信息
+-(ChatUser*)getLoginInfo;
 
 
 //创建账号

@@ -1,6 +1,6 @@
 {
   "name": "flappyim",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "summary": "A im named flappyim",
   "description": "flappyIM  for  IOS",
   "homepage": "https://github.com/flappygod/flappyIM_ios",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/flappygod/flappyIM_ios.git",
-    "tag": "0.3.1"
+    "tag": "0.3.3"
   },
   "platforms": {
     "ios": "8.0"
@@ -46,9 +46,6 @@
     ],
     "CocoaAsyncSocket": [
       "~> 7.6.3"
-    ],
-    "Reachability": [
-      "~> 3.2"
     ],
     "FMDB": [
       "~> 2.7.5"

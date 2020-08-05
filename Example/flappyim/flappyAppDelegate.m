@@ -17,6 +17,9 @@
     //注册远程通知
     [[FlappyIM shareInstance]registerRemoteNotice:application];
     
+    //通知处理
+    [[FlappyIM shareInstance] didReceiveRemoteNotification:[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]];
+    
     return YES;
 }
 

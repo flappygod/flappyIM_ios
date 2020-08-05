@@ -73,8 +73,7 @@
     //消息被点击
     [[FlappyIM shareInstance] setNotifyClickListener:^(ChatMessage * _Nullable message) {
         //打印字符串
-        NSLog(@"阿瓦达哇大");
-        
+        NSLog(@"%@", [NSString stringWithFormat:@"收到点击推送的消息:::::::%@",[message getChatText]]);
     }];
     
     [[FlappyIM shareInstance]  getUserSessions:^(id _Nullable data) {

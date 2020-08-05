@@ -25,9 +25,9 @@
 @interface FlappyIM ()
 
 //用于监听网络变化
-@property (nonatomic,strong) Reachability* hostReachability;
+@property (nonatomic,strong) ReachabilityFlappy* hostReachability;
 //用于监听网络变化
-@property (nonatomic,strong) Reachability* internetReachability;
+@property (nonatomic,strong) ReachabilityFlappy* internetReachability;
 //用于联网的socket
 @property (nonatomic,strong) FlappySocket* flappysocket;
 //被踢下线了
@@ -257,18 +257,20 @@
 
 //监听到本地的通知
 -(void)didReceiveRemoteNotification:(NSDictionary *)userInfo{
-    if(self.notifyClicked!=nil){
-        //获取消息
-        NSString* msg=userInfo[@"message"];
-        //转换为消息体
-        self.notifyClicked([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
-        //移除
-        UNRemoveObject(@"flappy_message");
-    }else{
-        //获取消息
-        NSString* msg=userInfo[@"message"];
-        //保存本地
-        UNSaveObject(msg,@"flappy_message");
+    if(userInfo!=nil&&userInfo[@"message"]!=nil){
+        if(self.notifyClicked!=nil){
+            //获取消息
+            NSString* msg=userInfo[@"message"];
+            //转换为消息体
+            self.notifyClicked([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
+            //移除
+            UNRemoveObject(@"flappy_message");
+        }else{
+            //获取消息
+            NSString* msg=userInfo[@"message"];
+            //保存本地
+            UNSaveObject(msg,@"flappy_message");
+        }
     }
 }
 
@@ -310,8 +312,6 @@
                                          @"device":DEVICE_TYPE,
                                          @"pushid":deviceTokenStr
             };
-            //创建
-            self.flappysocket=[[FlappySocket alloc] init];
             //注册地址
             NSString *urlString = [FlappyApiConfig shareInstance].URL_changePush;
             //循环引用
@@ -511,16 +511,16 @@
 -(void)setupNotify{
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reachabilityChanged:)
-                                                 name:kReachabilityChangedNotification
+                                                 name:kReachabilityChangedNotificationFlappy
                                                object:nil];
     // 设置网络检测的站点
     NSString *remoteHostName = @"www.baidu.com";
     //创建
-    self.hostReachability = [Reachability reachabilityWithHostName:remoteHostName];
+    self.hostReachability = [ReachabilityFlappy reachabilityWithHostName:remoteHostName];
     [self.hostReachability startNotifier];
     [self updateInterfaceWithReachability:self.hostReachability];
     //创建
-    self.internetReachability = [Reachability reachabilityForInternetConnection];
+    self.internetReachability = [ReachabilityFlappy reachabilityForInternetConnection];
     [self.internetReachability startNotifier];
     [self updateInterfaceWithReachability:self.internetReachability];
     
@@ -558,15 +558,15 @@
 //变化监听
 - (void) reachabilityChanged:(NSNotification *)note
 {
-    Reachability* curReach = [note object];
+    ReachabilityFlappy* curReach = [note object];
     [self updateInterfaceWithReachability:curReach];
 }
 
 //更新网络状态
-- (void)updateInterfaceWithReachability:(Reachability *)reachability
+- (void)updateInterfaceWithReachability:(ReachabilityFlappy *)reachability
 {
     
-    NetworkStatus netStatus = [reachability currentReachabilityStatus];
+    NetworkStatusFlappy netStatus = [reachability currentReachabilityStatus];
     switch (netStatus) {
         case 0:
             break;
@@ -585,7 +585,7 @@
 -(void)stopOberver{
     //移除监听
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:kReachabilityChangedNotification
+                                                    name:kReachabilityChangedNotificationFlappy
                                                   object:nil];
     
     
@@ -1232,6 +1232,14 @@
     }
     //返回状态
     return true;
+}
+
+//获取登录信息
+-(ChatUser*)getLoginInfo{
+    //获取当前账户
+    ChatUser* user=[[FlappyData shareInstance]getUser];
+    //获取当前账户
+    return user;
 }
 
 #pragma  dealloc
