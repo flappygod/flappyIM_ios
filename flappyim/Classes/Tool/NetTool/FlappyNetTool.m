@@ -39,21 +39,19 @@
     
     NSLog(@"NewWorkState --- %@", netWorkState);
     
-    
-    
-    if ([netWorkState isEqualToString:@"Unknow"] || [netWorkState isEqualToString:@"Not Reachable"]) {// 未知 或 无网络
-        
+    if ( [netWorkState isEqualToString:@"Not Reachable"]) {
         return 0;
-        
     }
-    
-    else if ([netWorkState isEqualToString:@"Reachable via WWAN"]) {// 蜂窝数据
-        
+    // 未知
+    else if([netWorkState isEqualToString:@"Unknow"]){
+        return -1;
+    }
+    // 蜂窝数据
+    else if ([netWorkState isEqualToString:@"Reachable via WWAN"]) {
         return 1;
-        
     }
-    
-    else {// WiFi
+    // WiFi
+    else {
         
         return 2;
         
