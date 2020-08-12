@@ -8,7 +8,7 @@
 
 #import "FlappyUploadTool.h"
 #import "FlappyStringTool.h"
-#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFNetworking-umbrella.h>
 
 
 @implementation FlappyUploadTool
@@ -65,8 +65,7 @@
     
     __weak typeof(self) safeSelf=self;
     
-    //开始上传
-    [manager POST:urlPath parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    [manager POST:urlPath parameters:nil headers:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         //错误
         NSError *error;
         //URL
@@ -90,8 +89,6 @@
         }
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
-        
-        
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         //结束
         if(safeSelf.successBlock!=nil)
@@ -107,13 +104,14 @@
                                                         userInfo:nil]);
         }
     }];
+    
 }
 
 
 
 //上传图片和视频
 - (void)uploadImageAndMovieBaseModel:(NSString*)urlPath
-                            andModels:(NSMutableArray *)models {
+                           andModels:(NSMutableArray *)models {
     
     
     //创建AFHTTPSessionManager
@@ -136,7 +134,7 @@
     __weak typeof(self) safeSelf=self;
     
     //开始上传
-    [manager POST:urlPath parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    [manager POST:urlPath parameters:nil headers:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
         for(int s=0;s<models.count;s++){
             FlappyUploadModel* model=[models objectAtIndex:s];

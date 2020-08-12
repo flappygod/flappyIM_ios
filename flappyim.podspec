@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'flappyim'
-  s.version          = '0.3.8'
+  s.version          = '0.3.9'
   s.summary          = 'A im named flappyim'
 
 # This description is used to generate tags and improve search results.
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/flappygod/flappyIM_ios.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
 
   s.source_files = 'flappyim/Classes/**/*'
   s.public_header_files = 'flappyim/Classes/Public/*.h'
@@ -41,7 +41,7 @@ Pod::Spec.new do |s|
   s.user_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1' }
   s.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1' }
   s.frameworks = 'UIKit','Foundation','AVFoundation','CoreMedia','UserNotifications','AVKit'
-  s.dependency 'AFNetworking', '~> 3.2.1'
+  s.dependency 'AFNetworking', '~> 4.0.1'
   s.dependency 'MJExtension', '~> 3.1.0'
   s.dependency 'Protobuf', '~> 3.9.0'
   s.dependency 'CocoaAsyncSocket', '~> 7.6.3'

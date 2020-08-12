@@ -1,22 +1,22 @@
 PODS:
-  - AFNetworking (3.2.1):
-    - AFNetworking/NSURLSession (= 3.2.1)
-    - AFNetworking/Reachability (= 3.2.1)
-    - AFNetworking/Security (= 3.2.1)
-    - AFNetworking/Serialization (= 3.2.1)
-    - AFNetworking/UIKit (= 3.2.1)
-  - AFNetworking/NSURLSession (3.2.1):
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (3.2.1)
-  - AFNetworking/Security (3.2.1)
-  - AFNetworking/Serialization (3.2.1)
-  - AFNetworking/UIKit (3.2.1):
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
-  - CocoaAsyncSocket (7.6.3)
-  - flappyim (0.3.3):
-    - AFNetworking (~> 3.2.1)
+  - CocoaAsyncSocket (7.6.4)
+  - flappyim (0.3.8):
+    - AFNetworking (~> 4.0.1)
     - CocoaAsyncSocket (~> 7.6.3)
     - FMDB (~> 2.7.5)
     - MJExtension (~> 3.1.0)
@@ -24,14 +24,14 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - MJExtension (3.1.0)
-  - Protobuf (3.9.0)
+  - MJExtension (3.1.2)
+  - Protobuf (3.9.2)
 
 DEPENDENCIES:
   - flappyim (from `../`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - AFNetworking
     - CocoaAsyncSocket
     - FMDB
@@ -43,13 +43,13 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
-  CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
-  flappyim: 137ddf15015a61dd646d34dfe94dcc46d1eb777e
+  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
+  flappyim: c4e6bc21edf629da3459135a76d810901abcbd09
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  MJExtension: 6b69b3bef2864fd550ce1a184eda219e321209d2
-  Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
+  MJExtension: 81e8e411ced318561dd09334b0c83d8227cef79c
+  Protobuf: 67fb42ba613def994e61854de2b3164f13790cc4
 
-PODFILE CHECKSUM: feb42ff4229e00a2f94b2e56c132068f957e7df0
+PODFILE CHECKSUM: a2fa1c546ccead3213f6b7e995550649642bdf2b
 
 COCOAPODS: 1.9.3

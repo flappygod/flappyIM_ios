@@ -6,7 +6,7 @@
 //
 
 #import "FlappyNetTool.h"
-#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFNetworking-umbrella.h>
 
 @implementation FlappyNetTool
 

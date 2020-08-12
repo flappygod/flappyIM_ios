@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFNetworking-umbrella.h>
 #import "FlappyBlocks.h"
 #import "FlappyChatSession.h"
 #import "ChatMessage.h"

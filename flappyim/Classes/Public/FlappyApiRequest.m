@@ -28,28 +28,29 @@
     //请求数据
     [manager POST:url
        parameters:param
+          headers:nil
          progress:^(NSProgress * _Nonnull uploadProgress) {
-             
-         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-             //请求成功
-             if(responseObject!=nil&&[responseObject[@"resultCode"] integerValue]==RESULT_SUCCESS){
-                 //数据请求成功
-                 success(responseObject[@"resultData"]);
-             }else{
-                 //消息
-                 NSString* resultStr=responseObject[@"resultMessage"];
-                 //返回代码
-                 NSString* resultCode=[FlappyStringTool toUnNullZeroStr:responseObject[@"resultCode"]];
-                 //请求失败
-                 failure([[NSError alloc]initWithDomain:[FlappyStringTool toUnNullStr:resultStr]
-                                                   code:RESULT_FAILURE
-                                               userInfo:nil],
-                         [resultCode integerValue]);
-             }
-         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-             //网络错误请求失败
-             failure(error,RESULT_NETERROR);
-         }];
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //请求成功
+        if(responseObject!=nil&&[responseObject[@"resultCode"] integerValue]==RESULT_SUCCESS){
+            //数据请求成功
+            success(responseObject[@"resultData"]);
+        }else{
+            //消息
+            NSString* resultStr=responseObject[@"resultMessage"];
+            //返回代码
+            NSString* resultCode=[FlappyStringTool toUnNullZeroStr:responseObject[@"resultCode"]];
+            //请求失败
+            failure([[NSError alloc]initWithDomain:[FlappyStringTool toUnNullStr:resultStr]
+                                              code:RESULT_FAILURE
+                                          userInfo:nil],
+                    [resultCode integerValue]);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        //网络错误请求失败
+        failure(error,RESULT_NETERROR);
+    }];
 }
 
 

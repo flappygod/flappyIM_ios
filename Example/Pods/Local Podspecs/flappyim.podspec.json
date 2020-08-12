@@ -1,6 +1,6 @@
 {
   "name": "flappyim",
-  "version": "0.3.3",
+  "version": "0.3.8",
   "summary": "A im named flappyim",
   "description": "flappyIM  for  IOS",
   "homepage": "https://github.com/flappygod/flappyIM_ios",
@@ -13,10 +13,10 @@
   },
   "source": {
     "git": "https://github.com/flappygod/flappyIM_ios.git",
-    "tag": "0.3.3"
+    "tag": "0.3.8"
   },
   "platforms": {
-    "ios": "8.0"
+    "ios": "9.0"
   },
   "source_files": "flappyim/Classes/**/*",
   "public_header_files": "flappyim/Classes/Public/*.h",
@@ -36,7 +36,7 @@
   ],
   "dependencies": {
     "AFNetworking": [
-      "~> 3.2.1"
+      "~> 4.0.1"
     ],
     "MJExtension": [
       "~> 3.1.0"

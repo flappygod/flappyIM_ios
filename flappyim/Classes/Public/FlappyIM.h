@@ -21,7 +21,7 @@
 #import "ReachabilityFlappy.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFNetworking-umbrella.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 
