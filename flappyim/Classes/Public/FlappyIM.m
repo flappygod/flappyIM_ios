@@ -775,7 +775,8 @@
     NSDictionary *parameters = @{@"userID":@"",
                                  @"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"device":DEVICE_TYPE,
-                                 @"pushid":self.pushID
+                                 @"pushid":self.pushID,
+                                 @"pushplat":[FlappyApiConfig shareInstance].pushPlat
     };
     //请求数据
     [FlappyApiRequest postRequest:urlString
