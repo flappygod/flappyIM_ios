@@ -31,12 +31,17 @@
 
 @implementation FlappySocket
 
-
--(instancetype)init{
+//初始化
+-(instancetype)initWithSuccess:(FlappySuccess)success
+                    andFailure:(FlappyFailure)failure
+                       andDead:(FlappyDead)dead{
     self=[super init];
     if(self!=nil){
         self.receiveData=[[NSMutableData alloc]init];
         self.updateArray=[[NSMutableArray alloc]init];
+        self.success=success;
+        self.failure=failure;
+        self.dead=dead;
     }
     return self;
 }
@@ -45,14 +50,8 @@
 //建立长连接
 -(void)connectSocket:(NSString*)serverAddress
             withPort:(NSString*)serverPort
-            withUser:(ChatUser*)user
-         withSuccess:(FlappySuccess)success
-         withFailure:(FlappyFailure)failure
-                dead:(FlappyDead)dead{
+            withUser:(ChatUser*)user{
     
-    //保留引用
-    self.success=success;
-    self.failure=failure;
     
     //建立长连接
     self.socket=[[GCDAsyncSocket alloc] initWithDelegate:self
@@ -84,8 +83,6 @@
     else{
         //保存用户数据
         self.user=user;
-        //socket非正常退出的时候，重新登录
-        self.dead = dead;
     }
 }
 

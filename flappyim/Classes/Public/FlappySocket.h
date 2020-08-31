@@ -40,17 +40,19 @@
 @property (nonatomic,strong)  NSMutableArray*  updateArray;
 
 
+//进行初始化
+-(instancetype)initWithSuccess:(FlappySuccess)success
+                    andFailure:(FlappyFailure)failure
+                       andDead:(FlappyDead)dead;
+
 //建立长连接
 -(void)connectSocket:(NSString*)serverAddress
             withPort:(NSString*)serverPort
-            withUser:(ChatUser*)user
-         withSuccess:(FlappySuccess)success
-         withFailure:(FlappyFailure)failure
-                dead:(FlappyDead)dead;
-
+            withUser:(ChatUser*)user;
 
 //主动下线
 -(void)offline:(Boolean)regular;
+
 
 @end
 
