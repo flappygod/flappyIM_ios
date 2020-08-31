@@ -612,12 +612,13 @@
 //进行初始化
 -(void)setupReconnect{
     //自动登录
-    ChatUser* user=[[FlappyData shareInstance]getUser];
+    ChatUser* user=[[FlappyData shareInstance] getUser];
     
     //当前用户没有登录或者被踢下线的情况
     if(user==nil||user.login==false){
         return;
     }
+    
     //当前是已经连接的，不需要继续登录了
     if(self.flappysocket!=nil){
         //不为空而且已经连接，不需要继续登录了
@@ -625,35 +626,49 @@
             return;
         }
     }
-    //开始
-    __weak typeof(self) safeSelf=self;
+    
     //如果网络是正常连接的
     if([FlappyNetTool getCurrentNetworkState]!=0&&self.isActive){
-        //防止重复请求
-        [self autoLogin:^(id data) {
-            
-            NSLog(@"自动登录成功");
-            
-        } andFailure:^(NSError * error, NSInteger code) {
-            //当前账户已经被踢下线了
-            if(code==RESULT_KNICKED){
-                //清空user
-                ChatUser* uesr=[[FlappyData shareInstance]getUser];
-                uesr.login=false;
-                [[FlappyData shareInstance]saveUser:uesr];
-                //当前账户被踢下线
-                if(self.knicked!=nil){
-                    self.knicked();
-                    self.knicked=nil;
-                }
-            }else{
-                //5秒后重新执行登录
-                [safeSelf performSelector:@selector(setupReconnect)
-                               withObject:nil
-                               afterDelay:5];
-            }
-        }];
+        [self autoLogin];
     }
+}
+
+-(void)autoLogin{
+    //开始
+    __weak typeof(self) safeSelf=self;
+    
+    //如果正在loading,那么延后执行
+    if(self.isLoading){
+        [safeSelf performSelector:@selector(setupReconnect)
+                       withObject:nil
+                       afterDelay:5];
+        return;
+    }
+    
+    //防止重复请求
+    [self autoLogin:^(id data) {
+        
+        NSLog(@"自动登录成功");
+        
+    } andFailure:^(NSError * error, NSInteger code) {
+        //当前账户已经被踢下线了
+        if(code==RESULT_KNICKED){
+            //清空user
+            ChatUser* uesr=[[FlappyData shareInstance]getUser];
+            uesr.login=false;
+            [[FlappyData shareInstance]saveUser:uesr];
+            //当前账户被踢下线
+            if(safeSelf.knicked!=nil){
+                safeSelf.knicked();
+                safeSelf.knicked=nil;
+            }
+        }else{
+            //5秒后重新执行登录
+            [safeSelf performSelector:@selector(setupReconnect)
+                           withObject:nil
+                           afterDelay:5];
+        }
+    }];
 }
 
 
