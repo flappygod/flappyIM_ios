@@ -39,6 +39,9 @@
 //被踢下线了
 @property (nonatomic,assign) bool isSetup;
 
+//当前正在登录
+@property (nonatomic,assign) bool isLoading;
+
 
 @end
 
@@ -716,6 +719,10 @@
     
     //创建
     self.flappysocket=[[FlappySocket alloc] init];
+    
+    //当前的设备正在登录
+    self.isLoading=true;
+    
     //弱引用保证
     __weak typeof(self) safeSelf=self;
     //请求数据
@@ -729,15 +736,20 @@
         ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
         //登录成功
         user.login=true;
-        
-        
+        //登录数据
         safeSelf.flappysocket.loginData=data;
         //连接服务器
         [safeSelf.flappysocket connectSocket:data[@"serverIP"]
                                     withPort:data[@"serverPort"]
                                     withUser:user
-                                 withSuccess:success
-                                 withFailure:failure
+                                 withSuccess:^(id sdata) {
+            success(sdata);
+            safeSelf.isLoading=false;
+        }
+                                 withFailure:^(NSError *error,NSInteger code){
+            failure(error,code)
+            safeSelf.isLoading=false;
+        }
                                         dead:^{
             [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
                                        withObject:nil
@@ -747,6 +759,7 @@
     } withFailure:^(NSError * error, NSInteger code) {
         //登录失败，清空回调
         failure(error,code);
+        safeSelf.isLoading=false;
     }];
 }
 
