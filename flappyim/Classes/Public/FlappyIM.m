@@ -703,41 +703,44 @@
   andSuccess:(FlappySuccess)success
   andFailure:(FlappyFailure)failure{
     
-    
-    //当前有flappysocket，而且正在登录
-    if(self.flappysocket!=nil&&(self.flappysocket.success!=nil||self.flappysocket.failure!=nil)){
+    @synchronized(self){
         
-        //直接失败
-        failure([NSError errorWithDomain:@"A login thread also run"
-                                    code:RESULT_NETERROR
-                                userInfo:nil],RESULT_NETERROR);
-        return ;
+        //如果当前正在loading
+        if(self.isLoading){
+            
+            //直接失败
+            failure([NSError errorWithDomain:@"A login thread also run"
+                                        code:RESULT_NETERROR
+                                    userInfo:nil],RESULT_NETERROR);
+            return ;
+        }
+        
+        //如果当前有正在连接的socket,先下线了
+        if(self.flappysocket!=nil){
+            //之前的正常下线
+            [self.flappysocket offline:true];
+        }
+        
+        
+        //注册地址
+        NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
+        
+        //请求体，参数（NSDictionary 类型）
+        NSDictionary *parameters = @{@"userID":@"",
+                                     @"userExtendID":userExtendID,
+                                     @"device":DEVICE_TYPE,
+                                     @"pushid":self.pushID,
+                                     @"pushplat":[FlappyApiConfig shareInstance].pushPlat
+        };
+        
+        
+        
+        //当前的设备正在登录
+        self.isLoading=true;
     }
-    
-    //如果当前有正在连接的socket,先下线了
-    if(self.flappysocket!=nil){
-        //之前的正常下线
-        [self.flappysocket offline:true];
-    }
-    
-    
-    //注册地址
-    NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
-    
-    //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"userID":@"",
-                                 @"userExtendID":userExtendID,
-                                 @"device":DEVICE_TYPE,
-                                 @"pushid":self.pushID,
-                                 @"pushplat":[FlappyApiConfig shareInstance].pushPlat
-    };
-    
-    
+
     //创建
     self.flappysocket=[[FlappySocket alloc] init];
-    
-    //当前的设备正在登录
-    self.isLoading=true;
     
     //弱引用保证
     __weak typeof(self) safeSelf=self;
