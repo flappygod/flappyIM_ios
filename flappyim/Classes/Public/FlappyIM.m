@@ -831,7 +831,7 @@
     
     
     //当前有flappysocket，而且正在登录
-    if(self.flappysocket!=nil&&(self.flappysocket.success!=nil||self.flappysocket.failure!=nil)){
+    if(self.isLoading)){
         
         //直接失败
         failure([NSError errorWithDomain:@"A login thread also run"
