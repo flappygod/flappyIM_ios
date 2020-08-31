@@ -633,6 +633,7 @@
     }
 }
 
+//执行自动登录的方法
 -(void)autoLogin{
     //开始
     __weak typeof(self) safeSelf=self;
