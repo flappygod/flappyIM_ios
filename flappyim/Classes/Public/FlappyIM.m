@@ -1259,6 +1259,14 @@
     }];
 }
 
+//判断当前是否在线
+-(Boolean)isOnline{
+    if(self.flappysocket!=nil&&self.flappysocket.isActive){
+        return true;
+    }
+    return false;
+}
+
 
 //判断当前用户是否登录
 -(Boolean)isLogin{

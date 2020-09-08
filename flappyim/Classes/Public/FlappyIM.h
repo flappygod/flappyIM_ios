@@ -71,6 +71,9 @@ NS_ASSUME_NONNULL_BEGIN
 //判断当前账号是否登录
 -(Boolean)isLogin;
 
+//判断当前是否在线
+-(Boolean)isOnline;
+
 //获取登录信息
 -(ChatUser*)getLoginInfo;
 

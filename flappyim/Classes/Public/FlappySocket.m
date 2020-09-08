@@ -37,6 +37,7 @@
                        andDead:(FlappyDead)dead{
     self=[super init];
     if(self!=nil){
+        self.isActive=false;
         self.receiveData=[[NSMutableData alloc]init];
         self.updateArray=[[NSMutableArray alloc]init];
         self.success=success;
@@ -215,6 +216,7 @@
 
 //主动下线
 -(void)offline:(Boolean)regular{
+    self.isActive=false;
     //正常退出，非正常退出的回调不执行
     if(regular){
         self.dead=nil;
@@ -293,47 +295,47 @@
     //返回登录消息
     if(respones.type==RES_LOGIN)
     {
+        //当前在线了
+        self.isActive=true;
+        //用户已经登录过了
+        self.user.login=true;
+        //保存用户登录数据
+        [[FlappyData shareInstance] saveUser:self.user];
         //登录成功
         if(self.success!=nil){
-            //用户已经登录过了
-            self.user.login=true;
-            //保存用户登录数据
-            [[FlappyData shareInstance] saveUser:self.user];
-            //登录成功
             self.success(self.loginData);
-            //登录成功后保存推送类型，保存用户所有的会话列表
-            @try {
-                //推送类型
-                id dataType=self.loginData[@"route"][@"routePushType"];
-                //推送类型
-                NSInteger type=(long)dataType;
-                //保存
-                [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
-                //修改
-                NSArray* array=self.loginData[@"sessions"];
-                //修改session
-                NSMutableArray* sessions=[[NSMutableArray alloc]init];
-                //遍历
-                for(int s=0;s<array.count;s++){
-                    //数据字典
-                    NSDictionary* dic=[array objectAtIndex:s];
-                    //数据
-                    SessionData* data=[SessionData  mj_objectWithKeyValues:dic];
-                    //添加
-                    [sessions addObject:data];
-                }
-                //插入会话数据
-                [[FlappyDataBase shareInstance] insertSessions:sessions];
-                
-            } @catch (NSException *exception) {
-            } @finally {
-            }
-            //清空回调和数据
-            self.success=nil;
-            self.failure=nil;
-            self.loginData=nil;
-            
         }
+        //登录成功后保存推送类型，保存用户所有的会话列表
+        @try {
+            //推送类型
+            id dataType=self.loginData[@"route"][@"routePushType"];
+            //推送类型
+            NSInteger type=(long)dataType;
+            //保存
+            [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
+            //修改
+            NSArray* array=self.loginData[@"sessions"];
+            //修改session
+            NSMutableArray* sessions=[[NSMutableArray alloc]init];
+            //遍历
+            for(int s=0;s<array.count;s++){
+                //数据字典
+                NSDictionary* dic=[array objectAtIndex:s];
+                //数据
+                SessionData* data=[SessionData  mj_objectWithKeyValues:dic];
+                //添加
+                [sessions addObject:data];
+            }
+            //插入会话数据
+            [[FlappyDataBase shareInstance] insertSessions:sessions];
+            
+        } @catch (NSException *exception) {
+        } @finally {
+        }
+        //清空回调和数据
+        self.success=nil;
+        self.failure=nil;
+        self.loginData=nil;
         //消息信息
         NSMutableArray* array=respones.msgArray;
         //进行排序

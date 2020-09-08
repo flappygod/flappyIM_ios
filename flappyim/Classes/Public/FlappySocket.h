@@ -38,6 +38,8 @@
 @property (nonatomic,strong)  id  loginData;
 //正在更新的数据
 @property (nonatomic,strong)  NSMutableArray*  updateArray;
+//登录的数据
+@property (nonatomic,assign)  Boolean  isActive;
 
 
 //进行初始化
