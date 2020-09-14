@@ -8,6 +8,7 @@
 
 #import "FlappyUploadTool.h"
 #import "FlappyStringTool.h"
+#import "FlappyApiRequest.h"
 #import <AFNetworking/AFNetworking-umbrella.h>
 
 
@@ -47,7 +48,7 @@
         }
     }
     //创建AFHTTPSessionManager
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    AFHTTPSessionManager *manager = [FlappyApiRequest shareManager];
     
     //设置响应文件类型为JSON类型
     manager.responseSerializer    = [AFJSONResponseSerializer serializer];
@@ -115,7 +116,7 @@
     
     
     //创建AFHTTPSessionManager
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    AFHTTPSessionManager *manager = [FlappyApiRequest shareManager];
     
     //设置响应文件类型为JSON类型
     manager.responseSerializer    = [AFJSONResponseSerializer serializer];
