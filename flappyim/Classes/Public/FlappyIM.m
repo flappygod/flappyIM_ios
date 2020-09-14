@@ -679,9 +679,9 @@
                 safeSelf.knicked=nil;
             }
         }else{
-//            [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
-//                                                     selector:@selector(setupReconnect)
-//                                                       object:nil];
+            [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
+                                                     selector:@selector(setupReconnect)
+                                                       object:nil];
             //5秒后重新执行登录
             [safeSelf performSelector:@selector(setupReconnect)
                            withObject:nil
