@@ -11,6 +11,19 @@
 
 @implementation FlappyApiRequest
 
+//使用单例模式
++(AFHTTPSessionManager*)shareManager {
+    static AFHTTPSessionManager *manager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        //不能再使用alloc方法
+        //因为已经重写了allocWithZone方法，所以这里要调用父类的分配空间的方法
+        manager = [AFHTTPSessionManager manager];
+        
+    });
+    return manager;
+}
+
 
 //请求接口
 +(void)postRequest:(NSString*)url
@@ -20,7 +33,7 @@
     
     
     //初始化一个AFHTTPSessionManager
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    AFHTTPSessionManager *manager = [FlappyApiRequest shareManager];
     //设置请求体数据为json类型
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
     //设置响应体数据为json类型
