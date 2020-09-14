@@ -63,7 +63,7 @@
     self.URL_videoUpload= [NSString stringWithFormat:@"%@/upload/videoUpload",self.BaseUploadUrl];
     
     //修改推送ID
-    self.URL_changePush= [NSString stringWithFormat:@"%@/upload/changePush",self.BaseUploadUrl];
+    self.URL_changePush= [NSString stringWithFormat:@"%@/api/changePush",self.BaseUploadUrl];
     
     //创建账户
     self.URL_register= [NSString stringWithFormat:@"%@/api/register",self.BaseUrl];
