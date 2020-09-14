@@ -774,8 +774,8 @@
         self.flappysocket=[[FlappySocket alloc] initWithSuccess:^(id sdata) {
             success(sdata);
             safeSelf.isLoading=false;
-        } andFailure:wrap
-                           
+        }
+                                                     andFailure:wrap
                                                         andDead:^{
             [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
                                                      selector:@selector(setupReconnect)
