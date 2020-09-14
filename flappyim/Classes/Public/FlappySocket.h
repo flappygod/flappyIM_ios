@@ -19,6 +19,7 @@
 #import "FlappyChatSession.h"
 #import "FlappyApiRequest.h"
 #import "FlappySocket.h"
+#import "FlappyFailureWrap.h"
 
 
 @interface FlappySocket : NSObject<GCDAsyncSocketDelegate>
@@ -29,7 +30,7 @@
 //成功
 @property (nonatomic,strong)  FlappySuccess  success;
 //失败
-@property (nonatomic,strong)  FlappyFailure  failure;
+@property (nonatomic,strong)  FlappyFailureWrap*  failure;
 //正在登录的用户
 @property (nonatomic,strong)  ChatUser*  user;
 //登录成功之后非正常退出的情况
@@ -44,7 +45,7 @@
 
 //进行初始化
 -(instancetype)initWithSuccess:(FlappySuccess)success
-                    andFailure:(FlappyFailure)failure
+                    andFailure:(FlappyFailureWrap*)failure
                        andDead:(FlappyDead)dead;
 
 //建立长连接

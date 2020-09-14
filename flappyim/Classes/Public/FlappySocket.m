@@ -33,7 +33,7 @@
 
 //初始化
 -(instancetype)initWithSuccess:(FlappySuccess)success
-                    andFailure:(FlappyFailure)failure
+                    andFailure:(FlappyFailureWrap*)failure
                        andDead:(FlappyDead)dead{
     self=[super init];
     if(self!=nil){
@@ -73,8 +73,8 @@
     //失败
     if(error!=nil){
         NSLog(@"%@",error.description);
-        //错误
-        self.failure(error, RESULT_NETERROR);
+        //错误error, RESULT_NETERROR
+        [self.failure completeBlock:error andCode:RESULT_NETERROR];
         //错误
         self.failure=nil;
         //连接错误
@@ -125,11 +125,12 @@
     [self.socket readDataWithTimeout:-1 tag:0];
     //停止之前的
     [NSObject cancelPreviousPerformRequestsWithTarget:self
-                                             selector:@selector(startHeart)
+                                             selector:@selector(startHeart:)
                                                object:nil];
     //开启心跳线程
-    [self performSelector:@selector(startHeart:)
-               withObject:nil];
+    [self performSelectorOnMainThread:@selector(startHeart:)
+                           withObject:nil
+                        waitUntilDone:false];
     
 }
 
@@ -231,10 +232,9 @@
     //登录失败
     if(self.failure!=nil){
         //失败
-        self.failure([NSError errorWithDomain:@"Socket closed by a new login thread"
-                                         code:0
-                                     userInfo:nil],
-                     RESULT_NETERROR);
+        [self.failure completeBlock:[NSError errorWithDomain:@"Socket closed by a new login thread"
+                                                        code:0
+                                                    userInfo:nil] andCode:RESULT_NETERROR];
         //失败
         self.failure=nil;
         //清空

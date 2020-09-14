@@ -19,6 +19,7 @@
 #import "FlappySender.h"
 #import "FlappyApiConfig.h"
 #import "FlappyStringTool.h"
+#import "FlappyFailureWrap.h"
 #import "FlappyDef.h"
 
 
@@ -678,9 +679,9 @@
                 safeSelf.knicked=nil;
             }
         }else{
-            [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
-                                                     selector:@selector(setupReconnect)
-                                                       object:nil];
+//            [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
+//                                                     selector:@selector(setupReconnect)
+//                                                       object:nil];
             //5秒后重新执行登录
             [safeSelf performSelector:@selector(setupReconnect)
                            withObject:nil
@@ -756,14 +757,26 @@
         //弱引用保证
         __weak typeof(self) safeSelf=self;
         
+        
+        //进行
+        FlappyFailureWrap* wrap=[[FlappyFailureWrap alloc] initWithFailure:^(NSError *error,NSInteger code){
+            //失败
+            failure(error,code);
+            //不在加载中状态
+            safeSelf.isLoading=false;
+        }];
+        
+        //安全
+        __weak typeof(wrap) safeWrap=wrap;
+        
+        
         //创建socket
         self.flappysocket=[[FlappySocket alloc] initWithSuccess:^(id sdata) {
             success(sdata);
             safeSelf.isLoading=false;
-        } andFailure:^(NSError *error,NSInteger code){
-            failure(error,code);
-            safeSelf.isLoading=false;
-        } andDead:^{
+        } andFailure:wrap
+                           
+                                                        andDead:^{
             [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
                                                      selector:@selector(setupReconnect)
                                                        object:nil];
@@ -794,7 +807,11 @@
             
         } withFailure:^(NSError * error, NSInteger code) {
             //登录失败，清空回调
-            failure(error,code);
+            __strong typeof(safeWrap) strongWrap = safeWrap;
+            //失败调用
+            if(strongWrap!=nil){
+                [strongWrap completeBlock:error andCode:code];
+            }
             safeSelf.isLoading=false;
         }];
     }
@@ -876,12 +893,19 @@
                                      @"pushplat":[FlappyApiConfig shareInstance].pushPlat
         };
         
+        
+        //进行
+        FlappyFailureWrap* wrap=[[FlappyFailureWrap alloc] initWithFailure:failure];
+        
+        //安全
+        __weak typeof(wrap) safeWrap=wrap;
+        
         //当前的
         __weak typeof(self) safeSelf=self;
         
         //创建新的socket
         self.flappysocket=[[FlappySocket alloc] initWithSuccess:success
-                                                     andFailure:failure
+                                                     andFailure:wrap
                                                         andDead:^{
             
             [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
@@ -923,7 +947,11 @@
             
         } withFailure:^(NSError * error, NSInteger code) {
             //登录失败，清空回调
-            failure(error,code);
+            __strong typeof(safeWrap) strongWrap = safeWrap;
+            //失败调用
+            if(strongWrap!=nil){
+                [strongWrap completeBlock:error andCode:code];
+            }
         }];
     }
 }

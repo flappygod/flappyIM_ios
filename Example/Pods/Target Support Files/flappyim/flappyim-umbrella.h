@@ -23,6 +23,7 @@
 #import "FlappyBaseSession.h"
 #import "FlappyBlocks.h"
 #import "FlappyChatSession.h"
+#import "FlappyFailureWrap.h"
 #import "FlappyIM.h"
 #import "FlappySocket.h"
 #import "ReachabilityFlappy.h"
