@@ -329,6 +329,9 @@
                 [[FlappyData shareInstance]saveUser:user];
                 
             } withFailure:^(NSError * error, NSInteger code) {
+                [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
+                                                         selector:@selector(updateDeviceToken:)
+                                                           object:deviceTokenStr];
                 //修改失败
                 [safeSelf performSelector:@selector(updateDeviceToken:)
                                withObject:deviceTokenStr
@@ -557,9 +560,11 @@
 //监听进入页面
 -(void)applicationDidBecomeActive:(NSNotification *)notification{
     self.isActive=true;
-    [self performSelectorOnMainThread:@selector(setupReconnect)
-                           withObject:nil
-                        waitUntilDone:false];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                             selector:@selector(setupReconnect)
+                                               object:nil];
+    [self performSelector:@selector(setupReconnect)
+               withObject:nil];
     NSLog(@"重新进来后响应，该区域编写重新进入页面的逻辑");
 }
 
@@ -579,9 +584,15 @@
         case 0:
             break;
         case 1:
+            [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                                     selector:@selector(setupReconnect)
+                                                       object:nil];
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
             break;
         case 2:
+            [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                                     selector:@selector(setupReconnect)
+                                                       object:nil];
             [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
             break;
         default:
@@ -640,6 +651,9 @@
     
     //如果正在loading,那么延后执行
     if(self.isLoading){
+        [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
+                                                 selector:@selector(setupReconnect)
+                                                   object:nil];
         [safeSelf performSelector:@selector(setupReconnect)
                        withObject:nil
                        afterDelay:5];
@@ -664,6 +678,9 @@
                 safeSelf.knicked=nil;
             }
         }else{
+            [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
+                                                     selector:@selector(setupReconnect)
+                                                       object:nil];
             //5秒后重新执行登录
             [safeSelf performSelector:@selector(setupReconnect)
                            withObject:nil
@@ -747,6 +764,9 @@
             failure(error,code);
             safeSelf.isLoading=false;
         } andDead:^{
+            [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
+                                                     selector:@selector(setupReconnect)
+                                                       object:nil];
             [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
                                        withObject:nil
                                     waitUntilDone:false];
@@ -778,7 +798,7 @@
             safeSelf.isLoading=false;
         }];
     }
-
+    
 }
 
 
@@ -863,9 +883,12 @@
         self.flappysocket=[[FlappySocket alloc] initWithSuccess:success
                                                      andFailure:failure
                                                         andDead:^{
-            [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
-                                       withObject:nil
-                                    waitUntilDone:false];
+            
+            [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
+                                                     selector:@selector(setupReconnect)
+                                                       object:nil];
+            [safeSelf performSelector:@selector(setupReconnect)
+                           withObject:nil];
         }];
         
         //请求数据

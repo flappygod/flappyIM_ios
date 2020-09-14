@@ -123,10 +123,13 @@
     [self.socket writeData:reqData withTimeout:-1 tag:0];
     //开启数据读取
     [self.socket readDataWithTimeout:-1 tag:0];
+    //停止之前的
+    [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                             selector:@selector(startHeart)
+                                               object:nil];
     //开启心跳线程
-    [self performSelectorOnMainThread:@selector(startHeart:)
-                           withObject:nil
-                        waitUntilDone:false];
+    [self performSelector:@selector(startHeart:)
+               withObject:nil];
     
 }
 
