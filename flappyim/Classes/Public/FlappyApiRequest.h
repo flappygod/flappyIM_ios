@@ -17,8 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface FlappyApiRequest : NSObject
 
 
-+ (AFHTTPSessionManager*)shareManager;
-
 //请求数据
 +(void)postRequest:(NSString*)url
     withParameters:(NSDictionary *)param

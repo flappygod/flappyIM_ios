@@ -15,6 +15,19 @@
 @implementation FlappyUploadTool
 
 
+//使用单例模式
++(AFHTTPSessionManager*)shareManager {
+    static AFHTTPSessionManager *manager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        //不能再使用alloc方法
+        //因为已经重写了allocWithZone方法，所以这里要调用父类的分配空间的方法
+        manager = [AFHTTPSessionManager manager];
+        
+    });
+    return manager;
+}
+
 
 //上传图片和视频
 - (void)uploadImageAndMovieBaseModel:(NSString*)urlPath
@@ -48,7 +61,7 @@
         }
     }
     //创建AFHTTPSessionManager
-    AFHTTPSessionManager *manager = [FlappyApiRequest shareManager];
+    AFHTTPSessionManager *manager = [FlappyUploadTool shareManager];
     
     //设置响应文件类型为JSON类型
     manager.responseSerializer    = [AFJSONResponseSerializer serializer];
@@ -116,7 +129,7 @@
     
     
     //创建AFHTTPSessionManager
-    AFHTTPSessionManager *manager = [FlappyApiRequest shareManager];
+    AFHTTPSessionManager *manager = [FlappyUploadTool shareManager];
     
     //设置响应文件类型为JSON类型
     manager.responseSerializer    = [AFJSONResponseSerializer serializer];

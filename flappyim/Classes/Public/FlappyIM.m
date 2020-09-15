@@ -810,7 +810,10 @@
             __strong typeof(safeWrap) strongWrap = safeWrap;
             //失败调用
             if(strongWrap!=nil){
+                //执行
                 [strongWrap completeBlock:error andCode:code];
+                //置空
+                strongWrap=nil;
             }
             safeSelf.isLoading=false;
         }];
@@ -950,7 +953,10 @@
             __strong typeof(safeWrap) strongWrap = safeWrap;
             //失败调用
             if(strongWrap!=nil){
+                //执行
                 [strongWrap completeBlock:error andCode:code];
+                //清空
+                strongWrap=nil;
             }
         }];
     }
