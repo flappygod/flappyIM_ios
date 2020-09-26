@@ -23,6 +23,10 @@
         //不能再使用alloc方法
         //因为已经重写了allocWithZone方法，所以这里要调用父类的分配空间的方法
         _sharedSingleton = [[super allocWithZone:NULL] init];
+        //默认12秒
+        _sharedSingleton.heartInterval=12;
+        //默认正式环境
+        _sharedSingleton.pushPlat=@"release";
         //地址
         [_sharedSingleton  resetServer:FLAPPY_BASE andUploadUrl:FLAPPY_BASE];
         
@@ -54,10 +58,6 @@
     self.BaseUrl=serverUrl;
     //上传地址
     self.BaseUploadUrl=upload;
-    
-    //默认心跳为12秒
-    self.heartInterval=12;
-    
     //上传文件的地址
     self.URL_fileUpload= [NSString stringWithFormat:@"%@/upload/fileUpload",self.BaseUploadUrl];
     
@@ -101,8 +101,6 @@
     //删除会话中的用户
     self.URL_delUserInSession= [NSString stringWithFormat:@"%@/api/delUserInSession",self.BaseUrl];
     
-    //默认生产环境
-    self.pushPlat=@"release";
 }
 
 
