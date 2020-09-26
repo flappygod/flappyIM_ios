@@ -55,6 +55,8 @@
     //上传地址
     self.BaseUploadUrl=upload;
     
+    //默认心跳为12秒
+    self.heartInterval=12;
     
     //上传文件的地址
     self.URL_fileUpload= [NSString stringWithFormat:@"%@/upload/fileUpload",self.BaseUploadUrl];
