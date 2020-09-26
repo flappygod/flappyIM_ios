@@ -334,7 +334,7 @@
                 //修改失败
                 [safeSelf performSelector:@selector(updateDeviceToken:)
                                withObject:deviceTokenStr
-                               afterDelay:3];
+                               afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
             }];
         }
     }
@@ -652,7 +652,7 @@
                                                    object:nil];
         [safeSelf performSelector:@selector(setupReconnect)
                        withObject:nil
-                       afterDelay:5];
+                       afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
         return;
     }
     
@@ -680,7 +680,7 @@
             //5秒后重新执行登录
             [safeSelf performSelector:@selector(setupReconnect)
                            withObject:nil
-                           afterDelay:5];
+                           afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
         }
     }];
 }
