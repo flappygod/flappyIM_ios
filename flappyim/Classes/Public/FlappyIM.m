@@ -640,7 +640,7 @@
     }
     
     //如果网络是正常连接的
-    if([FlappyNetTool getCurrentNetworkState]!=0&&self.isActive){
+    if([_hostReachability currentReachabilityStatus]!=NotReachable&&self.isActive){
         [self autoLogin];
     }
 }
