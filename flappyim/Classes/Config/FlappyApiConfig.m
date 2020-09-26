@@ -25,6 +25,8 @@
         _sharedSingleton = [[super allocWithZone:NULL] init];
         //默认12秒
         _sharedSingleton.heartInterval=12;
+        //默认6秒
+        _sharedSingleton.autoLoginInterval=6;
         //默认正式环境
         _sharedSingleton.pushPlat=@"release";
         //地址
@@ -34,10 +36,25 @@
     return _sharedSingleton;
 }
 
-
 // 防止外部调用alloc或者new
 + (instancetype)allocWithZone:(struct _NSZone *)zone {
     return [FlappyApiConfig shareInstance];
+}
+
+//设置心跳
+-(void)setHeartInterval:(NSInteger)heartInterval{
+    _heartInterval=heartInterval;
+    if(_heartInterval<3){
+        _heartInterval=3;
+    }
+}
+
+//自动登录时间间隔
+-(void)setAutoLoginInterval:(NSInteger)autoLoginInterval{
+    _autoLoginInterval=autoLoginInterval;
+    if(_autoLoginInterval<3){
+        _autoLoginInterval=3;
+    }
 }
 
 // 防止外部调用copy
@@ -84,7 +101,6 @@
     
     //获取单聊会话
     self.URL_getSingleSession =[NSString stringWithFormat:@"%@/api/getSingleSession",self.BaseUrl];
-    
     
     //创建多人会话
     self.URL_createGroupSession= [NSString stringWithFormat:@"%@/api/createGroupSession",self.BaseUrl];
