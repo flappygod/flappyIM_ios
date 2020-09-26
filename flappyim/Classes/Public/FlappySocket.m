@@ -609,13 +609,9 @@
 //开启心跳
 -(void)startHeart:(id)sender{
     // 开启心跳
-    // 每隔30s像服务器发送心跳包
+    // 每隔12s像服务器发送心跳包
     // 在longConnectToSocket方法中进行长连接需要向服务器发送的讯息
-    NSInteger beat=[FlappyApiConfig shareInstance].heartInterval;
-    if(beat<3){
-        beat=3;
-    }
-    self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:beat
+    self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:[FlappyApiConfig shareInstance].heartInterval
                                                          target:self
                                                        selector:@selector(heartBeat:)
                                                        userInfo:nil
