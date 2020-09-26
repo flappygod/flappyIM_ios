@@ -102,9 +102,7 @@
     self.URL_delUserInSession= [NSString stringWithFormat:@"%@/api/delUserInSession",self.BaseUrl];
     
     //默认生产环境
-    if(self.pushPlat==nil){
-        self.pushPlat=@"release";
-    }
+    self.pushPlat=@"release";
 }
 
 
