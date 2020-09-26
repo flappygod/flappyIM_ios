@@ -27,8 +27,6 @@
 
 //用于监听网络变化
 @property (nonatomic,strong) ReachabilityFlappy* hostReachability;
-//用于监听网络变化
-@property (nonatomic,strong) ReachabilityFlappy* internetReachability;
 //用于联网的socket
 @property (nonatomic,strong) FlappySocket* flappysocket;
 //被踢下线了
@@ -527,14 +525,11 @@
                                                object:nil];
     // 设置网络检测的站点
     NSString *remoteHostName = @"www.baidu.com";
+    
     //创建
     self.hostReachability = [ReachabilityFlappy reachabilityWithHostName:remoteHostName];
     [self.hostReachability startNotifier];
     [self updateInterfaceWithReachability:self.hostReachability];
-    //创建
-    self.internetReachability = [ReachabilityFlappy reachabilityForInternetConnection];
-    [self.internetReachability startNotifier];
-    [self updateInterfaceWithReachability:self.internetReachability];
     
     //监听是否触发home键挂起程序，（把程序放在后台执行其他操作）
     [[NSNotificationCenter defaultCenter] addObserver:self
