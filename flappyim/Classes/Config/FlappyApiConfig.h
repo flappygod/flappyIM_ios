@@ -41,6 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
 //设备
 @property (nonatomic,copy) NSString*  pushPlat;
 
+//心跳间隔
+@property (nonatomic,assign) NSInteger  heartInterval;
+
 
 //重新设置服务器地址
 -(void)resetServer:(NSString*)serverUrl
