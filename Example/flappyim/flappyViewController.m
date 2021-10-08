@@ -24,11 +24,11 @@
 {
     [super viewDidLoad];
     
-    [[FlappyIM shareInstance] setPlatfrom:@"debug"];
+    [[FlappyIM shareInstance] setPlatfrom:@"IOS"];
     
     //初始化
-    [[FlappyIM shareInstance] setup:@"http://49.233.131.151"
-                      withUploadUrl:@"http://49.233.131.151"];
+    [[FlappyIM shareInstance] setup:@"http://192.168.101.9"
+                      withUploadUrl:@"http://192.168.101.9"];
     
     
     //创建登录

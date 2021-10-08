@@ -15,6 +15,9 @@
  字典转换为jsonstring
  *************************/
 +(NSString*)DicToJSONString:(id)dictonary;
+/*************************
+ 字典转换为jsonstring保留空格等
+ *************************/
 +(NSString*)DicToJSONStringHasBlank:(id)dictonary;
 /*************************
  json转换为jsonstring
