@@ -95,7 +95,7 @@
     [self msgInsert:chatMsg];
     
     //图片信息
-    ChatVoice* chatVoice=[ChatVoice mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:chatMsg.messageContent]];
+    ChatVoice* chatVoice=[chatMsg getChatVoice];
     
     //开始请求
     FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
@@ -115,7 +115,7 @@
             //地址
             chatVoice.path=dic[@"resultData"][@"filePath"];
             //设置
-            chatMsg.messageContent=[FlappyJsonTool DicToJSONString:[chatVoice mj_keyValues]];
+            [chatMsg setChatVoice:chatVoice];
             //上传完成发送消息
             [safeSelf sendMessage:chatMsg
                        andSuccess:success
@@ -212,7 +212,7 @@
     [self msgInsert:chatMsg];
     
     //图片信息
-    ChatImage* chatImg=[ChatImage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:chatMsg.messageContent]];
+    ChatImage* chatImg=[chatMsg getChatImage];
     
     //开始请求
     FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
@@ -236,7 +236,7 @@
             //地址赋值
             chatImg.path=imgPath;
             //设置
-            chatMsg.messageContent=[FlappyJsonTool DicToJSONString:[chatImg mj_keyValues]];
+            [chatMsg setChatImage:chatImg];
             //上传完成发送消息
             [safeSelf sendMessage:chatMsg
                        andSuccess:success
@@ -321,7 +321,7 @@
     [self msgInsert:chatMsg];
     
     //视频信息
-    ChatVideo* chatVideo=[ChatVideo mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:chatMsg.messageContent]];
+    ChatVideo* chatVideo=[chatMsg getChatVideo];
     
     //开始请求
     FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
@@ -340,9 +340,10 @@
         if(resultCode.integerValue==RESULT_SUCCESS){
             //地址
             chatVideo.path=dic[@"resultData"][@"filePath"];
+            //封面
             chatVideo.coverPath=dic[@"resultData"][@"overFilePath"];
             //设置
-            chatMsg.messageContent=[FlappyJsonTool DicToJSONString:[chatVideo mj_keyValues]];
+            [chatMsg setChatVideo:chatVideo];
             //上传完成发送消息
             [safeSelf sendMessage:chatMsg
                        andSuccess:success

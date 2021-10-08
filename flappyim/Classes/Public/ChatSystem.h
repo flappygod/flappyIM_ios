@@ -16,14 +16,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ChatSystem : NSObject
 
-//用于会话展示的文本
-@property(nonatomic,copy) NSString*  sysText;
-
-//系统动作的文本
+//系统动作
 @property(nonatomic,assign) NSInteger  sysAction;
+//标题
+@property(nonatomic,copy) NSString*  sysTitle;
+//内容
+@property(nonatomic,copy) NSString*  sysBody;
+//数据
+@property(nonatomic,copy) NSString*  sysData;
+//系统时间
+@property(nonatomic,copy) NSString*  sysTime;
 
-//系统动作的数据
-@property(nonatomic,copy) NSString*  sysActionData;
 
 
 @end

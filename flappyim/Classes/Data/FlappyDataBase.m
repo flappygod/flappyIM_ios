@@ -887,10 +887,11 @@
             msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
             [listArray addObject:msg];
         }
-        
+        //关闭
         [result close];
+        //关闭
         [db close];
-        
+        //结果集
         [retArray addObjectsFromArray:listArray];
         
         if(retArray.count>size){

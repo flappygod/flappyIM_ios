@@ -423,7 +423,9 @@
     //会话更新
     else if(respones.type==RES_UPDATE){
         NSMutableArray* sessions=respones.sessionsArray;
+        //返回的session
         if(sessions!=nil&&sessions.count>0){
+            //遍历
             for(int x=0;x<sessions.count;x++){
                 //获取会话
                 Session* memSession=[sessions objectAtIndex:x];
@@ -440,7 +442,7 @@
                     //消息
                     ChatMessage* msg=[messages objectAtIndex:w];
                     //判断会话时间戳
-                    if(data.sessionStamp>=[msg getChatSystem].sysActionData.longLongValue){
+                    if(data.sessionStamp>=[msg getChatSystem].sysTime.longLongValue){
                         //更新消息设置
                         msg.messageReaded=1;
                         //插入消息
@@ -560,14 +562,14 @@
         NSString* former=dic[message.messageSession];
         //获取数据
         if(former==nil){
-            [dic setObject:[message getChatSystem].sysActionData
+            [dic setObject:[message getChatSystem].sysTime
                     forKey:message.messageSession];
         }else{
             //替换数据
             long stamp=former.integerValue;
-            long newStamp=[message getChatSystem].sysActionData.integerValue;
+            long newStamp=[message getChatSystem].sysTime.integerValue;
             if (newStamp > stamp) {
-                [dic setObject:[message getChatSystem].sysActionData
+                [dic setObject:[message getChatSystem].sysTime
                         forKey:message.messageSession];
             }
         }

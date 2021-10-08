@@ -12,21 +12,10 @@
 @implementation ChatMessage
 
 
-//获取系统消息
--(ChatSystem*)getChatSystem{
-    if(_messageContent!=nil&&self.messageType==MSG_TYPE_SYSTEM){
-        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:_messageContent];
-        if(dic!=nil){
-            return [ChatSystem mj_objectWithKeyValues:dic];
-        }
-    }
-    return nil;
-}
-
 //设置聊天文本
 -(void)setChatText:(NSString*)chatText{
     //不为空
-    if(chatText!=nil&&self.messageType==MSG_TYPE_TEXT){
+    if(chatText!=nil){
         _messageContent=[self base64EncodeString:chatText];
     }
 }
@@ -39,10 +28,34 @@
     return nil;
 }
 
+//设置系统消息
+-(void)setChatSystem:(ChatSystem*)chatSystem{
+    if(chatSystem!=nil){
+        _messageContent=[self base64EncodeString:[FlappyJsonTool DicToJSONString:[chatSystem mj_keyValues]]];
+    }
+}
+//获取系统消息
+-(ChatSystem*)getChatSystem{
+    if(_messageContent!=nil&&self.messageType==MSG_TYPE_SYSTEM){
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[self base64DecodeString:_messageContent]];
+        if(dic!=nil){
+            return [ChatSystem mj_objectWithKeyValues:dic];
+        }
+    }
+    return nil;
+}
+
+
+//设置图像
+-(void)setChatImage:(ChatImage*)chatImage{
+    if(chatImage!=nil){
+        _messageContent=[self base64EncodeString:[FlappyJsonTool DicToJSONString:[chatImage mj_keyValues]]];
+    }
+}
 //获取图像
 -(ChatImage*)getChatImage{
     if(_messageContent!=nil&&self.messageType==MSG_TYPE_IMG){
-        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:_messageContent];
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[self base64DecodeString:_messageContent]];
         if(dic!=nil){
             return [ChatImage mj_objectWithKeyValues:dic];
         }
@@ -50,10 +63,16 @@
     return nil;
 }
 
+//设置声音
+-(void)setChatVoice:(ChatVoice*)chatVoice{
+    if(chatVoice!=nil){
+        _messageContent=[self base64EncodeString:[FlappyJsonTool DicToJSONString:[chatVoice mj_keyValues]]];
+    }
+}
 //获取声音
 -(ChatVoice*)getChatVoice{
     if(_messageContent!=nil&&self.messageType==MSG_TYPE_VOICE){
-        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:_messageContent];
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[self base64DecodeString:_messageContent]];
         if(dic!=nil){
             return [ChatVoice mj_objectWithKeyValues:dic];
         }
@@ -61,10 +80,16 @@
     return nil;
 }
 
+//设置视频
+-(void)setChatVideo:(ChatVideo*)chatVideo{
+    if(chatVideo!=nil){
+        _messageContent=[self base64EncodeString:[FlappyJsonTool DicToJSONString:[chatVideo mj_keyValues]]];
+    }
+}
 //获取视频
 -(ChatVideo*)getChatVideo{
     if(_messageContent!=nil&&self.messageType==MSG_TYPE_VIDEO){
-        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:_messageContent];
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[self base64DecodeString:_messageContent]];
         if(dic!=nil){
             return [ChatVideo mj_objectWithKeyValues:dic];
         }
@@ -72,10 +97,16 @@
     return nil;
 }
 
+//设置位置
+-(void)setChatLocation:(ChatLocation*)chatLocation{
+    if(chatLocation!=nil){
+        _messageContent=[self base64EncodeString:[FlappyJsonTool DicToJSONString:[chatLocation mj_keyValues]]];
+    }
+}
 //获取位置
 -(ChatLocation*)getChatLocation{
     if(_messageContent!=nil&&self.messageType==MSG_TYPE_LOCATE){
-        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:_messageContent];
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[self base64DecodeString:_messageContent]];
         if(dic!=nil){
             return [ChatLocation mj_objectWithKeyValues:dic];
         }

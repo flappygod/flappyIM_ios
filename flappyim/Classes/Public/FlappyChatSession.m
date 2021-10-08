@@ -153,6 +153,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     //创建发送地址
     ChatImage* image=[[ChatImage alloc]init];
+    //本地发送的地址
     image.sendPath=path;
     
     chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
@@ -163,7 +164,7 @@
     chatmsg.messageRecieve=[self getPeerID];
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
-    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[image mj_keyValues]];
+    [chatmsg setChatImage:image];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
@@ -190,7 +191,7 @@
     chatmsg.messageRecieve=[self getPeerID];
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
-    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[image mj_keyValues]];
+    [chatmsg setChatImage:image];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
@@ -219,8 +220,8 @@
     chatmsg.messageSendExtendid=[self getMine].userExtendId;
     chatmsg.messageRecieve=[self getPeerID];
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
-    chatmsg.messageType=MSG_TYPE_IMG;
-    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[voice mj_keyValues]];
+    chatmsg.messageType=MSG_TYPE_VOICE;
+    [chatmsg setChatVoice:voice];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
@@ -248,7 +249,7 @@
     chatmsg.messageRecieve=[self getPeerID];
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VOICE;
-    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[voice mj_keyValues]];
+    [chatmsg setChatVoice:voice];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
@@ -265,8 +266,8 @@
                    andFailure:(FlappySendFailure)failure{
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     //创建发送地址
-    ChatVideo* voice=[[ChatVideo alloc]init];
-    voice.sendPath=path;
+    ChatVideo* video=[[ChatVideo alloc]init];
+    video.sendPath=path;
     
     chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
     chatmsg.messageSession=self.session.sessionId;
@@ -276,7 +277,7 @@
     chatmsg.messageRecieve=[self getPeerID];
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VIDEO;
-    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[voice mj_keyValues]];
+    [chatmsg setChatVideo:video];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
@@ -302,7 +303,7 @@
     chatmsg.messageRecieve=[self getPeerID];
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VIDEO;
-    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[video mj_keyValues]];
+    [chatmsg setChatVideo:video];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
@@ -328,7 +329,7 @@
     chatmsg.messageRecieve=[self getPeerID];
     chatmsg.messageRecieveExtendid=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_LOCATE;
-    chatmsg.messageContent=[FlappyJsonTool DicToJSONString:[location mj_keyValues]];
+    [chatmsg setChatLocation:location];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSended=SEND_STATE_CREATE;
     
@@ -350,8 +351,6 @@
     }
     //重新发送图片消息
     else if(chatmsg.messageType==MSG_TYPE_IMG){
-        
-        
         [[FlappySender shareInstance] uploadImageAndSend:chatmsg
                                               andSuccess:success
                                               andFailure:failure];
