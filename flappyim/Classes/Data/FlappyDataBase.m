@@ -338,7 +338,7 @@
             NSArray* array=[FlappyJsonTool JSONStringToDictionary:[result stringForColumn:@"users"]];
             NSMutableArray* usersArr=[[NSMutableArray alloc]init];
             for(int s=0;s<array.count;s++){
-                SessionData* session=[SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
+                ChatUser* session=[ChatUser mj_objectWithKeyValues:[array objectAtIndex:s]];
                 [usersArr addObject:session];
             }
             msg.users=usersArr;
@@ -386,7 +386,7 @@
             NSArray* array=[FlappyJsonTool JSONStringToDictionary:[result stringForColumn:@"users"]];
             NSMutableArray* usersArr=[[NSMutableArray alloc]init];
             for(int s=0;s<array.count;s++){
-                SessionData* session=[SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
+                ChatUser* session=[ChatUser mj_objectWithKeyValues:[array objectAtIndex:s]];
                 [usersArr addObject:session];
             }
             msg.users=usersArr;
