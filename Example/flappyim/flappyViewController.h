@@ -16,5 +16,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *sendBtn;
 @property (weak, nonatomic) IBOutlet UIButton *create;
 @property (weak, nonatomic) IBOutlet UIButton *sendImageBtn;
+@property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 
 @end

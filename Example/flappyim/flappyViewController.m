@@ -31,9 +31,9 @@
     
     
     //创建登录
-    UITapGestureRecognizer* gs=[[UITapGestureRecognizer alloc]initWithTarget:self
-                                                                      action:@selector(login)];
-    [self.view addGestureRecognizer:gs];
+    [self.loginBtn addTarget:self
+                      action:@selector(login:)
+            forControlEvents:UIControlEventTouchUpInside];
     
     //发送
     [self.sendBtn addTarget:self
@@ -81,7 +81,7 @@
     [[FlappyIM shareInstance]  getUserSessions:^(id _Nullable data) {
         NSLog(@"data");
     } andFailure:^(NSError * _Nullable err, NSInteger code) {
-        
+        NSLog(@"data");
     }];
     
 }
@@ -140,7 +140,7 @@
 
 
 //登录
--(void)login{
+-(void)login:(id)sender{
     [[FlappyIM shareInstance] login:@"101" andSuccess:^(id data) {
         //登录成功
         NSLog(@"登录成功");
