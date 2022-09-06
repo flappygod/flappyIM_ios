@@ -17,11 +17,6 @@
 
 
 @implementation LXHttpRequest
-{
-    //cookie
-    //NSHTTPCookieStorage *cookieJar;
-}
-
 
 
 //同步get请求
@@ -108,7 +103,10 @@
         
     }else{
         NSURLSession *session = [NSURLSession sharedSession];
-        NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request
+                                                        completionHandler:^(NSData * _Nullable data,
+                                                                            NSURLResponse * _Nullable response,
+                                                                            NSError * _Nullable error) {
             if(error==nil){
                 NSString* resultStr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
                 [self performSelectorOnMainThread:@selector(dataSuccess:) withObject:resultStr waitUntilDone:YES];
@@ -133,7 +131,10 @@
 #pragma clang diagnostic pop
     }else{
         NSURLSession *session = [NSURLSession sharedSession];
-        NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:req
+                                                        completionHandler:^(NSData * _Nullable data,
+                                                                            NSURLResponse * _Nullable response,
+                                                                            NSError * _Nullable error) {
             if(error==nil){
                 NSString* resultStr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
                 [self performSelectorOnMainThread:@selector(dataSuccess:) withObject:resultStr waitUntilDone:YES];
@@ -158,7 +159,10 @@
 #pragma clang diagnostic pop
     }else{
         NSURLSession *session = [NSURLSession sharedSession];
-        NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:req
+                                                        completionHandler:^(NSData * _Nullable data,
+                                                                            NSURLResponse * _Nullable response,
+                                                                            NSError * _Nullable error) {
             if(error==nil){
                 NSString* resultStr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
                 [self performSelectorOnMainThread:@selector(dataSuccess:) withObject:resultStr waitUntilDone:YES];
@@ -220,7 +224,9 @@
     //第一步，创建url
     NSURL *url = [NSURL URLWithString:self.url];
     //第二步，创建请求
-    NSMutableURLRequest *req = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:self.timeOut];
+    NSMutableURLRequest *req = [[NSMutableURLRequest alloc]initWithURL:url
+                                                           cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                                       timeoutInterval:self.timeOut];
     //超时时间
     [req setTimeoutInterval: self.timeOut ==0? 60:self.timeOut];
     //是否启用cookie
@@ -252,7 +258,9 @@
     //第一步，创建url
     NSURL *url = [NSURL URLWithString:self.url];
     //第二步，创建请求
-    NSMutableURLRequest *req = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:self.timeOut];
+    NSMutableURLRequest *req = [[NSMutableURLRequest alloc]initWithURL:url
+                                                           cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                                       timeoutInterval:self.timeOut];
     //超时时间
     [req setTimeoutInterval: self.timeOut ==0? 60:self.timeOut];
     //是否启用cookie
@@ -292,7 +300,6 @@
     NSString* paramStr=@"";
     if(result.length>1){
         paramStr=[result substringWithRange:NSMakeRange(0, result.length-1)];
-        NSLog(@"post()方法参数解析结果：%@",paramStr);
     }
     return paramStr;
 }
@@ -308,13 +315,12 @@
 }
 
 //请求错误
--(void)dataError:(id) data{
+-(void)dataError:(NSError*) data{
     if(_errorBlock!=nil)
     {
-        NSError* erro=data;
         NSException* excep=[[NSException alloc]initWithName:@"neterror"
-                                                     reason:erro.description
-                                                   userInfo:erro.userInfo];
+                                                     reason:data.description
+                                                   userInfo:data.userInfo];
         _errorBlock(excep);
     }
 }
@@ -326,18 +332,6 @@
 //接收到服务器回应的时候调用此方法
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    //NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
-    //获取headerfields
-    //原生NSURLConnection写法
-    //NSDictionary *fields = [res allHeaderFields];
-    
-    //获取cookie方法1
-    // NSArray *cookies = [NSHTTPCookie cookiesWithResponseHeaderFields:fields forURL:url];
-    //获取cookie方法2
-    //NSString *cookieString = [[HTTPResponse allHeaderFields] valueForKey:@"Set-Cookie"];
-    //获取cookie方法3
-    //cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    
     self.receiveData = [NSMutableData data];
 }
 
@@ -350,15 +344,13 @@
 //数据传完之后调用此方法
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    NSString *receiveStr = [[NSString alloc]initWithData:self.receiveData
-                                                encoding:NSUTF8StringEncoding];
-    //结束
+    //错误
     if(self.successBlock!=nil)
     {
         NSString *resultStr = [[NSString alloc]initWithData:self.receiveData
                                                    encoding:NSUTF8StringEncoding];
         self.successBlock(resultStr);
-    }    NSLog(@"%@",receiveStr);
+    }
 }
 
 //网络请求过程中，出现任何错误（断网，连接超时等）会进入此方法
@@ -373,21 +365,18 @@
     }
 }
 
-//IOS9.0以下使用https的时候安全验证，这里默认是通过
+//使用https的时候安全验证默认是通过（IOS9.0以下）
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
     return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
 }
 
-//IOS9.0以下使用https的时候安全验证，这里默认是通过
+//使用https的时候安全验证默认是通过（IOS9.0以下）
 -(void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    NSLog(@"didReceiveAuthenticationChallenge %@ %zd", [[challenge protectionSpace] authenticationMethod], (ssize_t) [challenge previousFailureCount]);
     if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]){
-        NSLog(@"%@",challenge.protectionSpace.host);
-        [[challenge sender]  useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+        [[challenge sender]  useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]
+                forAuthenticationChallenge:challenge];
         [[challenge sender]  continueWithoutCredentialForAuthenticationChallenge: challenge];
     }
 }
-
-
 
 @end
