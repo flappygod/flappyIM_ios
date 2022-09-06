@@ -27,8 +27,7 @@
     [[FlappyIM shareInstance] setPlatfrom:@"IOS"];
     
     //初始化
-    [[FlappyIM shareInstance] setup:@"http://192.168.101.9"
-                      withUploadUrl:@"http://192.168.101.9"];
+    [[FlappyIM shareInstance] setup:@"http://116.205.139.93" withUploadUrl:@"http://116.205.139.93"];
     
     
     //创建登录
