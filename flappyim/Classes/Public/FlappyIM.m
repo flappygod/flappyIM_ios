@@ -1357,7 +1357,7 @@
 //在展示通知前进行处理，即有机会在展示通知前再修改通知内容。
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center
       willPresentNotification:(UNNotification *)notification
-        withCompletionHandler:(void(^)(UNNotificationPresentationOptions))completionHandler{
+        withCompletionHandler:(void(^)(UNNotificationPresentationOptions))completionHandler API_AVAILABLE(ios(10.0)){
     //1. 处理通知
     //2. 处理完成后条用 completionHandler ，用于指示在前台显示通知的形式
     completionHandler(UNNotificationPresentationOptionAlert+UNNotificationPresentationOptionSound+UNNotificationPresentationOptionBadge);
@@ -1367,7 +1367,7 @@
 // 通知的点击事件
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
-         withCompletionHandler:(void(^)(void))completionHandler{
+         withCompletionHandler:(void(^)(void))completionHandler API_AVAILABLE(ios(10.0)){
     //用户推送的信息
     NSDictionary * userInfo = response.notification.request.content.userInfo;
     // 收到推送的请求
