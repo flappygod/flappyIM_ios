@@ -42,8 +42,8 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1' }
   s.frameworks = 'UIKit','Foundation','AVFoundation','CoreMedia','UserNotifications','AVKit'
   s.dependency 'AFNetworking', '~> 4.0.1'
-  s.dependency 'MJExtension', '~> 3.1.0'
+  s.dependency 'MJExtension', '~> 3.4.1'
   s.dependency 'Protobuf', '~> 3.9.0'
-  s.dependency 'CocoaAsyncSocket', '~> 7.6.3'
+  s.dependency 'CocoaAsyncSocket', '~> 7.6.5'
   s.dependency 'FMDB', '~> 2.7.5'
 end
