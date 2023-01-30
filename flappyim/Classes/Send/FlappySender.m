@@ -109,11 +109,11 @@
         //字典
         NSDictionary* dic=data;
         
-        NSString* resultCode=dic[@"resultCode"];
+        NSString* resultCode=dic[@"code"];
         //成功
         if(resultCode.integerValue==RESULT_SUCCESS){
             //地址
-            chatVoice.path=dic[@"resultData"][@"filePath"];
+            chatVoice.path=dic[@"data"][@"filePath"];
             //设置
             [chatMsg setChatVoice:chatVoice];
             //上传完成发送消息
@@ -228,11 +228,11 @@
         //字典
         NSDictionary* dic=data;
         
-        NSString* resultCode=dic[@"resultCode"];
+        NSString* resultCode=dic[@"code"];
         //成功
         if(resultCode.integerValue==RESULT_SUCCESS){
             //地址
-            NSString* imgPath=dic[@"resultData"][@"filePath"];
+            NSString* imgPath=dic[@"data"][@"filePath"];
             //地址赋值
             chatImg.path=imgPath;
             //设置
@@ -335,13 +335,13 @@
         //字典
         NSDictionary* dic=data;
         
-        NSString* resultCode=dic[@"resultCode"];
+        NSString* resultCode=dic[@"code"];
         //成功
         if(resultCode.integerValue==RESULT_SUCCESS){
             //地址
-            chatVideo.path=dic[@"resultData"][@"filePath"];
+            chatVideo.path=dic[@"data"][@"filePath"];
             //封面
-            chatVideo.coverPath=dic[@"resultData"][@"overFilePath"];
+            chatVideo.coverPath=dic[@"data"][@"overFilePath"];
             //设置
             [chatMsg setChatVideo:chatVideo];
             //上传完成发送消息

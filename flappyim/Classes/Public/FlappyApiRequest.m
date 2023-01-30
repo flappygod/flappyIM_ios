@@ -41,14 +41,14 @@
     req.successBlock=^(NSString*  data){
         NSDictionary* responseObject=[FlappyJsonTool JSONStringToDictionary:data];
         //请求成功
-        if(responseObject!=nil&&[responseObject[@"resultCode"] integerValue]==RESULT_SUCCESS){
+        if(responseObject!=nil&&[responseObject[@"code"] integerValue]==RESULT_SUCCESS){
             //数据请求成功
-            success(responseObject[@"resultData"]);
+            success(responseObject[@"data"]);
         }else{
             //消息
-            NSString* resultStr=responseObject[@"resultMessage"];
+            NSString* resultStr=responseObject[@"msg"];
             //返回代码
-            NSString* resultCode=[FlappyStringTool toUnNullZeroStr:responseObject[@"resultCode"]];
+            NSString* resultCode=[FlappyStringTool toUnNullZeroStr:responseObject[@"code"]];
             //请求失败
             failure([[NSError alloc]initWithDomain:[FlappyStringTool toUnNullStr:resultStr]
                                               code:RESULT_FAILURE
@@ -84,14 +84,14 @@
     req.successBlock=^(NSString*  data){
         NSDictionary* responseObject=[FlappyJsonTool JSONStringToDictionary:data];
         //请求成功
-        if(responseObject!=nil&&[responseObject[@"resultCode"] integerValue]==RESULT_SUCCESS){
+        if(responseObject!=nil&&[responseObject[@"code"] integerValue]==RESULT_SUCCESS){
             //数据请求成功
-            success(responseObject[@"resultData"]);
+            success(responseObject[@"data"]);
         }else{
             //消息
-            NSString* resultStr=responseObject[@"resultMessage"];
+            NSString* resultStr=responseObject[@"msg"];
             //返回代码
-            NSString* resultCode=[FlappyStringTool toUnNullZeroStr:responseObject[@"resultCode"]];
+            NSString* resultCode=[FlappyStringTool toUnNullZeroStr:responseObject[@"code"]];
             //请求失败
             failure([[NSError alloc]initWithDomain:[FlappyStringTool toUnNullStr:resultStr]
                                               code:RESULT_FAILURE
