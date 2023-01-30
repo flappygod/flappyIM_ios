@@ -731,12 +731,10 @@
         //当前的设备正在登录
         self.isLoading=true;
         
-        //如果当前有正在连接的socket,先下线了
+        //如果当前有正在连接的socket,之前的正常下线
         if(self.flappysocket!=nil){
-            //之前的正常下线
             [self.flappysocket offline:true];
         }
-        
         
         //注册地址
         NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
@@ -753,7 +751,7 @@
         __weak typeof(self) safeSelf=self;
         
         
-        //进行
+        //错误这里讲socket 和 接口请求都合并起来，一个失败就代表都失败
         FlappyFailureWrap* wrap=[[FlappyFailureWrap alloc] initWithFailure:^(NSError *error,NSInteger code){
             //失败
             failure(error,code);
@@ -785,6 +783,7 @@
                        withParameters:parameters
                           withSuccess:^(id data) {
             
+            //保存推送状态数据
             [safeSelf savePushData:data];
             
             //得到当前的用户数据
@@ -932,7 +931,7 @@
                 //最后的时间保存起来
                 newUser.userName=user.userName;
                 //头像
-                newUser.userHead=user.userHead;
+                newUser.userAvatar=user.userAvatar;
                 //保存
                 [[FlappyData shareInstance]saveUser:newUser];
                 //设置登录返回的数据

@@ -20,15 +20,17 @@ NS_ASSUME_NONNULL_BEGIN
 //用户的名称
 @property(nonatomic,copy) NSString* userName;
 //用户的头像
-@property(nonatomic,copy) NSString* userHead;
-//用户的注册时间
-@property(nonatomic,copy) NSString* userCreateDate;
-//用户是否删除
-@property(nonatomic,assign) NSInteger userDeleted;
-//用户的删除s日期
-@property(nonatomic,copy) NSString* userDeletedDate;
+@property(nonatomic,copy) NSString* userAvatar;
 //用户数据
 @property(nonatomic,copy) NSString* userData;
+//用户的注册时间
+@property(nonatomic,copy) NSString* userCreateDate;
+//用户的登录时间
+@property(nonatomic,copy) NSString* userLoginDate;
+//用户是否删除
+@property(nonatomic,assign) NSInteger isDelete;
+//用户的删除s日期
+@property(nonatomic,copy) NSString* deleteDate;
 
 
 //推送的ID
