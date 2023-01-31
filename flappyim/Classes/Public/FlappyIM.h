@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setup:(NSString*)serverUrl  withUploadUrl:(NSString*)uploadUrl;
 
 //设置当前的平台
--(void)setPlatfrom:(NSString*)platform;
+-(void)setPushPlatfrom:(NSString*)platform;
 
 //判断当前账号是否登录
 -(Boolean)isLogin;

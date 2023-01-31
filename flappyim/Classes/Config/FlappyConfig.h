@@ -10,7 +10,7 @@
 
 
 //当前的设备类型
-#define  DEVICE_TYPE   @"IOS"
+#define  DEVICE_TYPE   @"Ios"
 
 
 

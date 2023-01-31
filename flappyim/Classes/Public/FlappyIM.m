@@ -417,7 +417,7 @@
 }
 
 //设置推送平台
--(void)setPlatfrom:(NSString*)platform{
+-(void)setPushPlatfrom:(NSString*)platform{
     [FlappyApiConfig shareInstance].pushPlat=platform;
 }
 
