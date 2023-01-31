@@ -689,7 +689,7 @@
 //创建账号
 -(void)createAccount:(NSString*)userID
          andUserName:(NSString*)userName
-         andUserHead:(NSString*)userHead
+       andUserAvatar:(NSString*)userAvatar
           andSuccess:(FlappySuccess)success
           andFailure:(FlappyFailure)failure{
     
@@ -698,7 +698,7 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userExtendID":userID,
                                  @"userName":userName,
-                                 @"userHead":userHead
+                                 @"userAvatar":userAvatar
     };
     
     //请求数据
