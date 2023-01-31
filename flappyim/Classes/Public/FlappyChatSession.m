@@ -124,7 +124,7 @@
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%ld",(long)[NSDate date].timeIntervalSince1970*1000];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSend=[self getMine].userId;
@@ -156,7 +156,7 @@
     //本地发送的地址
     image.sendPath=path;
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%ld",(long)[NSDate date].timeIntervalSince1970*1000];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSend=[self getMine].userId;
@@ -183,7 +183,7 @@
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%ld",(long)[NSDate date].timeIntervalSince1970*1000];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSend=[self getMine].userId;
@@ -213,7 +213,7 @@
     ChatVoice* voice=[[ChatVoice alloc]init];
     voice.sendPath=path;
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%ld",(long)[NSDate date].timeIntervalSince1970*1000];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSend=[self getMine].userId;
@@ -241,7 +241,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%ld",(long)[NSDate date].timeIntervalSince1970*1000];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSend=[self getMine].userId;
@@ -269,7 +269,7 @@
     ChatVideo* video=[[ChatVideo alloc]init];
     video.sendPath=path;
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%ld",(long)[NSDate date].timeIntervalSince1970*1000];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSend=[self getMine].userId;
@@ -295,7 +295,7 @@
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%ld",(long)[NSDate date].timeIntervalSince1970*1000];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSend=[self getMine].userId;
@@ -321,7 +321,7 @@
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
-    chatmsg.messageId=[NSString stringWithFormat:@"%.3f",[[NSDate new] timeIntervalSince1970]];
+    chatmsg.messageId=[NSString stringWithFormat:@"%ld",(long)[NSDate date].timeIntervalSince1970*1000];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSend=[self getMine].userId;
