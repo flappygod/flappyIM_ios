@@ -11,6 +11,16 @@
 @implementation FlappyStringTool
 
 
++ (NSString *)uuidString
+{
+    CFUUIDRef uuid_ref = CFUUIDCreate(NULL);
+    CFStringRef uuid_string_ref= CFUUIDCreateString(NULL, uuid_ref);
+    NSString *uuid = [NSString stringWithString:(__bridge NSString *)uuid_string_ref];
+    CFRelease(uuid_ref);
+    CFRelease(uuid_string_ref);
+    return [uuid lowercaseString];
+}
+
 + (BOOL)checkEmail:(NSString *)email{
     
     //^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w{2,3}){1,3})$

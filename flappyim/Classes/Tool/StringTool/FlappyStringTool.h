@@ -10,6 +10,9 @@
 
 @interface FlappyStringTool : NSObject
 
+//生成一个UUID
++ (NSString *)uuidString;
+
 //判断字符串是不是空的
 +(Boolean)isStringEmpty:(NSString* )str;
 
