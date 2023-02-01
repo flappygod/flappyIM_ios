@@ -428,16 +428,16 @@
                 [NSNumber numberWithInteger:msg.messageSessionOffset],
                 [NSNumber numberWithInteger:msg.messageTableSeq],
                 [NSNumber numberWithInteger:msg.messageType],
-                [FlappyStringTool toUnNullStr:msg.messageSend],
-                [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
-                [FlappyStringTool toUnNullStr:msg.messageRecieve],
-                [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
+                [FlappyStringTool toUnNullStr:msg.messageSendId],
+                [FlappyStringTool toUnNullStr:msg.messageSendExtendId],
+                [FlappyStringTool toUnNullStr:msg.messageReceiveId],
+                [FlappyStringTool toUnNullStr:msg.messageReceiveExtendId],
                 [FlappyStringTool toUnNullStr:msg.messageContent],
-                [NSNumber numberWithInteger:msg.messageSended],
-                [NSNumber numberWithInteger:msg.messageReaded],
+                [NSNumber numberWithInteger:msg.messageSendState],
+                [NSNumber numberWithInteger:msg.messageReadState],
                 [FlappyStringTool toUnNullStr:msg.messageDate],
-                [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
-                [NSNumber numberWithInteger:msg.messageDeleted],
+                [FlappyStringTool toUnNullStr:msg.deleteDate],
+                [NSNumber numberWithInteger:msg.isDelete],
                 msg.messageId]];
             if(!result){
                 totalSuccess=false;
@@ -455,17 +455,17 @@
                 [NSNumber numberWithInteger:msg.messageSessionOffset],
                 [NSNumber numberWithInteger:msg.messageTableSeq],
                 [NSNumber numberWithInteger:msg.messageType],
-                [FlappyStringTool toUnNullStr:msg.messageSend],
-                [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
-                [FlappyStringTool toUnNullStr:msg.messageRecieve],
-                [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
+                [FlappyStringTool toUnNullStr:msg.messageSendId],
+                [FlappyStringTool toUnNullStr:msg.messageSendExtendId],
+                [FlappyStringTool toUnNullStr:msg.messageReceiveId],
+                [FlappyStringTool toUnNullStr:msg.messageReceiveExtendId],
                 [FlappyStringTool toUnNullStr:msg.messageContent],
-                [NSNumber numberWithInteger:msg.messageSended],
-                [NSNumber numberWithInteger:msg.messageReaded],
+                [NSNumber numberWithInteger:msg.messageSendState],
+                [NSNumber numberWithInteger:msg.messageReadState],
                 [FlappyStringTool toUnNullStr:msg.messageDate],
-                [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
+                [FlappyStringTool toUnNullStr:msg.deleteDate],
                 [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],
-                [NSNumber numberWithInteger:msg.messageDeleted]
+                [NSNumber numberWithInteger:msg.isDelete]
                 
             ]];
             if(!result){
@@ -531,16 +531,16 @@
                     [NSNumber numberWithInteger:msg.messageSessionOffset],
                     [NSNumber numberWithInteger:msg.messageTableSeq],
                     [NSNumber numberWithInteger:msg.messageType],
-                    [FlappyStringTool toUnNullStr:msg.messageSend],
-                    [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
-                    [FlappyStringTool toUnNullStr:msg.messageRecieve],
-                    [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
+                    [FlappyStringTool toUnNullStr:msg.messageSendId],
+                    [FlappyStringTool toUnNullStr:msg.messageSendExtendId],
+                    [FlappyStringTool toUnNullStr:msg.messageReceiveId],
+                    [FlappyStringTool toUnNullStr:msg.messageReceiveExtendId],
                     [FlappyStringTool toUnNullStr:msg.messageContent],
-                    [NSNumber numberWithInteger:msg.messageSended],
-                    [NSNumber numberWithInteger:msg.messageReaded],
+                    [NSNumber numberWithInteger:msg.messageSendState],
+                    [NSNumber numberWithInteger:msg.messageReadState],
                     [FlappyStringTool toUnNullStr:msg.messageDate],
-                    [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
-                    [NSNumber numberWithInteger:msg.messageDeleted],
+                    [FlappyStringTool toUnNullStr:msg.deleteDate],
+                    [NSNumber numberWithInteger:msg.isDelete],
                     msg.messageId]];
                 if(!result){
                     totalSuccess=false;
@@ -556,17 +556,17 @@
                     [NSNumber numberWithInteger:msg.messageSessionOffset],
                     [NSNumber numberWithInteger:msg.messageTableSeq],
                     [NSNumber numberWithInteger:msg.messageType],
-                    [FlappyStringTool toUnNullStr:msg.messageSend],
-                    [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
-                    [FlappyStringTool toUnNullStr:msg.messageRecieve],
-                    [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
+                    [FlappyStringTool toUnNullStr:msg.messageSendId],
+                    [FlappyStringTool toUnNullStr:msg.messageSendExtendId],
+                    [FlappyStringTool toUnNullStr:msg.messageReceiveId],
+                    [FlappyStringTool toUnNullStr:msg.messageReceiveExtendId],
                     [FlappyStringTool toUnNullStr:msg.messageContent],
-                    [NSNumber numberWithInteger:msg.messageSended],
-                    [NSNumber numberWithInteger:msg.messageReaded],
+                    [NSNumber numberWithInteger:msg.messageSendState],
+                    [NSNumber numberWithInteger:msg.messageReadState],
                     [FlappyStringTool toUnNullStr:msg.messageDate],
-                    [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
+                    [FlappyStringTool toUnNullStr:msg.deleteDate],
                     [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],
-                    [NSNumber numberWithInteger:msg.messageDeleted]
+                    [NSNumber numberWithInteger:msg.isDelete]
                     
                 ]];
                 if(!result){
@@ -613,17 +613,17 @@
             msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
             msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
             msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSend = [result stringForColumn:@"messageSend"];
-            msg.messageSendExtendid = [result stringForColumn:@"messageSendExtendid"];
-            msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
-            msg.messageRecieveExtendid = [result stringForColumn:@"messageRecieveExtendid"];
+            msg.messageSendId = [result stringForColumn:@"messageSend"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
+            msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
             msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSended = [result intForColumn:@"messageSended"];
-            msg.messageReaded = [result intForColumn:@"messageReaded"];
+            msg.messageSendState = [result intForColumn:@"messageSended"];
+            msg.messageReadState = [result intForColumn:@"messageReaded"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+            msg.isDelete = [result intForColumn:@"messageDeleted"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+            msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
             [result close];
             [db close];
             //返回消息
@@ -650,16 +650,16 @@
             [NSNumber numberWithInteger:msg.messageSessionOffset],
             [NSNumber numberWithInteger:msg.messageTableSeq],
             [NSNumber numberWithInteger:msg.messageType],
-            [FlappyStringTool toUnNullStr:msg.messageSend],
-            [FlappyStringTool toUnNullStr:msg.messageSendExtendid],
-            [FlappyStringTool toUnNullStr:msg.messageRecieve],
-            [FlappyStringTool toUnNullStr:msg.messageRecieveExtendid],
+            [FlappyStringTool toUnNullStr:msg.messageSendId],
+            [FlappyStringTool toUnNullStr:msg.messageSendExtendId],
+            [FlappyStringTool toUnNullStr:msg.messageReceiveId],
+            [FlappyStringTool toUnNullStr:msg.messageReceiveExtendId],
             [FlappyStringTool toUnNullStr:msg.messageContent],
-            [NSNumber numberWithInteger:msg.messageSended],
-            [NSNumber numberWithInteger:msg.messageReaded],
+            [NSNumber numberWithInteger:msg.messageSendState],
+            [NSNumber numberWithInteger:msg.messageReadState],
             [FlappyStringTool toUnNullStr:msg.messageDate],
-            [FlappyStringTool toUnNullStr:msg.messageDeletedDate],
-            [NSNumber numberWithInteger:msg.messageDeleted],
+            [FlappyStringTool toUnNullStr:msg.deleteDate],
+            [NSNumber numberWithInteger:msg.isDelete],
             msg.messageId]];
         [db close];
         if (result) {
@@ -688,17 +688,17 @@
             msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
             msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
             msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSend = [result stringForColumn:@"messageSend"];
-            msg.messageSendExtendid = [result stringForColumn:@"messageSendExtendid"];
-            msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
-            msg.messageRecieveExtendid = [result stringForColumn:@"messageRecieveExtendid"];
+            msg.messageSendId = [result stringForColumn:@"messageSend"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
+            msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
             msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSended = [result intForColumn:@"messageSended"];
-            msg.messageReaded = [result intForColumn:@"messageReaded"];
+            msg.messageSendState = [result intForColumn:@"messageSended"];
+            msg.messageReadState = [result intForColumn:@"messageReaded"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+            msg.isDelete = [result intForColumn:@"messageDeleted"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+            msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
             [result close];
             [db close];
             //返回消息
@@ -732,17 +732,17 @@
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
         msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
         msg.messageType = [result intForColumn:@"messageType"];
-        msg.messageSend = [result stringForColumn:@"messageSend"];
-        msg.messageSendExtendid = [result stringForColumn:@"messageSendExtendid"];
-        msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
-        msg.messageRecieveExtendid = [result stringForColumn:@"messageRecieveExtendid"];
+        msg.messageSendId = [result stringForColumn:@"messageSend"];
+        msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
+        msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
+        msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
         msg.messageContent = [result stringForColumn:@"messageContent"];
-        msg.messageSended = [result intForColumn:@"messageSended"];
-        msg.messageReaded = [result intForColumn:@"messageReaded"];
+        msg.messageSendState = [result intForColumn:@"messageSended"];
+        msg.messageReadState = [result intForColumn:@"messageReaded"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
-        msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+        msg.isDelete = [result intForColumn:@"messageDeleted"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
-        msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+        msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
         [retArray addObject:msg];
     }
     [result close];
@@ -772,17 +772,17 @@
             msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
             msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
             msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSend = [result stringForColumn:@"messageSend"];
-            msg.messageSendExtendid = [result stringForColumn:@"messageSendExtendid"];
-            msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
-            msg.messageRecieveExtendid = [result stringForColumn:@"messageRecieveExtendid"];
+            msg.messageSendId = [result stringForColumn:@"messageSend"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
+            msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
             msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSended = [result intForColumn:@"messageSended"];
-            msg.messageReaded = [result intForColumn:@"messageReaded"];
+            msg.messageSendState = [result intForColumn:@"messageSended"];
+            msg.messageReadState = [result intForColumn:@"messageReaded"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+            msg.isDelete = [result intForColumn:@"messageDeleted"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+            msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
             [retArray addObject:msg];
         }
         [result close];
@@ -813,17 +813,17 @@
             msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
             msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
             msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSend = [result stringForColumn:@"messageSend"];
-            msg.messageSendExtendid = [result stringForColumn:@"messageSendExtendid"];
-            msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
-            msg.messageRecieveExtendid = [result stringForColumn:@"messageRecieveExtendid"];
+            msg.messageSendId = [result stringForColumn:@"messageSend"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
+            msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
             msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSended = [result intForColumn:@"messageSended"];
-            msg.messageReaded = [result intForColumn:@"messageReaded"];
+            msg.messageSendState = [result intForColumn:@"messageSended"];
+            msg.messageReadState = [result intForColumn:@"messageReaded"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+            msg.isDelete = [result intForColumn:@"messageDeleted"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+            msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
             [retArray addObject:msg];
         }
         [result close];
@@ -874,17 +874,17 @@
             msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
             msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
             msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSend = [result stringForColumn:@"messageSend"];
-            msg.messageSendExtendid = [result stringForColumn:@"messageSendExtendid"];
-            msg.messageRecieve = [result stringForColumn:@"messageRecieve"];
-            msg.messageRecieveExtendid = [result stringForColumn:@"messageRecieveExtendid"];
+            msg.messageSendId = [result stringForColumn:@"messageSend"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
+            msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
             msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSended = [result intForColumn:@"messageSended"];
-            msg.messageReaded = [result intForColumn:@"messageReaded"];
+            msg.messageSendState = [result intForColumn:@"messageSended"];
+            msg.messageReadState = [result intForColumn:@"messageReaded"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.messageDeleted = [result intForColumn:@"messageDeleted"];
+            msg.isDelete = [result intForColumn:@"messageDeleted"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.messageDeletedDate = [result stringForColumn:@"messageDeletedDate"];
+            msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
             [listArray addObject:msg];
         }
         //关闭

@@ -27,13 +27,13 @@
     
     msg.messageSessionType=(int32_t)chatmsg.messageSessionType;
     
-    msg.messageSend=chatmsg.messageSend;
+    msg.messageSend=chatmsg.messageSendId;
     
-    msg.messageSendExtendid=chatmsg.messageSendExtendid;
+    msg.messageSendExtendid=chatmsg.messageSendExtendId;
     
-    msg.messageRecieve=chatmsg.messageRecieve;
+    msg.messageRecieve=chatmsg.messageReceiveId;
     
-    msg.messageRecieveExtendid=chatmsg.messageRecieveExtendid;
+    msg.messageRecieveExtendid=chatmsg.messageReceiveExtendId;
     
     msg.messageType=(int32_t)chatmsg.messageType;
     
@@ -41,7 +41,7 @@
     
     msg.messageDate=chatmsg.messageDate;
     
-    msg.messageSended=(int32_t)chatmsg.messageSended;
+    msg.messageSended=(int32_t)chatmsg.messageSendState;
     
     return msg;
 }

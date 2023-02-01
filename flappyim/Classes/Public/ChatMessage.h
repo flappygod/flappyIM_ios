@@ -57,27 +57,27 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) NSInteger messageType;
 
-@property(nonatomic,copy)NSString* messageSend;
+@property(nonatomic,copy)NSString* messageSendId;
 
-@property(nonatomic,copy)NSString* messageSendExtendid;
+@property(nonatomic,copy)NSString* messageSendExtendId;
 
-@property(nonatomic,copy)NSString* messageRecieve;
+@property(nonatomic,copy)NSString* messageReceiveId;
 
-@property(nonatomic,copy)NSString* messageRecieveExtendid;
+@property(nonatomic,copy)NSString* messageReceiveExtendId;
 
 @property(nonatomic,copy)NSString* messageContent;
 
-@property(nonatomic,assign) NSInteger messageSended;
+@property(nonatomic,assign) NSInteger messageSendState;
 
-@property(nonatomic,assign) NSInteger messageReaded;
+@property(nonatomic,assign) NSInteger messageReadState;
 
 @property(nonatomic,copy)NSString* messageDate;
 
-@property(nonatomic,assign) NSInteger messageDeleted;
+@property(nonatomic,assign) NSInteger isDelete;
 
 @property(nonatomic,assign) NSInteger messageStamp;
 
-@property(nonatomic,copy)NSString* messageDeletedDate;
+@property(nonatomic,copy)NSString* deleteDate;
 
 
 //设置聊天文本

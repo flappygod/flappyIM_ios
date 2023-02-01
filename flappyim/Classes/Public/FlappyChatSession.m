@@ -128,14 +128,14 @@
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=[self getMine].userId;
-    chatmsg.messageSendExtendid=[self getMine].userExtendId;
-    chatmsg.messageRecieve=[self getPeerID];
-    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_TEXT;
     [chatmsg setChatText:text];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSended=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_CREATE;
     
     //发送消息
     [[FlappySender shareInstance] sendMessage:chatmsg
@@ -160,14 +160,14 @@
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=[self getMine].userId;
-    chatmsg.messageSendExtendid=[self getMine].userExtendId;
-    chatmsg.messageRecieve=[self getPeerID];
-    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
     [chatmsg setChatImage:image];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSended=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_CREATE;
     
     [[FlappySender shareInstance] uploadImageAndSend:chatmsg
                                           andSuccess:success
@@ -187,14 +187,14 @@
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=[self getMine].userId;
-    chatmsg.messageSendExtendid=[self getMine].userExtendId;
-    chatmsg.messageRecieve=[self getPeerID];
-    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
     [chatmsg setChatImage:image];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSended=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_CREATE;
     
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
@@ -217,14 +217,14 @@
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=[self getMine].userId;
-    chatmsg.messageSendExtendid=[self getMine].userExtendId;
-    chatmsg.messageRecieve=[self getPeerID];
-    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VOICE;
     [chatmsg setChatVoice:voice];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSended=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_CREATE;
     
     [[FlappySender shareInstance] uploadVoiceAndSend:chatmsg
                                           andSuccess:success
@@ -245,14 +245,14 @@
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=[self getMine].userId;
-    chatmsg.messageSendExtendid=[self getMine].userExtendId;
-    chatmsg.messageRecieve=[self getPeerID];
-    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VOICE;
     [chatmsg setChatVoice:voice];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSended=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_CREATE;
     
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
@@ -273,14 +273,14 @@
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=[self getMine].userId;
-    chatmsg.messageSendExtendid=[self getMine].userExtendId;
-    chatmsg.messageRecieve=[self getPeerID];
-    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VIDEO;
     [chatmsg setChatVideo:video];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSended=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_CREATE;
     
     [[FlappySender shareInstance] uploadVideoAndSend:chatmsg
                                           andSuccess:success
@@ -299,14 +299,14 @@
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=[self getMine].userId;
-    chatmsg.messageSendExtendid=[self getMine].userExtendId;
-    chatmsg.messageRecieve=[self getPeerID];
-    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VIDEO;
     [chatmsg setChatVideo:video];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSended=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_CREATE;
     
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
@@ -325,14 +325,14 @@
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSend=[self getMine].userId;
-    chatmsg.messageSendExtendid=[self getMine].userExtendId;
-    chatmsg.messageRecieve=[self getPeerID];
-    chatmsg.messageRecieveExtendid=[self getPeerExtendID];
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_LOCATE;
     [chatmsg setChatLocation:location];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSended=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_CREATE;
     
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success

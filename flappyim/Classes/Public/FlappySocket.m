@@ -369,7 +369,7 @@
                 [self notifyNewMessage:chatMsg];
             }else{
                 //保留是否处理的flag;
-                chatMsg.messageReaded=former.messageReaded;
+                chatMsg.messageReadState=former.messageReadState;
             }
             //消息发送成功
             [self sendMessageSuccess:chatMsg];
@@ -409,7 +409,7 @@
                 [self messageArrived:chatMsg];
             }else{
                 //保留是否已经处理的信息
-                chatMsg.messageReaded=former.messageReaded;
+                chatMsg.messageReadState=former.messageReadState;
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
             }
             [self sendMessageSuccess:chatMsg];
@@ -444,7 +444,7 @@
                     //判断会话时间戳
                     if(data.sessionStamp>=[msg getChatSystem].sysTime.longLongValue){
                         //更新消息设置
-                        msg.messageReaded=1;
+                        msg.messageReadState=1;
                         //插入消息
                         [[FlappyDataBase shareInstance] insertMsg:msg];
                     }
@@ -472,12 +472,12 @@
     ChatUser* user=[[FlappyData shareInstance]getUser];
     if(user!=nil){
         //自己发送的消息，已经发送
-        if([user.userId isEqualToString:message.messageSend]){
-            message.messageSended=SEND_STATE_SENDED;
+        if([user.userId isEqualToString:message.messageSendId]){
+            message.messageSendState=SEND_STATE_SENDED;
         }
         //用户发送的消息已经送达
         else{
-            message.messageSended=SEND_STATE_REACHED;
+            message.messageSendState=SEND_STATE_REACHED;
         }
     }
 }
@@ -491,7 +491,7 @@
         //存活状态才返回信息
         ChatUser* user=[[FlappyData shareInstance]getUser];
         //如果不为空
-        if(user!=nil&&![user.userId isEqualToString:message.messageSend]){
+        if(user!=nil&&![user.userId isEqualToString:message.messageSendId]){
             //连接到服务器开始请求登录
             FlappyRequest* request=[[FlappyRequest alloc]init];
             

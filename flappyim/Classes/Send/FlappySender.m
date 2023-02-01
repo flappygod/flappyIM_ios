@@ -492,7 +492,7 @@
     //我们先姑且认为它是最后一条
     ChatUser* user=[[FlappyData shareInstance]getUser];
     //创建
-    msg.messageSended=SEND_STATE_CREATE;
+    msg.messageSendState=SEND_STATE_CREATE;
     //数据
     NSInteger value=(user.latest!=nil? user.latest.integerValue:0)+1;
     //还没发送成功，那么放在最后一条
@@ -513,7 +513,7 @@
 //发送失败
 -(void)msgFailure:(ChatMessage*)msg{
     //发送成功了
-    msg.messageSended=SEND_STATE_FAILURE;
+    msg.messageSendState=SEND_STATE_FAILURE;
     //放入指定的位置
     [[FlappyDataBase shareInstance] updateMessage:msg];
 }
