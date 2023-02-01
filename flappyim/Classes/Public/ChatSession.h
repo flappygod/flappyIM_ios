@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) NSInteger sessionType;
 
+@property(nonatomic,copy) NSString* sessionInfo;
+
 @property(nonatomic,copy) NSString* sessionName;
 
 @property(nonatomic,copy) NSString* sessionImage;
@@ -37,9 +39,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString* sessionCreateUser;
 
-@property(nonatomic,assign) NSInteger sessionDeleted;
+@property(nonatomic,assign) NSInteger isDelete;
 
-@property(nonatomic,copy) NSString* sessionDeletedDate;
+@property(nonatomic,copy) NSString* deleteDate;
 
 
 @end

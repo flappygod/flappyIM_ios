@@ -148,8 +148,8 @@
                     [NSNumber numberWithInteger:data.sessionStamp],
                     [FlappyStringTool toUnNullStr:data.sessionCreateDate],
                     [FlappyStringTool toUnNullStr:data.sessionCreateUser],
-                    [NSNumber numberWithInteger:data.sessionDeleted],
-                    [FlappyStringTool toUnNullStr:data.sessionDeletedDate],
+                    [NSNumber numberWithInteger:data.isDelete],
+                    [FlappyStringTool toUnNullStr:data.deleteDate],
                     [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:usersDataDic]],
                     [FlappyStringTool toUnNullStr:[FlappyData shareInstance].getUser.userExtendId],
                     data.sessionExtendId
@@ -181,8 +181,8 @@
                     [NSNumber numberWithInteger:data.sessionStamp],
                     [FlappyStringTool toUnNullStr:data.sessionCreateDate],
                     [FlappyStringTool toUnNullStr:data.sessionCreateUser],
-                    [NSNumber numberWithInteger:data.sessionDeleted],
-                    [FlappyStringTool toUnNullStr:data.sessionDeletedDate],
+                    [NSNumber numberWithInteger:data.isDelete],
+                    [FlappyStringTool toUnNullStr:data.deleteDate],
                     [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:usersDataDic]],
                     [FlappyStringTool toUnNullStr:[FlappyData shareInstance].getUser.userExtendId]
                     
@@ -251,8 +251,8 @@
                 [NSNumber numberWithInteger:data.sessionStamp],
                 [FlappyStringTool toUnNullStr:data.sessionCreateDate],
                 [FlappyStringTool toUnNullStr:data.sessionCreateUser],
-                [NSNumber numberWithInteger:data.sessionDeleted],
-                [FlappyStringTool toUnNullStr:data.sessionDeletedDate],
+                [NSNumber numberWithInteger:data.isDelete],
+                [FlappyStringTool toUnNullStr:data.deleteDate],
                 [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:usersDataDic]],
                 [FlappyStringTool toUnNullStr:[FlappyData shareInstance].getUser.userExtendId],
                 data.sessionExtendId
@@ -285,8 +285,8 @@
                 [NSNumber numberWithInteger:data.sessionStamp],
                 [FlappyStringTool toUnNullStr:data.sessionCreateDate],
                 [FlappyStringTool toUnNullStr:data.sessionCreateUser],
-                [NSNumber numberWithInteger:data.sessionDeleted],
-                [FlappyStringTool toUnNullStr:data.sessionDeletedDate],
+                [NSNumber numberWithInteger:data.isDelete],
+                [FlappyStringTool toUnNullStr:data.deleteDate],
                 [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:usersDataDic]],
                 [FlappyStringTool toUnNullStr:[FlappyData shareInstance].getUser.userExtendId]
                 
@@ -332,8 +332,8 @@
             msg.sessionStamp = [result intForColumn:@"sessionStamp"];
             msg.sessionCreateDate = [result stringForColumn:@"sessionCreateDate"];
             msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
-            msg.sessionDeleted = [result intForColumn:@"sessionDeleted"];
-            msg.sessionDeletedDate = [result stringForColumn:@"sessionDeletedDate"];
+            msg.isDelete = [result intForColumn:@"sessionDeleted"];
+            msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
             //转换
             NSArray* array=[FlappyJsonTool JSONStringToDictionary:[result stringForColumn:@"users"]];
             NSMutableArray* usersArr=[[NSMutableArray alloc]init];
@@ -380,8 +380,8 @@
             msg.sessionStamp = [result intForColumn:@"sessionStamp"];
             msg.sessionCreateDate = [result stringForColumn:@"sessionCreateDate"];
             msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
-            msg.sessionDeleted = [result intForColumn:@"sessionDeleted"];
-            msg.sessionDeletedDate = [result stringForColumn:@"sessionDeletedDate"];
+            msg.isDelete = [result intForColumn:@"sessionDeleted"];
+            msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
             //转换
             NSArray* array=[FlappyJsonTool JSONStringToDictionary:[result stringForColumn:@"users"]];
             NSMutableArray* usersArr=[[NSMutableArray alloc]init];
