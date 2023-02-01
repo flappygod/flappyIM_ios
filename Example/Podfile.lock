@@ -20,12 +20,12 @@ PODS:
     - CocoaAsyncSocket (~> 7.6.5)
     - FMDB (~> 2.7.5)
     - MJExtension (~> 3.4.1)
-    - Protobuf (~> 3.9.0)
+    - Protobuf (~> 3.21.5)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
   - MJExtension (3.4.1)
-  - Protobuf (3.9.2)
+  - Protobuf (3.21.12)
 
 DEPENDENCIES:
   - flappyim (from `../`)
@@ -45,10 +45,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  flappyim: 8b7bba9dfb31981b3b2edd3bc2c5a411327dd370
+  flappyim: 69a16220b8b125270da18fcbd7f9102f83af07e1
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
-  Protobuf: 67fb42ba613def994e61854de2b3164f13790cc4
+  Protobuf: 120350fc38646e2dedc26f49ecba778184ea1de2
 
 PODFILE CHECKSUM: a2fa1c546ccead3213f6b7e995550649642bdf2b
 
