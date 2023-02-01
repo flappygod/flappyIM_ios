@@ -170,7 +170,7 @@
                     [usersDataDic addObject:[[usersData objectAtIndex:s] mj_keyValues]];
                 }
                 
-                BOOL result = [db executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionInfo,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                BOOL result = [db executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionInfo,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                            withArgumentsInArray:@[
                     
                     [FlappyStringTool toUnNullStr:data.sessionId],
@@ -276,7 +276,7 @@
                 [usersDataDic addObject:[[usersData objectAtIndex:s] mj_keyValues]];
             }
             //插入数据
-            BOOL result = [db executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionInfo,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
+            BOOL result = [db executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionInfo,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                        withArgumentsInArray:@[
                 
                 [FlappyStringTool toUnNullStr:data.sessionId],
