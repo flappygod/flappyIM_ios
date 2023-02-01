@@ -52,9 +52,9 @@
         return;
     }
     //4.数据库中创建表（可创建多张）
-    NSString *sql = @"create table if not exists message (messageId TEXT PRIMARY KEY,messageSession TEXT,messageSessionType INTEGER,messageSessionOffset INTEGER,messageTableSeq INTEGER,messageType INTEGER ,messageSend TEXT,messageSendExtendid TEXT,messageRecieve TEXT,messageRecieveExtendid TEXT,messageContent TEXT,messageSended INTEGER,messageReaded INTEGER,messageDate TEXT,messageDeletedDate TEXT,messageStamp INTEGER,messageDeleted INTEGER)";
+    NSString *sql = @"create table if not exists message (messageId TEXT PRIMARY KEY,messageSession TEXT,messageSessionType INTEGER,messageSessionOffset INTEGER,messageTableSeq INTEGER,messageType INTEGER ,messageSendId TEXT,messageSendExtendId TEXT,messageReceiveId TEXT,messageReceiveExtendId TEXT,messageContent TEXT,messageSendState INTEGER,messageReadState INTEGER,messageDate TEXT,deleteDate TEXT,messageStamp INTEGER,isDelete INTEGER)";
     
-    NSString *sqlTwo=@"create table if not exists session (sessionId TEXT,sessionExtendId TEXT,sessionType INTEGER,sessionName TEXT,sessionImage TEXT,sessionOffset TEXT,sessionStamp INTEGER,sessionCreateDate TEXT,sessionCreateUser TEXT,sessionDeleted INTEGER,sessionDeletedDate TEXT,users TEXT,sessionInsertUser TEXT,primary key (sessionId,sessionInsertUser))";
+    NSString *sqlTwo=@"create table if not exists session (sessionId TEXT,sessionExtendId TEXT,sessionType INTEGER,sessionInfo TEXT,essionName TEXT,sessionImage TEXT,sessionOffset TEXT,sessionStamp INTEGER,sessionCreateDate TEXT,sessionCreateUser TEXT,sessionDeleted INTEGER,sessionDeletedDate TEXT,users TEXT,sessionInsertUser TEXT,primary key (sessionId,sessionInsertUser))";
     
     //5.执行更新操作 此处database直接操作，不考虑多线程问题，多线程问题，用FMDatabaseQueue 每次数据库操作之后都会返回bool数值，YES，表示success，NO，表示fail,可以通过 @see lastError @see lastErrorCode @see lastErrorMessage
     BOOL result = [db executeUpdate:sql];
@@ -136,12 +136,13 @@
                     [usersDataDic addObject:[[usersData objectAtIndex:s] mj_keyValues]];
                 }
                 //存在就更新数据
-                BOOL result = [db executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionInsertUser = ? and sessionExtendId=?"
+                BOOL result = [db executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionInfo=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionInsertUser = ? and sessionExtendId=?"
                            withArgumentsInArray:@[
                     
                     [FlappyStringTool toUnNullStr:data.sessionId],
                     [FlappyStringTool toUnNullStr:data.sessionExtendId],
                     [NSNumber numberWithInteger:data.sessionType],
+                    [FlappyStringTool toUnNullStr:data.sessionInfo],
                     [FlappyStringTool toUnNullStr:data.sessionName],
                     [FlappyStringTool toUnNullStr:data.sessionImage],
                     [FlappyStringTool toUnNullStr:data.sessionOffset],
@@ -169,12 +170,13 @@
                     [usersDataDic addObject:[[usersData objectAtIndex:s] mj_keyValues]];
                 }
                 
-                BOOL result = [db executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                BOOL result = [db executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionInfo,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
                            withArgumentsInArray:@[
                     
                     [FlappyStringTool toUnNullStr:data.sessionId],
                     [FlappyStringTool toUnNullStr:data.sessionExtendId],
                     [NSNumber numberWithInteger:data.sessionType],
+                    [FlappyStringTool toUnNullStr:data.sessionInfo],
                     [FlappyStringTool toUnNullStr:data.sessionName],
                     [FlappyStringTool toUnNullStr:data.sessionImage],
                     [FlappyStringTool toUnNullStr:data.sessionOffset],
@@ -239,12 +241,13 @@
                 [usersDataDic addObject:[[usersData objectAtIndex:s] mj_keyValues]];
             }
             //更新数据
-            BOOL result = [db executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionInsertUser = ? and sessionExtendId=?"
+            BOOL result = [db executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionInfo=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionInsertUser = ? and sessionExtendId=?"
                        withArgumentsInArray:@[
                 
                 [FlappyStringTool toUnNullStr:data.sessionId],
                 [FlappyStringTool toUnNullStr:data.sessionExtendId],
                 [NSNumber numberWithInteger:data.sessionType],
+                [FlappyStringTool toUnNullStr:data.sessionInfo],
                 [FlappyStringTool toUnNullStr:data.sessionName],
                 [FlappyStringTool toUnNullStr:data.sessionImage],
                 [FlappyStringTool toUnNullStr:data.sessionOffset],
@@ -273,12 +276,13 @@
                 [usersDataDic addObject:[[usersData objectAtIndex:s] mj_keyValues]];
             }
             //插入数据
-            BOOL result = [db executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
+            BOOL result = [db executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionInfo,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
                        withArgumentsInArray:@[
                 
                 [FlappyStringTool toUnNullStr:data.sessionId],
                 [FlappyStringTool toUnNullStr:data.sessionExtendId],
                 [NSNumber numberWithInteger:data.sessionType],
+                [FlappyStringTool toUnNullStr:data.sessionInfo],
                 [FlappyStringTool toUnNullStr:data.sessionName],
                 [FlappyStringTool toUnNullStr:data.sessionImage],
                 [FlappyStringTool toUnNullStr:data.sessionOffset],
@@ -326,6 +330,7 @@
             msg.sessionId = [result stringForColumn:@"sessionId"];
             msg.sessionExtendId = [result stringForColumn:@"sessionExtendId"];
             msg.sessionType = [result intForColumn:@"sessionType"];
+            msg.sessionInfo = [result stringForColumn:@"sessionInfo"];
             msg.sessionName = [result stringForColumn:@"sessionName"];
             msg.sessionImage = [result stringForColumn:@"sessionImage"];
             msg.sessionOffset = [result stringForColumn:@"sessionOffset"];
@@ -374,6 +379,7 @@
             msg.sessionId = [result stringForColumn:@"sessionId"];
             msg.sessionExtendId = [result stringForColumn:@"sessionExtendId"];
             msg.sessionType = [result intForColumn:@"sessionType"];
+            msg.sessionInfo = [result stringForColumn:@"sessionInfo"];
             msg.sessionName = [result stringForColumn:@"sessionName"];
             msg.sessionImage = [result stringForColumn:@"sessionImage"];
             msg.sessionOffset = [result stringForColumn:@"sessionOffset"];
@@ -421,7 +427,7 @@
             
             [formers close];
             
-            BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?"
+            BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ?"
                        withArgumentsInArray:@[
                 [FlappyStringTool toUnNullStr:msg.messageSession],
                 [NSNumber numberWithInteger:msg.messageSessionType],
@@ -446,7 +452,7 @@
             
             [formers close];
             
-            BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+            BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSendId,messageSendExtendId,messageReceiveId,messageReceiveExtendId,messageContent,messageSendState,messageReadState,messageDate,deleteDate,messageStamp,isDelete) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                        withArgumentsInArray:@[
                 //插入部分
                 [FlappyStringTool toUnNullStr:msg.messageId],
@@ -524,7 +530,7 @@
             //包含更新
             if(nuber.intValue==1){
                 
-                BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?"
+                BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ?"
                            withArgumentsInArray:@[
                     [FlappyStringTool toUnNullStr:msg.messageSession],
                     [NSNumber numberWithInteger:msg.messageSessionType],
@@ -547,7 +553,7 @@
                 }
             }else{
                 //不包含插入
-                BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSend,messageSendExtendid,messageRecieve,messageRecieveExtendid,messageContent,messageSended,messageReaded,messageDate,messageDeletedDate,messageStamp,messageDeleted) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSendId,messageSendExtendId,messageReceiveId,messageReceiveExtendId,messageContent,messageSendState,messageReadState,messageDate,deleteDate,messageStamp,isDelete) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                            withArgumentsInArray:@[
                     //插入部分
                     [FlappyStringTool toUnNullStr:msg.messageId],
@@ -613,17 +619,17 @@
             msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
             msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
             msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSend"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
-            msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
+            msg.messageSendId = [result stringForColumn:@"messageSendId"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
+            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
             msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSended"];
-            msg.messageReadState = [result intForColumn:@"messageReaded"];
+            msg.messageSendState = [result intForColumn:@"messageSendState"];
+            msg.messageReadState = [result intForColumn:@"messageReadState"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.isDelete = [result intForColumn:@"messageDeleted"];
+            msg.isDelete = [result intForColumn:@"isDelete"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
+            msg.deleteDate = [result stringForColumn:@"deleteDate"];
             [result close];
             [db close];
             //返回消息
@@ -643,7 +649,7 @@
         if(db==nil){
             return false;
         }
-        BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSend=?,messageSendExtendid=?,messageRecieve=?,messageRecieveExtendid=?,messageContent=?,messageSended=?,messageReaded=?,messageDate=?,messageDeletedDate=?,messageDeleted=? where messageId = ?"
+        BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ?"
                    withArgumentsInArray:@[
             [FlappyStringTool toUnNullStr:msg.messageSession],
             [NSNumber numberWithInteger:msg.messageSessionType],
@@ -688,17 +694,17 @@
             msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
             msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
             msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSend"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
-            msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
+            msg.messageSendId = [result stringForColumn:@"messageSendId"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
+            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
             msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSended"];
-            msg.messageReadState = [result intForColumn:@"messageReaded"];
+            msg.messageSendState = [result intForColumn:@"messageSendState"];
+            msg.messageReadState = [result intForColumn:@"messageReadState"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.isDelete = [result intForColumn:@"messageDeleted"];
+            msg.isDelete = [result intForColumn:@"isDelete"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
+            msg.deleteDate = [result stringForColumn:@"deleteDate"];
             [result close];
             [db close];
             //返回消息
@@ -732,17 +738,17 @@
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
         msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
         msg.messageType = [result intForColumn:@"messageType"];
-        msg.messageSendId = [result stringForColumn:@"messageSend"];
-        msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
-        msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
-        msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
+        msg.messageSendId = [result stringForColumn:@"messageSendId"];
+        msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
+        msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
+        msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
         msg.messageContent = [result stringForColumn:@"messageContent"];
-        msg.messageSendState = [result intForColumn:@"messageSended"];
-        msg.messageReadState = [result intForColumn:@"messageReaded"];
+        msg.messageSendState = [result intForColumn:@"messageSendState"];
+        msg.messageReadState = [result intForColumn:@"messageReadState"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
-        msg.isDelete = [result intForColumn:@"messageDeleted"];
+        msg.isDelete = [result intForColumn:@"isDelete"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
-        msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
+        msg.deleteDate = [result stringForColumn:@"deleteDate"];
         [retArray addObject:msg];
     }
     [result close];
@@ -758,7 +764,7 @@
         if(db==nil){
             return nil;
         }
-        FMResultSet *result = [db executeQuery:@"select * from message where messageReaded = 0 and messageType=0 and messageSession=? order by messageTableSeq  desc" withArgumentsInArray:@[sessionID]];
+        FMResultSet *result = [db executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageSession=? order by messageTableSeq  desc" withArgumentsInArray:@[sessionID]];
         
         //创建消息列表
         NSMutableArray* retArray=[[NSMutableArray alloc]init];
@@ -772,17 +778,17 @@
             msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
             msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
             msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSend"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
-            msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
+            msg.messageSendId = [result stringForColumn:@"messageSendId"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
+            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
             msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSended"];
-            msg.messageReadState = [result intForColumn:@"messageReaded"];
+            msg.messageSendState = [result intForColumn:@"messageSendState"];
+            msg.messageReadState = [result intForColumn:@"messageReadState"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.isDelete = [result intForColumn:@"messageDeleted"];
+            msg.isDelete = [result intForColumn:@"isDelete"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
+            msg.deleteDate = [result stringForColumn:@"deleteDate"];
             [retArray addObject:msg];
         }
         [result close];
@@ -799,7 +805,7 @@
         if(db==nil){
             return nil;
         }
-        FMResultSet *result = [db executeQuery:@"select * from message where messageReaded = 0 and messageType=0 order by messageTableSeq  desc"];
+        FMResultSet *result = [db executeQuery:@"select * from message where messageReadState = 0 and messageType=0 order by messageTableSeq  desc"];
         
         //创建消息列表
         NSMutableArray* retArray=[[NSMutableArray alloc]init];
@@ -813,17 +819,17 @@
             msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
             msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
             msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSend"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
-            msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
+            msg.messageSendId = [result stringForColumn:@"messageSendId"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
+            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
             msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSended"];
-            msg.messageReadState = [result intForColumn:@"messageReaded"];
+            msg.messageSendState = [result intForColumn:@"messageSendState"];
+            msg.messageReadState = [result intForColumn:@"messageReadState"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.isDelete = [result intForColumn:@"messageDeleted"];
+            msg.isDelete = [result intForColumn:@"isDelete"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
+            msg.deleteDate = [result stringForColumn:@"deleteDate"];
             [retArray addObject:msg];
         }
         [result close];
@@ -874,17 +880,17 @@
             msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
             msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
             msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSend"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendid"];
-            msg.messageReceiveId = [result stringForColumn:@"messageRecieve"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageRecieveExtendid"];
+            msg.messageSendId = [result stringForColumn:@"messageSendId"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
+            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
             msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSended"];
-            msg.messageReadState = [result intForColumn:@"messageReaded"];
+            msg.messageSendState = [result intForColumn:@"messageSendState"];
+            msg.messageReadState = [result intForColumn:@"messageReadState"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.isDelete = [result intForColumn:@"messageDeleted"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.deleteDate = [result stringForColumn:@"messageDeletedDate"];
+            msg.isDelete = [result intForColumn:@"isDelete"];
+            msg.deleteDate = [result stringForColumn:@"deleteDate"];
             [listArray addObject:msg];
         }
         //关闭
