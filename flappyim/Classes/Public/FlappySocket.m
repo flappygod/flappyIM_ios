@@ -520,7 +520,6 @@
             //数量
             for(int s=0;s<array.count;s++){
                 SessionListener listener=[array objectAtIndex:s];
-                FlappyChatSession* session=[[FlappyChatSession alloc]init];
                 listener(session);
             }
         });
