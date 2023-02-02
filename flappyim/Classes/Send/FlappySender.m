@@ -328,9 +328,6 @@
         return;
     }
     
-    //消息
-    [self msgInsert:chatMsg];
-    
     //视频信息
     ChatVideo* chatVideo=[chatMsg getChatVideo];
     
@@ -423,12 +420,15 @@
         
     } @catch (NSException *exception) {
         [self msgFailure:chatMsg];
-        failure(chatMsg,[NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
+        failure(chatMsg,[NSError errorWithDomain:@"视频读取失败" code:0 userInfo:nil],
                 RESULT_FILEERR);
         return;
     } @finally {
         
     }
+    
+    //消息
+    [self msgInsert:chatMsg];
     
     //上传文件
     FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];

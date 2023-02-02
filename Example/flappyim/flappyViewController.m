@@ -92,8 +92,8 @@
     imagePickVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     imagePickVC.allowsEditing = NO;
     imagePickVC.delegate = self;
-    imagePickVC.mediaTypes = [NSArray arrayWithObjects:@"public.image", nil];
-    //imagePickVC.mediaTypes = [NSArray arrayWithObjects:@"public.movie", nil];
+    //imagePickVC.mediaTypes = [NSArray arrayWithObjects:@"public.image", nil];
+    imagePickVC.mediaTypes = [NSArray arrayWithObjects:@"public.movie", nil];
     [self presentViewController:imagePickVC animated:YES completion:nil];
 }
 
@@ -104,32 +104,32 @@
     __weak typeof(self) safeSelf=self;
     [[FlappyIM shareInstance] createSingleSession:@"100"
                                        andSuccess:^(id _Nullable data) {
-                                           NSLog(@"会话创建成功");
-                                           safeSelf.session=data;
-                                           [self sessionSuccess:data];
-                                           
-                                           ChatMessage* ms=[safeSelf.session getLatestMessage];
-                                           safeSelf.lable.text=[ms getChatText];
-                                           
-                                           ChatMessage* msg=[safeSelf.session getLatestMessage];
-                                           
-                                           NSLog(@"%ld",(long)msg.messageTableSeq);
-                                           
-                                           if(msg!=nil){
-                                               NSMutableArray* formers=[safeSelf.session getFormerMessages:msg.messageId
-                                                                                                  withSize:10];
-                                               
-                                               for(int s=0;s<formers.count;s++){
-                                                   ChatMessage* message=[formers objectAtIndex:s];
-                                                   
-                                                   NSLog(@"%ld",(long)message.messageTableSeq);
-                                               }
-                                           }
-                                          
-                                           
-                                       } andFailure:^(NSError * _Nullable error, NSInteger code) {
-                                           NSLog(@"会话创建失败");
-                                       }];
+        NSLog(@"会话创建成功");
+        safeSelf.session=data;
+        [self sessionSuccess:data];
+        
+        ChatMessage* ms=[safeSelf.session getLatestMessage];
+        safeSelf.lable.text=[ms getChatText];
+        
+        ChatMessage* msg=[safeSelf.session getLatestMessage];
+        
+        NSLog(@"%ld",(long)msg.messageTableSeq);
+        
+        if(msg!=nil){
+            NSMutableArray* formers=[safeSelf.session getFormerMessages:msg.messageId
+                                                               withSize:10];
+            
+            for(int s=0;s<formers.count;s++){
+                ChatMessage* message=[formers objectAtIndex:s];
+                
+                NSLog(@"%ld",(long)message.messageTableSeq);
+            }
+        }
+        
+        
+    } andFailure:^(NSError * _Nullable error, NSInteger code) {
+        NSLog(@"会话创建失败");
+    }];
 }
 
 -(void)sessionSuccess:(FlappyChatSession*)session{
@@ -153,12 +153,25 @@
 //发送消息
 -(void)sendMessage:(id)sender{
     if(self.session!=nil){
-        [self.session sendText:self.sendText.text
-                    andSuccess:^(ChatMessage* _Nullable data) {
-                        NSLog(@"发送成功");
-                    } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
-                        NSLog(@"发送失败");
-                    }];
+                [self.session sendText:self.sendText.text
+                            andSuccess:^(ChatMessage* _Nullable data) {
+                                NSLog(@"发送成功");
+                            } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
+                                NSLog(@"发送失败");
+                            }];
+        
+//        ChatLocation* loc=[[ChatLocation alloc]init];
+//        loc.lat=@"11111";
+//        loc.lng=@"222222";
+//        loc.address=@"345354354";
+//
+//        [self.session sendLocation:loc
+//                        andSuccess:^(ChatMessage* _Nullable data) {
+//            NSLog(@"发送成功");
+//        } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
+//            NSLog(@"发送失败");
+//        }];
+        
     }
 }
 
@@ -175,23 +188,24 @@
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    NSURL * url =[info objectForKey:UIImagePickerControllerImageURL];
+    //NSURL * url =[info objectForKey:UIImagePickerControllerImageURL];
+    NSURL * url =[info objectForKey:UIImagePickerControllerMediaURL];
     if(self.session!=nil){
         NSString* str=[url.absoluteString substringWithRange:NSMakeRange(7, url.absoluteString.length-7)];
         
-        [self.session sendLocalImage:str
-                          andSuccess:^(ChatMessage* _Nullable data) {
-                              NSLog(@"发送成功");
-                          } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
-                              NSLog(@"发送失败");
-                          }];
-        
-//        [self.session sendLocalVideo:str
+//        [self.session sendLocalImage:str
 //                          andSuccess:^(ChatMessage* _Nullable data) {
-//                              NSLog(@"发送成功");
-//                          } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
-//                              NSLog(@"发送失败");
-//                          }];
+//            NSLog(@"发送成功");
+//        } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
+//            NSLog(@"发送失败");
+//        }];
+        
+                [self.session sendLocalVideo:str
+                                  andSuccess:^(ChatMessage* _Nullable data) {
+                                      NSLog(@"发送成功");
+                                  } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
+                                      NSLog(@"发送失败");
+                                  }];
     }
     
     
