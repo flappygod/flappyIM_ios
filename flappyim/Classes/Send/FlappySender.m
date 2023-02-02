@@ -230,9 +230,10 @@
         
         NSString* resultCode=dic[@"code"];
         //成功
-        if(resultCode.integerValue==RESULT_SUCCESS){
+        if(resultCode.integerValue==RESULT_SUCCESS && [dic[@"data"] isKindOfClass:NSArray.class]){
+            NSArray* dataList=dic[@"data"];
             //地址
-            NSString* imgPath=dic[@"data"][@"filePath"];
+            NSString* imgPath=dataList.count > 0? dataList[0]:@"";
             //地址赋值
             chatImg.path=imgPath;
             //设置

@@ -92,7 +92,8 @@
     imagePickVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     imagePickVC.allowsEditing = NO;
     imagePickVC.delegate = self;
-    imagePickVC.mediaTypes = [NSArray arrayWithObjects:@"public.movie", nil];
+    imagePickVC.mediaTypes = [NSArray arrayWithObjects:@"public.image", nil];
+    //imagePickVC.mediaTypes = [NSArray arrayWithObjects:@"public.movie", nil];
     [self presentViewController:imagePickVC animated:YES completion:nil];
 }
 
@@ -173,22 +174,24 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
-    NSString *mediaType=[info objectForKey:UIImagePickerControllerMediaType];
     
-    NSURL * url;
-    
-    if ([mediaType isEqualToString:@"public.movie"]){
-        //如果是视频
-        url = info[UIImagePickerControllerMediaURL];//获得视频的URL
-    }
+    NSURL * url =[info objectForKey:UIImagePickerControllerImageURL];
     if(self.session!=nil){
         NSString* str=[url.absoluteString substringWithRange:NSMakeRange(7, url.absoluteString.length-7)];
-        [self.session sendLocalVideo:str
+        
+        [self.session sendLocalImage:str
                           andSuccess:^(ChatMessage* _Nullable data) {
                               NSLog(@"发送成功");
                           } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
                               NSLog(@"发送失败");
                           }];
+        
+//        [self.session sendLocalVideo:str
+//                          andSuccess:^(ChatMessage* _Nullable data) {
+//                              NSLog(@"发送成功");
+//                          } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
+//                              NSLog(@"发送失败");
+//                          }];
     }
     
     
