@@ -179,7 +179,7 @@
     if(self.session!=nil){
         NSString* str=[url.absoluteString substringWithRange:NSMakeRange(7, url.absoluteString.length-7)];
         
-        [self.session sendLocalImage:url.absoluteString
+        [self.session sendLocalImage:str
                           andSuccess:^(ChatMessage* _Nullable data) {
                               NSLog(@"发送成功");
                           } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
