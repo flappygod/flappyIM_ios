@@ -33,11 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString* sessionOffset;
 
-@property(nonatomic,assign) long sessionStamp;
-
 @property(nonatomic,copy) NSString* sessionCreateDate;
 
 @property(nonatomic,copy) NSString* sessionCreateUser;
+
+@property(nonatomic,assign) long sessionStamp;
 
 @property(nonatomic,assign) NSInteger isDelete;
 

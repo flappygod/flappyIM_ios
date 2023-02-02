@@ -73,9 +73,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy)NSString* messageDate;
 
-@property(nonatomic,assign) NSInteger isDelete;
-
 @property(nonatomic,assign) NSInteger messageStamp;
+
+@property(nonatomic,assign) NSInteger isDelete;
 
 @property(nonatomic,copy)NSString* deleteDate;
 
