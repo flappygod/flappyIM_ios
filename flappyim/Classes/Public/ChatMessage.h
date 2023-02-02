@@ -38,6 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 #define MSG_TYPE_LOCATE  4
 //短视频
 #define MSG_TYPE_VIDEO  5
+//文件
+#define MSG_TYPE_FILE  6
+//自定义消息
+#define MSG_TYPE_CUSTOM  7
 
 
 
