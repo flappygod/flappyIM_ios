@@ -208,11 +208,46 @@
         return;
     }
     
+    //图片信息
+    ChatImage* chatImg=[chatMsg getChatImage];
+    
+    //get image failed??
+    if(chatImg.width==0&&chatImg.height==0){
+        @try {
+            NSString* trueUrl=chatImg.sendPath;
+            if([trueUrl hasPrefix:@"file://"]){
+                trueUrl = [trueUrl substringWithRange:NSMakeRange(7, trueUrl.length-7)];
+            }
+            //获取图片
+            UIImage* image=[[UIImage alloc]initWithContentsOfFile:trueUrl];
+            //不为空
+            if(image==nil){
+                [self msgFailure:chatMsg];
+                failure(chatMsg,[NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
+                        RESULT_FILEERR);
+                return;
+            }
+            //保存宽度
+            chatImg.width=[NSString stringWithFormat:@"%ld",(long)image.size.width];
+            //保存高度
+            chatImg.height=[NSString stringWithFormat:@"%ld",(long)image.size.height];
+        } @catch (NSException *exception) {
+            //失败了
+            [self msgFailure:chatMsg];
+            //图片读取失败
+            failure(chatMsg,[NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
+                    RESULT_FILEERR);
+            //返回
+            return;
+        } @finally {
+            
+        }
+    }
+    
+    
     //消息
     [self msgInsert:chatMsg];
     
-    //图片信息
-    ChatImage* chatImg=[chatMsg getChatImage];
     
     //开始请求
     FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
@@ -261,31 +296,6 @@
         [safeSelf.reqArray removeObject:safeReq];
     };
     
-    @try {
-        //获取图片
-        UIImage* image=[[UIImage alloc]initWithContentsOfFile:chatImg.sendPath];
-        //不为空
-        if(image==nil){
-            [self msgFailure:chatMsg];
-            failure(chatMsg,[NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
-                    RESULT_FILEERR);
-            return;
-        }
-        //保存宽度
-        chatImg.width=[NSString stringWithFormat:@"%ld",(long)image.size.width];
-        //保存高度
-        chatImg.height=[NSString stringWithFormat:@"%ld",(long)image.size.height];
-    } @catch (NSException *exception) {
-        //失败了
-        [self msgFailure:chatMsg];
-        //图片读取失败
-        failure(chatMsg,[NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
-                RESULT_FILEERR);
-        //返回
-        return;
-    } @finally {
-        
-    }
     
     //上传
     FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];

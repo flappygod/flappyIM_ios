@@ -7,6 +7,7 @@
 //
 
 #import "FlappyImageTool.h"
+#import <ImageIO/ImageIO.h>
 
 @implementation FlappyImageTool
 
@@ -166,5 +167,21 @@
     return image;
 }
 
+
+// 根据图片url获取图片尺寸
++(CGSize)getImageSizeWithPath:(id)imageURL
+{
+    NSString* trueUrl=imageURL;
+    if(![trueUrl hasPrefix:@"file://"]){
+        trueUrl = [NSString stringWithFormat: @"%@%@",@"file://",trueUrl];
+    }
+    CGImageSourceRef source = CGImageSourceCreateWithURL((CFURLRef)[NSURL URLWithString:trueUrl], NULL);
+    NSDictionary* imageHeader = (__bridge NSDictionary*) CGImageSourceCopyPropertiesAtIndex(source, 0, NULL);
+    NSLog(@"Image header info %@",imageHeader);
+    CGFloat pixelHeight = [[imageHeader objectForKey:@"PixelHeight"] floatValue];
+    CGFloat pixelWidth  = [[imageHeader objectForKey:@"PixelWidth"] floatValue];
+    CGSize size = CGSizeMake(pixelWidth, pixelHeight);
+    return  size;
+}
 
 @end

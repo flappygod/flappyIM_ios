@@ -13,6 +13,7 @@
 #import "FlappyJsonTool.h"
 #import "FlappyStringTool.h"
 #import "FlappyData.h"
+#import "FlappyImageTool.h"
 #import "MJExtension.h"
 
 @implementation FlappyChatSession
@@ -156,6 +157,9 @@
     ChatImage* image=[[ChatImage alloc]init];
     //本地发送的地址
     image.sendPath=path;
+    CGSize size=[FlappyImageTool getImageSizeWithPath:path];
+    image.width=[NSString stringWithFormat:@"%d",(int)size.width];
+    image.height=[NSString stringWithFormat:@"%d",(int)size.height];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;

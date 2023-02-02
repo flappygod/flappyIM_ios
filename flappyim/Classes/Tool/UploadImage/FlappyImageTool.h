@@ -35,4 +35,7 @@
  通过颜色创建一张纯色的图片
  *************************/
 +(UIImage *)imageWithColor:(UIColor *)color;
+
+//获取图片大小
++(CGSize)getImageSizeWithPath:(id)imageURL;
 @end
