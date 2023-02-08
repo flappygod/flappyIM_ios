@@ -124,6 +124,19 @@
     return nil;
 }
 
+//设置|获取自定义
+-(void)setChatCustom:(NSString*)chatText{
+    if(chatText!=nil){
+        _messageContent=[self base64EncodeString:chatText];
+    }
+}
+-(NSString*)getChatCustom{
+    if(_messageContent!=nil&&self.messageType==MSG_TYPE_CUSTOM){
+        return [self base64DecodeString:_messageContent];
+    }
+    return nil;
+}
+
 
 #pragma mark -对一个字符串进行base64编码，并返回
 -(NSString *)base64EncodeString:(NSString *)string{

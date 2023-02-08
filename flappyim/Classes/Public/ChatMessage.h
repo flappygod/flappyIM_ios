@@ -85,44 +85,38 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy)NSString* deleteDate;
 
 
-//设置聊天文本
+//聊天文本
 -(void)setChatText:(NSString*)chatText;
-//获取聊天文本
 -(NSString*)getChatText;
 
 
-//设置系统消息
+//系统消息
 -(void)setChatSystem:(ChatSystem*)chatSystem;
-//获取系统消息
 -(ChatSystem*)getChatSystem;
 
-
-//设置图像
+//图片
 -(void)setChatImage:(ChatImage*)chatImage;
-//获取图像
 -(ChatImage*)getChatImage;
 
-
-//设置声音
+//声音
 -(void)setChatVoice:(ChatVoice*)chatVoice;
-//获取声音
 -(ChatVoice*)getChatVoice;
 
-//设置位置
+//位置
 -(void)setChatLocation:(ChatLocation*)chatLocation;
-//获取位置
 -(ChatLocation*)getChatLocation;
 
-//设置视频
+//视频
 -(void)setChatVideo:(ChatVideo*)chatVideo;
-//获取视频
 -(ChatVideo*)getChatVideo;
 
-//设置文件
+//文件
 -(void)setChatFile:(ChatFile*)chatFile;
-//获取文件
 -(ChatFile*)getChatFile;
 
+//自定义
+-(void)setChatCustom:(NSString*)chatText;
+-(NSString*)getChatCustom;
 
 
 @end

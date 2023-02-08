@@ -400,6 +400,34 @@
 }
 
 
+//发送文本
+-(ChatMessage*)sendCustomMessage:(NSString*)text
+                      andSuccess:(FlappySendSuccess)success
+                      andFailure:(FlappySendFailure)failure{
+    
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    
+    chatmsg.messageId=[FlappyStringTool uuidString];
+    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionType=self.session.sessionType;
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
+    chatmsg.messageType=MSG_TYPE_CUSTOM;
+    [chatmsg setChatCustom:text];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageSendState=SEND_STATE_CREATE;
+    
+    //发送消息
+    [[FlappySender shareInstance] sendMessage:chatmsg
+                                   andSuccess:success
+                                   andFailure:failure];
+    
+    return chatmsg;
+}
+
+
 
 //重新发送
 -(void)resendMessage:(ChatMessage*)chatmsg
@@ -440,6 +468,12 @@
         [[FlappySender shareInstance] uploadFileAndSend:chatmsg
                                              andSuccess:success
                                              andFailure:failure];
+    }
+    //重新发送自定义消息
+    else if(chatmsg.messageType==MSG_TYPE_CUSTOM){
+        [[FlappySender shareInstance] sendMessage:chatmsg
+                                       andSuccess:success
+                                       andFailure:failure];
     }
     
 }
