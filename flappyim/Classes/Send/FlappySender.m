@@ -452,6 +452,90 @@
 }
 
 
+//上传文件并发送
+-(void)uploadFileAndSend:(ChatMessage*)chatMsg
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure{
+    
+    //已经上传了
+    if(![FlappyStringTool isStringEmpty:[chatMsg getChatFile].path]){
+        
+        [self sendMessage:chatMsg
+               andSuccess:success
+               andFailure:failure];
+        return;
+    }
+    
+    //图片信息
+    ChatFile* chatFile=[chatMsg getChatFile];
+    
+    
+    //插入消息
+    [self msgInsert:chatMsg];
+    
+    
+    //开始请求
+    FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
+    
+    //自己
+    __weak typeof(self) safeSelf=self;
+    //用于引用
+    __weak typeof (req) safeReq=req;
+    
+    //成功
+    req.successBlock=^(id data){
+        
+        //字典
+        NSDictionary* dic=data;
+        
+        NSString* resultCode=dic[@"code"];
+        //成功
+        if(resultCode.integerValue==RESULT_SUCCESS && [dic[@"data"] isKindOfClass:NSArray.class]){
+            NSArray* dataList=dic[@"data"];
+            //地址
+            NSString* imgPath=dataList.count > 0? dataList[0]:@"";
+            //地址赋值
+            chatFile.path=imgPath;
+            //设置
+            [chatMsg setChatFile:chatFile];
+            //上传完成发送消息
+            [safeSelf sendMessage:chatMsg
+                       andSuccess:success
+                       andFailure:failure];
+            [safeSelf.reqArray removeObject:safeReq];
+        }else{
+            [safeSelf msgFailure:chatMsg];
+            //上传失败了
+            failure(chatMsg,[NSError errorWithDomain:@"文件上传失败" code:0 userInfo:nil],
+                    RESULT_NETERROR);
+            [safeSelf.reqArray removeObject:safeReq];
+        }
+        
+    };
+    //失败
+    req.errorBlock=^(NSException*  error){
+        [safeSelf msgFailure:chatMsg];
+        //上传失败了
+        failure(chatMsg,[NSError errorWithDomain:error.description code:0 userInfo:nil],
+                RESULT_NETERROR);
+        [safeSelf.reqArray removeObject:safeReq];
+    };
+    
+    
+    //上传
+    FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
+    uploadReq.path=chatFile.sendPath;
+    uploadReq.name=@"file";
+    uploadReq.type=@"file";
+    [req uploadImageAndMovieBaseModel:[FlappyApiConfig shareInstance].URL_fileUpload
+                             andModel:uploadReq];
+    
+    
+    //添加进入请求列表，方式请求被回收
+    [self.reqArray addObject:req];
+}
+
+
 //发送消息
 -(void)sendMessage:(ChatMessage*)chatMsg
         andSuccess:(FlappySendSuccess)success

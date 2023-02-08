@@ -11,6 +11,7 @@
 #import "ChatVideo.h"
 #import "ChatLocation.h"
 #import "ChatSystem.h"
+#import "ChatFile.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -107,17 +108,20 @@ NS_ASSUME_NONNULL_BEGIN
 //获取声音
 -(ChatVoice*)getChatVoice;
 
+//设置位置
+-(void)setChatLocation:(ChatLocation*)chatLocation;
+//获取位置
+-(ChatLocation*)getChatLocation;
 
 //设置视频
 -(void)setChatVideo:(ChatVideo*)chatVideo;
 //获取视频
 -(ChatVideo*)getChatVideo;
 
-
-//设置位置
--(void)setChatLocation:(ChatLocation*)chatLocation;
-//获取位置
--(ChatLocation*)getChatLocation;
+//设置文件
+-(void)setChatFile:(ChatFile*)chatFile;
+//获取文件
+-(ChatFile*)getChatFile;
 
 
 

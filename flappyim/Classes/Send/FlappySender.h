@@ -38,6 +38,11 @@
                andSuccess:(FlappySendSuccess)success
                andFailure:(FlappySendFailure)failure;
 
+//上传文件并发送
+-(void)uploadFileAndSend:(ChatMessage*)chatMsg
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure;
+
 //发送消息
 -(void)sendMessage:(ChatMessage*)chatMsg
         andSuccess:(FlappySendSuccess)success

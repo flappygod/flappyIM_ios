@@ -9,9 +9,11 @@
 #import "SessionData.h"
 #import "FlappyIM.h"
 #import "FlappyApiRequest.h"
+#import "ChatLocation.h"
 #import "ChatImage.h"
 #import "ChatVoice.h"
-#import "ChatLocation.h"
+#import "ChatFile.h"
+#import "ChatVideo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //获取某条信息之前的消息
 -(NSMutableArray*)getFormerMessages:(NSString*)messageID
-                             withSize:(NSInteger)size;
+                           withSize:(NSInteger)size;
 
 
 //发送文本
@@ -72,6 +74,11 @@ NS_ASSUME_NONNULL_BEGIN
               andFailure:(FlappySendFailure)failure;
 
 
+//发送位置
+-(ChatMessage*)sendLocation:(ChatLocation*)location
+                 andSuccess:(FlappySendSuccess)success
+                 andFailure:(FlappySendFailure)failure;
+
 
 //发送视频
 -(ChatMessage*)sendLocalVideo:(NSString*)video
@@ -85,10 +92,18 @@ NS_ASSUME_NONNULL_BEGIN
               andFailure:(FlappySendFailure)failure;
 
 
-//发送位置
--(ChatMessage*)sendLocation:(ChatLocation*)location
-                 andSuccess:(FlappySendSuccess)success
-                 andFailure:(FlappySendFailure)failure;
+//发送文件
+-(ChatMessage*)sendLocalFile:(NSString*)file
+                     andName:(NSString*)name
+                  andSuccess:(FlappySendSuccess)success
+                  andFailure:(FlappySendFailure)failure;
+
+
+//发送文件
+-(ChatMessage*)sendFile:(ChatFile*)file
+             andSuccess:(FlappySendSuccess)success
+             andFailure:(FlappySendFailure)failure;
+
 
 
 //重新发送

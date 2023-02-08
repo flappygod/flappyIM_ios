@@ -265,6 +265,32 @@
     return chatmsg;
 }
 
+//发送位置信息
+-(ChatMessage*)sendLocation:(ChatLocation*)location
+                 andSuccess:(FlappySendSuccess)success
+                 andFailure:(FlappySendFailure)failure{
+    
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    
+    chatmsg.messageId=[FlappyStringTool uuidString];
+    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionType=self.session.sessionType;
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
+    chatmsg.messageType=MSG_TYPE_LOCATE;
+    [chatmsg setChatLocation:location];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageSendState=SEND_STATE_CREATE;
+    
+    [[FlappySender shareInstance] sendMessage:chatmsg
+                                   andSuccess:success
+                                   andFailure:failure];
+    return chatmsg;
+}
+
+
 //发送本地短视频
 -(ChatMessage*)sendLocalVideo:(NSString*)path
                    andSuccess:(FlappySendSuccess)success
@@ -319,11 +345,40 @@
 }
 
 
-//发送位置信息
--(ChatMessage*)sendLocation:(ChatLocation*)location
-                 andSuccess:(FlappySendSuccess)success
-                 andFailure:(FlappySendFailure)failure{
+//发送文件
+-(ChatMessage*)sendLocalFile:(NSString*)path
+                     andName:(NSString*)name
+                  andSuccess:(FlappySendSuccess)success
+                  andFailure:(FlappySendFailure)failure{
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    //创建发送地址
+    ChatFile* file=[[ChatFile alloc]init];
+    file.sendPath=path;
+    file.fileName=name;
     
+    chatmsg.messageId=[FlappyStringTool uuidString];
+    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionType=self.session.sessionType;
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
+    chatmsg.messageType=MSG_TYPE_FILE;
+    [chatmsg setChatFile:file];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageSendState=SEND_STATE_CREATE;
+    
+    [[FlappySender shareInstance] uploadFileAndSend:chatmsg
+                                         andSuccess:success
+                                         andFailure:failure];
+    return chatmsg;
+}
+
+
+//发送文件
+-(ChatMessage*)sendFile:(ChatFile*)file
+             andSuccess:(FlappySendSuccess)success
+             andFailure:(FlappySendFailure)failure{
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
@@ -333,8 +388,8 @@
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
-    chatmsg.messageType=MSG_TYPE_LOCATE;
-    [chatmsg setChatLocation:location];
+    chatmsg.messageType=MSG_TYPE_FILE;
+    [chatmsg setChatFile:file];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_CREATE;
     
@@ -343,6 +398,8 @@
                                    andFailure:failure];
     return chatmsg;
 }
+
+
 
 //重新发送
 -(void)resendMessage:(ChatMessage*)chatmsg
@@ -377,6 +434,12 @@
         [[FlappySender shareInstance] uploadVideoAndSend:chatmsg
                                               andSuccess:success
                                               andFailure:failure];
+    }
+    //重新发送文件消息
+    else if(chatmsg.messageType==MSG_TYPE_FILE){
+        [[FlappySender shareInstance] uploadFileAndSend:chatmsg
+                                             andSuccess:success
+                                             andFailure:failure];
     }
     
 }
