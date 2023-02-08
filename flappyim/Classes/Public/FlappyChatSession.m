@@ -71,7 +71,7 @@
 -(void)addMessageListener:(MessageListener)listener{
     //添加ID
     [[FlappyIM shareInstance] addMsgListener:listener
-                            withSessionID: self.session.sessionId];
+                               withSessionID: self.session.sessionId];
     [_listeners addObject:listener];
 }
 
@@ -79,7 +79,7 @@
 -(void)removeMessageListener:(MessageListener)listener{
     //移除监听
     [[FlappyIM shareInstance] removeMsgListener:listener
-                               withSessionID:self.session.sessionId];
+                                  withSessionID:self.session.sessionId];
     [_listeners removeObject:listener];
 }
 
@@ -94,7 +94,7 @@
     if(_listeners!=nil&&_listeners.count>0){
         for(int s=0;s<_listeners.count;s++){
             [[FlappyIM shareInstance] removeMsgListener:[_listeners objectAtIndex:s]
-                                       withSessionID:self.session.sessionId];
+                                          withSessionID:self.session.sessionId];
         }
     }
 }
@@ -110,7 +110,7 @@
 
 //获取某条信息之前的消息
 -(NSMutableArray*)getFormerMessages:(NSString*)messageID
-                             withSize:(NSInteger)size{
+                           withSize:(NSInteger)size{
     NSMutableArray* arr=[[FlappyDataBase shareInstance]
                          getSessionFormerMessage:self.session.sessionId
                          withMessageID:messageID
@@ -359,20 +359,24 @@
         [[FlappySender shareInstance] uploadImageAndSend:chatmsg
                                               andSuccess:success
                                               andFailure:failure];
-        
     }
     //重新发送语音消息
     else if(chatmsg.messageType==MSG_TYPE_VOICE){
-        
         [[FlappySender shareInstance] uploadVoiceAndSend:chatmsg
                                               andSuccess:success
                                               andFailure:failure];
     }
     //重新发送位置消息
-    if(chatmsg.messageType==MSG_TYPE_LOCATE){
+    else if(chatmsg.messageType==MSG_TYPE_LOCATE){
         [[FlappySender shareInstance] sendMessage:chatmsg
                                        andSuccess:success
                                        andFailure:failure];
+    }
+    //重新发送视频消息
+    else if(chatmsg.messageType==MSG_TYPE_VIDEO){
+        [[FlappySender shareInstance] uploadVideoAndSend:chatmsg
+                                              andSuccess:success
+                                              andFailure:failure];
     }
     
 }
