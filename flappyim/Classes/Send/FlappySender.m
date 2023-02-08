@@ -432,11 +432,8 @@
     
     //上传文件
     FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
-    //发送地址
     uploadReq.path=chatVideo.sendPath;
-    //文件
     uploadReq.name=@"file";
-    //视频
     uploadReq.type=@"video";
     //上传
     [uplaods addObject:uploadReq];

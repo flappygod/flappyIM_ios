@@ -80,6 +80,27 @@
                     mimeType = [NSString stringWithFormat:@"image/%@", extension];
                 }
                 
+                //文件名
+                NSString *fileName = [model.path componentsSeparatedByString:@"/"].lastObject;
+                //错误
+                NSError *error;
+                //URL
+                NSURL* url;
+                //如果以file开头
+                if([model.path hasPrefix:@"file://"]){
+                    //其实不需要，切掉前面的
+                    NSString* path=[model.path substringWithRange:NSMakeRange(7, model.path.length-7)];
+                    //创建url
+                    url=[NSURL fileURLWithPath:path];
+                }else{
+                    //创建url
+                    url=[NSURL fileURLWithPath:model.path];
+                }
+                [formData appendPartWithFileURL:url
+                                           name:model.name
+                                       fileName:fileName
+                                       mimeType:mimeType
+                                          error:&error];
             } else {
                 //获取文件的后缀名
                 if([model.path rangeOfString:@"."].location!=NSNotFound){
@@ -90,33 +111,33 @@
                     NSString *extension = @"MOV";
                     mimeType = [NSString stringWithFormat:@"video/%@", extension];
                 }
+                
+                //文件名
+                NSString *fileName = [model.path componentsSeparatedByString:@"/"].lastObject;
+                //错误
+                NSError *error;
+                //URL
+                NSURL* url;
+                //如果以file开头
+                if([model.path hasPrefix:@"file://"]){
+                    //其实不需要，切掉前面的
+                    NSString* path=[model.path substringWithRange:NSMakeRange(7, model.path.length-7)];
+                    //创建url
+                    url=[NSURL fileURLWithPath:path];
+                }else{
+                    //创建url
+                    url=[NSURL fileURLWithPath:model.path];
+                }
+                
+                [formData appendPartWithFileData:[NSData dataWithContentsOfFile:model.path]
+                                            name:model.name
+                                        fileName:fileName
+                                        mimeType:mimeType];
+                
             }
             
             
-            //文件名
-            NSString *fileName = [model.path componentsSeparatedByString:@"/"].lastObject;
             
-            //错误
-            NSError *error;
-            //URL
-            NSURL* url;
-            //如果以file开头
-            if([model.path hasPrefix:@"file://"]){
-                //其实不需要，切掉前面的
-                NSString* path=[model.path substringWithRange:NSMakeRange(7, model.path.length-7)];
-                //创建url
-                url=[NSURL fileURLWithPath:path];
-            }else{
-                //创建url
-                url=[NSURL fileURLWithPath:model.path];
-            }
-            BOOL success = [formData appendPartWithFileURL:url
-                                                      name:model.name
-                                                  fileName:fileName
-                                                  mimeType:mimeType
-                                                     error:&error];
-            if (!success) {
-            }
         }
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
