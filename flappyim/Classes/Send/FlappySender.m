@@ -91,57 +91,8 @@
         return;
     }
     
-    //消息
-    [self msgInsert:chatMsg];
-    
-    //图片信息
+    //语音信息
     ChatVoice* chatVoice=[chatMsg getChatVoice];
-    
-    //开始请求
-    FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
-    
-    //自己
-    __weak typeof(self) safeSelf=self;
-    __weak typeof (req) safeReq=req;
-    
-    //成功
-    req.successBlock=^(id data){
-        //字典
-        NSDictionary* dic=data;
-        
-        NSString* resultCode=dic[@"code"];
-        //成功
-        if(resultCode.integerValue==RESULT_SUCCESS){
-            //地址
-            chatVoice.path=dic[@"data"][@"filePath"];
-            //设置
-            [chatMsg setChatVoice:chatVoice];
-            //上传完成发送消息
-            [safeSelf sendMessage:chatMsg
-                       andSuccess:success
-                       andFailure:failure];
-            //移除请求释放资源
-            [safeSelf.reqArray removeObject:safeReq];
-        }else{
-            [safeSelf msgFailure:chatMsg];
-            //上传失败了
-            failure(chatMsg,[NSError errorWithDomain:@"图片上传失败" code:0 userInfo:nil],
-                    RESULT_NETERROR);
-            //移除请求释放资源
-            [safeSelf.reqArray removeObject:safeReq];
-        }
-    };
-    
-    //失败
-    req.errorBlock=^(NSException*  error){
-        [safeSelf msgFailure:chatMsg];
-        //上传失败了
-        failure(chatMsg,[NSError errorWithDomain:error.reason code:0 userInfo:nil],
-                RESULT_NETERROR);
-        //移除请求释放资源
-        [safeSelf.reqArray removeObject:safeReq];
-    };
-    
     
     @try {
         //根据地址来
@@ -179,6 +130,58 @@
     } @finally {
         
     }
+    
+    //更新消息
+    [chatMsg setChatVoice:chatVoice];
+    
+    //插入消息
+    [self msgInsert:chatMsg];
+    
+    //开始请求
+    FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
+    
+    //自己
+    __weak typeof(self) safeSelf=self;
+    __weak typeof (req) safeReq=req;
+    
+    //成功
+    req.successBlock=^(id data){
+        //字典
+        NSDictionary* dic=data;
+        
+        NSString* resultCode=dic[@"code"];
+        //成功
+        if(resultCode.integerValue==RESULT_SUCCESS){
+            //地址
+            chatVoice.path=dic[@"data"][@"filePath"];
+            //设置
+            [chatMsg setChatVoice:chatVoice];
+            //上传完成发送消息
+            [safeSelf sendMessage:chatMsg
+                       andSuccess:success
+                       andFailure:failure];
+            //移除请求释放资源
+            [safeSelf.reqArray removeObject:safeReq];
+        }else{
+            [safeSelf msgFailure:chatMsg];
+            //上传失败了
+            failure(chatMsg,[NSError errorWithDomain:@"文件上传失败" code:0 userInfo:nil],
+                    RESULT_NETERROR);
+            //移除请求释放资源
+            [safeSelf.reqArray removeObject:safeReq];
+        }
+    };
+    
+    //失败
+    req.errorBlock=^(NSException*  error){
+        [safeSelf msgFailure:chatMsg];
+        //上传失败了
+        failure(chatMsg,[NSError errorWithDomain:error.reason code:0 userInfo:nil],
+                RESULT_NETERROR);
+        //移除请求释放资源
+        [safeSelf.reqArray removeObject:safeReq];
+    };
+    
     
     //上传文件
     FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
@@ -244,8 +247,11 @@
         }
     }
     
+    //更新消息
+    [chatMsg setChatImage:chatImg];
     
-    //消息
+    
+    //插入消息
     [self msgInsert:chatMsg];
     
     
