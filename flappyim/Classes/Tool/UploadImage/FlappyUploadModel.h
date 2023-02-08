@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *path;
 @property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *fileName;
 
 @end
 

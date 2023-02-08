@@ -183,7 +183,7 @@
     //上传文件
     FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
     uploadReq.path=chatVoice.sendPath;
-    uploadReq.name=@"files";
+    uploadReq.name=@"file";
     uploadReq.type=@"video";
     
     [req uploadImageAndMovieBaseModel:[FlappyApiConfig shareInstance].URL_fileUpload
@@ -300,7 +300,7 @@
     //上传
     FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
     uploadReq.path=chatImg.sendPath;
-    uploadReq.name=@"files";
+    uploadReq.name=@"file";
     uploadReq.type=@"image";
     [req uploadImageAndMovieBaseModel:[FlappyApiConfig shareInstance].URL_fileUpload
                              andModel:uploadReq];
@@ -414,7 +414,7 @@
         //上传文件
         FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
         uploadReq.path=info.overPath;
-        uploadReq.name=@"overFile";
+        uploadReq.name=@"file";
         uploadReq.type=@"image";
         [uplaods addObject:uploadReq];
         
