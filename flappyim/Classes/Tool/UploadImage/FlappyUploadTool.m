@@ -30,17 +30,17 @@
 
 
 //上传图片和视频
-- (void)uploadImageAndMovieBaseModel:(NSString*)urlPath
+- (void)uploadFileBaseModel:(NSString*)urlPath
                             andModel:(FlappyUploadModel *)model {
     NSMutableArray* array=[[NSMutableArray alloc]init];
     [array addObject:model];
-    [self uploadImageAndMovieBaseModel:urlPath andModels:array];
+    [self uploadFilesBaseModel:urlPath andModels:array];
 }
 
 
 
 //上传图片和视频
-- (void)uploadImageAndMovieBaseModel:(NSString*)urlPath
+- (void)uploadFilesBaseModel:(NSString*)urlPath
                            andModels:(NSMutableArray *)models {
     
     //创建AFHTTPSessionManager

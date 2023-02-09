@@ -28,15 +28,13 @@ typedef void(^SuccessBlock) (id);
 
 
 
-
+//上传文件到服务器
+- (void)uploadFileBaseModel:(NSString*)urlPath
+                   andModel:(FlappyUploadModel *)model;
 
 //上传文件到服务器
-- (void)uploadImageAndMovieBaseModel:(NSString*)urlPath
-                            andModel:(FlappyUploadModel *)model;
-
-//上传文件到服务器
-- (void)uploadImageAndMovieBaseModel:(NSString*)urlPath
-                           andModels:(NSMutableArray *)models;
+- (void)uploadFilesBaseModel:(NSString*)urlPath
+                   andModels:(NSMutableArray *)models;
 
 
 @end
