@@ -400,10 +400,10 @@
 }
 
 
-//发送文本
--(ChatMessage*)sendCustomMessage:(NSString*)text
-                      andSuccess:(FlappySendSuccess)success
-                      andFailure:(FlappySendFailure)failure{
+//发送自定义
+-(ChatMessage*)sendCustom:(NSString*)text
+               andSuccess:(FlappySendSuccess)success
+               andFailure:(FlappySendFailure)failure{
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
