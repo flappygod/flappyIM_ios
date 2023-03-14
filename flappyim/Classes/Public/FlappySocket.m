@@ -316,21 +316,25 @@
             NSInteger type=(long)dataType;
             //保存
             [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
-            //修改
-            NSArray* array=self.loginData[@"sessions"];
-            //修改session
-            NSMutableArray* sessions=[[NSMutableArray alloc]init];
-            //遍历
-            for(int s=0;s<array.count;s++){
-                //数据字典
-                NSDictionary* dic=[array objectAtIndex:s];
-                //数据
-                SessionData* data=[SessionData  mj_objectWithKeyValues:dic];
-                //添加
-                [sessions addObject:data];
+            
+            if(self.loginData[@"sessions"]!=nil && self.loginData[@"sessions"]!=[NSNull null]){
+                //修改
+                NSArray* array=self.loginData[@"sessions"];
+                //修改session
+                NSMutableArray* sessions=[[NSMutableArray alloc]init];
+                //遍历
+                for(int s=0;s<array.count;s++){
+                    //数据字典
+                    NSDictionary* dic=[array objectAtIndex:s];
+                    //数据
+                    SessionData* data=[SessionData  mj_objectWithKeyValues:dic];
+                    //添加
+                    [sessions addObject:data];
+                }
+                //插入会话数据
+                [[FlappyDataBase shareInstance] insertSessions:sessions];
             }
-            //插入会话数据
-            [[FlappyDataBase shareInstance] insertSessions:sessions];
+            
             
         } @catch (NSException *exception) {
         } @finally {
