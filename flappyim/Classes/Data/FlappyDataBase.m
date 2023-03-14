@@ -146,7 +146,7 @@
                     [FlappyStringTool toUnNullStr:data.sessionName],
                     [FlappyStringTool toUnNullStr:data.sessionImage],
                     [FlappyStringTool toUnNullStr:data.sessionOffset],
-                    [NSNumber numberWithInteger:data.sessionStamp],
+                    [NSNumber numberWithLong:data.sessionStamp],
                     [FlappyStringTool toUnNullStr:data.sessionCreateDate],
                     [FlappyStringTool toUnNullStr:data.sessionCreateUser],
                     [NSNumber numberWithInteger:data.isDelete],
@@ -180,7 +180,7 @@
                     [FlappyStringTool toUnNullStr:data.sessionName],
                     [FlappyStringTool toUnNullStr:data.sessionImage],
                     [FlappyStringTool toUnNullStr:data.sessionOffset],
-                    [NSNumber numberWithInteger:data.sessionStamp],
+                    [NSNumber numberWithLong:data.sessionStamp],
                     [FlappyStringTool toUnNullStr:data.sessionCreateDate],
                     [FlappyStringTool toUnNullStr:data.sessionCreateUser],
                     [NSNumber numberWithInteger:data.isDelete],
@@ -251,7 +251,7 @@
                 [FlappyStringTool toUnNullStr:data.sessionName],
                 [FlappyStringTool toUnNullStr:data.sessionImage],
                 [FlappyStringTool toUnNullStr:data.sessionOffset],
-                [NSNumber numberWithInteger:data.sessionStamp],
+                [NSNumber numberWithLong:data.sessionStamp],
                 [FlappyStringTool toUnNullStr:data.sessionCreateDate],
                 [FlappyStringTool toUnNullStr:data.sessionCreateUser],
                 [NSNumber numberWithInteger:data.isDelete],
@@ -286,7 +286,7 @@
                 [FlappyStringTool toUnNullStr:data.sessionName],
                 [FlappyStringTool toUnNullStr:data.sessionImage],
                 [FlappyStringTool toUnNullStr:data.sessionOffset],
-                [NSNumber numberWithInteger:data.sessionStamp],
+                [NSNumber numberWithLong:data.sessionStamp],
                 [FlappyStringTool toUnNullStr:data.sessionCreateDate],
                 [FlappyStringTool toUnNullStr:data.sessionCreateUser],
                 [NSNumber numberWithInteger:data.isDelete],
@@ -334,7 +334,7 @@
             msg.sessionName = [result stringForColumn:@"sessionName"];
             msg.sessionImage = [result stringForColumn:@"sessionImage"];
             msg.sessionOffset = [result stringForColumn:@"sessionOffset"];
-            msg.sessionStamp = [result intForColumn:@"sessionStamp"];
+            msg.sessionStamp = [result longForColumn:@"sessionStamp"];
             msg.sessionCreateDate = [result stringForColumn:@"sessionCreateDate"];
             msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
             msg.isDelete = [result intForColumn:@"sessionDeleted"];
@@ -383,7 +383,7 @@
             msg.sessionName = [result stringForColumn:@"sessionName"];
             msg.sessionImage = [result stringForColumn:@"sessionImage"];
             msg.sessionOffset = [result stringForColumn:@"sessionOffset"];
-            msg.sessionStamp = [result intForColumn:@"sessionStamp"];
+            msg.sessionStamp = [result longForColumn:@"sessionStamp"];
             msg.sessionCreateDate = [result stringForColumn:@"sessionCreateDate"];
             msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
             msg.isDelete = [result intForColumn:@"sessionDeleted"];
