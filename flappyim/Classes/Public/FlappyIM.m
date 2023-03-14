@@ -1164,10 +1164,18 @@
     SessionData* data=[[FlappyDataBase shareInstance] getUserSessionByExtendID:extendID];
     //成功
     if(data!=nil){
-        success(data);
+        FlappyChatSession* session=[[FlappyChatSession alloc] init];
+        session.session=data;
+        success(session);
     }else{
         //获取用户会话
-        [self getUserSessionsHttp:success
+        [self getUserSessionsHttp:^(NSArray* array){
+            if(array.count>0){
+                success(array[0]);
+            }else{
+                success(nil);
+            }
+        }
                        andFailure:failure];
     }
 }
