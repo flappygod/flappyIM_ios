@@ -33,6 +33,8 @@
 #define  RESULT_NOTLOGIN   5
 //上传失败
 #define  RESULT_FILEERR   6
+//没有数据
+#define  RESULT_NO_DATA   7
 
 
 

@@ -1169,14 +1169,9 @@
         success(session);
     }else{
         //获取用户会话
-        [self getUserSessionsHttp:^(NSArray* array){
-            if(array.count>0){
-                success(array[0]);
-            }else{
-                success(nil);
-            }
-        }
-                       andFailure:failure];
+        [self getSessionByExtendIDHttp:extendID
+                            andSuccess:success
+                            andFailure:failure];
     }
 }
 
