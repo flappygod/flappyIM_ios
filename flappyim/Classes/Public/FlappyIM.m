@@ -1196,7 +1196,7 @@
         [ret addObject:session];
     }
     //成功
-    if(ret!=nil){
+    if(ret!=nil && ret.count!= 0){
         success(ret);
     }else{
         //没有拿到就联网去拿
