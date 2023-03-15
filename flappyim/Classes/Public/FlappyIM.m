@@ -501,12 +501,12 @@
 }
 
 //新增会话监听
--(void)addSessinListener:(SessionListener)listener{
+-(void)addSessionListener:(SessionListener)listener{
     [self.sessinListeners addObject:listener];
 }
 
 //移除会话监听
--(void)removeSessinListener:(SessionListener)listener{
+-(void)removeSessionListener:(SessionListener)listener{
     [self.sessinListeners removeObject:listener];
 }
 

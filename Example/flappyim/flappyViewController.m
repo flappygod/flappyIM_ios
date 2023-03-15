@@ -63,7 +63,7 @@
     }];
     
     //会话更新
-    [[FlappyIM shareInstance]  addSessinListener:^(FlappyChatSession*  _Nullable chatsession) {
+    [[FlappyIM shareInstance]  addSessionListener:^(FlappyChatSession*  _Nullable chatsession) {
         NSLog(@"会话有更新");
     }];
     

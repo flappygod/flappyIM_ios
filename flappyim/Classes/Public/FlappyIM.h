@@ -167,11 +167,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //新增会话监听
--(void)addSessinListener:(SessionListener)listener;
+-(void)addSessionListener:(SessionListener)listener;
 
 
 //移除会话监听
--(void)removeSessinListener:(SessionListener)listener;
+-(void)removeSessionListener:(SessionListener)listener;
 
 
 
