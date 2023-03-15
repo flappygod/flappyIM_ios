@@ -330,6 +330,8 @@
                     SessionData* data=[SessionData  mj_objectWithKeyValues:dic];
                     //添加
                     [sessions addObject:data];
+                    //会话更新了
+                    [self notifySession:data];
                 }
                 //插入会话数据
                 [[FlappyDataBase shareInstance] insertSessions:sessions];
