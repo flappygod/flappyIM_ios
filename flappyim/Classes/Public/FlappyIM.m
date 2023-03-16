@@ -26,7 +26,7 @@
 @interface FlappyIM ()
 
 //用于监听网络变化
-@property (nonatomic,strong) ReachabilityFlappy* hostReachability;
+@property (nonatomic,strong) Reachability* hostReachability;
 //用于联网的socket
 @property (nonatomic,strong) FlappySocket* flappysocket;
 //被踢下线了
@@ -521,13 +521,13 @@
 -(void)setupNotify{
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reachabilityChanged:)
-                                                 name:kReachabilityChangedNotificationFlappy
+                                                 name:kReachabilityChangedNotification
                                                object:nil];
     // 设置网络检测的站点
     NSString *remoteHostName = @"www.baidu.com";
     
     //创建
-    self.hostReachability = [ReachabilityFlappy reachabilityWithHostName:remoteHostName];
+    self.hostReachability = [Reachability reachabilityWithHostName:remoteHostName];
     [self.hostReachability startNotifier];
     [self updateInterfaceWithReachability:self.hostReachability];
     
@@ -567,15 +567,15 @@
 //变化监听
 - (void) reachabilityChanged:(NSNotification *)note
 {
-    ReachabilityFlappy* curReach = [note object];
+    Reachability* curReach = [note object];
     [self updateInterfaceWithReachability:curReach];
 }
 
 //更新网络状态
-- (void)updateInterfaceWithReachability:(ReachabilityFlappy *)reachability
+- (void)updateInterfaceWithReachability:(Reachability *)reachability
 {
     
-    NetworkStatusFlappy netStatus = [reachability currentReachabilityStatus];
+    NetworkStatus netStatus = [reachability currentReachabilityStatus];
     switch (netStatus) {
         case 0:
             break;
@@ -600,7 +600,7 @@
 -(void)stopOberver{
     //移除监听
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:kReachabilityChangedNotificationFlappy
+                                                    name:kReachabilityChangedNotification
                                                   object:nil];
     
     

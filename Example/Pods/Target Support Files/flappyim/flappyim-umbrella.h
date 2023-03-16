@@ -27,7 +27,6 @@
 #import "FlappyFailureWrap.h"
 #import "FlappyIM.h"
 #import "FlappySocket.h"
-#import "ReachabilityFlappy.h"
 #import "SessionData.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;

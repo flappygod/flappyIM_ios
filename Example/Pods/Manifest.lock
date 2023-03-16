@@ -21,11 +21,13 @@ PODS:
     - FMDB (~> 2.7.5)
     - MJExtension (~> 3.4.1)
     - Protobuf (~> 3.21.5)
+    - Reachability (~> 3.2)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
   - MJExtension (3.4.1)
   - Protobuf (3.21.12)
+  - Reachability (3.2)
 
 DEPENDENCIES:
   - flappyim (from `../`)
@@ -37,6 +39,7 @@ SPEC REPOS:
     - FMDB
     - MJExtension
     - Protobuf
+    - Reachability
 
 EXTERNAL SOURCES:
   flappyim:
@@ -45,10 +48,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  flappyim: c7dc21defcdd05f28a971506726d4a8804cfef03
+  flappyim: cb450b35e178d35584b450d179c844de46c4ed8f
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   Protobuf: 120350fc38646e2dedc26f49ecba778184ea1de2
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
 
 PODFILE CHECKSUM: a2fa1c546ccead3213f6b7e995550649642bdf2b
 
