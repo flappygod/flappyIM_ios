@@ -53,37 +53,42 @@
             withPort:(NSString*)serverPort
             withUser:(ChatUser*)user{
     
-    
-    //建立长连接
-    self.socket=[[GCDAsyncSocket alloc] initWithDelegate:self
-                                           delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
-    //保存
-    [FlappySender shareInstance].socket=self.socket;
-    
-    NSError* error=nil;
-    
-    //连接host
-    [self.socket connectToHost:serverAddress
-                        onPort:serverPort.integerValue
-                   withTimeout:20
-                         error:&error];
-    
-    
-    
-    //失败
-    if(error!=nil){
-        NSLog(@"%@",error.description);
-        //错误error, RESULT_NETERROR
-        [self.failure completeBlock:error andCode:RESULT_NETERROR];
-        //错误
-        self.failure=nil;
-        //连接错误
-        self.success=nil;
-    }
-    //成功
-    else{
-        //保存用户数据
-        self.user=user;
+    @synchronized (self) {
+        @try {
+            //建立长连接
+            self.socket=[[GCDAsyncSocket alloc] initWithDelegate:self
+                                                   delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+            //保存
+            [FlappySender shareInstance].socket=self.socket;
+            
+            //错误
+            NSError* error=nil;
+            
+            //连接host
+            [self.socket connectToHost:serverAddress
+                                onPort:serverPort.integerValue
+                           withTimeout:20
+                                 error:&error];
+            
+            //失败
+            if(error!=nil){
+                NSLog(@"FlappyIM:%@",error.description);
+                //错误error, RESULT_NETERROR
+                [self.failure completeBlock:error andCode:RESULT_NETERROR];
+                //错误
+                self.failure=nil;
+                //连接错误
+                self.success=nil;
+            }
+            //成功
+            else{
+                //保存用户数据
+                self.user=user;
+            }
+        } @catch (NSException *exception) {
+            //打印错误日志
+            NSLog(@"FlappyIM:%@",exception.description);
+        }
     }
 }
 
@@ -96,38 +101,33 @@
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
-    
-    //组装登录数据
-    ReqLogin* info=[[ReqLogin alloc]init];
-    //类型
-    info.device=DEVICE_TYPE;
-    //用户ID
-    info.userId=self.user.userId;
-    //推送ID
-    info.pushid=[FlappyIM shareInstance].pushID;
-    //登录信息
-    if([[FlappyData shareInstance]getUser]!=nil){
-        info.latest=[[FlappyData shareInstance]getUser].latest;
-    }
-    
-    //连接到服务器开始请求登录
-    FlappyRequest* request=[[FlappyRequest alloc]init];
-    //登录请求
-    request.type=REQ_LOGIN;
-    //登录信息
-    request.login=info;
-    
-    //请求数据，已经GPBComputeRawVarint32SizeForInteger
-    NSData* reqData=[request delimitedData];
-    
-    
     @try {
+        //组装登录数据
+        ReqLogin* info=[[ReqLogin alloc]init];
+        //类型
+        info.device=DEVICE_TYPE;
+        //用户ID
+        info.userId=self.user.userId;
+        //推送ID
+        info.pushid=[FlappyIM shareInstance].pushID;
+        //登录信息
+        if([[FlappyData shareInstance] getUser]!=nil){
+            info.latest=[[FlappyData shareInstance] getUser].latest;
+        }
+        //连接到服务器开始请求登录
+        FlappyRequest* request=[[FlappyRequest alloc]init];
+        //登录请求
+        request.type=REQ_LOGIN;
+        //登录信息
+        request.login=info;
+        //请求数据，已经GPBComputeRawVarint32SizeForInteger
+        NSData* reqData=[request delimitedData];
         //写入请求数据
         [self.socket writeData:reqData withTimeout:-1 tag:0];
         //开启数据读取
         [self.socket readDataWithTimeout:-1 tag:0];
     } @catch (NSException *exception) {
-        NSLog(@"%@",exception.description);
+        NSLog(@"FlappyIM:%@",exception.description);
     }
     
     //停止之前的
@@ -232,40 +232,42 @@
 
 //主动下线
 -(void)offline:(Boolean)regular{
-    self.isActive=false;
-    //正常退出，非正常退出的回调不执行
-    if(regular){
-        self.dead=nil;
-    }
-    //主动断开连接
-    @try {
-        if(self.socket!=nil){
-            [self.socket disconnect];
+    //加上锁，处理下线
+    @synchronized (self) {
+        @try {
+            self.isActive=false;
+            //正常退出，非正常退出的回调不执行
+            if(regular){
+                self.dead=nil;
+            }
+            //主动断开连接
+            if(self.socket!=nil){
+                [self.socket disconnect];
+            }
+            //登录失败
+            if(self.failure!=nil){
+                //失败
+                [self.failure completeBlock:[NSError errorWithDomain:@"Socket closed by a new login thread"
+                                                                code:0
+                                                            userInfo:nil] andCode:RESULT_NETERROR];
+                //失败
+                self.failure=nil;
+                //清空
+                self.success=nil;
+            }
+            //心跳停止
+            [self stopHeart];
+            //清空socket
+            self.socket=nil;
+            //非正常退出
+            if(self.dead!=nil){
+                //非正常退出
+                self.dead();
+                self.dead=nil;
+            }
+        } @catch (NSException *exception) {
+            NSLog(@"%@",exception.description);
         }
-    } @catch (NSException *exception) {
-        NSLog(@"%@",exception.description);
-    }
-    
-    //登录失败
-    if(self.failure!=nil){
-        //失败
-        [self.failure completeBlock:[NSError errorWithDomain:@"Socket closed by a new login thread"
-                                                        code:0
-                                                    userInfo:nil] andCode:RESULT_NETERROR];
-        //失败
-        self.failure=nil;
-        //清空
-        self.success=nil;
-    }
-    //心跳停止
-    [self stopHeart];
-    //清空socket
-    self.socket=nil;
-    //非正常退出
-    if(self.dead!=nil){
-        //非正常退出
-        self.dead();
-        self.dead=nil;
     }
 }
 
@@ -338,7 +340,7 @@
             //推送类型
             NSInteger type=(long)dataType;
             //保存
-            [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
+            [[FlappyData shareInstance] savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
             
             if(self.loginData[@"sessions"]!=nil && self.loginData[@"sessions"]!=[NSNull null]){
                 //修改
@@ -359,63 +361,64 @@
                 //插入会话数据
                 [[FlappyDataBase shareInstance] insertSessions:sessions];
             }
-            
-            
         } @catch (NSException *exception) {
-        } @finally {
+            NSLog(@"FlappyIM:%@",exception.description);
         }
         //清空回调和数据
         self.success=nil;
         self.failure=nil;
         self.loginData=nil;
-        //消息信息
-        NSMutableArray* array=respones.msgArray;
-        //进行排序
-        [array sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-            ChatMessage* one=obj1;
-            ChatMessage* two=obj2;
-            if(one.messageTableSeq>two.messageTableSeq){
-                return NSOrderedDescending;
+        @try {
+            //消息信息
+            NSMutableArray* array=respones.msgArray;
+            //进行排序
+            [array sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+                ChatMessage* one=obj1;
+                ChatMessage* two=obj2;
+                if(one.messageTableSeq>two.messageTableSeq){
+                    return NSOrderedDescending;
+                }
+                return NSOrderedAscending;
+            }];
+            
+            NSMutableArray* inserts=[[NSMutableArray alloc]init];
+            
+            //转换
+            for(long s=0;s<array.count;s++){
+                Message* message=[array objectAtIndex:s];
+                //转换一下
+                ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
+                //需要更新
+                [inserts addObject:chatMsg];
+                //修改消息状态
+                [self messageArrivedState:chatMsg];
+                //获取之前的消息ID
+                ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId];
+                //之前不存在
+                if(former==nil){
+                    [self notifyNewMessage:chatMsg];
+                }else{
+                    //保留是否处理的flag;
+                    chatMsg.messageReadState=former.messageReadState;
+                }
+                //消息发送成功
+                [self sendMessageSuccess:chatMsg];
             }
-            return NSOrderedAscending;
-        }];
-        
-        NSMutableArray* inserts=[[NSMutableArray alloc]init];
-        
-        //转换
-        for(long s=0;s<array.count;s++){
-            Message* message=[array objectAtIndex:s];
-            //转换一下
-            ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
-            //需要更新
-            [inserts addObject:chatMsg];
-            //修改消息状态
-            [self messageArrivedState:chatMsg];
-            //获取之前的消息ID
-            ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId];
-            //之前不存在
-            if(former==nil){
-                [self notifyNewMessage:chatMsg];
-            }else{
-                //保留是否处理的flag;
-                chatMsg.messageReadState=former.messageReadState;
+            
+            //批量插入列表
+            [[FlappyDataBase shareInstance] insertMsgs:inserts];
+            
+            //最后一条的数据保存
+            if(inserts.count>0){
+                ChatMessage* last=[inserts objectAtIndex:inserts.count-1];
+                ChatUser* user=[[FlappyData shareInstance]getUser];
+                user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
+                [[FlappyData shareInstance]saveUser:user];
+                [self messageArrived:last];
             }
-            //消息发送成功
-            [self sendMessageSuccess:chatMsg];
+        } @catch (NSException *exception) {
+            NSLog(@"FlappyIM:%@",exception.description);
         }
-        
-        //批量插入列表
-        [[FlappyDataBase shareInstance] insertMsgs:inserts];
-        
-        //最后一条的数据保存
-        if(inserts.count>0){
-            ChatMessage* last=[inserts objectAtIndex:inserts.count-1];
-            ChatUser* user=[[FlappyData shareInstance]getUser];
-            user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
-            [[FlappyData shareInstance]saveUser:user];
-            [self messageArrived:last];
-        }
-        
         [self checkSessionNeedUpdate];
     }
     //接收到新的消息
