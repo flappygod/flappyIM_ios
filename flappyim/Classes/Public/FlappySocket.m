@@ -128,7 +128,6 @@
         [self.socket readDataWithTimeout:-1 tag:0];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception.description);
-        
     }
     
     //停止之前的
@@ -170,7 +169,6 @@
         //修改
         [sock readDataWithTimeout:-1 tag:tag];
     } @catch (NSException *exception) {
-        
         NSLog(@"%@",exception.description);
     }
     
@@ -240,14 +238,14 @@
         self.dead=nil;
     }
     //主动断开连接
-    if(self.socket!=nil){
-        @try {
+    @try {
+        if(self.socket!=nil){
             [self.socket disconnect];
-        } @catch (NSException *exception) {
-            
-            NSLog(@"%@",exception.description);
         }
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception.description);
     }
+    
     //登录失败
     if(self.failure!=nil){
         //失败
@@ -410,8 +408,8 @@
         [[FlappyDataBase shareInstance] insertMsgs:inserts];
         
         //最后一条的数据保存
-        if(array.count>0){
-            ChatMessage* last=[array objectAtIndex:array.count-1];
+        if(inserts.count>0){
+            ChatMessage* last=[inserts objectAtIndex:inserts.count-1];
             ChatUser* user=[[FlappyData shareInstance]getUser];
             user.latest=[NSString stringWithFormat:@"%ld",(long)last.messageTableSeq];
             [[FlappyData shareInstance]saveUser:user];
