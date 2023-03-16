@@ -568,7 +568,12 @@
 - (void) reachabilityChanged:(NSNotification *)note
 {
     Reachability* curReach = [note object];
-    [self updateInterfaceWithReachability:curReach];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                             selector:@selector(updateInterfaceWithReachability:)
+                                               object:nil];
+    
+    [self performSelector:@selector(updateInterfaceWithReachability:) withObject:curReach afterDelay:1];
 }
 
 //更新网络状态
