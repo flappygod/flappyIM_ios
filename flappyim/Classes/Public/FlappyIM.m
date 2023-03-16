@@ -647,20 +647,18 @@
     
     //如果正在loading,那么延后执行
     if(self.isLoading){
-        [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
+        [NSObject cancelPreviousPerformRequestsWithTarget:self
                                                  selector:@selector(setupReconnect)
                                                    object:nil];
-        [safeSelf performSelector:@selector(setupReconnect)
-                       withObject:nil
-                       afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
+        [self performSelector:@selector(setupReconnect)
+                   withObject:nil
+                   afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
         return;
     }
     
     //防止重复请求
     [self autoLogin:^(id data) {
-        
         NSLog(@"自动登录成功");
-        
     } andFailure:^(NSError * error, NSInteger code) {
         //当前账户已经被踢下线了
         if(code==RESULT_KNICKED){
@@ -966,7 +964,8 @@
         //设置
         [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
     } @catch (NSException *exception) {
-    } @finally {
+        //打印错误日志
+        NSLog(@"FlappyIM:%@",exception.description);
     }
 }
 
