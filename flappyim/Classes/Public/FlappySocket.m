@@ -119,10 +119,18 @@
     
     //请求数据，已经GPBComputeRawVarint32SizeForInteger
     NSData* reqData=[request delimitedData];
-    //写入请求数据
-    [self.socket writeData:reqData withTimeout:-1 tag:0];
-    //开启数据读取
-    [self.socket readDataWithTimeout:-1 tag:0];
+    
+    
+    @try {
+        //写入请求数据
+        [self.socket writeData:reqData withTimeout:-1 tag:0];
+        //开启数据读取
+        [self.socket readDataWithTimeout:-1 tag:0];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception.description);
+        
+    }
+    
     //停止之前的
     [NSObject cancelPreviousPerformRequestsWithTarget:self
                                              selector:@selector(startHeart:)
@@ -227,7 +235,12 @@
     }
     //主动断开连接
     if(self.socket!=nil){
-        [self.socket disconnect];
+        @try {
+            [self.socket disconnect];
+        } @catch (NSException *exception) {
+            
+            NSLog(@"%@",exception.description);
+        }
     }
     //登录失败
     if(self.failure!=nil){
@@ -255,42 +268,48 @@
 //解析二进制数据：NSData --> 自定义模型对象
 - (void)parseContentDataWithHeadLength:(int32_t)headL withContentLength:(int32_t)contentL{
     
-    //本次解析data的范围
-    NSRange range = NSMakeRange(0, headL + contentL);
-    
-    //本次解析的data
-    NSData *data = [self.receiveData subdataWithRange:range];
-    
-    //接收到的所有数据转换为数据流
-    GPBCodedInputStream *inputStream = [GPBCodedInputStream streamWithData:data];
-    //错误
-    NSError *error;
-    //解析数据
-    FlappyResponse *obj = [FlappyResponse parseDelimitedFromCodedInputStream:inputStream
-                                                           extensionRegistry:nil
-                                                                       error:&error];
-    //如果正确解析
-    if (!error){
-        //保存解析正确的模型对象
-        if (obj){
-            [self msgRecieved:obj];
+    @try {
+        //本次解析data的范围
+        NSRange range = NSMakeRange(0, headL + contentL);
+        
+        //本次解析的data
+        NSData *data = [self.receiveData subdataWithRange:range];
+        
+        //接收到的所有数据转换为数据流
+        GPBCodedInputStream *inputStream = [GPBCodedInputStream streamWithData:data];
+        //错误
+        NSError *error;
+        //解析数据
+        FlappyResponse *obj = [FlappyResponse parseDelimitedFromCodedInputStream:inputStream
+                                                               extensionRegistry:nil
+                                                                           error:&error];
+        //如果正确解析
+        if (!error){
+            //保存解析正确的模型对象
+            if (obj){
+                [self msgRecieved:obj];
+            }
+            //移除已经解析过的data
+            [self.receiveData replaceBytesInRange:range
+                                        withBytes:NULL
+                                           length:0];
         }
-        //移除已经解析过的data
-        [self.receiveData replaceBytesInRange:range
-                                    withBytes:NULL
-                                       length:0];
+        if (self.receiveData.length < 1)
+            return;
+        //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
+        headL = 0;
+        contentL = [FlappyApiRequest getContentLength:self.receiveData
+                                       withHeadLength:&headL];
+        //实际包不足解析，继续接收下一个包
+        if (headL + contentL > self.receiveData.length) return;
+        //继续解析下一条
+        [self parseContentDataWithHeadLength:headL
+                           withContentLength:contentL];
+    } @catch (NSException *exception) {
+        
+        NSLog(@"%@",exception.description);
     }
-    if (self.receiveData.length < 1)
-        return;
-    //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
-    headL = 0;
-    contentL = [FlappyApiRequest getContentLength:self.receiveData
-                                   withHeadLength:&headL];
-    //实际包不足解析，继续接收下一个包
-    if (headL + contentL > self.receiveData.length) return;
-    //继续解析下一条
-    [self parseContentDataWithHeadLength:headL
-                       withContentLength:contentL];
+    
 }
 
 //处理解析出来的信息,新消息过来了
@@ -511,7 +530,13 @@
             //请求数据，已经GPBComputeRawVarint32SizeForInteger
             NSData* reqData=[request delimitedData];
             //写入数据请求
-            [self.socket writeData:reqData withTimeout:-1 tag:0];
+            
+            @try {
+                [self.socket writeData:reqData withTimeout:-1 tag:0];
+            } @catch (NSException *exception) {
+                NSLog(@"%@",exception.description);
+            }
+            
         }
     }
 }
@@ -602,7 +627,11 @@
             //请求数据，已经GPBComputeRawVarint32SizeForInteger
             NSData* reqData=[req delimitedData];
             //写入请求数据
-            [self.socket writeData:reqData withTimeout:-1 tag:0];
+            @try {
+                [self.socket writeData:reqData withTimeout:-1 tag:0];
+            } @catch (NSException *exception) {
+                NSLog(@"%@",exception.description);
+            }
         }
         
         
@@ -648,7 +677,11 @@
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
         NSData* reqData=[request delimitedData];
         //写入请求数据
-        [self.socket  writeData:reqData withTimeout:-1 tag:0];
+        @try {
+            [self.socket  writeData:reqData withTimeout:-1 tag:0];
+        } @catch (NSException *exception) {
+            NSLog(@"%@",exception.description);
+        }
         NSLog(@"heart beat");
     }
 }
