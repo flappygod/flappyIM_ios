@@ -148,26 +148,32 @@
  * Not called if there is an error.
  **/
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag{
-    //数据
-    [self.receiveData appendData:data];
-    //读取data的头部占用字节 和 从头部读取内容长度
-    //验证结果：数据比较小时头部占用字节为1，数据比较大时头部占用字节为2
-    int32_t headL = 0;
-    int32_t contentL = [FlappyApiRequest getContentLength:self.receiveData
-                                           withHeadLength:&headL];
-    if (contentL < 1){
-        [sock readDataWithTimeout:-1 tag:0];
-        return;
+    @try {
+        //数据
+        [self.receiveData appendData:data];
+        //读取data的头部占用字节 和 从头部读取内容长度
+        //验证结果：数据比较小时头部占用字节为1，数据比较大时头部占用字节为2
+        int32_t headL = 0;
+        int32_t contentL = [FlappyApiRequest getContentLength:self.receiveData
+                                               withHeadLength:&headL];
+        if (contentL < 1){
+            [sock readDataWithTimeout:-1 tag:0];
+            return;
+        }
+        //拆包情况下：继续接收下一条消息，直至接收完这条消息所有的拆包，再解析
+        if (headL + contentL > self.receiveData.length){
+            [sock readDataWithTimeout:-1 tag:0];
+            return;
+        }
+        //当receiveData长度不小于第一条消息内容长度时，开始解析receiveData
+        [self parseContentDataWithHeadLength:headL withContentLength:contentL];
+        //修改
+        [sock readDataWithTimeout:-1 tag:tag];
+    } @catch (NSException *exception) {
+        
+        NSLog(@"%@",exception.description);
     }
-    //拆包情况下：继续接收下一条消息，直至接收完这条消息所有的拆包，再解析
-    if (headL + contentL > self.receiveData.length){
-        [sock readDataWithTimeout:-1 tag:0];
-        return;
-    }
-    //当receiveData长度不小于第一条消息内容长度时，开始解析receiveData
-    [self parseContentDataWithHeadLength:headL withContentLength:contentL];
-    //修改
-    [sock readDataWithTimeout:-1 tag:tag];
+    
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
