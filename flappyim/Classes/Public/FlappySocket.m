@@ -398,8 +398,8 @@
                 if(former==nil){
                     [self notifyNewMessage:chatMsg];
                 }else{
-                    //保留是否处理的flag;
                     chatMsg.messageReadState=former.messageReadState;
+                    [self notifyUpdateMessage:chatMsg];
                 }
                 //消息发送成功
                 [self sendMessageSuccess:chatMsg];
@@ -437,18 +437,19 @@
             if(former==nil){
                 //添加数据
                 [[FlappyDataBase shareInstance] insertMsg:chatMsg];
-                [self notifyNewMessage:chatMsg];
                 [self messageArrived:chatMsg];
+                [self notifyNewMessage:chatMsg];
             }else{
                 //保留是否已经处理的信息
                 chatMsg.messageReadState=former.messageReadState;
                 [[FlappyDataBase shareInstance] updateMessage:chatMsg];
+                [self notifyUpdateMessage:chatMsg];
             }
             [self sendMessageSuccess:chatMsg];
             //更新最近一条的时间
             ChatUser* user=[[FlappyData shareInstance]getUser];
             user.latest=[NSString stringWithFormat:@"%ld",(long)chatMsg.messageTableSeq];
-            [[FlappyData shareInstance]saveUser:user];
+            [[FlappyData shareInstance] saveUser:user];
         }
         [self checkSessionNeedUpdate];
     }
@@ -566,6 +567,28 @@
 
 //通知有新的消息
 -(void)notifyNewMessage:(ChatMessage*)message{
+    //在主线程之中执行
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //新消息
+            NSArray* array=[FlappyIM shareInstance].msgListeners.allKeys;
+            //数量
+            for(int s=0;s<array.count;s++){
+                NSString* str=[array objectAtIndex:s];
+                NSMutableArray* listeners=[[FlappyIM shareInstance].msgListeners objectForKey:str];
+                //回调监听的事件
+                for(int w=0;w<listeners.count;w++){
+                    MessageListener listener=[listeners objectAtIndex:w];
+                    listener(message);
+                }
+            }
+        });
+    });
+}
+
+
+//通知消息有更新
+-(void)notifyUpdateMessage:(ChatMessage*)message{
     //在主线程之中执行
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
