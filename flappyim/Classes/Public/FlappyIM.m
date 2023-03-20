@@ -93,10 +93,10 @@
             //判断当前是在后台还是在前台
             [safeSelf sendLocalNotification:message];
         }
-    } withCreate:^(ChatMessage * _Nullable message) {
+    } withSend:^(ChatMessage * _Nullable message) {
         
     } andUpdate:^(ChatMessage * _Nullable message) {
-    
+        
     }];
 }
 
@@ -431,7 +431,7 @@
 
 //增加消息的监听
 -(void)addGloableMsgListener:(MessageListener)receive
-                  withCreate:(MessageListener)create
+                    withSend:(MessageListener)send
                    andUpdate:(MessageListener)update{
     //监听所有消息
     if(receive!=nil){
@@ -442,13 +442,13 @@
         }
         [listeners addObject:receive];
     }
-    if(create!=nil){
-        NSMutableArray* listeners=[self.msgCreateListeners objectForKey:GlobalKey];
+    if(send!=nil){
+        NSMutableArray* listeners=[self.msgSendListeners objectForKey:GlobalKey];
         if(listeners==nil){
             listeners=[[NSMutableArray alloc]init];
-            [self.msgCreateListeners setObject:listeners forKey:GlobalKey];
+            [self.msgSendListeners setObject:listeners forKey:GlobalKey];
         }
-        [listeners addObject:create];
+        [listeners addObject:send];
     }
     if(update!=nil){
         NSMutableArray* listeners=[self.msgUpdateListeners objectForKey:GlobalKey];
@@ -462,7 +462,7 @@
 
 //移除监听
 -(void)removeGloableMsgListener:(MessageListener)receive
-                     withCreate:(MessageListener)create
+                       withSend:(MessageListener)create
                      withUpdate:(MessageListener)update{
     //监听所有消息
     if(receive!=nil){
@@ -472,7 +472,7 @@
         }
     }
     if(create!=nil){
-        NSMutableArray* listeners=[self.msgCreateListeners objectForKey:GlobalKey];
+        NSMutableArray* listeners=[self.msgSendListeners objectForKey:GlobalKey];
         if(listeners!=nil){
             [listeners removeObject:create];
         }
@@ -487,7 +487,7 @@
 
 //增加某个session的监听
 -(void)addMsgListener:(MessageListener)receive
-           withCreate:(MessageListener)create
+             withSend:(MessageListener)send
            withUpdate:(MessageListener)update
         withSessionID:(NSString*)sessionID{
     //监听所有消息
@@ -499,13 +499,13 @@
         }
         [listeners addObject:receive];
     }
-    if(create!=nil){
-        NSMutableArray* listeners=[self.msgCreateListeners objectForKey:sessionID];
+    if(send!=nil){
+        NSMutableArray* listeners=[self.msgSendListeners objectForKey:sessionID];
         if(listeners==nil){
             listeners=[[NSMutableArray alloc]init];
-            [self.msgCreateListeners setObject:listeners forKey:sessionID];
+            [self.msgSendListeners setObject:listeners forKey:sessionID];
         }
-        [listeners addObject:create];
+        [listeners addObject:send];
     }
     if(update!=nil){
         NSMutableArray* listeners=[self.msgUpdateListeners objectForKey:sessionID];
@@ -519,7 +519,7 @@
 
 //移除会话的
 -(void)removeMsgListener:(MessageListener)receive
-              withCreate:(MessageListener)create
+                withSend:(MessageListener)send
               withUpdate:(MessageListener)update
            withSessionID:(NSString*)sessionID{
     //监听所有消息
@@ -529,10 +529,10 @@
             [listeners removeObject:receive];
         }
     }
-    if(create!=nil){
-        NSMutableArray* listeners=[self.msgCreateListeners objectForKey:sessionID];
+    if(send!=nil){
+        NSMutableArray* listeners=[self.msgSendListeners objectForKey:sessionID];
         if(listeners!=nil){
-            [listeners removeObject:create];
+            [listeners removeObject:send];
         }
     }
     if(update!=nil){
@@ -1398,7 +1398,7 @@
     [self stopOberver];
     [self.msgReceiveListeners removeAllObjects];
     [self.msgUpdateListeners removeAllObjects];
-    [self.msgCreateListeners removeAllObjects];
+    [self.msgSendListeners removeAllObjects];
 }
 
 

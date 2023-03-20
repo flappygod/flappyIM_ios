@@ -335,6 +335,9 @@
     long time=(long)[NSDate date].timeIntervalSince1970*1000;
     //写入请求数据
     [self.socket writeData:reqData withTimeout:-1 tag:time];
+    
+    //发送消息
+    [self notifySendMessage:chatMsg];
 }
 
 
@@ -586,13 +589,13 @@
 }
 
 //通知消息创建
--(void)notifyCreateMessage:(ChatMessage*)message{
+-(void)notifySendMessage:(ChatMessage*)message{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray* array=[FlappyIM shareInstance].msgCreateListeners.allKeys;
+            NSArray* array=[FlappyIM shareInstance].msgSendListeners.allKeys;
             for(int s=0;s<array.count;s++){
                 NSString* str=[array objectAtIndex:s];
-                NSMutableArray* listeners=[[FlappyIM shareInstance].msgCreateListeners objectForKey:str];
+                NSMutableArray* listeners=[[FlappyIM shareInstance].msgSendListeners objectForKey:str];
                 for(int w=0;w<listeners.count;w++){
                     MessageListener listener=[listeners objectAtIndex:w];
                     listener(message);

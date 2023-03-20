@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) bool  isActive;
 
 //消息创建、发送
-@property (nonatomic,strong) NSMutableDictionary*  msgCreateListeners;
+@property (nonatomic,strong) NSMutableDictionary*  msgSendListeners;
 
 //接收到消息
 @property (nonatomic,strong) NSMutableDictionary*  msgReceiveListeners;
@@ -149,25 +149,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 //增加所有消息的监听
 -(void)addGloableMsgListener:(MessageListener)receive
-                  withCreate:(MessageListener)create
+                    withSend:(MessageListener)send
                    andUpdate:(MessageListener)update;
 
 //移除所有消息的监听
 -(void)removeGloableMsgListener:(MessageListener)receive
-                     withCreate:(MessageListener)create
+                       withSend:(MessageListener)send
                      withUpdate:(MessageListener)update;
 
 
 //增加某个session的监听
 -(void)addMsgListener:(MessageListener)receive
-           withCreate:(MessageListener)create
+             withSend:(MessageListener)send
            withUpdate:(MessageListener)update
         withSessionID:(NSString*)sessionID;
 
 
 //移除某个session的监听
 -(void)removeMsgListener:(MessageListener)receive
-              withCreate:(MessageListener)create
+                withSend:(MessageListener)send
               withUpdate:(MessageListener)update
            withSessionID:(NSString*)sessionID;
 
