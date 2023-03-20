@@ -37,8 +37,14 @@ NS_ASSUME_NONNULL_BEGIN
 //当前是否活跃
 @property (nonatomic,assign) bool  isActive;
 
-//回调
-@property (nonatomic,strong) NSMutableDictionary*  msgListeners;
+//消息创建、发送
+@property (nonatomic,strong) NSMutableDictionary*  msgCreateListeners;
+
+//接收到消息
+@property (nonatomic,strong) NSMutableDictionary*  msgReceiveListeners;
+
+//消息状态更新
+@property (nonatomic,strong) NSMutableDictionary*  msgUpdateListeners;
 
 //会话间隔
 @property (nonatomic,strong) NSMutableArray*  sessinListeners;
@@ -117,8 +123,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 //获取群组会话
 -(void)getSessionByExtendID:(NSString*)extendID
-           andSuccess:(FlappySuccess)success
-           andFailure:(FlappyFailure)failure;
+                 andSuccess:(FlappySuccess)success
+                 andFailure:(FlappyFailure)failure;
 
 
 //获取用户的所有会话列表
@@ -142,20 +148,28 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //增加所有消息的监听
--(void)addGloableMsgListener:(MessageListener)listener;
+-(void)addGloableMsgListener:(MessageListener)receive
+                  withCreate:(MessageListener)create
+                   andUpdate:(MessageListener)update;
 
 //移除所有消息的监听
--(void)removeGloableMsgListener:(MessageListener)listener;
+-(void)removeGloableMsgListener:(MessageListener)receive
+                     withCreate:(MessageListener)create
+                     withUpdate:(MessageListener)update;
 
 
 //增加某个session的监听
--(void)addMsgListener:(MessageListener)listener
-     withSessionID:(NSString*)sessionID;
+-(void)addMsgListener:(MessageListener)receive
+           withCreate:(MessageListener)create
+           withUpdate:(MessageListener)update
+        withSessionID:(NSString*)sessionID;
 
 
 //移除某个session的监听
--(void)removeMsgListener:(MessageListener)listener
-        withSessionID:(NSString*)sessionID;
+-(void)removeMsgListener:(MessageListener)receive
+              withCreate:(MessageListener)create
+              withUpdate:(MessageListener)update
+           withSessionID:(NSString*)sessionID;
 
 
 //设置被踢下线的监听

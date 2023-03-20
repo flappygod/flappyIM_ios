@@ -11,12 +11,13 @@
 #import "FlappyApiRequest.h"
 #import "FlappyConfig.h"
 #import "Flappy.pbobjc.h"
+#import "FlappySocket.h"
 
 
 @interface FlappySender : NSObject
 
 //socket通信
-@property (nonatomic,weak) GCDAsyncSocket*  socket;
+@property (nonatomic,weak) FlappySocket*  socket;
 
 
 //单例模式

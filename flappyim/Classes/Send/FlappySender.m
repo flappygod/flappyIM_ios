@@ -545,7 +545,7 @@
     [self msgInsert:chatMsg];
     
     //获取socket
-    GCDAsyncSocket* socket=self.socket;
+    FlappySocket* socket=self.socket;
     
     //连接已经断开了
     if(socket==nil){
@@ -561,15 +561,7 @@
     }
     
     
-    //发送消息轻轻
-    FlappyRequest* request=[[FlappyRequest alloc]init];
-    //消息请求
-    request.type=REQ_MSG;
-    //消息内容
-    request.msg=[FlappyBaseSession changeToMessage:chatMsg];
     
-    //请求数据，已经GPBComputeRawVarint32SizeForInteger
-    NSData* reqData=[request delimitedData];
     //消息ID保存
     [self.successCallbacks setObject:success forKey:chatMsg.messageId];
     //消息ID保存
@@ -577,9 +569,9 @@
     //消息ID保存
     [self.successMsgs setObject:chatMsg forKey:chatMsg.messageId];
     
-    long time=(long)[NSDate date].timeIntervalSince1970*1000;
-    //写入请求数据
-    [socket writeData:reqData withTimeout:-1 tag:time];
+    
+    [socket sendMessage:chatMsg];
+    
     
 }
 

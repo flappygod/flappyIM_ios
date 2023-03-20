@@ -53,6 +53,9 @@
             withPort:(NSString*)serverPort
             withUser:(ChatUser*)user;
 
+//发送消息
+-(void)sendMessage:(ChatMessage*) chatMsg;
+
 //主动下线
 -(void)offline:(Boolean)regular;
 

@@ -18,6 +18,7 @@
 #import "FlappyNetTool.h"
 #import "FlappySender.h"
 #import "FlappyApiConfig.h"
+#import "FlappyBaseSession.h"
 
 @interface FlappySocket()
 
@@ -59,7 +60,7 @@
             self.socket=[[GCDAsyncSocket alloc] initWithDelegate:self
                                                    delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
             //保存
-            [FlappySender shareInstance].socket=self.socket;
+            [FlappySender shareInstance].socket=self;
             
             //错误
             NSError* error=nil;
@@ -318,6 +319,25 @@
     
 }
 
+
+//发送消息
+-(void)sendMessage:(ChatMessage*) chatMsg{
+    //发送消息轻轻
+    FlappyRequest* request=[[FlappyRequest alloc]init];
+    //消息请求
+    request.type=REQ_MSG;
+    //消息内容
+    request.msg=[FlappyBaseSession changeToMessage:chatMsg];
+    
+    //请求数据，已经GPBComputeRawVarint32SizeForInteger
+    NSData* reqData=[request delimitedData];
+    
+    long time=(long)[NSDate date].timeIntervalSince1970*1000;
+    //写入请求数据
+    [self.socket writeData:reqData withTimeout:-1 tag:time];
+}
+
+
 //处理解析出来的信息,新消息过来了
 - (void)msgRecieved:(FlappyResponse *)respones{
     //返回登录消息
@@ -565,18 +585,32 @@
     });
 }
 
-//通知有新的消息
--(void)notifyNewMessage:(ChatMessage*)message{
-    //在主线程之中执行
+//通知消息创建
+-(void)notifyCreateMessage:(ChatMessage*)message{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            //新消息
-            NSArray* array=[FlappyIM shareInstance].msgListeners.allKeys;
-            //数量
+            NSArray* array=[FlappyIM shareInstance].msgCreateListeners.allKeys;
             for(int s=0;s<array.count;s++){
                 NSString* str=[array objectAtIndex:s];
-                NSMutableArray* listeners=[[FlappyIM shareInstance].msgListeners objectForKey:str];
-                //回调监听的事件
+                NSMutableArray* listeners=[[FlappyIM shareInstance].msgCreateListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    MessageListener listener=[listeners objectAtIndex:w];
+                    listener(message);
+                }
+            }
+        });
+    });
+}
+
+
+//通知有新的消息
+-(void)notifyNewMessage:(ChatMessage*)message{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSArray* array=[FlappyIM shareInstance].msgReceiveListeners.allKeys;
+            for(int s=0;s<array.count;s++){
+                NSString* str=[array objectAtIndex:s];
+                NSMutableArray* listeners=[[FlappyIM shareInstance].msgReceiveListeners objectForKey:str];
                 for(int w=0;w<listeners.count;w++){
                     MessageListener listener=[listeners objectAtIndex:w];
                     listener(message);
@@ -589,16 +623,12 @@
 
 //通知消息有更新
 -(void)notifyUpdateMessage:(ChatMessage*)message{
-    //在主线程之中执行
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            //新消息
-            NSArray* array=[FlappyIM shareInstance].msgListeners.allKeys;
-            //数量
+            NSArray* array=[FlappyIM shareInstance].msgUpdateListeners.allKeys;
             for(int s=0;s<array.count;s++){
                 NSString* str=[array objectAtIndex:s];
-                NSMutableArray* listeners=[[FlappyIM shareInstance].msgListeners objectForKey:str];
-                //回调监听的事件
+                NSMutableArray* listeners=[[FlappyIM shareInstance].msgUpdateListeners objectForKey:str];
                 for(int w=0;w<listeners.count;w++){
                     MessageListener listener=[listeners objectAtIndex:w];
                     listener(message);
