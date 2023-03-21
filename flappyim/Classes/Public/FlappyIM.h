@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import <AFNetworking/AFNetworking-umbrella.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import "FlappyMessageListener.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -38,13 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) bool  isActive;
 
 //消息创建、发送
-@property (nonatomic,strong) NSMutableDictionary*  msgSendListeners;
-
-//接收到消息
-@property (nonatomic,strong) NSMutableDictionary*  msgReceiveListeners;
-
-//消息状态更新
-@property (nonatomic,strong) NSMutableDictionary*  msgUpdateListeners;
+@property (nonatomic,strong) NSMutableDictionary*  messageListeners;
 
 //会话间隔
 @property (nonatomic,strong) NSMutableArray*  sessinListeners;
@@ -148,27 +143,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //增加所有消息的监听
--(void)addGloableMsgListener:(MessageListener)receive
-                    withSend:(MessageListener)send
-                   andUpdate:(MessageListener)update;
+-(void)addGloableMsgListener:(FlappyMessageListener*)listener;
 
 //移除所有消息的监听
--(void)removeGloableMsgListener:(MessageListener)receive
-                       withSend:(MessageListener)send
-                     withUpdate:(MessageListener)update;
+-(void)removeGloableMsgListener:(FlappyMessageListener*)listener;
 
 
 //增加某个session的监听
--(void)addMsgListener:(MessageListener)receive
-             withSend:(MessageListener)send
-           withUpdate:(MessageListener)update
+-(void)addMsgListener:(FlappyMessageListener*)listener
         withSessionID:(NSString*)sessionID;
 
 
 //移除某个session的监听
--(void)removeMsgListener:(MessageListener)receive
-                withSend:(MessageListener)send
-              withUpdate:(MessageListener)update
+-(void)removeMsgListener:(FlappyMessageListener*)listener
            withSessionID:(NSString*)sessionID;
 
 

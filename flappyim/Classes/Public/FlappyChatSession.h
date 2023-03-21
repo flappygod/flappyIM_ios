@@ -14,6 +14,7 @@
 #import "ChatVoice.h"
 #import "ChatFile.h"
 #import "ChatVideo.h"
+#import "FlappyMessageListener.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,11 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //设置消息的监听
--(void)addMessageListener:(MessageListener)listener;
+-(void)addMessageListener:(FlappyMessageListener*)listener;
 
 
 //移除消息的监听
--(void)removeMessageListener:(MessageListener)listener;
+-(void)removeMessageListener:(FlappyMessageListener*)listener;
 
 
 //清空监听

@@ -18,14 +18,14 @@
 
 @implementation FlappyChatSession
 {
-    NSMutableArray* _listeners;
+    NSMutableArray* _messageListeners;
 }
 
 //初始化
 -(instancetype)init{
     self=[super init];
     if(self){
-        _listeners=[[NSMutableArray alloc]init];
+        _messageListeners=[[NSMutableArray alloc]init];
     }
     return self;
 }
@@ -68,19 +68,19 @@
 
 
 //设置消息的监听
--(void)addMessageListener:(MessageListener)listener{
+-(void)addMessageListener:(FlappyMessageListener*)listener{
     //添加ID
+    [_messageListeners addObject:listener];
     [[FlappyIM shareInstance] addMsgListener:listener
-                               withSessionID: self.session.sessionId];
-    [_listeners addObject:listener];
+                               withSessionID:self.session.sessionId];
 }
 
 //清除某个监听
--(void)removeMessageListener:(MessageListener)listener{
-    //移除监听
+-(void)removeMessageListener:(FlappyMessageListener*)listener{
+    //添加ID
+    [_messageListeners removeObject:listener];
     [[FlappyIM shareInstance] removeMsgListener:listener
                                   withSessionID:self.session.sessionId];
-    [_listeners removeObject:listener];
 }
 
 //销毁的时候清除监听
@@ -91,9 +91,9 @@
 //清空监听
 -(void)clearListeners{
     //移除添加的监听
-    if(_listeners!=nil&&_listeners.count>0){
-        for(int s=0;s<_listeners.count;s++){
-            [[FlappyIM shareInstance] removeMsgListener:[_listeners objectAtIndex:s]
+    if(_messageListeners!=nil&&_messageListeners.count>0){
+        for(int s=0;s<_messageListeners.count;s++){
+            [[FlappyIM shareInstance] removeMsgListener:[_messageListeners objectAtIndex:s]
                                           withSessionID:self.session.sessionId];
         }
     }

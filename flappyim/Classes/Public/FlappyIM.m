@@ -62,7 +62,7 @@
         //设置一个唯一的UUID
         _sharedSingleton.pushID=[FlappyIM getUUID];
         //回调
-        _sharedSingleton.msgReceiveListeners=[[NSMutableDictionary alloc] init];
+        _sharedSingleton.messageListeners=[[NSMutableDictionary alloc] init];
         //会话的监听
         _sharedSingleton.sessinListeners=[[NSMutableArray alloc]init];
         //还没有被初始化
@@ -84,8 +84,11 @@
 -(void)initLocalNotification{
     //后台了，但是还没有被墓碑的情况
     __weak typeof(self) safeSelf=self;
-    //监听是否发送本地通知
-    [self addGloableMsgListener:^(ChatMessage * _Nullable message) {
+    [self addGloableMsgListener:[[FlappyMessageListener alloc] initWithSend:^(ChatMessage * _Nullable message) {
+        
+    } andUpdate:^(ChatMessage * _Nullable message) {
+        
+    } andReceive:^(ChatMessage * _Nullable message) {
         //判断当前是在后台还是前台，如果是在后台，那么
         UIApplicationState state = [UIApplication sharedApplication].applicationState;
         //如果再后台
@@ -93,11 +96,7 @@
             //判断当前是在后台还是在前台
             [safeSelf sendLocalNotification:message];
         }
-    } withSend:^(ChatMessage * _Nullable message) {
-        
-    } andUpdate:^(ChatMessage * _Nullable message) {
-        
-    }];
+    }]];
 }
 
 
@@ -430,115 +429,51 @@
 
 
 //增加消息的监听
--(void)addGloableMsgListener:(MessageListener)receive
-                    withSend:(MessageListener)send
-                   andUpdate:(MessageListener)update{
+-(void)addGloableMsgListener:(FlappyMessageListener*)listener{
     //监听所有消息
-    if(receive!=nil){
-        NSMutableArray* listeners=[self.msgReceiveListeners objectForKey:GlobalKey];
+    if(listener!=nil){
+        NSMutableArray* listeners=[self.messageListeners objectForKey:GlobalKey];
         if(listeners==nil){
             listeners=[[NSMutableArray alloc]init];
-            [self.msgReceiveListeners setObject:listeners forKey:GlobalKey];
+            [self.messageListeners setObject:listeners forKey:GlobalKey];
         }
-        [listeners addObject:receive];
-    }
-    if(send!=nil){
-        NSMutableArray* listeners=[self.msgSendListeners objectForKey:GlobalKey];
-        if(listeners==nil){
-            listeners=[[NSMutableArray alloc]init];
-            [self.msgSendListeners setObject:listeners forKey:GlobalKey];
-        }
-        [listeners addObject:send];
-    }
-    if(update!=nil){
-        NSMutableArray* listeners=[self.msgUpdateListeners objectForKey:GlobalKey];
-        if(listeners==nil){
-            listeners=[[NSMutableArray alloc]init];
-            [self.msgUpdateListeners setObject:listeners forKey:GlobalKey];
-        }
-        [listeners addObject:update];
+        [listeners addObject:listener];
     }
 }
 
 //移除监听
--(void)removeGloableMsgListener:(MessageListener)receive
-                       withSend:(MessageListener)create
-                     withUpdate:(MessageListener)update{
+-(void)removeGloableMsgListener:(FlappyMessageListener*)listener{
     //监听所有消息
-    if(receive!=nil){
-        NSMutableArray* listeners=[self.msgReceiveListeners objectForKey:GlobalKey];
+    if(listener!=nil){
+        NSMutableArray* listeners=[self.messageListeners objectForKey:GlobalKey];
         if(listeners!=nil){
-            [listeners removeObject:receive];
-        }
-    }
-    if(create!=nil){
-        NSMutableArray* listeners=[self.msgSendListeners objectForKey:GlobalKey];
-        if(listeners!=nil){
-            [listeners removeObject:create];
-        }
-    }
-    if(update!=nil){
-        NSMutableArray* listeners=[self.msgUpdateListeners objectForKey:GlobalKey];
-        if(listeners!=nil){
-            [listeners removeObject:update];
+            [listeners removeObject:listener];
         }
     }
 }
 
 //增加某个session的监听
--(void)addMsgListener:(MessageListener)receive
-             withSend:(MessageListener)send
-           withUpdate:(MessageListener)update
+-(void)addMsgListener:(FlappyMessageListener*)listener
         withSessionID:(NSString*)sessionID{
     //监听所有消息
-    if(receive!=nil){
-        NSMutableArray* listeners=[self.msgReceiveListeners objectForKey:sessionID];
+    if(listener!=nil){
+        NSMutableArray* listeners=[self.messageListeners objectForKey:sessionID];
         if(listeners==nil){
             listeners=[[NSMutableArray alloc]init];
-            [self.msgReceiveListeners setObject:listeners forKey:sessionID];
+            [self.messageListeners setObject:listeners forKey:sessionID];
         }
-        [listeners addObject:receive];
-    }
-    if(send!=nil){
-        NSMutableArray* listeners=[self.msgSendListeners objectForKey:sessionID];
-        if(listeners==nil){
-            listeners=[[NSMutableArray alloc]init];
-            [self.msgSendListeners setObject:listeners forKey:sessionID];
-        }
-        [listeners addObject:send];
-    }
-    if(update!=nil){
-        NSMutableArray* listeners=[self.msgUpdateListeners objectForKey:sessionID];
-        if(listeners==nil){
-            listeners=[[NSMutableArray alloc]init];
-            [self.msgUpdateListeners setObject:listeners forKey:sessionID];
-        }
-        [listeners addObject:update];
+        [listeners addObject:listener];
     }
 }
 
 //移除会话的
--(void)removeMsgListener:(MessageListener)receive
-                withSend:(MessageListener)send
-              withUpdate:(MessageListener)update
+-(void)removeMsgListener:(FlappyMessageListener*)listener
            withSessionID:(NSString*)sessionID{
     //监听所有消息
-    if(receive!=nil){
-        NSMutableArray* listeners=[self.msgReceiveListeners objectForKey:sessionID];
+    if(listener!=nil){
+        NSMutableArray* listeners=[self.messageListeners objectForKey:sessionID];
         if(listeners!=nil){
-            [listeners removeObject:receive];
-        }
-    }
-    if(send!=nil){
-        NSMutableArray* listeners=[self.msgSendListeners objectForKey:sessionID];
-        if(listeners!=nil){
-            [listeners removeObject:send];
-        }
-    }
-    if(update!=nil){
-        NSMutableArray* listeners=[self.msgUpdateListeners objectForKey:sessionID];
-        if(listeners!=nil){
-            [listeners removeObject:update];
+            [listeners removeObject:listener];
         }
     }
 }
@@ -1396,9 +1331,8 @@
     [self.flappysocket  offline:true];
     //停止
     [self stopOberver];
-    [self.msgReceiveListeners removeAllObjects];
-    [self.msgUpdateListeners removeAllObjects];
-    [self.msgSendListeners removeAllObjects];
+    //清空
+    [self.messageListeners removeAllObjects];
 }
 
 
