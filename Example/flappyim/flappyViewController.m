@@ -137,9 +137,13 @@
 
 -(void)sessionSuccess:(FlappyChatSession*)session{
     __weak typeof(self) safeSelf=self;
-    [session addMessageListener:^(ChatMessage * _Nullable message) {
+    [session addMessageListener:[[FlappyMessageListener alloc] initWithSend:^(ChatMessage * _Nullable message) {
+        
+    } andUpdate:^(ChatMessage * _Nullable message) {
+        
+    } andReceive:^(ChatMessage * _Nullable message) {
         safeSelf.lable.text=[message getChatText];
-    }];
+    }]];
 }
 
 
