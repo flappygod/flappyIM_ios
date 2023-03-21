@@ -57,10 +57,13 @@
         NSLog(@"创建失败");
     }];
     
-    [[FlappyIM shareInstance] addGloableMsgListener:^(ChatMessage * _Nullable message) {
-        //打印信息
-        NSLog(@"%@", [message getChatText]);
-    }];
+    [[FlappyIM shareInstance] addGloableMsgListener:[[FlappyMessageListener alloc] initWithSend:^(ChatMessage * _Nullable message) {
+        
+    } andUpdate:^(ChatMessage * _Nullable message) {
+        
+    } andReceive:^(ChatMessage * _Nullable message) {
+        
+    }]];
     
     //会话更新
     [[FlappyIM shareInstance]  addSessionListener:^(FlappyChatSession*  _Nullable chatsession) {
