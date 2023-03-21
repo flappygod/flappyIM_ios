@@ -17,6 +17,13 @@ NS_ASSUME_NONNULL_BEGIN
                  andReceive:(MessageListener)receiveListener;
 
 
+-(void)onSend:(ChatMessage*) msg;
+
+-(void)onUpdate:(ChatMessage*) msg;
+
+-(void)onReceive:(ChatMessage*) msg;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

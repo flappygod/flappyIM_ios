@@ -28,5 +28,23 @@
     return self;
 }
 
+-(void)onSend:(ChatMessage*) msg{
+    if(_sendListener!=nil){
+        _sendListener(msg);
+    }
+}
+
+-(void)onUpdate:(ChatMessage*) msg{
+    if(_updateListener!=nil){
+        _updateListener(msg);
+    }
+}
+
+-(void)onReceive:(ChatMessage*) msg{
+    if(_receiveListener!=nil){
+        _receiveListener(msg);
+    }
+}
+
 
 @end
