@@ -578,7 +578,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             //新消息
-            NSArray* array=[FlappyIM shareInstance].sessinListeners;
+            NSArray* array=[FlappyIM shareInstance].sessionListeners;
             //数量
             for(int s=0;s<array.count;s++){
                 SessionListener listener=[array objectAtIndex:s];

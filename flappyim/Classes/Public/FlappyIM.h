@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSMutableDictionary*  messageListeners;
 
 //会话间隔
-@property (nonatomic,strong) NSMutableArray*  sessinListeners;
+@property (nonatomic,strong) NSMutableArray*  sessionListeners;
 
 //单例模式
 + (instancetype)shareInstance;

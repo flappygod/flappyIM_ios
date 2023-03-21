@@ -64,7 +64,7 @@
         //回调
         _sharedSingleton.messageListeners=[[NSMutableDictionary alloc] init];
         //会话的监听
-        _sharedSingleton.sessinListeners=[[NSMutableArray alloc]init];
+        _sharedSingleton.sessionListeners=[[NSMutableArray alloc]init];
         //还没有被初始化
         _sharedSingleton.isSetup=false;
         //不再使用本地推送了
@@ -480,12 +480,12 @@
 
 //新增会话监听
 -(void)addSessionListener:(SessionListener)listener{
-    [self.sessinListeners addObject:listener];
+    [self.sessionListeners addObject:listener];
 }
 
 //移除会话监听
 -(void)removeSessionListener:(SessionListener)listener{
-    [self.sessinListeners removeObject:listener];
+    [self.sessionListeners removeObject:listener];
 }
 
 
