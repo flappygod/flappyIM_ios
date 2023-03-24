@@ -322,22 +322,29 @@
 
 //发送消息
 -(void)sendMessage:(ChatMessage*) chatMsg{
-    //发送消息轻轻
-    FlappyRequest* request=[[FlappyRequest alloc]init];
-    //消息请求
-    request.type=REQ_MSG;
-    //消息内容
-    request.msg=[FlappyBaseSession changeToMessage:chatMsg];
-    
-    //请求数据，已经GPBComputeRawVarint32SizeForInteger
-    NSData* reqData=[request delimitedData];
-    
-    long time=(long)[NSDate date].timeIntervalSince1970*1000;
-    //写入请求数据
-    [self.socket writeData:reqData withTimeout:-1 tag:time];
-    
     //发送消息
     [self notifyMessageSend:chatMsg];
+    
+    @try {
+        //发送消息轻轻
+        FlappyRequest* request=[[FlappyRequest alloc]init];
+        //消息请求
+        request.type=REQ_MSG;
+        //消息内容
+        request.msg=[FlappyBaseSession changeToMessage:chatMsg];
+        
+        //请求数据，已经GPBComputeRawVarint32SizeForInteger
+        NSData* reqData=[request delimitedData];
+        
+        long time=(long)[NSDate date].timeIntervalSince1970*1000;
+        
+        //写入请求数据
+        [self.socket writeData:reqData withTimeout:-1 tag:time];
+    } @catch (NSException *exception) {
+        [[FlappySender shareInstance] failureCallback:chatMsg.messageId];
+    }
+    
+    
 }
 
 
@@ -519,7 +526,7 @@
     //在主线程之中执行
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[FlappySender shareInstance]successCallback:message];
+            [[FlappySender shareInstance] successCallback:message];
         });
     });
 }
