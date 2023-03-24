@@ -32,7 +32,7 @@
 @property(nonatomic,strong) NSMutableDictionary* failureCallbacks;
 
 //消息
-@property(nonatomic,strong) NSMutableDictionary* successMsgs;
+@property(nonatomic,strong) NSMutableDictionary* sendingMessages;
 
 //请求
 @property(nonatomic,strong) NSMutableArray* reqArray;
@@ -54,7 +54,7 @@
         //初始化
         _sharedSingleton.successCallbacks=[[NSMutableDictionary alloc]init];
         _sharedSingleton.failureCallbacks=[[NSMutableDictionary alloc]init];
-        _sharedSingleton.successMsgs=[[NSMutableDictionary alloc]init];
+        _sharedSingleton.sendingMessages=[[NSMutableDictionary alloc]init];
         _sharedSingleton.reqArray=[[NSMutableArray alloc]init];
     });
     return _sharedSingleton;
@@ -555,7 +555,7 @@
     }
     
     //之前的回调错误信息
-    ChatMessage* former=[self.successMsgs objectForKey:chatMsg.messageId];
+    ChatMessage* former=[self.sendingMessages objectForKey:chatMsg.messageId];
     if(former!=nil){
         [self failureCallback:chatMsg.messageId];
     }
@@ -567,7 +567,7 @@
     //消息ID保存
     [self.failureCallbacks setObject:failure forKey:chatMsg.messageId];
     //消息ID保存
-    [self.successMsgs setObject:chatMsg forKey:chatMsg.messageId];
+    [self.sendingMessages setObject:chatMsg forKey:chatMsg.messageId];
     
     
     [socket sendMessage:chatMsg];
@@ -623,7 +623,7 @@
         success(chatMsg);
         [self.successCallbacks removeObjectForKey:chatMsg.messageId];
         [self.failureCallbacks removeObjectForKey:chatMsg.messageId];
-        [self.successMsgs removeObjectForKey:chatMsg.messageId];
+        [self.sendingMessages removeObjectForKey:chatMsg.messageId];
     }
 }
 
@@ -635,7 +635,7 @@
     //获取回调
     FlappySendFailure failure=[self.failureCallbacks objectForKey:messageid];
     //消息
-    ChatMessage* msg=[self.successMsgs objectForKey:messageid];
+    ChatMessage* msg=[self.sendingMessages objectForKey:messageid];
     //不为空
     if(failure!=nil&&msg!=nil){
         //发送失败
@@ -644,7 +644,7 @@
         failure(msg,[NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
         [self.successCallbacks removeObjectForKey:messageid];
         [self.failureCallbacks removeObjectForKey:messageid];
-        [self.successMsgs removeObjectForKey:messageid];
+        [self.sendingMessages removeObjectForKey:messageid];
     }
 }
 
