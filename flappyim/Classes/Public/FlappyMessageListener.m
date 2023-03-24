@@ -13,15 +13,18 @@
     MessageListener _sendListener;
     MessageListener _updateListener;
     MessageListener _receiveListener;
+    MessageListener _failureListener;
 }
 
 ///init with blocks
 -(instancetype)initWithSend:(MessageListener)sendListener
+                 andFailure:(MessageListener)failureListener
                   andUpdate:(MessageListener)updateListener
                  andReceive:(MessageListener)receiveListener{
     self=[super init];
     if(self){
         _sendListener=sendListener;
+        _failureListener=failureListener;
         _updateListener=updateListener;
         _receiveListener=receiveListener;
     }
@@ -43,6 +46,12 @@
 -(void)onReceive:(ChatMessage*) msg{
     if(_receiveListener!=nil){
         _receiveListener(msg);
+    }
+}
+
+-(void)onFailure:(ChatMessage*) msg{
+    if(_failureListener!=nil){
+        _failureListener(msg);
     }
 }
 
