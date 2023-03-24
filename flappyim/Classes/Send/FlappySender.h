@@ -19,6 +19,9 @@
 //socket通信
 @property (nonatomic,weak) FlappySocket*  socket;
 
+//消息
+@property(nonatomic,strong) NSMutableDictionary* sendingMessages;
+
 
 //单例模式
 + (instancetype)shareInstance;

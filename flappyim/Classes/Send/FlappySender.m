@@ -31,9 +31,6 @@
 //失败
 @property(nonatomic,strong) NSMutableDictionary* failureCallbacks;
 
-//消息
-@property(nonatomic,strong) NSMutableDictionary* sendingMessages;
-
 //请求
 @property(nonatomic,strong) NSMutableArray* reqArray;
 
@@ -632,15 +629,10 @@
     if(messageid==nil){
         return;
     }
-    //获取回调
     FlappySendFailure failure=[self.failureCallbacks objectForKey:messageid];
-    //消息
     ChatMessage* msg=[self.sendingMessages objectForKey:messageid];
-    //不为空
-    if(failure!=nil&&msg!=nil){
-        //发送失败
+    if(failure!=nil && msg!=nil){
         [self msgFailure:msg];
-        //移除
         failure(msg,[NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
         [self.successCallbacks removeObjectForKey:messageid];
         [self.failureCallbacks removeObjectForKey:messageid];
@@ -652,19 +644,15 @@
 //全部失败
 -(void)failureAllCallbacks{
     //没有的时候饭很好
-    if(self.failureCallbacks==nil||self.failureCallbacks.count==0){
+    if(self.sendingMessages==nil||self.sendingMessages.count==0){
         return;
     }
-    //回调信息
-    NSMutableDictionary* dic=self.failureCallbacks;
-    //所有的
+    NSMutableDictionary* dic=self.sendingMessages;
     NSArray* array=dic.allKeys;
-    //都失败
     for(int s=0;s<array.count;s++){
         NSString* messageid=[array objectAtIndex:s];
         [self failureCallback:messageid];
     }
-    
 }
 
 
