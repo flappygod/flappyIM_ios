@@ -84,7 +84,10 @@
 -(void)initLocalNotification{
     //后台了，但是还没有被墓碑的情况
     __weak typeof(self) safeSelf=self;
-    [self addGloableMsgListener:[[FlappyMessageListener alloc] initWithSend:^(ChatMessage * _Nullable message) {
+    [self addGloableMsgListener:[[FlappyMessageListener alloc]
+                                 initWithSend:^(ChatMessage * _Nullable message) {
+        
+    } andFailure:^(ChatMessage * _Nullable message) {
         
     } andUpdate:^(ChatMessage * _Nullable message) {
         
