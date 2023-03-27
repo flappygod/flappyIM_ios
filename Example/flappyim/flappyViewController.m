@@ -137,7 +137,10 @@
 
 -(void)sessionSuccess:(FlappyChatSession*)session{
     __weak typeof(self) safeSelf=self;
-    [session addMessageListener:[[FlappyMessageListener alloc] initWithSend:^(ChatMessage * _Nullable message) {
+    [session addMessageListener:[[FlappyMessageListener alloc]
+                                 initWithSend:^(ChatMessage * _Nullable message) {
+        
+    } andFailure:^(ChatMessage * _Nullable message) {
         
     } andUpdate:^(ChatMessage * _Nullable message) {
         
@@ -160,24 +163,24 @@
 //发送消息
 -(void)sendMessage:(id)sender{
     if(self.session!=nil){
-                [self.session sendText:self.sendText.text
-                            andSuccess:^(ChatMessage* _Nullable data) {
-                                NSLog(@"发送成功");
-                            } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
-                                NSLog(@"发送失败");
-                            }];
+        [self.session sendText:self.sendText.text
+                    andSuccess:^(ChatMessage* _Nullable data) {
+            NSLog(@"发送成功");
+        } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
+            NSLog(@"发送失败");
+        }];
         
-//        ChatLocation* loc=[[ChatLocation alloc]init];
-//        loc.lat=@"11111";
-//        loc.lng=@"222222";
-//        loc.address=@"345354354";
-//
-//        [self.session sendLocation:loc
-//                        andSuccess:^(ChatMessage* _Nullable data) {
-//            NSLog(@"发送成功");
-//        } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
-//            NSLog(@"发送失败");
-//        }];
+        //        ChatLocation* loc=[[ChatLocation alloc]init];
+        //        loc.lat=@"11111";
+        //        loc.lng=@"222222";
+        //        loc.address=@"345354354";
+        //
+        //        [self.session sendLocation:loc
+        //                        andSuccess:^(ChatMessage* _Nullable data) {
+        //            NSLog(@"发送成功");
+        //        } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
+        //            NSLog(@"发送失败");
+        //        }];
         
     }
 }
@@ -200,19 +203,19 @@
     if(self.session!=nil){
         NSString* str=[url.absoluteString substringWithRange:NSMakeRange(7, url.absoluteString.length-7)];
         
-//        [self.session sendLocalImage:str
-//                          andSuccess:^(ChatMessage* _Nullable data) {
-//            NSLog(@"发送成功");
-//        } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
-//            NSLog(@"发送失败");
-//        }];
+        //        [self.session sendLocalImage:str
+        //                          andSuccess:^(ChatMessage* _Nullable data) {
+        //            NSLog(@"发送成功");
+        //        } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
+        //            NSLog(@"发送失败");
+        //        }];
         
-                [self.session sendLocalVideo:str
-                                  andSuccess:^(ChatMessage* _Nullable data) {
-                                      NSLog(@"发送成功");
-                                  } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
-                                      NSLog(@"发送失败");
-                                  }];
+        [self.session sendLocalVideo:str
+                          andSuccess:^(ChatMessage* _Nullable data) {
+            NSLog(@"发送成功");
+        } andFailure:^(ChatMessage* msg,NSError * _Nullable error, NSInteger code) {
+            NSLog(@"发送失败");
+        }];
     }
     
     
