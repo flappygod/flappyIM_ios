@@ -56,7 +56,7 @@
 -(void)successCallback:(ChatMessage*)messageid;
 
 //失败
--(void)failureCallback:(NSString*)messageid;
+-(void)failureCallback:(ChatMessage*)message;
 
 //全部失败
 -(void)failureAllCallbacks;

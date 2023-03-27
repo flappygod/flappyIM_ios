@@ -208,9 +208,21 @@
     //非正常d退出
     [self offline:false];
     //退出了
+    __weak typeof(self) safeSelf=self;
+    //通知所有的消息错误
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[FlappySender shareInstance] failureAllCallbacks];
+            if([FlappySender shareInstance].sendingMessages==nil||[FlappySender shareInstance].sendingMessages.count==0){
+                return;
+            }
+            NSMutableDictionary* dic=[FlappySender shareInstance].sendingMessages;
+            NSArray* array=dic.allKeys;
+            for(int s=0;s<array.count;s++){
+                NSString* messageid=[array objectAtIndex:s];
+                ChatMessage* chatMsg=[[FlappySender shareInstance].sendingMessages objectForKey:messageid];
+                [safeSelf notifyMessageFailure:chatMsg];
+                [[FlappySender shareInstance] failureCallback:chatMsg];
+            }
         });
     });
 }
@@ -341,7 +353,17 @@
         //写入请求数据
         [self.socket writeData:reqData withTimeout:-1 tag:time];
     } @catch (NSException *exception) {
-        [[FlappySender shareInstance] failureCallback:chatMsg.messageId];
+        //通知所有的消息错误
+        __weak typeof(self) safeSelf=self;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //获取消息
+                ChatMessage* message=[[FlappySender shareInstance].sendingMessages
+                                      objectForKey:chatMsg.messageId];
+                [safeSelf notifyMessageFailure:message];
+                [[FlappySender shareInstance] failureCallback:message];
+            });
+        });
     }
     
     
@@ -610,6 +632,9 @@
 
 //通知消息创建
 -(void)notifyMessageSend:(ChatMessage*)message{
+    if(message==nil){
+        return;
+    }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
@@ -629,6 +654,9 @@
 //通知有新的消息
 -(void)notifyMessageReceive:(ChatMessage*)message
                   andFormer:(ChatMessage*)former{
+    if(message==nil){
+        return;
+    }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
@@ -650,6 +678,9 @@
 
 //通知消息失败
 -(void)notifyMessageFailure:(ChatMessage*)message{
+    if(message==nil){
+        return;
+    }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;

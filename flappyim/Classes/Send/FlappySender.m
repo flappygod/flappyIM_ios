@@ -625,18 +625,17 @@
 }
 
 //失败
--(void)failureCallback:(NSString*)messageid{
-    if(messageid==nil){
+-(void)failureCallback:(ChatMessage*)message{
+    if(message==nil){
         return;
     }
-    FlappySendFailure failure=[self.failureCallbacks objectForKey:messageid];
-    ChatMessage* msg=[self.sendingMessages objectForKey:messageid];
-    if(failure!=nil && msg!=nil){
-        [self msgFailure:msg];
-        failure(msg,[NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
-        [self.successCallbacks removeObjectForKey:messageid];
-        [self.failureCallbacks removeObjectForKey:messageid];
-        [self.sendingMessages removeObjectForKey:messageid];
+    FlappySendFailure failure=[self.failureCallbacks objectForKey:message.messageId];
+    if(failure!=nil && message!=nil){
+        [self msgFailure:message];
+        failure(message,[NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
+        [self.successCallbacks removeObjectForKey:message.messageId];
+        [self.failureCallbacks removeObjectForKey:message.messageId];
+        [self.sendingMessages removeObjectForKey:message.messageId];
     }
 }
 
@@ -651,7 +650,7 @@
     NSArray* array=dic.allKeys;
     for(int s=0;s<array.count;s++){
         NSString* messageid=[array objectAtIndex:s];
-        [self failureCallback:messageid];
+        [self failureCallback:[self.sendingMessages objectForKey:messageid]];
     }
 }
 
