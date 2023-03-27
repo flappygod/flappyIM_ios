@@ -59,6 +59,8 @@
     
     [[FlappyIM shareInstance] addGloableMsgListener:[[FlappyMessageListener alloc] initWithSend:^(ChatMessage * _Nullable message) {
         
+    } andFailure:^(ChatMessage * _Nullable message) {
+        
     } andUpdate:^(ChatMessage * _Nullable message) {
         
     } andReceive:^(ChatMessage * _Nullable message) {
