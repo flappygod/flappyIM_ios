@@ -554,10 +554,8 @@
     //之前的回调错误信息
     ChatMessage* former=[self.sendingMessages objectForKey:chatMsg.messageId];
     if(former!=nil){
-        [self failureCallback:chatMsg.messageId];
+        [self failureCallback:chatMsg];
     }
-    
-    
     
     //消息ID保存
     [self.successCallbacks setObject:success forKey:chatMsg.messageId];

@@ -220,8 +220,10 @@
             for(int s=0;s<array.count;s++){
                 NSString* messageid=[array objectAtIndex:s];
                 ChatMessage* chatMsg=[[FlappySender shareInstance].sendingMessages objectForKey:messageid];
-                [safeSelf notifyMessageFailure:chatMsg];
-                [[FlappySender shareInstance] failureCallback:chatMsg];
+                if(chatMsg!=nil){
+                    [safeSelf notifyMessageFailure:chatMsg];
+                    [[FlappySender shareInstance] failureCallback:chatMsg];
+                }
             }
         });
     });
@@ -357,7 +359,6 @@
         __weak typeof(self) safeSelf=self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             dispatch_async(dispatch_get_main_queue(), ^{
-                //获取消息
                 ChatMessage* message=[[FlappySender shareInstance].sendingMessages
                                       objectForKey:chatMsg.messageId];
                 [safeSelf notifyMessageFailure:message];
