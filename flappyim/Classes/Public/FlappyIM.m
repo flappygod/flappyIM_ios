@@ -42,7 +42,10 @@
 @property (nonatomic,assign) bool isSetup;
 
 //当前正在登录
-@property (nonatomic,assign) bool isLoading;
+@property (nonatomic,assign) bool isLoginProgress;
+
+//当前正在登录
+@property (nonatomic,assign) bool isAutoLoginProgress;
 
 
 @end
@@ -399,10 +402,10 @@
     if(!self.isSetup){
         //初始化数据库
         [self setupDataBase];
-        //重新连接
-        [self setupReconnect];
         //通知
         [self setupNotify];
+        //重新连接
+        [self setupReconnect];
         //当前是活跃的
         self.isActive=true;
     }
@@ -500,14 +503,13 @@
 
 #pragma  NOTIFY 网络状态监听通知
 -(void)setupNotify{
+    //监听网络状态变化
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reachabilityChanged:)
                                                  name:kReachabilityChangedNotification
                                                object:nil];
     // 设置网络检测的站点
     NSString *remoteHostName = @"www.baidu.com";
-    
-    //创建
     self.hostReachability = [Reachability reachabilityWithHostName:remoteHostName];
     [self.hostReachability startNotifier];
     [self updateInterfaceWithReachability:self.hostReachability];
@@ -530,31 +532,20 @@
     //先下线
     if(self.flappysocket!=nil){
         [self.flappysocket offline:true];
+        NSLog(@"后台下线");
     }
-    NSLog(@"触发home按下,在该区域书写点击home键的逻辑");
 }
 
 //监听进入页面
 -(void)applicationDidBecomeActive:(NSNotification *)notification{
     self.isActive=true;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self
-                                             selector:@selector(setupReconnect)
-                                               object:nil];
-    [self performSelector:@selector(setupReconnect)
-               withObject:nil];
-    NSLog(@"重新进来后响应，该区域编写重新进入页面的逻辑");
+    [self setupReconnect];
 }
 
 //变化监听
 - (void) reachabilityChanged:(NSNotification *)note
 {
-    Reachability* curReach = [note object];
-    
-    [NSObject cancelPreviousPerformRequestsWithTarget:self
-                                             selector:@selector(updateInterfaceWithReachability:)
-                                               object:nil];
-    
-    [self performSelector:@selector(updateInterfaceWithReachability:) withObject:curReach afterDelay:1];
+    [self updateInterfaceWithReachability:[note object]];
 }
 
 //更新网络状态
@@ -566,16 +557,8 @@
         case 0:
             break;
         case 1:
-            [NSObject cancelPreviousPerformRequestsWithTarget:self
-                                                     selector:@selector(setupReconnect)
-                                                       object:nil];
-            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
-            break;
         case 2:
-            [NSObject cancelPreviousPerformRequestsWithTarget:self
-                                                     selector:@selector(setupReconnect)
-                                                       object:nil];
-            [self performSelector:@selector(setupReconnect) withObject:nil afterDelay:1];
+            [self setupReconnect];
             break;
         default:
             break;
@@ -604,25 +587,41 @@
 
 //进行初始化
 -(void)setupReconnect{
-    //自动登录
-    ChatUser* user=[[FlappyData shareInstance] getUser];
-    
-    //当前用户没有登录或者被踢下线的情况
-    if(user==nil||user.login==false){
-        return;
-    }
-    
-    //当前是已经连接的，不需要继续登录了
-    if(self.flappysocket!=nil){
-        //不为空而且已经连接，不需要继续登录了
-        if(self.flappysocket.socket!=nil&&self.flappysocket.socket.isConnected){
+    @synchronized (FlappyIM.class) {
+        NSLog(@"setupReconnect");
+        //自动登录
+        ChatUser* user=[[FlappyData shareInstance] getUser];
+        
+        //当前用户没有登录或者被踢下线的情况
+        if(user==nil||user.login==false){
             return;
         }
-    }
-    
-    //如果网络是正常连接的
-    if([_hostReachability currentReachabilityStatus]!=NotReachable&&self.isActive){
-        [self autoLogin];
+        
+        //当前是已经连接的，不需要继续登录了
+        if(self.flappysocket!=nil){
+            //不为空而且已经连接，不需要继续登录了
+            if(self.flappysocket.socket!=nil&&self.flappysocket.socket.isConnected){
+                return;
+            }
+        }
+        
+        //如果正在登录,那么延后执行
+        if(self.isLoginProgress){
+            [self performSelector:@selector(setupReconnect)
+                       withObject:nil
+                       afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
+            return;
+        }
+        
+        //如果正在自动登录,那么延后执行
+        if(self.isAutoLoginProgress){
+            return;
+        }
+        
+        //如果网络是正常连接的
+        if([_hostReachability currentReachabilityStatus]!=NotReachable&&self.isActive){
+            [self autoLogin];
+        }
     }
 }
 
@@ -631,21 +630,18 @@
     //开始
     __weak typeof(self) safeSelf=self;
     
-    //如果正在loading,那么延后执行
-    if(self.isLoading){
-        [NSObject cancelPreviousPerformRequestsWithTarget:self
-                                                 selector:@selector(setupReconnect)
-                                                   object:nil];
-        [self performSelector:@selector(setupReconnect)
-                   withObject:nil
-                   afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
-        return;
-    }
+    //开始自动登录
+    self.isAutoLoginProgress=true;
     
     //防止重复请求
     [self autoLogin:^(id data) {
         NSLog(@"自动登录成功");
+        //自动登录成功了
+        safeSelf.isAutoLoginProgress=false;
+        
     } andFailure:^(NSError * error, NSInteger code) {
+        //自动登录失败了
+        safeSelf.isAutoLoginProgress=false;
         //当前账户已经被踢下线了
         if(code==RESULT_KNICKED){
             //清空user
@@ -658,13 +654,9 @@
                 safeSelf.knicked=nil;
             }
         }else{
-            [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
-                                                     selector:@selector(setupReconnect)
-                                                       object:nil];
-            //5秒后重新执行登录
             [safeSelf performSelector:@selector(setupReconnect)
-                           withObject:nil
-                           afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
+                       withObject:nil
+                       afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
         }
     }];
 }
@@ -700,10 +692,10 @@
   andSuccess:(FlappySuccess)success
   andFailure:(FlappyFailure)failure{
     
-    @synchronized(self){
+    @synchronized(FlappyIM.class){
         
         //如果当前正在loading
-        if(self.isLoading){
+        if(self.isLoginProgress){
             
             //直接失败
             failure([NSError errorWithDomain:@"A login thread also run"
@@ -713,7 +705,7 @@
         }
         
         //当前的设备正在登录
-        self.isLoading=true;
+        self.isLoginProgress=true;
         
         //如果当前有正在连接的socket,之前的正常下线
         if(self.flappysocket!=nil){
@@ -740,7 +732,7 @@
             //失败
             failure(error,code);
             //不在加载中状态
-            safeSelf.isLoading=false;
+            safeSelf.isLoginProgress=false;
         }];
         
         //安全
@@ -750,16 +742,13 @@
         //创建socket
         self.flappysocket=[[FlappySocket alloc] initWithSuccess:^(id sdata) {
             success(sdata);
-            safeSelf.isLoading=false;
+            safeSelf.isLoginProgress=false;
         }
                                                      andFailure:wrap
                                                         andDead:^{
-            [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
-                                                     selector:@selector(setupReconnect)
-                                                       object:nil];
-            [safeSelf performSelectorOnMainThread:@selector(setupReconnect)
-                                       withObject:nil
-                                    waitUntilDone:false];
+            [safeSelf performSelector:@selector(setupReconnect)
+                       withObject:nil
+                       afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
         }];
         
         //请求数据
@@ -793,7 +782,7 @@
                 //置空
                 strongWrap=nil;
             }
-            safeSelf.isLoading=false;
+            safeSelf.isLoginProgress=false;
         }];
     }
     
@@ -847,10 +836,10 @@
       andFailure:(FlappyFailure)failure{
     
     //加锁保证正常
-    @synchronized (self) {
+    @synchronized (FlappyIM.class) {
         
         //当前有flappysocket，而且正在登录
-        if(self.isLoading){
+        if(self.isLoginProgress){
             //直接失败
             failure([NSError errorWithDomain:@"A login thread also run"
                                         code:RESULT_NETERROR
@@ -888,12 +877,9 @@
         self.flappysocket=[[FlappySocket alloc] initWithSuccess:success
                                                      andFailure:wrap
                                                         andDead:^{
-            
-            [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
-                                                     selector:@selector(setupReconnect)
-                                                       object:nil];
             [safeSelf performSelector:@selector(setupReconnect)
-                           withObject:nil];
+                       withObject:nil
+                       afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
         }];
         
         //请求数据

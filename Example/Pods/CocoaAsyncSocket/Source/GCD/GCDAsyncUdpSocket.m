@@ -34,7 +34,7 @@
 // Logging Enabled - See log level below
 
 // Logging uses the CocoaLumberjack framework (which is also GCD based).
-// https://github.com/robbiehanson/CocoaLumberjack
+// http://code.google.com/p/cocoalumberjack/
 // 
 // It allows us to do a lot of logging without significantly slowing down the code.
 #import "DDLog.h"
@@ -253,7 +253,7 @@ enum GCDAsyncUdpSocketConfig
 
 #if TARGET_OS_IPHONE
 // Forward declaration
-+ (void)listenerThread:(id)unused;
++ (void)listenerThread;
 #endif
 
 @end
@@ -281,20 +281,13 @@ enum GCDAsyncUdpSocketConfig
 	int addressFamily;
 }
 
-- (instancetype)initWithData:(NSData *)d timeout:(NSTimeInterval)t tag:(long)i NS_DESIGNATED_INITIALIZER;
+- (id)initWithData:(NSData *)d timeout:(NSTimeInterval)t tag:(long)i;
 
 @end
 
 @implementation GCDAsyncUdpSendPacket
 
-// Cover the superclass' designated initializer
-- (instancetype)init NS_UNAVAILABLE
-{
-	NSAssert(0, @"Use the designated initializer");
-	return nil;
-}
-
-- (instancetype)initWithData:(NSData *)d timeout:(NSTimeInterval)t tag:(long)i
+- (id)initWithData:(NSData *)d timeout:(NSTimeInterval)t tag:(long)i
 {
 	if ((self = [super init]))
 	{
@@ -324,13 +317,13 @@ enum GCDAsyncUdpSocketConfig
 	NSError *error;
 }
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (id)init;
 
 @end
 
 @implementation GCDAsyncUdpSpecialPacket
 
-- (instancetype)init
+- (id)init
 {
 	self = [super init];
 	return self;
@@ -345,28 +338,28 @@ enum GCDAsyncUdpSocketConfig
 
 @implementation GCDAsyncUdpSocket
 
-- (instancetype)init
+- (id)init
 {
 	LogTrace();
 	
 	return [self initWithDelegate:nil delegateQueue:NULL socketQueue:NULL];
 }
 
-- (instancetype)initWithSocketQueue:(dispatch_queue_t)sq
+- (id)initWithSocketQueue:(dispatch_queue_t)sq
 {
 	LogTrace();
 	
 	return [self initWithDelegate:nil delegateQueue:NULL socketQueue:sq];
 }
 
-- (instancetype)initWithDelegate:(id<GCDAsyncUdpSocketDelegate>)aDelegate delegateQueue:(dispatch_queue_t)dq
+- (id)initWithDelegate:(id <GCDAsyncUdpSocketDelegate>)aDelegate delegateQueue:(dispatch_queue_t)dq
 {
 	LogTrace();
 	
 	return [self initWithDelegate:aDelegate delegateQueue:dq socketQueue:NULL];
 }
 
-- (instancetype)initWithDelegate:(id<GCDAsyncUdpSocketDelegate>)aDelegate delegateQueue:(dispatch_queue_t)dq socketQueue:(dispatch_queue_t)sq
+- (id)initWithDelegate:(id <GCDAsyncUdpSocketDelegate>)aDelegate delegateQueue:(dispatch_queue_t)dq socketQueue:(dispatch_queue_t)sq
 {
 	LogTrace();
 	
@@ -481,7 +474,7 @@ enum GCDAsyncUdpSocketConfig
 #pragma mark Configuration
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-- (id<GCDAsyncUdpSocketDelegate>)delegate
+- (id)delegate
 {
 	if (dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey))
 	{
@@ -499,7 +492,7 @@ enum GCDAsyncUdpSocketConfig
 	}
 }
 
-- (void)setDelegate:(id<GCDAsyncUdpSocketDelegate>)newDelegate synchronously:(BOOL)synchronously
+- (void)setDelegate:(id <GCDAsyncUdpSocketDelegate>)newDelegate synchronously:(BOOL)synchronously
 {
 	dispatch_block_t block = ^{
         self->delegate = newDelegate;
@@ -516,12 +509,12 @@ enum GCDAsyncUdpSocketConfig
 	}
 }
 
-- (void)setDelegate:(id<GCDAsyncUdpSocketDelegate>)newDelegate
+- (void)setDelegate:(id <GCDAsyncUdpSocketDelegate>)newDelegate
 {
 	[self setDelegate:newDelegate synchronously:NO];
 }
 
-- (void)synchronouslySetDelegate:(id<GCDAsyncUdpSocketDelegate>)newDelegate
+- (void)synchronouslySetDelegate:(id <GCDAsyncUdpSocketDelegate>)newDelegate
 {
 	[self setDelegate:newDelegate synchronously:YES];
 }
@@ -577,7 +570,7 @@ enum GCDAsyncUdpSocketConfig
 	[self setDelegateQueue:newDelegateQueue synchronously:YES];
 }
 
-- (void)getDelegate:(id<GCDAsyncUdpSocketDelegate> *)delegatePtr delegateQueue:(dispatch_queue_t *)delegateQueuePtr
+- (void)getDelegate:(id <GCDAsyncUdpSocketDelegate> *)delegatePtr delegateQueue:(dispatch_queue_t *)delegateQueuePtr
 {
 	if (dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey))
 	{
@@ -599,7 +592,7 @@ enum GCDAsyncUdpSocketConfig
 	}
 }
 
-- (void)setDelegate:(id<GCDAsyncUdpSocketDelegate>)newDelegate delegateQueue:(dispatch_queue_t)newDelegateQueue synchronously:(BOOL)synchronously
+- (void)setDelegate:(id <GCDAsyncUdpSocketDelegate>)newDelegate delegateQueue:(dispatch_queue_t)newDelegateQueue synchronously:(BOOL)synchronously
 {
 	dispatch_block_t block = ^{
 		
@@ -624,12 +617,12 @@ enum GCDAsyncUdpSocketConfig
 	}
 }
 
-- (void)setDelegate:(id<GCDAsyncUdpSocketDelegate>)newDelegate delegateQueue:(dispatch_queue_t)newDelegateQueue
+- (void)setDelegate:(id <GCDAsyncUdpSocketDelegate>)newDelegate delegateQueue:(dispatch_queue_t)newDelegateQueue
 {
 	[self setDelegate:newDelegate delegateQueue:newDelegateQueue synchronously:NO];
 }
 
-- (void)synchronouslySetDelegate:(id<GCDAsyncUdpSocketDelegate>)newDelegate delegateQueue:(dispatch_queue_t)newDelegateQueue
+- (void)synchronouslySetDelegate:(id <GCDAsyncUdpSocketDelegate>)newDelegate delegateQueue:(dispatch_queue_t)newDelegateQueue
 {
 	[self setDelegate:newDelegate delegateQueue:newDelegateQueue synchronously:YES];
 }
@@ -948,7 +941,7 @@ enum GCDAsyncUdpSocketConfig
 {
 	LogTrace();
 	
-	__strong id<GCDAsyncUdpSocketDelegate> theDelegate = delegate;
+	__strong id theDelegate = delegate;
 	if (delegateQueue && [theDelegate respondsToSelector:@selector(udpSocket:didConnectToAddress:)])
 	{
 		NSData *address = [anAddress copy]; // In case param is NSMutableData
@@ -964,7 +957,7 @@ enum GCDAsyncUdpSocketConfig
 {
 	LogTrace();
 	
-	__strong id<GCDAsyncUdpSocketDelegate> theDelegate = delegate;
+	__strong id theDelegate = delegate;
 	if (delegateQueue && [theDelegate respondsToSelector:@selector(udpSocket:didNotConnect:)])
 	{
 		dispatch_async(delegateQueue, ^{ @autoreleasepool {
@@ -978,7 +971,7 @@ enum GCDAsyncUdpSocketConfig
 {
 	LogTrace();
 	
-	__strong id<GCDAsyncUdpSocketDelegate> theDelegate = delegate;
+	__strong id theDelegate = delegate;
 	if (delegateQueue && [theDelegate respondsToSelector:@selector(udpSocket:didSendDataWithTag:)])
 	{
 		dispatch_async(delegateQueue, ^{ @autoreleasepool {
@@ -992,7 +985,7 @@ enum GCDAsyncUdpSocketConfig
 {
 	LogTrace();
 	
-	__strong id<GCDAsyncUdpSocketDelegate> theDelegate = delegate;
+	__strong id theDelegate = delegate;
 	if (delegateQueue && [theDelegate respondsToSelector:@selector(udpSocket:didNotSendDataWithTag:dueToError:)])
 	{
 		dispatch_async(delegateQueue, ^{ @autoreleasepool {
@@ -1008,7 +1001,7 @@ enum GCDAsyncUdpSocketConfig
 	
 	SEL selector = @selector(udpSocket:didReceiveData:fromAddress:withFilterContext:);
 	
-	__strong id<GCDAsyncUdpSocketDelegate> theDelegate = delegate;
+	__strong id theDelegate = delegate;
 	if (delegateQueue && [theDelegate respondsToSelector:selector])
 	{
 		dispatch_async(delegateQueue, ^{ @autoreleasepool {
@@ -1022,7 +1015,7 @@ enum GCDAsyncUdpSocketConfig
 {
 	LogTrace();
 	
-	__strong id<GCDAsyncUdpSocketDelegate> theDelegate = delegate;
+	__strong id theDelegate = delegate;
 	if (delegateQueue && [theDelegate respondsToSelector:@selector(udpSocketDidClose:withError:)])
 	{
 		dispatch_async(delegateQueue, ^{ @autoreleasepool {
@@ -1038,7 +1031,7 @@ enum GCDAsyncUdpSocketConfig
 
 - (NSError *)badConfigError:(NSString *)errMsg
 {
-	NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errMsg};
+	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:errMsg forKey:NSLocalizedDescriptionKey];
 	
 	return [NSError errorWithDomain:GCDAsyncUdpSocketErrorDomain
 	                           code:GCDAsyncUdpSocketBadConfigError
@@ -1047,7 +1040,7 @@ enum GCDAsyncUdpSocketConfig
 
 - (NSError *)badParamError:(NSString *)errMsg
 {
-	NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errMsg};
+	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:errMsg forKey:NSLocalizedDescriptionKey];
 	
 	return [NSError errorWithDomain:GCDAsyncUdpSocketErrorDomain
 	                           code:GCDAsyncUdpSocketBadParamError
@@ -1057,7 +1050,7 @@ enum GCDAsyncUdpSocketConfig
 - (NSError *)gaiError:(int)gai_error
 {
 	NSString *errMsg = [NSString stringWithCString:gai_strerror(gai_error) encoding:NSASCIIStringEncoding];
-	NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errMsg};
+	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:errMsg forKey:NSLocalizedDescriptionKey];
 	
 	return [NSError errorWithDomain:@"kCFStreamErrorDomainNetDB" code:gai_error userInfo:userInfo];
 }
@@ -1068,10 +1061,10 @@ enum GCDAsyncUdpSocketConfig
 	NSDictionary *userInfo;
 	
 	if (reason)
-		userInfo = @{NSLocalizedDescriptionKey : errMsg,
-					 NSLocalizedFailureReasonErrorKey : reason};
+		userInfo = [NSDictionary dictionaryWithObjectsAndKeys:errMsg, NSLocalizedDescriptionKey,
+		                                                      reason, NSLocalizedFailureReasonErrorKey, nil];
 	else
-		userInfo = @{NSLocalizedDescriptionKey : errMsg};
+		userInfo = [NSDictionary dictionaryWithObjectsAndKeys:errMsg, NSLocalizedDescriptionKey, nil];
 	
 	return [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:userInfo];
 }
@@ -1090,7 +1083,7 @@ enum GCDAsyncUdpSocketConfig
 	                                                     @"GCDAsyncUdpSocket", [NSBundle mainBundle],
 	                                                     @"Send operation timed out", nil);
 	
-	NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errMsg};
+	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:errMsg forKey:NSLocalizedDescriptionKey];
 	
 	return [NSError errorWithDomain:GCDAsyncUdpSocketErrorDomain
 	                           code:GCDAsyncUdpSocketSendTimeoutError
@@ -1103,14 +1096,14 @@ enum GCDAsyncUdpSocketConfig
 	                                                     @"GCDAsyncUdpSocket", [NSBundle mainBundle],
 	                                                     @"Socket closed", nil);
 	
-	NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errMsg};
+	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:errMsg forKey:NSLocalizedDescriptionKey];
 	
 	return [NSError errorWithDomain:GCDAsyncUdpSocketErrorDomain code:GCDAsyncUdpSocketClosedError userInfo:userInfo];
 }
 
 - (NSError *)otherError:(NSString *)errMsg
 {
-	NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errMsg};
+	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:errMsg forKey:NSLocalizedDescriptionKey];
 	
 	return [NSError errorWithDomain:GCDAsyncUdpSocketErrorDomain
 	                           code:GCDAsyncUdpSocketOtherError
@@ -1244,7 +1237,7 @@ enum GCDAsyncUdpSocketConfig
 
                         // Fixes connection issues with IPv6, it is the same solution for udp socket.
                         // https://github.com/robbiehanson/CocoaAsyncSocket/issues/429#issuecomment-222477158
-                        struct sockaddr_in6 *sockaddr = (struct sockaddr_in6 *)(void *)res->ai_addr;
+                        struct sockaddr_in6 *sockaddr = (struct sockaddr_in6 *)res->ai_addr;
                         in_port_t *portPtr = &sockaddr->sin6_port;
                         if ((portPtr != NULL) && (*portPtr == 0)) {
                             *portPtr = htons(port);
@@ -1493,7 +1486,7 @@ enum GCDAsyncUdpSocketConfig
 				{
 					// IPv4
 					
-					struct sockaddr_in *addr = (struct sockaddr_in *)(void *)cursor->ifa_addr;
+					struct sockaddr_in *addr = (struct sockaddr_in *)cursor->ifa_addr;
 					
 					if (strcmp(cursor->ifa_name, iface) == 0)
 					{
@@ -1526,7 +1519,7 @@ enum GCDAsyncUdpSocketConfig
 				{
 					// IPv6
 					
-					const struct sockaddr_in6 *addr = (const struct sockaddr_in6 *)(const void *)cursor->ifa_addr;
+					struct sockaddr_in6 *addr = (struct sockaddr_in6 *)cursor->ifa_addr;
 					
 					if (strcmp(cursor->ifa_name, iface) == 0)
 					{
@@ -1627,8 +1620,8 @@ enum GCDAsyncUdpSocketConfig
 		return NO;
 	}
 	
-	const struct sockaddr_in *sSockaddr4 = (const struct sockaddr_in *)[someAddr4 bytes];
-	const struct sockaddr_in *cSockaddr4 = (const struct sockaddr_in *)[cachedConnectedAddress bytes];
+	const struct sockaddr_in *sSockaddr4 = (struct sockaddr_in *)[someAddr4 bytes];
+	const struct sockaddr_in *cSockaddr4 = (struct sockaddr_in *)[cachedConnectedAddress bytes];
 	
 	if (memcmp(&sSockaddr4->sin_addr, &cSockaddr4->sin_addr, sizeof(struct in_addr)) != 0)
 	{
@@ -1653,8 +1646,8 @@ enum GCDAsyncUdpSocketConfig
 		return NO;
 	}
 	
-	const struct sockaddr_in6 *sSockaddr6 = (const struct sockaddr_in6 *)[someAddr6 bytes];
-	const struct sockaddr_in6 *cSockaddr6 = (const struct sockaddr_in6 *)[cachedConnectedAddress bytes];
+	const struct sockaddr_in6 *sSockaddr6 = (struct sockaddr_in6 *)[someAddr6 bytes];
+	const struct sockaddr_in6 *cSockaddr6 = (struct sockaddr_in6 *)[cachedConnectedAddress bytes];
 	
 	if (memcmp(&sSockaddr6->sin6_addr, &cSockaddr6->sin6_addr, sizeof(struct in6_addr)) != 0)
 	{
@@ -1676,7 +1669,7 @@ enum GCDAsyncUdpSocketConfig
 		return 0;
 	
 	int result = 0;
-	const struct sockaddr_in *ifaceAddr = (const struct sockaddr_in *)[interfaceAddr4 bytes];
+	struct sockaddr_in *ifaceAddr = (struct sockaddr_in *)[interfaceAddr4 bytes];
 	
 	struct ifaddrs *addrs;
 	const struct ifaddrs *cursor;
@@ -1690,7 +1683,7 @@ enum GCDAsyncUdpSocketConfig
 			{
 				// IPv4
 				
-				const struct sockaddr_in *addr = (const struct sockaddr_in *)(const void *)cursor->ifa_addr;
+				struct sockaddr_in *addr = (struct sockaddr_in *)cursor->ifa_addr;
 				
 				if (memcmp(&addr->sin_addr, &ifaceAddr->sin_addr, sizeof(struct in_addr)) == 0)
 				{
@@ -1716,7 +1709,7 @@ enum GCDAsyncUdpSocketConfig
 		return 0;
 	
 	int result = 0;
-	const struct sockaddr_in6 *ifaceAddr = (const struct sockaddr_in6 *)[interfaceAddr6 bytes];
+	struct sockaddr_in6 *ifaceAddr = (struct sockaddr_in6 *)[interfaceAddr6 bytes];
 	
 	struct ifaddrs *addrs;
 	const struct ifaddrs *cursor;
@@ -1730,7 +1723,7 @@ enum GCDAsyncUdpSocketConfig
 			{
 				// IPv6
 				
-				const struct sockaddr_in6 *addr = (const struct sockaddr_in6 *)(const void *)cursor->ifa_addr;
+				struct sockaddr_in6 *addr = (struct sockaddr_in6 *)cursor->ifa_addr;
 				
 				if (memcmp(&addr->sin6_addr, &ifaceAddr->sin6_addr, sizeof(struct in6_addr)) == 0)
 				{
@@ -2892,7 +2885,7 @@ enum GCDAsyncUdpSocketConfig
 		
 		if (useIPv4)
 		{
-            int status = bind(self->socket4FD, (const struct sockaddr *)[interface4 bytes], (socklen_t)[interface4 length]);
+            int status = bind(self->socket4FD, (struct sockaddr *)[interface4 bytes], (socklen_t)[interface4 length]);
 			if (status == -1)
 			{
 				[self closeSockets];
@@ -2906,7 +2899,7 @@ enum GCDAsyncUdpSocketConfig
 		
 		if (useIPv6)
 		{
-            int status = bind(self->socket6FD, (const struct sockaddr *)[interface6 bytes], (socklen_t)[interface6 length]);
+            int status = bind(self->socket6FD, (struct sockaddr *)[interface6 bytes], (socklen_t)[interface6 length]);
 			if (status == -1)
 			{
 				[self closeSockets];
@@ -3014,7 +3007,7 @@ enum GCDAsyncUdpSocketConfig
 					   [[self class] hostFromAddress:localAddr4],
 					   [[self class] portFromAddress:localAddr4]);
 			
-            int status = bind(self->socket4FD, (const struct sockaddr *)[localAddr4 bytes], (socklen_t)[localAddr4 length]);
+            int status = bind(self->socket4FD, (struct sockaddr *)[localAddr4 bytes], (socklen_t)[localAddr4 length]);
 			if (status == -1)
 			{
 				[self closeSockets];
@@ -3031,7 +3024,7 @@ enum GCDAsyncUdpSocketConfig
 					   [[self class] hostFromAddress:localAddr6],
 					   [[self class] portFromAddress:localAddr6]);
 			
-            int status = bind(self->socket6FD, (const struct sockaddr *)[localAddr6 bytes], (socklen_t)[localAddr6 length]);
+            int status = bind(self->socket6FD, (struct sockaddr *)[localAddr6 bytes], (socklen_t)[localAddr6 length]);
 			if (status == -1)
 			{
 				[self closeSockets];
@@ -3327,7 +3320,7 @@ enum GCDAsyncUdpSocketConfig
 	LogTrace();
 	NSAssert(dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey), @"Must be dispatched on socketQueue");
 	
-	int status = connect(socket4FD, (const struct sockaddr *)[address4 bytes], (socklen_t)[address4 length]);
+	int status = connect(socket4FD, (struct sockaddr *)[address4 bytes], (socklen_t)[address4 length]);
 	if (status != 0)
 	{
 		if (errPtr)
@@ -3347,7 +3340,7 @@ enum GCDAsyncUdpSocketConfig
 	LogTrace();
 	NSAssert(dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey), @"Must be dispatched on socketQueue");
 	
-	int status = connect(socket6FD, (const struct sockaddr *)[address6 bytes], (socklen_t)[address6 length]);
+	int status = connect(socket6FD, (struct sockaddr *)[address6 bytes], (socklen_t)[address6 length]);
 	if (status != 0)
 	{
 		if (errPtr)
@@ -3469,8 +3462,8 @@ enum GCDAsyncUdpSocketConfig
 		
         if ((self->socket4FD != SOCKET_NULL) && groupAddr4 && interfaceAddr4)
 		{
-			const struct sockaddr_in *nativeGroup = (const struct sockaddr_in *)[groupAddr4 bytes];
-			const struct sockaddr_in *nativeIface = (const struct sockaddr_in *)[interfaceAddr4 bytes];
+			const struct sockaddr_in *nativeGroup = (struct sockaddr_in *)[groupAddr4 bytes];
+			const struct sockaddr_in *nativeIface = (struct sockaddr_in *)[interfaceAddr4 bytes];
 			
 			struct ip_mreq imreq;
 			imreq.imr_multiaddr = nativeGroup->sin_addr;
@@ -3491,7 +3484,7 @@ enum GCDAsyncUdpSocketConfig
 		}
         else if ((self->socket6FD != SOCKET_NULL) && groupAddr6 && interfaceAddr6)
 		{
-			const struct sockaddr_in6 *nativeGroup = (const struct sockaddr_in6 *)[groupAddr6 bytes];
+			const struct sockaddr_in6 *nativeGroup = (struct sockaddr_in6 *)[groupAddr6 bytes];
 			
 			struct ipv6_mreq imreq;
 			imreq.ipv6mr_multiaddr = nativeGroup->sin6_addr;
@@ -3529,121 +3522,6 @@ enum GCDAsyncUdpSocketConfig
 		*errPtr = err;
 	
 	return result;
-}
-
-- (BOOL)sendIPv4MulticastOnInterface:(NSString*)interface error:(NSError **)errPtr
-{
-    __block BOOL result = NO;
-    __block NSError *err = nil;
-
-    dispatch_block_t block = ^{ @autoreleasepool {
-
-        if (![self preOp:&err])
-        {
-            return_from_block;
-        }
-
-        if ((self->flags & kDidCreateSockets) == 0)
-        {
-            if (![self createSockets:&err])
-            {
-                return_from_block;
-            }
-        }
-        
-        // Convert interface to address
-
-        NSData *interfaceAddr4 = nil;
-        NSData *interfaceAddr6 = nil;
-
-        [self convertIntefaceDescription:interface port:0 intoAddress4:&interfaceAddr4 address6:&interfaceAddr6];
-
-        if (interfaceAddr4 == nil)
-        {
-            NSString *msg = @"Unknown interface. Specify valid interface by IP address.";
-            err = [self badParamError:msg];
-            return_from_block;
-        }
-
-        if (self->socket4FD != SOCKET_NULL) {
-            const struct sockaddr_in *nativeIface = (struct sockaddr_in *)[interfaceAddr4 bytes];
-            struct in_addr interface_addr = nativeIface->sin_addr;
-            int status = setsockopt(self->socket4FD, IPPROTO_IP, IP_MULTICAST_IF, &interface_addr, sizeof(interface_addr));
-            if (status != 0) {
-                 err = [self errnoErrorWithReason:@"Error in setsockopt() function"];
-                return_from_block;
-                result = YES;
-          }
-        }
-        
-     }};
-
-    if (dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey))
-        block();
-    else
-        dispatch_sync(socketQueue, block);
-
-    if (errPtr)
-        *errPtr = err;
-
-    return result;
-}
-
-- (BOOL)sendIPv6MulticastOnInterface:(NSString*)interface error:(NSError **)errPtr
-{
-    __block BOOL result = NO;
-    __block NSError *err = nil;
-
-    dispatch_block_t block = ^{ @autoreleasepool {
-
-        if (![self preOp:&err])
-        {
-            return_from_block;
-        }
-
-        if ((self->flags & kDidCreateSockets) == 0)
-        {
-            if (![self createSockets:&err])
-            {
-                return_from_block;
-            }
-        }
-        
-        // Convert interface to address
-
-        NSData *interfaceAddr4 = nil;
-        NSData *interfaceAddr6 = nil;
-
-        [self convertIntefaceDescription:interface port:0 intoAddress4:&interfaceAddr4 address6:&interfaceAddr6];
-
-        if (interfaceAddr6 == nil)
-        {
-            NSString *msg = @"Unknown interface. Specify valid interface by name (e.g. \"en1\").";
-            err = [self badParamError:msg];
-            return_from_block;
-        }
-
-        if ((self->socket6FD != SOCKET_NULL)) {
-            uint32_t scope_id = [self indexOfInterfaceAddr6:interfaceAddr6];
-            int status = setsockopt(self->socket6FD, IPPROTO_IPV6, IPV6_MULTICAST_IF, &scope_id, sizeof(scope_id));
-            if (status != 0) {
-                 err = [self errnoErrorWithReason:@"Error in setsockopt() function"];
-                return_from_block;
-            }
-            result = YES;
-       }
-        
-     }};
-
-    if (dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey))
-        block();
-    else
-        dispatch_sync(socketQueue, block);
-
-    if (errPtr)
-        *errPtr = err;
-
-    return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4860,13 +4738,13 @@ static NSThread *listenerThread;
 	dispatch_once(&predicate, ^{
 		
 		listenerThread = [[NSThread alloc] initWithTarget:self
-		                                         selector:@selector(listenerThread:)
+		                                         selector:@selector(listenerThread)
 		                                           object:nil];
 		[listenerThread start];
 	});
 }
 
-+ (void)listenerThread:(id)unused
++ (void)listenerThread
 {
 	@autoreleasepool {
 	
@@ -5307,7 +5185,6 @@ Failed:
 
 #endif
 
-#if TARGET_OS_IPHONE
 - (void)applicationWillEnterForeground:(NSNotification *)notification
 {
 	LogTrace();
@@ -5326,7 +5203,6 @@ Failed:
 	else
 		dispatch_async(socketQueue, block);
 }
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Advanced
@@ -5598,7 +5474,7 @@ Failed:
 		{
 			if ([address length] >= sizeof(struct sockaddr_in))
 			{
-				const struct sockaddr_in *addr4 = (const struct sockaddr_in *)(const void *)addrX;
+				const struct sockaddr_in *addr4 = (const struct sockaddr_in *)addrX;
 				
 				if (hostPtr) *hostPtr = [self hostFromSockaddr4:addr4];
 				if (portPtr) *portPtr = [self portFromSockaddr4:addr4];
@@ -5611,7 +5487,7 @@ Failed:
 		{
 			if ([address length] >= sizeof(struct sockaddr_in6))
 			{
-				const struct sockaddr_in6 *addr6 = (const struct sockaddr_in6 *)(const void *)addrX;
+				const struct sockaddr_in6 *addr6 = (const struct sockaddr_in6 *)addrX;
 				
 				if (hostPtr) *hostPtr = [self hostFromSockaddr6:addr6];
 				if (portPtr) *portPtr = [self portFromSockaddr6:addr6];

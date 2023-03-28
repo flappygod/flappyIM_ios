@@ -20,11 +20,9 @@
 
 //释放
 -(void)completeBlock:(NSError*)error andCode:(NSInteger)integer{
-    @synchronized (self) {
-        if(_failure!=nil){
-            _failure(error,integer);
-            _failure=nil;
-        }
+    if(_failure!=nil){
+        _failure(error,integer);
+        _failure=nil;
     }
 }
 

@@ -42,7 +42,6 @@ extern NSString *const GCDAsyncSocketSSLProtocolVersionMax;
 extern NSString *const GCDAsyncSocketSSLSessionOptionFalseStart;
 extern NSString *const GCDAsyncSocketSSLSessionOptionSendOneByteRecord;
 extern NSString *const GCDAsyncSocketSSLCipherSuites;
-extern NSString *const GCDAsyncSocketSSLALPN;
 #if !TARGET_OS_IPHONE
 extern NSString *const GCDAsyncSocketSSLDiffieHellmanParameters;
 #endif
@@ -50,7 +49,7 @@ extern NSString *const GCDAsyncSocketSSLDiffieHellmanParameters;
 #define GCDAsyncSocketLoggingContext 65535
 
 
-typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
+typedef NS_ENUM(NSInteger, GCDAsyncSocketError) {
 	GCDAsyncSocketNoError = 0,           // Never used
 	GCDAsyncSocketBadConfigError,        // Invalid configuration
 	GCDAsyncSocketBadParamError,         // Invalid parameter was passed
@@ -88,7 +87,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 - (instancetype)init;
 - (instancetype)initWithSocketQueue:(nullable dispatch_queue_t)sq;
 - (instancetype)initWithDelegate:(nullable id<GCDAsyncSocketDelegate>)aDelegate delegateQueue:(nullable dispatch_queue_t)dq;
-- (instancetype)initWithDelegate:(nullable id<GCDAsyncSocketDelegate>)aDelegate delegateQueue:(nullable dispatch_queue_t)dq socketQueue:(nullable dispatch_queue_t)sq NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDelegate:(nullable id<GCDAsyncSocketDelegate>)aDelegate delegateQueue:(nullable dispatch_queue_t)dq socketQueue:(nullable dispatch_queue_t)sq;
 
 /**
  * Create GCDAsyncSocket from already connect BSD socket file descriptor
@@ -255,7 +254,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * struct sockaddr sa  -> NSData *dsa = [NSData dataWithBytes:&remoteAddr length:remoteAddr.sa_len];
  * struct sockaddr *sa -> NSData *dsa = [NSData dataWithBytes:remoteAddr length:remoteAddr->sa_len];
  * 
- * This method invokes connectToAddress:remoteAddr viaInterface:nil withTimeout:-1 error:errPtr.
+ * This method invokes connectToAdd
 **/
 - (BOOL)connectToAddress:(NSData *)remoteAddr error:(NSError **)errPtr;
 
@@ -308,12 +307,6 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * Connects to the unix domain socket at the given url, using the specified timeout.
  */
 - (BOOL)connectToUrl:(NSURL *)url withTimeout:(NSTimeInterval)timeout error:(NSError **)errPtr;
-
-/**
- * Iterates over the given NetService's addresses in order, and invokes connectToAddress:error:. Stops at the
- * first invocation that succeeds and returns YES; otherwise returns NO.
- */
-- (BOOL)connectToNetService:(NSNetService *)netService error:(NSError **)errPtr;
 
 #pragma mark Disconnecting
 
@@ -436,7 +429,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * The given buffer will automatically be increased in size if needed.
  * 
  * If the timeout value is negative, the read operation will not use a timeout.
- * If the buffer is nil, the socket will create a buffer for you.
+ * If the buffer if nil, the socket will create a buffer for you.
  * 
  * If the bufferOffset is greater than the length of the given buffer,
  * the method will do nothing, and the delegate will not be called.
@@ -458,7 +451,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * A maximum of length bytes will be read.
  * 
  * If the timeout value is negative, the read operation will not use a timeout.
- * If the buffer is nil, a buffer will automatically be created for you.
+ * If the buffer if nil, a buffer will automatically be created for you.
  * If maxLength is zero, no length restriction is enforced.
  * 
  * If the bufferOffset is greater than the length of the given buffer,
@@ -490,7 +483,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * The given buffer will automatically be increased in size if needed.
  * 
  * If the timeout value is negative, the read operation will not use a timeout.
- * If the buffer is nil, a buffer will automatically be created for you.
+ * If the buffer if nil, a buffer will automatically be created for you.
  * 
  * If the length is 0, this method does nothing and the delegate is not called.
  * If the bufferOffset is greater than the length of the given buffer,
@@ -528,7 +521,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * For performance reasons, the socket will retain it, not copy it.
  * So if it is immutable, don't modify it while the socket is using it.
 **/
-- (void)readDataToData:(nullable NSData *)data withTimeout:(NSTimeInterval)timeout tag:(long)tag;
+- (void)readDataToData:(NSData *)data withTimeout:(NSTimeInterval)timeout tag:(long)tag;
 
 /**
  * Reads bytes until (and including) the passed "data" parameter, which acts as a separator.
@@ -536,7 +529,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * The given buffer will automatically be increased in size if needed.
  * 
  * If the timeout value is negative, the read operation will not use a timeout.
- * If the buffer is nil, a buffer will automatically be created for you.
+ * If the buffer if nil, a buffer will automatically be created for you.
  * 
  * If the bufferOffset is greater than the length of the given buffer,
  * the method will do nothing (except maybe print a warning), and the delegate will not be called.
@@ -601,7 +594,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * The given buffer will automatically be increased in size if needed.
  * 
  * If the timeout value is negative, the read operation will not use a timeout.
- * If the buffer is nil, a buffer will automatically be created for you.
+ * If the buffer if nil, a buffer will automatically be created for you.
  * 
  * If maxLength is zero, no length restriction is enforced.
  * Otherwise if maxLength bytes are read without completing the read,
@@ -663,7 +656,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * completes writing the bytes (which is NOT immediately after this method returns, but rather at a later time
  * when the delegate method notifies you), then you should first copy the bytes, and pass the copy to this method.
 **/
-- (void)writeData:(nullable NSData *)data withTimeout:(NSTimeInterval)timeout tag:(long)tag;
+- (void)writeData:(NSData *)data withTimeout:(NSTimeInterval)timeout tag:(long)tag;
 
 /**
  * Returns progress of the current write, from 0.0 to 1.0, or NaN if no current write (use isnan() to check).
@@ -754,7 +747,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * 
  * - GCDAsyncSocketSSLCipherSuites
  *     The values must be of type NSArray.
- *     Each item within the array must be a NSNumber, encapsulating an SSLCipherSuite.
+ *     Each item within the array must be a NSNumber, encapsulating
  *     See Apple's documentation for SSLSetEnabledCiphers.
  *     See also the SSLCipherSuite typedef.
  *
@@ -1117,7 +1110,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 /**
  * Called when a socket has read in data, but has not yet completed the read.
  * This would occur if using readToData: or readToLength: methods.
- * It may be used for things such as updating progress bars.
+ * It may be used to for things such as updating progress bars.
 **/
 - (void)socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
 
@@ -1128,7 +1121,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 
 /**
  * Called when a socket has written some data, but has not yet completed the entire write.
- * It may be used for things such as updating progress bars.
+ * It may be used to for things such as updating progress bars.
 **/
 - (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag;
 

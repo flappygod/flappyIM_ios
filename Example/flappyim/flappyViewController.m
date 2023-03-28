@@ -27,7 +27,7 @@
     [[FlappyIM shareInstance] setPushPlatfrom:@"Apple"];
     
     //初始化
-    [[FlappyIM shareInstance] setup:@"http://192.168.31.11" withUploadUrl:@"http://192.168.31.11"];
+    [[FlappyIM shareInstance] setup:@"http://116.205.139.93" withUploadUrl:@"http://116.205.139.93"];
     
     
     //创建登录
@@ -50,12 +50,12 @@
                 forControlEvents:UIControlEventTouchUpInside];
     
     //创建账号
-    [[FlappyIM shareInstance] createAccount:@"101" andUserName:@"李俊霖" andUserAvatar:@"waha" andSuccess:^(id data) {
-        //登录成功
-        NSLog(@"创建成功");
-    } andFailure:^(NSError * error, NSInteger code) {
-        NSLog(@"创建失败");
-    }];
+//    [[FlappyIM shareInstance] createAccount:@"101" andUserName:@"李俊霖" andUserAvatar:@"waha" andSuccess:^(id data) {
+//        //登录成功
+//        NSLog(@"创建成功");
+//    } andFailure:^(NSError * error, NSInteger code) {
+//        NSLog(@"创建失败");
+//    }];
     
     [[FlappyIM shareInstance] addGloableMsgListener:[[FlappyMessageListener alloc] initWithSend:^(ChatMessage * _Nullable message) {
         
@@ -154,7 +154,7 @@
 
 //登录
 -(void)login:(id)sender{
-    [[FlappyIM shareInstance] login:@"101" andSuccess:^(id data) {
+    [[FlappyIM shareInstance] login:@"1" andSuccess:^(id data) {
         //登录成功
         NSLog(@"登录成功");
     } andFailure:^(NSError * error, NSInteger code) {

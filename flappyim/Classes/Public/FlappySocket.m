@@ -54,11 +54,11 @@
             withPort:(NSString*)serverPort
             withUser:(ChatUser*)user{
     
-    @synchronized (self) {
+    @synchronized (FlappySocket.class) {
         @try {
             //建立长连接
             self.socket=[[GCDAsyncSocket alloc] initWithDelegate:self
-                                                   delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+                                                   delegateQueue:dispatch_get_main_queue()];
             //保存
             [FlappySender shareInstance].socket=self;
             
@@ -210,22 +210,21 @@
     //退出了
     __weak typeof(self) safeSelf=self;
     //通知所有的消息错误
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if([FlappySender shareInstance].sendingMessages==nil||[FlappySender shareInstance].sendingMessages.count==0){
-                return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //错误
+        if([FlappySender shareInstance].sendingMessages==nil||[FlappySender shareInstance].sendingMessages.count==0){
+            return;
+        }
+        NSMutableDictionary* dic=[FlappySender shareInstance].sendingMessages;
+        NSArray* array=dic.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* messageid=[array objectAtIndex:s];
+            ChatMessage* chatMsg=[[FlappySender shareInstance].sendingMessages objectForKey:messageid];
+            if(chatMsg!=nil){
+                [safeSelf notifyMessageFailure:chatMsg];
+                [[FlappySender shareInstance] failureCallback:chatMsg];
             }
-            NSMutableDictionary* dic=[FlappySender shareInstance].sendingMessages;
-            NSArray* array=dic.allKeys;
-            for(int s=0;s<array.count;s++){
-                NSString* messageid=[array objectAtIndex:s];
-                ChatMessage* chatMsg=[[FlappySender shareInstance].sendingMessages objectForKey:messageid];
-                if(chatMsg!=nil){
-                    [safeSelf notifyMessageFailure:chatMsg];
-                    [[FlappySender shareInstance] failureCallback:chatMsg];
-                }
-            }
-        });
+        }
     });
 }
 
@@ -248,7 +247,7 @@
 //主动下线
 -(void)offline:(Boolean)regular{
     //加上锁，处理下线
-    @synchronized (self) {
+    @synchronized (FlappySocket.class) {
         @try {
             self.isActive=false;
             //正常退出，非正常退出的回调不执行
@@ -257,6 +256,7 @@
             }
             //主动断开连接
             if(self.socket!=nil){
+                self.socket.delegate=nil;
                 [self.socket disconnect];
             }
             //登录失败
@@ -357,13 +357,11 @@
     } @catch (NSException *exception) {
         //通知所有的消息错误
         __weak typeof(self) safeSelf=self;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                ChatMessage* message=[[FlappySender shareInstance].sendingMessages
-                                      objectForKey:chatMsg.messageId];
-                [safeSelf notifyMessageFailure:message];
-                [[FlappySender shareInstance] failureCallback:message];
-            });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            ChatMessage* message=[[FlappySender shareInstance].sendingMessages
+                                  objectForKey:chatMsg.messageId];
+            [safeSelf notifyMessageFailure:message];
+            [[FlappySender shareInstance] failureCallback:message];
         });
     }
     
@@ -547,10 +545,8 @@
 //信息发送成功
 -(void)messageSendSuccess:(ChatMessage*)message{
     //在主线程之中执行
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[FlappySender shareInstance] successCallback:message];
-        });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[FlappySender shareInstance] successCallback:message];
     });
 }
 
@@ -618,16 +614,14 @@
 //会话
 -(void)notifySession:(SessionData*)session{
     //在主线程之中执行
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            //新消息
-            NSArray* array=[FlappyIM shareInstance].sessionListeners;
-            //数量
-            for(int s=0;s<array.count;s++){
-                SessionListener listener=[array objectAtIndex:s];
-                listener(session);
-            }
-        });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //新消息
+        NSArray* array=[FlappyIM shareInstance].sessionListeners;
+        //数量
+        for(int s=0;s<array.count;s++){
+            SessionListener listener=[array objectAtIndex:s];
+            listener(session);
+        }
     });
 }
 
@@ -636,18 +630,16 @@
     if(message==nil){
         return;
     }
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
-            for(int s=0;s<array.count;s++){
-                NSString* str=[array objectAtIndex:s];
-                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-                for(int w=0;w<listeners.count;w++){
-                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                    [listener onSend:message];
-                }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+            for(int w=0;w<listeners.count;w++){
+                FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                [listener onSend:message];
             }
-        });
+        }
     });
 }
 
@@ -658,22 +650,20 @@
     if(message==nil){
         return;
     }
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
-            for(int s=0;s<array.count;s++){
-                NSString* str=[array objectAtIndex:s];
-                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-                for(int w=0;w<listeners.count;w++){
-                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                    if(former==nil){
-                        [listener onReceive:message];
-                    }else{
-                        [listener onUpdate:message];
-                    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+            for(int w=0;w<listeners.count;w++){
+                FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                if(former==nil){
+                    [listener onReceive:message];
+                }else{
+                    [listener onUpdate:message];
                 }
             }
-        });
+        }
     });
 }
 
@@ -682,18 +672,16 @@
     if(message==nil){
         return;
     }
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
-            for(int s=0;s<array.count;s++){
-                NSString* str=[array objectAtIndex:s];
-                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-                for(int w=0;w<listeners.count;w++){
-                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                    [listener onFailure:message];
-                }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+            for(int w=0;w<listeners.count;w++){
+                FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                [listener onFailure:message];
             }
-        });
+        }
     });
 }
 
