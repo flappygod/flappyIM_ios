@@ -256,8 +256,8 @@
             }
             //主动断开连接
             if(self.socket!=nil){
-                self.socket.delegate=nil;
                 [self.socket disconnect];
+                self.socket.delegate=nil;
             }
             //登录失败
             if(self.failure!=nil){
