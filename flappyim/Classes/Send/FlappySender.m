@@ -601,6 +601,31 @@
     msg.messageSendState=SEND_STATE_FAILURE;
     //放入指定的位置
     [[FlappyDataBase shareInstance] updateMessage:msg];
+    //发送失败的通知
+    __weak typeof(self) safeSelf=self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        ChatMessage* message=[[FlappySender shareInstance].sendingMessages
+                              objectForKey:msg.messageId];
+        [safeSelf notifyMessageFailure:message];
+    });
+}
+
+//通知消息失败
+-(void)notifyMessageFailure:(ChatMessage*)message{
+    if(message==nil){
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+            for(int w=0;w<listeners.count;w++){
+                FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                [listener onFailure:message];
+            }
+        }
+    });
 }
 
 //成功
