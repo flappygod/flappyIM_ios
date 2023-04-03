@@ -532,6 +532,7 @@
     //先下线
     if(self.flappysocket!=nil){
         [self.flappysocket offline:true];
+        self.flappysocket=nil;
         NSLog(@"后台下线");
     }
 }
@@ -710,6 +711,7 @@
         //如果当前有正在连接的socket,之前的正常下线
         if(self.flappysocket!=nil){
             [self.flappysocket offline:true];
+            self.flappysocket=nil;
         }
         
         //注册地址
@@ -802,8 +804,6 @@
     
     //之前的正常下线
     [self.flappysocket offline:true];
-    
-    //清空
     self.flappysocket=nil;
     
     //注册地址
@@ -849,8 +849,8 @@
         
         //如果当前有正在连接的socket,先下线了
         if(self.flappysocket!=nil){
-            //之前的正常下线
             [self.flappysocket offline:true];
+            self.flappysocket=nil;
         }
         
         //自动登录
