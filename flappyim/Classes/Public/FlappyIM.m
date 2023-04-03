@@ -589,7 +589,6 @@
 //进行初始化
 -(void)setupReconnect{
     @synchronized (FlappyIM.class) {
-        NSLog(@"setupReconnect");
         //自动登录
         ChatUser* user=[[FlappyData shareInstance] getUser];
         
@@ -621,6 +620,7 @@
         
         //如果网络是正常连接的
         if([_hostReachability currentReachabilityStatus]!=NotReachable&&self.isActive){
+            NSLog(@"setupReconnect");
             [self autoLogin];
         }
     }
