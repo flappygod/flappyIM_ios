@@ -604,8 +604,7 @@
     //发送失败的通知
     __weak typeof(self) safeSelf=self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        ChatMessage* message=[[FlappySender shareInstance].sendingMessages
-                              objectForKey:msg.messageId];
+        ChatMessage* message=[safeSelf.sendingMessages objectForKey:msg.messageId];
         [safeSelf notifyMessageFailure:message];
     });
 }
