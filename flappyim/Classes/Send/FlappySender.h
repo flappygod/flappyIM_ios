@@ -17,7 +17,7 @@
 @interface FlappySender : NSObject
 
 //socket通信
-@property (nonatomic,weak) FlappySocket*  socket;
+@property (nonatomic,weak) FlappySocket*  flappySocket;
 
 //消息
 @property(nonatomic,strong) NSMutableDictionary* sendingMessages;

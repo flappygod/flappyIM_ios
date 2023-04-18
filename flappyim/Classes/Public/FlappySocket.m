@@ -32,6 +32,11 @@
 
 @implementation FlappySocket
 
+
+//socket通信
+static  GCDAsyncSocket*  _instanceSocket;
+
+
 //初始化
 -(instancetype)initWithSuccess:(FlappySuccess)success
                     andFailure:(FlappyFailureWrap*)failure
@@ -41,8 +46,8 @@
         self.isActive=false;
         self.receiveData=[[NSMutableData alloc]init];
         self.updateArray=[[NSMutableArray alloc]init];
-        self.success=success;
-        self.failure=failure;
+        self.loginSuccess=success;
+        self.loginFailure=failure;
         self.dead=dead;
     }
     return self;
@@ -57,33 +62,29 @@
     @synchronized (FlappySocket.class) {
         @try {
             //建立长连接
-            self.socket=[[GCDAsyncSocket alloc] initWithDelegate:self
-                                                   delegateQueue:dispatch_get_main_queue()];
-            //保存
-            [FlappySender shareInstance].socket=self;
+            if(_instanceSocket==nil){
+                _instanceSocket=[[GCDAsyncSocket alloc] init];
+            }
+            self.socket=_instanceSocket;
+            self.socket.delegateQueue=dispatch_get_main_queue();
+            self.socket.delegate= self;
+            [FlappySender shareInstance].flappySocket=self;
             
             //错误
             NSError* error=nil;
-            
-            //连接host
             [self.socket connectToHost:serverAddress
                                 onPort:serverPort.integerValue
                            withTimeout:20
                                  error:&error];
-            
             //失败
             if(error!=nil){
                 NSLog(@"FlappyIM:%@",error.description);
-                //错误error, RESULT_NETERROR
-                [self.failure completeBlock:error andCode:RESULT_NETERROR];
-                //错误
-                self.failure=nil;
-                //连接错误
-                self.success=nil;
+                [self.loginFailure completeBlock:error andCode:RESULT_NETERROR];
+                self.loginFailure=nil;
+                self.loginSuccess=nil;
             }
             //成功
             else{
-                //保存用户数据
                 self.user=user;
             }
         } @catch (NSException *exception) {
@@ -249,34 +250,35 @@
     //加上锁，处理下线
     @synchronized (FlappySocket.class) {
         @try {
+            //非active状态
             self.isActive=false;
-            //正常退出，非正常退出的回调不执行
-            if(regular){
-                self.dead=nil;
-            }
+            
             //主动断开连接
             if(self.socket!=nil){
                 [self.socket disconnect];
-                self.socket.delegate=nil;
+                self.socket.delegate= nil;
+                self.socket=nil;
             }
+            
             //登录失败
-            if(self.failure!=nil){
-                //失败
-                [self.failure completeBlock:[NSError errorWithDomain:@"Socket closed by a new login thread"
-                                                                code:0
-                                                            userInfo:nil] andCode:RESULT_NETERROR];
-                //失败
-                self.failure=nil;
-                //清空
-                self.success=nil;
+            if(self.loginFailure!=nil){
+                [self.loginFailure completeBlock:[NSError errorWithDomain:@"Socket closed by a new login thread"
+                                                                     code:0
+                                                                 userInfo:nil] andCode:RESULT_NETERROR];
+                self.loginFailure=nil;
+                self.loginSuccess=nil;
             }
+            
             //心跳停止
             [self stopHeart];
-            //非正常退出
+            
+            //正常退出，非正常退出的回调不执行
             if(self.dead!=nil){
-                //非正常退出
-                self.dead();
-                self.dead=nil;
+                if(!regular){
+                    self.dead();
+                }else{
+                    self.dead=nil;
+                }
             }
         } @catch (NSException *exception) {
             NSLog(@"%@",exception.description);
@@ -348,10 +350,18 @@
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
         NSData* reqData=[request delimitedData];
         
+        //写入时间
         long time=(long)[NSDate date].timeIntervalSince1970*1000;
+        
+        //不是正常的
+        if(!self.isActive){
+            @throw [[NSException alloc] initWithName:@"failed" reason:@"socket not active" userInfo:nil];
+        }
         
         //写入请求数据
         [self.socket writeData:reqData withTimeout:-1 tag:time];
+        
+        
     } @catch (NSException *exception) {
         //通知所有的消息错误
         __weak typeof(self) safeSelf=self;
@@ -469,13 +479,13 @@
         NSLog(@"FlappyIM:%@",exception.description);
     }
     //登录成功
-    if(self.success!=nil){
-        self.success(self.loginData);
+    if(self.loginSuccess!=nil){
+        self.loginSuccess(self.loginData);
     }
     
     //清空回调和数据
-    self.success=nil;
-    self.failure=nil;
+    self.loginSuccess=nil;
+    self.loginFailure=nil;
     self.loginData=nil;
     
     [self checkSessionNeedUpdate];

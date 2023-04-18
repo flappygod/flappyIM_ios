@@ -26,11 +26,11 @@
 
 
 //socket通信
-@property (nonatomic,strong)  GCDAsyncSocket*  socket;
+@property (nonatomic,weak)  GCDAsyncSocket*  socket;
 //成功
-@property (nonatomic,strong)  FlappySuccess  success;
+@property (nonatomic,strong)  FlappySuccess  loginSuccess;
 //失败
-@property (nonatomic,strong)  FlappyFailureWrap*  failure;
+@property (nonatomic,strong)  FlappyFailureWrap*  loginFailure;
 //正在登录的用户
 @property (nonatomic,strong)  ChatUser*  user;
 //登录成功之后非正常退出的情况

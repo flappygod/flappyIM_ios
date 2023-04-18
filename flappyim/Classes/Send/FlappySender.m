@@ -542,7 +542,7 @@
     [self msgInsert:chatMsg];
     
     //获取socket
-    FlappySocket* socket=self.socket;
+    FlappySocket* socket=self.flappySocket;
     
     //连接已经断开了
     if(socket==nil){
