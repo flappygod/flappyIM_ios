@@ -272,8 +272,6 @@
             }
             //心跳停止
             [self stopHeart];
-            //清空socket
-            self.socket=nil;
             //非正常退出
             if(self.dead!=nil){
                 //非正常退出
