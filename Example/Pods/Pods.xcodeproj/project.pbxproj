@@ -27,6 +27,7 @@
 		0FD8001A8877D6E1B048473516DBF19C /* ChatSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B0CEA4D879D62ECAF2348A13370214F /* ChatSession.m */; };
 		10ABB5EF9399F9AFB454BA14BA72FAA1 /* FlappySender.m in Sources */ = {isa = PBXBuildFile; fileRef = 289DE78EEAD8E531B3B41E7BB8CA8D07 /* FlappySender.m */; };
 		11B573B4DC7B0AB12290A9D8A7A76406 /* flappyim-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A273DD882FA15B612E2AAEC9518BD9E /* flappyim-dummy.m */; };
+		12F482FE2022286A223FFC9BFA84F83A /* CocoaAsyncSocket-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 33327139DBA79DB6507A21F117BF083D /* CocoaAsyncSocket-dummy.m */; };
 		1339E6C9911F6C3F413CF37B1DB1207A /* MJFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 51FCEC313A332DFD1E62336B526F1427 /* MJFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1414B8A146190FDFD3F486FF2B4D99F7 /* GPBBootstrap.h in Headers */ = {isa = PBXBuildFile; fileRef = 6626A3DD2526F0F1208F810345EBC63B /* GPBBootstrap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		176F8093A462DA87177AE2DC38C74F3A /* FMDB-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A331C4CD66051D7C79A741F4DF66BA6 /* FMDB-dummy.m */; };
@@ -56,6 +57,7 @@
 		33DC154CACD614244DE45A53CE08EF0D /* MJExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 4699B617ECEF1FF3432F5EEFAE658E34 /* MJExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		347731E8D4C4F27FC53DDFAC590481D6 /* AFAutoPurgingImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 10142EB9933C9CEDBF7EF107D2C01FAF /* AFAutoPurgingImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3670B9BF0270568E92C7842000FE6A98 /* FlappyUploadTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DB9BE7A068AE865E3103BD0302BB9C0 /* FlappyUploadTool.m */; };
+		37B0BF2484BE142772F5429AEE5CF0B1 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 95839D96A3B1068B4231DD1471CCFD74 /* GCDAsyncUdpSocket.m */; };
 		37F6A3BECF37C125152A3BBA232AD7DC /* NSObject+MJKeyValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CC392B5B84EEA40CAF26EF7242C908C /* NSObject+MJKeyValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		39530702DD43115F6D3F3BEAAE2A0E44 /* GPBStruct.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 2323B3AA10DE584B533DC62270CC1A1B /* GPBStruct.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3BE9E0D1640F1CC98A04EAE95CFD2775 /* Struct.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 6056CC095AD98EF17EC875A50ABA56D2 /* Struct.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -77,6 +79,7 @@
 		4C39C37315CDC5029F4E9CC8A3198BD9 /* Any.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D9A61A011B5799CBD80236EEFE2AD247 /* Any.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CCC92A9A4E32DB6DB1E037151D44A5F /* SessionData.h in Headers */ = {isa = PBXBuildFile; fileRef = AED2911B1BFFC5D58F83B3E4B0283F28 /* SessionData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4DCB59DE84A69063E9485E4D8BF8C637 /* AFNetworking-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F5BF2C789D670405342A1B0BB459B3B5 /* AFNetworking-dummy.m */; };
+		4FC2272F4C11472C903CFCC6A101313E /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 7258251DA8E9D4FF39D79306A1669BB1 /* GCDAsyncSocket.m */; };
 		5161910D196B162679B67EB74B6AEE2F /* ChatRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C8EBA01E7F2BF87F849CD1E3707DCB /* ChatRoute.m */; };
 		52E68E9AFF4A9C20F05A07F3E55EAF59 /* AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 32A39866166F7AE7CFA2A22332C85FD8 /* AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		550C7289647BF10B61AEB649D38F4C42 /* FlappyStringTool.m in Sources */ = {isa = PBXBuildFile; fileRef = C4078B046CEFDBFD5DA859BB30696773 /* FlappyStringTool.m */; };
@@ -199,16 +202,13 @@
 		C06C8A74707298E961D44141C1CA4E12 /* FlappyMessageListener.m in Sources */ = {isa = PBXBuildFile; fileRef = AD05CA9B0963AB800F35F2B2E4813E83 /* FlappyMessageListener.m */; };
 		C24736263DB2A3C48265F1BBD1EA6CB0 /* GPBStruct.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C63C4AB8D07DE5AF82E77A5F38DB94C /* GPBStruct.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C283373E2183D117B8EB2C9884DC3A07 /* FlappyIM.m in Sources */ = {isa = PBXBuildFile; fileRef = F4A16031EB35A06FF673FB9E24612AFA /* FlappyIM.m */; };
-		C2DFA93DF25F018AA81E9D441E1CAF26 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 95839D96A3B1068B4231DD1471CCFD74 /* GCDAsyncUdpSocket.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		C3296E1E1BCEAEE6294A3FE8562C0EFC /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = BF58FCAE513965896DB17A4F0AE31BBF /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C3720287B1BD1239122E262FBC10EA99 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C9388C24A6E1CE059B8753DA236993B /* AVKit.framework */; };
-		C577175BC7C3EA73248A5CB041587053 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 7258251DA8E9D4FF39D79306A1669BB1 /* GCDAsyncSocket.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		C8B04F633E60BDE1C65FFF161287D532 /* GPBAny.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C92C4831EDE935DF8ED53326C749319 /* GPBAny.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		CA2B5FBBE30F8FB8E006A65B828B56E3 /* ChatImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 68194D3E6466E62002C5DA95EDAD1FCA /* ChatImage.m */; };
 		CA6CA02141FC454EE49E3DF1687BC5DD /* GPBCodedOutputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 925FC9C35C7F71883C767595D84B1066 /* GPBCodedOutputStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CB8861BB7084F64AF072C947B5CD49BB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA966A2F70D987DC4D45366F9F19B45 /* UIKit.framework */; };
 		CBA797C292CF129755168E042F96531E /* NSObject+MJCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = FB13DD8318B2AEA1A45E9F5A96226D51 /* NSObject+MJCoding.m */; };
-		CBAA830E4F43D7A6DBBDE378713ADDD0 /* CocoaAsyncSocket-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 33327139DBA79DB6507A21F117BF083D /* CocoaAsyncSocket-dummy.m */; };
 		CCD4362E8522B5BC2820666098E91B93 /* NSObject+MJCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 5915A638493CA473B03AA8D0C06EA5B4 /* NSObject+MJCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CDEF12A353FEBC8FE4E2EA0D3FFAC615 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 84904105AFA4DF14B923A0FFA118B0A3 /* AFURLRequestSerialization.m */; };
 		CE9F398B1DAD84FEA79B6E830A05E852 /* MJExtension-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5212477F2CA5FDB0474A536260A86F88 /* MJExtension-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1700,7 +1700,7 @@
 			buildConfigurationList = B0A95C19FCB7B5FAAC46BE001C359756 /* Build configuration list for PBXNativeTarget "CocoaAsyncSocket" */;
 			buildPhases = (
 				17317FE99BCBCAE1DCC6BF783E1EFAF0 /* Headers */,
-				D16C692EA2A4A203DC5FD33344704672 /* Sources */,
+				B9BA2F3E20981E6576E8626EADB9300B /* Sources */,
 				D37DD023A3721BF2E9A52660FA8A3C6D /* Frameworks */,
 				3D473FD104BFCD98C99B267430355524 /* Resources */,
 			);
@@ -1946,6 +1946,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B9BA2F3E20981E6576E8626EADB9300B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12F482FE2022286A223FFC9BFA84F83A /* CocoaAsyncSocket-dummy.m in Sources */,
+				4FC2272F4C11472C903CFCC6A101313E /* GCDAsyncSocket.m in Sources */,
+				37B0BF2484BE142772F5429AEE5CF0B1 /* GCDAsyncUdpSocket.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BD5E4E136FD3CDDEBCB59A7B2A0F77D7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1974,16 +1984,6 @@
 				6C239323DE74D9551EB571A31A24EC1E /* UIProgressView+AFNetworking.m in Sources */,
 				AC29EE5318026D0BAF479C904536378F /* UIRefreshControl+AFNetworking.m in Sources */,
 				657D596F7ED1260403D4E064E6BF8CD1 /* WKWebView+AFNetworking.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D16C692EA2A4A203DC5FD33344704672 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CBAA830E4F43D7A6DBBDE378713ADDD0 /* CocoaAsyncSocket-dummy.m in Sources */,
-				C577175BC7C3EA73248A5CB041587053 /* GCDAsyncSocket.m in Sources */,
-				C2DFA93DF25F018AA81E9D441E1CAF26 /* GCDAsyncUdpSocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2127,7 +2127,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0556C35DDC79E688ACB1A275E286BC25 /* Release */ = {
+		0247D858711773713777F25A7771B350 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D51B59805DC6071E0AFAD9BC75D753F1 /* CocoaAsyncSocket.release.xcconfig */;
 			buildSettings = {
@@ -2142,7 +2142,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket.modulemap";
 				PRODUCT_MODULE_NAME = CocoaAsyncSocket;
@@ -2534,6 +2534,36 @@
 			};
 			name = Debug;
 		};
+		7EB696D49BFDA62EBF045C0A10971288 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3839E7E9B770E81D0A78B3080A57489A /* CocoaAsyncSocket.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket.modulemap";
+				PRODUCT_MODULE_NAME = CocoaAsyncSocket;
+				PRODUCT_NAME = CocoaAsyncSocket;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 		8CC1C3DEBCFFCB9CD15A2E14E531F6EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 73AC61D577D3D6E823797F502D1C830B /* FMDB.debug.xcconfig */;
@@ -2782,36 +2812,6 @@
 			};
 			name = Debug;
 		};
-		EC1B78CFC42C10C62E61A9E190E3BE0F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3839E7E9B770E81D0A78B3080A57489A /* CocoaAsyncSocket.debug.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket.modulemap";
-				PRODUCT_MODULE_NAME = CocoaAsyncSocket;
-				PRODUCT_NAME = CocoaAsyncSocket;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2881,8 +2881,8 @@
 		B0A95C19FCB7B5FAAC46BE001C359756 /* Build configuration list for PBXNativeTarget "CocoaAsyncSocket" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				EC1B78CFC42C10C62E61A9E190E3BE0F /* Debug */,
-				0556C35DDC79E688ACB1A275E286BC25 /* Release */,
+				7EB696D49BFDA62EBF045C0A10971288 /* Debug */,
+				0247D858711773713777F25A7771B350 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
