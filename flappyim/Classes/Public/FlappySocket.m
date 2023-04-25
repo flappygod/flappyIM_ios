@@ -336,8 +336,6 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 //发送消息
 -(void)sendMessage:(ChatMessage*) chatMsg{
-    //发送消息
-    [self notifyMessageSend:chatMsg];
     
     @try {
         //发送消息轻轻
@@ -629,24 +627,6 @@ static  GCDAsyncSocket*  _instanceSocket;
         for(int s=0;s<array.count;s++){
             SessionListener listener=[array objectAtIndex:s];
             listener(session);
-        }
-    });
-}
-
-//通知消息创建
--(void)notifyMessageSend:(ChatMessage*)message{
-    if(message==nil){
-        return;
-    }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
-        for(int s=0;s<array.count;s++){
-            NSString* str=[array objectAtIndex:s];
-            NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-            for(int w=0;w<listeners.count;w++){
-                FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                [listener onSend:message];
-            }
         }
     });
 }

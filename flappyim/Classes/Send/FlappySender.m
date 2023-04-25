@@ -187,7 +187,7 @@
     uploadReq.type=@"voice";
     
     [req uploadFileBaseModel:[FlappyApiConfig shareInstance].URL_fileUpload
-                             andModel:uploadReq];
+                    andModel:uploadReq];
     //添加进入请求列表，方式请求被回收
     [self.reqArray addObject:req];
     
@@ -306,7 +306,7 @@
     uploadReq.name=@"file";
     uploadReq.type=@"image";
     [req uploadFileBaseModel:[FlappyApiConfig shareInstance].URL_fileUpload
-                             andModel:uploadReq];
+                    andModel:uploadReq];
     
     
     //添加进入请求列表，方式请求被回收
@@ -442,7 +442,7 @@
     [uplaods addObject:uploadReq];
     
     [req uploadFilesBaseModel:[FlappyApiConfig shareInstance].URL_videoUpload
-                            andModels:uplaods];
+                    andModels:uplaods];
     //添加进入请求列表，方式请求被回收
     [self.reqArray addObject:req];
     
@@ -525,7 +525,7 @@
     uploadReq.name=@"file";
     uploadReq.type=@"file";
     [req uploadFileBaseModel:[FlappyApiConfig shareInstance].URL_fileUpload
-                             andModel:uploadReq];
+                    andModel:uploadReq];
     
     
     //添加进入请求列表，方式请求被回收
@@ -591,8 +591,23 @@
         //否则更新
         [[FlappyDataBase shareInstance] updateMessage:msg];
     }
+    [self notifyMessageSend:msg];
 }
 
+//通知消息发送
+-(void)notifyMessageSend:(ChatMessage*)msg{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+            for(int w=0;w<listeners.count;w++){
+                FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                [listener onSend:msg];
+            }
+        }
+    });
+}
 
 
 //发送失败
