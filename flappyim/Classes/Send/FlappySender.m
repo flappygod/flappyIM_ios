@@ -149,8 +149,12 @@
         NSString* resultCode=dic[@"code"];
         //成功
         if(resultCode.integerValue==RESULT_SUCCESS){
+            
+            NSArray* dataList=dic[@"data"];
             //地址
-            chatVoice.path=dic[@"data"][@"filePath"];
+            NSString* path=dataList.count > 0? dataList[0]:@"";
+            //地址
+            chatVoice.path=path;
             //设置
             [chatMsg setChatVoice:chatVoice];
             //上传完成发送消息
@@ -271,9 +275,9 @@
         if(resultCode.integerValue==RESULT_SUCCESS && [dic[@"data"] isKindOfClass:NSArray.class]){
             NSArray* dataList=dic[@"data"];
             //地址
-            NSString* imgPath=dataList.count > 0? dataList[0]:@"";
+            NSString* path=dataList.count > 0? dataList[0]:@"";
             //地址赋值
-            chatImg.path=imgPath;
+            chatImg.path=path;
             //设置
             [chatMsg setChatImage:chatImg];
             //上传完成发送消息
@@ -490,9 +494,9 @@
         if(resultCode.integerValue==RESULT_SUCCESS && [dic[@"data"] isKindOfClass:NSArray.class]){
             NSArray* dataList=dic[@"data"];
             //地址
-            NSString* imgPath=dataList.count > 0? dataList[0]:@"";
+            NSString* path=dataList.count > 0? dataList[0]:@"";
             //地址赋值
-            chatFile.path=imgPath;
+            chatFile.path=path;
             //设置
             [chatMsg setChatFile:chatFile];
             //上传完成发送消息
