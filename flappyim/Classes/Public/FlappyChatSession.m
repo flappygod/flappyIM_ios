@@ -153,13 +153,7 @@
     
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    //创建发送地址
-    ChatImage* image=[[ChatImage alloc]init];
-    //本地发送的地址
-    image.sendPath=path;
-    CGSize size=[FlappyImageTool getImageSizeWithPath:path];
-    image.width=[NSString stringWithFormat:@"%d",(int)size.width];
-    image.height=[NSString stringWithFormat:@"%d",(int)size.height];
+    
     
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
@@ -169,7 +163,11 @@
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
+    //本地发送的地址
+    ChatImage* image=[[ChatImage alloc]init];
+    image.sendPath=path;
     [chatmsg setChatImage:image];
+    
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_CREATE;
     
@@ -214,9 +212,6 @@
     
     
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    //创建发送地址
-    ChatVoice* voice=[[ChatVoice alloc]init];
-    voice.sendPath=path;
     
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
@@ -226,6 +221,9 @@
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VOICE;
+    //创建发送地址
+    ChatVoice* voice=[[ChatVoice alloc]init];
+    voice.sendPath=path;
     [chatmsg setChatVoice:voice];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_CREATE;
@@ -296,9 +294,6 @@
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure{
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    //创建发送地址
-    ChatVideo* video=[[ChatVideo alloc]init];
-    video.sendPath=path;
     
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
@@ -308,7 +303,11 @@
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VIDEO;
+    //创建发送地址
+    ChatVideo* video=[[ChatVideo alloc]init];
+    video.sendPath=path;
     [chatmsg setChatVideo:video];
+    
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_CREATE;
     

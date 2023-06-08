@@ -109,7 +109,7 @@
         if(audioAsset==nil){
             [self msgFailure:chatMsg];
             failure(chatMsg,[NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
-                    RESULT_FILEERR);
+                    RESULT_PARSE_ERROR);
             return;
         }
         
@@ -122,10 +122,8 @@
     } @catch (NSException *exception) {
         [self msgFailure:chatMsg];
         failure(chatMsg,[NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
-                RESULT_FILEERR);
+                RESULT_PARSE_ERROR);
         return;
-    } @finally {
-        
     }
     
     //更新消息
@@ -214,10 +212,13 @@
     
     //图片信息
     ChatImage* chatImg=[chatMsg getChatImage];
-    
-    //get image failed??
-    if(chatImg.width==0&&chatImg.height==0){
-        @try {
+    @try {
+        //先拿数据看看那
+        CGSize size=[FlappyImageTool getImageSizeWithPath:chatImg.sendPath];
+        chatImg.width=[NSString stringWithFormat:@"%d",(int)size.width];
+        chatImg.height=[NSString stringWithFormat:@"%d",(int)size.height];
+        //没有拿到，继续其他方式拿
+        if(chatImg.width==0&&chatImg.height==0){
             NSString* trueUrl=chatImg.sendPath;
             if([trueUrl hasPrefix:@"file://"]){
                 trueUrl = [trueUrl substringWithRange:NSMakeRange(7, trueUrl.length-7)];
@@ -228,37 +229,29 @@
             if(image==nil){
                 [self msgFailure:chatMsg];
                 failure(chatMsg,[NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
-                        RESULT_FILEERR);
+                        RESULT_PARSE_ERROR);
                 return;
             }
             //保存宽度
             chatImg.width=[NSString stringWithFormat:@"%ld",(long)image.size.width];
             //保存高度
             chatImg.height=[NSString stringWithFormat:@"%ld",(long)image.size.height];
-        } @catch (NSException *exception) {
-            //失败了
-            [self msgFailure:chatMsg];
-            //图片读取失败
-            failure(chatMsg,[NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
-                    RESULT_FILEERR);
-            //返回
-            return;
-        } @finally {
-            
         }
+    } @catch (NSException *exception) {
+        //失败了
+        [self msgFailure:chatMsg];
+        //图片读取失败
+        failure(chatMsg,[NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
+                RESULT_PARSE_ERROR);
+        //返回
+        return;
     }
-    
     //更新消息
     [chatMsg setChatImage:chatImg];
-    
-    
     //插入消息
     [self msgInsert:chatMsg];
-    
-    
     //开始请求
     FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
-    
     //自己
     __weak typeof(self) safeSelf=self;
     //用于引用
@@ -400,23 +393,19 @@
             //否则不用了
             url=[NSURL URLWithString:[NSString stringWithFormat:@"file://%@",chatVideo.sendPath]];
         }
-        
         //获取视频信息
         FlappyVideoInfo* info=[self videoInfoForUrl:url
                                                size:CGSizeMake(512, 512)];
-        
         //返回数据
-        if(info!=nil&&info.overPath!=nil&&info.duration!=nil&&info.vwidth!=nil&&info.vheight!=nil){
-            
-        }else{
-            @throw [[NSException alloc]initWithName:@"视频解析失败"
-                                             reason:@"视频解析失败"
-                                           userInfo:nil];
+        if(info==nil||info.overPath==nil||info.duration==nil||info.vwidth==nil||info.vheight==nil){
+                @throw [[NSException alloc]initWithName:@"视频解析失败"
+                                                 reason:@"视频解析失败"
+                                               userInfo:nil];
         }
-        
         chatVideo.width=info.vwidth;
         chatVideo.height=info.vheight;
         chatVideo.duration=info.duration;
+        chatVideo.coverSendPath = info.overPath;
         
         //上传文件
         FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
@@ -428,10 +417,8 @@
     } @catch (NSException *exception) {
         [self msgFailure:chatMsg];
         failure(chatMsg,[NSError errorWithDomain:@"视频读取失败" code:0 userInfo:nil],
-                RESULT_FILEERR);
+                RESULT_PARSE_ERROR);
         return;
-    } @finally {
-        
     }
     
     //消息
@@ -568,9 +555,7 @@
     //消息ID保存
     [self.sendingMessages setObject:chatMsg forKey:chatMsg.messageId];
     
-    
     [socket sendMessage:chatMsg];
-    
     
 }
 

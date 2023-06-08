@@ -11,12 +11,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ChatVideo : NSObject
 
-//发送的本地地址
-@property(nonatomic,copy) NSString*  sendPath;
 //地址
 @property(nonatomic,copy) NSString*  path;
+//发送的本地地址
+@property(nonatomic,copy) NSString*  sendPath;
 //封面图片
 @property(nonatomic,copy) NSString*  coverPath;
+//封面图片
+@property(nonatomic,copy) NSString*  coverSendPath;
 //时长
 @property(nonatomic,copy) NSString*  duration;
 //宽度
