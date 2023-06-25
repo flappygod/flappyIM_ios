@@ -398,9 +398,9 @@
                                                size:CGSizeMake(512, 512)];
         //返回数据
         if(info==nil||info.overPath==nil||info.duration==nil||info.vwidth==nil||info.vheight==nil){
-                @throw [[NSException alloc]initWithName:@"视频解析失败"
-                                                 reason:@"视频解析失败"
-                                               userInfo:nil];
+            @throw [[NSException alloc]initWithName:@"视频解析失败"
+                                             reason:@"视频解析失败"
+                                           userInfo:nil];
         }
         chatVideo.width=info.vwidth;
         chatVideo.height=info.vheight;
@@ -458,6 +458,11 @@
     //图片信息
     ChatFile* chatFile=[chatMsg getChatFile];
     
+    //文件大小
+    NSFileManager* manager = [NSFileManager defaultManager];
+    if ([manager fileExistsAtPath:chatFile.sendPath]){
+        chatFile.fileSize = [NSString stringWithFormat:@"%llu",[[manager attributesOfItemAtPath:chatFile.sendPath error:nil] fileSize]];
+    }
     
     //插入消息
     [self msgInsert:chatMsg];

@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 //文件名称
 @property(nonatomic,copy) NSString*  fileName;
+//文件大小
+@property(nonatomic,copy) NSString*  fileSize;
 //文件发送地址
 @property(nonatomic,copy) NSString*  sendPath;
 //文件网络地址
