@@ -406,6 +406,7 @@
         chatVideo.height=info.vheight;
         chatVideo.duration=info.duration;
         chatVideo.coverSendPath = info.overPath;
+        [chatMsg setChatVideo:chatVideo];
         
         //上传文件
         FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
