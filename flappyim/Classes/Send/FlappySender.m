@@ -410,7 +410,7 @@
         //上传文件
         FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
         uploadReq.path=info.overPath;
-        uploadReq.name=@"file";
+        uploadReq.name=@"cover";
         uploadReq.type=@"image";
         [uplaods addObject:uploadReq];
         
@@ -427,7 +427,7 @@
     //上传文件
     FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
     uploadReq.path=chatVideo.sendPath;
-    uploadReq.name=@"file";
+    uploadReq.name=@"video";
     uploadReq.type=@"video";
     //上传
     [uplaods addObject:uploadReq];
