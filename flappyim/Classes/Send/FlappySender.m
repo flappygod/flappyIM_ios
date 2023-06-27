@@ -463,6 +463,7 @@
     if ([manager fileExistsAtPath:chatFile.sendPath]){
         chatFile.fileSize = [NSString stringWithFormat:@"%llu",[[manager attributesOfItemAtPath:chatFile.sendPath error:nil] fileSize]];
     }
+    [chatMsg setChatFile:chatFile];
     
     //插入消息
     [self msgInsert:chatMsg];
