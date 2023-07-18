@@ -667,6 +667,7 @@
 -(void)createAccount:(NSString*)userID
          andUserName:(NSString*)userName
        andUserAvatar:(NSString*)userAvatar
+         andUserData:(NSString*)userData
           andSuccess:(FlappySuccess)success
           andFailure:(FlappyFailure)failure{
     
@@ -675,6 +676,7 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userExtendID":userID,
                                  @"userName":userName,
+                                 @"userData":userData,
                                  @"userAvatar":userAvatar
     };
     
@@ -686,6 +688,30 @@
     
 }
 
+//创建账号
+-(void)updateAccount:(NSString*)userID
+         andUserName:(NSString*)userName
+       andUserAvatar:(NSString*)userAvatar
+         andUserData:(NSString*)userData
+          andSuccess:(FlappySuccess)success
+          andFailure:(FlappyFailure)failure{
+    
+    //注册地址
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_update;
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"userExtendID":userID,
+                                 @"userName":userName,
+                                 @"userData":userData,
+                                 @"userAvatar":userAvatar
+    };
+    
+    //请求数据
+    [FlappyApiRequest postRequest:urlString
+                   withParameters:parameters
+                      withSuccess:success
+                      withFailure:failure];
+    
+}
 
 
 //登录账号

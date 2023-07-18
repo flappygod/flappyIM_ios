@@ -36,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString* URL_changePush;
 //注册
 @property(nonatomic,copy) NSString* URL_register;
+//更新用户信息
+@property(nonatomic,copy) NSString* URL_update;
 //登录
 @property(nonatomic,copy) NSString* URL_login;
 //登出

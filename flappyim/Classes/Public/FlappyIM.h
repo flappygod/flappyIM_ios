@@ -83,6 +83,15 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)createAccount:(NSString*)userID
          andUserName:(NSString*)userName
        andUserAvatar:(NSString*)userAvatar
+         andUserData:(NSString*)userData
+          andSuccess:(FlappySuccess)success
+          andFailure:(FlappyFailure)failure;
+
+//更新账号信息
+-(void)updateAccount:(NSString*)userID
+         andUserName:(NSString*)userName
+       andUserAvatar:(NSString*)userAvatar
+         andUserData:(NSString*)userData
           andSuccess:(FlappySuccess)success
           andFailure:(FlappyFailure)failure;
 

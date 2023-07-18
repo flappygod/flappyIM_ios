@@ -84,6 +84,9 @@
     //创建账户
     self.URL_register= [NSString stringWithFormat:@"%@/api/register",self.BaseUrl];
     
+    //创建账户
+    self.URL_update= [NSString stringWithFormat:@"%@/api/updateUser",self.BaseUrl];
+    
     //登录账号
     self.URL_login =[NSString stringWithFormat:@"%@/api/login",self.BaseUrl];
     
