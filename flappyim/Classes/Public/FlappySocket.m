@@ -111,7 +111,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         //用户ID
         info.userId=self.user.userId;
         //推送ID
-        info.pushid=[FlappyIM shareInstance].pushID;
+        info.pushId=[FlappyIM shareInstance].pushID;
         //登录信息
         if([[FlappyData shareInstance] getUser]!=nil){
             info.latest=[[FlappyData shareInstance] getUser].latest;

@@ -118,7 +118,7 @@ GPB_FINAL @interface FlappyResponse : GPBMessage
 typedef GPB_ENUM(ReqLogin_FieldNumber) {
   ReqLogin_FieldNumber_UserId = 1,
   ReqLogin_FieldNumber_Device = 2,
-  ReqLogin_FieldNumber_Pushid = 3,
+  ReqLogin_FieldNumber_PushId = 3,
   ReqLogin_FieldNumber_Latest = 4,
 };
 
@@ -131,7 +131,7 @@ GPB_FINAL @interface ReqLogin : GPBMessage
 @property(nonatomic, readwrite, copy, null_resettable) NSString *device;
 
 /** 推送ID */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *pushid;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *pushId;
 
 /** 最后的消息序号 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *latest;
@@ -336,7 +336,7 @@ GPB_FINAL @interface FlappyKafka : GPBMessage
 typedef GPB_ENUM(Route_FieldNumber) {
   Route_FieldNumber_UserId = 1,
   Route_FieldNumber_Device = 2,
-  Route_FieldNumber_Pushid = 3,
+  Route_FieldNumber_PushId = 3,
   Route_FieldNumber_PushType = 4,
   Route_FieldNumber_Time = 5,
   Route_FieldNumber_PushPlat = 6,
@@ -351,7 +351,7 @@ GPB_FINAL @interface Route : GPBMessage
 @property(nonatomic, readwrite, copy, null_resettable) NSString *device;
 
 /** 推送ID */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *pushid;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *pushId;
 
 /** 推送类型 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *pushType;

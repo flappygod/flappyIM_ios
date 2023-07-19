@@ -216,14 +216,14 @@ typedef struct FlappyResponse__storage_ {
 
 @dynamic userId;
 @dynamic device;
-@dynamic pushid;
+@dynamic pushId;
 @dynamic latest;
 
 typedef struct ReqLogin__storage_ {
   uint32_t _has_storage_[1];
   NSString *userId;
   NSString *device;
-  NSString *pushid;
+  NSString *pushId;
   NSString *latest;
 } ReqLogin__storage_;
 
@@ -252,12 +252,12 @@ typedef struct ReqLogin__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "pushid",
+        .name = "pushId",
         .dataTypeSpecific.clazz = Nil,
-        .number = ReqLogin_FieldNumber_Pushid,
+        .number = ReqLogin_FieldNumber_PushId,
         .hasIndex = 2,
-        .offset = (uint32_t)offsetof(ReqLogin__storage_, pushid),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .offset = (uint32_t)offsetof(ReqLogin__storage_, pushId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
       {
@@ -280,7 +280,7 @@ typedef struct ReqLogin__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\001\005A\000";
+        "\002\001\005A\000\003\006\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG
@@ -886,7 +886,7 @@ typedef struct FlappyKafka__storage_ {
 
 @dynamic userId;
 @dynamic device;
-@dynamic pushid;
+@dynamic pushId;
 @dynamic pushType;
 @dynamic time;
 @dynamic pushPlat;
@@ -894,7 +894,7 @@ typedef struct FlappyKafka__storage_ {
 typedef struct Route__storage_ {
   uint32_t _has_storage_[1];
   NSString *device;
-  NSString *pushid;
+  NSString *pushId;
   NSString *pushType;
   NSString *time;
   NSString *pushPlat;
@@ -926,12 +926,12 @@ typedef struct Route__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "pushid",
+        .name = "pushId",
         .dataTypeSpecific.clazz = Nil,
-        .number = Route_FieldNumber_Pushid,
+        .number = Route_FieldNumber_PushId,
         .hasIndex = 2,
-        .offset = (uint32_t)offsetof(Route__storage_, pushid),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .offset = (uint32_t)offsetof(Route__storage_, pushId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
       {
@@ -972,7 +972,7 @@ typedef struct Route__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\003\001\005A\000\004\010\000\006\010\000";
+        "\004\001\005A\000\003\006\000\004\010\000\006\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG
