@@ -52,7 +52,7 @@
         return;
     }
     //4.数据库中创建表（可创建多张）
-    NSString *sql = @"create table if not exists message (messageId TEXT PRIMARY KEY,messageSession TEXT,messageSessionType INTEGER,messageSessionOffset INTEGER,messageTableSeq INTEGER,messageType INTEGER ,messageSendId TEXT,messageSendExtendId TEXT,messageReceiveId TEXT,messageReceiveExtendId TEXT,messageContent TEXT,messageSendState INTEGER,messageReadState INTEGER,isDelete INTEGER,messageDate TEXT,messageStamp INTEGER,deleteDate TEXT,messageInsertUser TEXT,primary key (messageId))";
+    NSString *sql = @"create table if not exists message (messageId TEXT PRIMARY KEY,messageSession TEXT,messageSessionType INTEGER,messageSessionOffset INTEGER,messageTableSeq INTEGER,messageType INTEGER ,messageSendId TEXT,messageSendExtendId TEXT,messageReceiveId TEXT,messageReceiveExtendId TEXT,messageContent TEXT,messageSendState INTEGER,messageReadState INTEGER,isDelete INTEGER,messageDate TEXT,messageStamp INTEGER,deleteDate TEXT,messageInsertUser TEXT,primary key (messageId,messageInsertUser))";
     
     NSString *sqlTwo=@"create table if not exists session (sessionId TEXT,sessionExtendId TEXT,sessionType INTEGER,sessionInfo TEXT,sessionName TEXT,sessionImage TEXT,sessionOffset TEXT,sessionStamp INTEGER,sessionCreateDate TEXT,sessionCreateUser TEXT,sessionDeleted INTEGER,sessionDeletedDate TEXT,users TEXT,sessionInsertUser TEXT,primary key (sessionId,sessionInsertUser))";
     
@@ -434,12 +434,20 @@
             return false;
         }
         
+        
+        //获取user
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return false;
+        }
+        
+        
         //是否成功
         Boolean totalSuccess=true;
         
         //查询当前用户是否存在一条当前一样的会话
-        FMResultSet *formers = [db executeQuery:@"select * from message where messageId = ?"
-                           withArgumentsInArray:@[msg.messageId]];
+        FMResultSet *formers = [db executeQuery:@"select * from message where messageId = ? and messageInsertUser = ?"
+                           withArgumentsInArray:@[msg.messageId,user.userExtendId]];
         
         if([formers next]){
             
@@ -470,7 +478,7 @@
             
             [formers close];
             
-            BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSendId,messageSendExtendId,messageReceiveId,messageReceiveExtendId,messageContent,messageSendState,messageReadState,messageDate,deleteDate,messageStamp,isDelete) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+            BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSendId,messageSendExtendId,messageReceiveId,messageReceiveExtendId,messageContent,messageSendState,messageReadState,messageDate,deleteDate,messageStamp,isDelete,messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                        withArgumentsInArray:@[
                 //插入部分
                 [FlappyStringTool toUnNullStr:msg.messageId],
@@ -489,8 +497,8 @@
                 [FlappyStringTool toUnNullStr:msg.messageDate],
                 [FlappyStringTool toUnNullStr:msg.deleteDate],
                 [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],
-                [NSNumber numberWithInteger:msg.isDelete]
-                
+                [NSNumber numberWithInteger:msg.isDelete],
+                user.userExtendId
             ]];
             if(!result){
                 totalSuccess=false;
@@ -509,23 +517,33 @@
 
 //插入消息列表
 -(Boolean)insertMsgs:(NSMutableArray*)array{
-    if(array==nil||array.count==0){
-        return true;
-    }
     @synchronized (self) {
+        
+        //如果为空
+        if(array==nil||array.count==0){
+            return true;
+        }
+        
+        //获取user
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return false;
+        }
+        
         //获取db
         FMDatabase* db=[self openDB];
         if(db==nil){
             return false;
         }
         
+        //消息
         NSMutableArray* contains=[[NSMutableArray alloc]init];
         
+        //查询当前用户是否存在一条当前一样的会话
         for(int s=0;s<array.count;s++){
             ChatMessage* msg=[array objectAtIndex:s];
-            //查询当前用户是否存在一条当前一样的会话
-            FMResultSet *formers = [db executeQuery:@"select * from message where messageId = ?"
-                               withArgumentsInArray:@[msg.messageId]];
+            FMResultSet *formers = [db executeQuery:@"select * from message where messageId = ? and messageInsertUser = ?"
+                               withArgumentsInArray:@[msg.messageId,user.userExtendId]];
             
             if([formers next]){
                 [contains addObject:[NSNumber numberWithInteger:1]];
