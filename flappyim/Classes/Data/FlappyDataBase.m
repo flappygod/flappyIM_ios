@@ -91,6 +91,12 @@
         return true;
     }
     
+    //获取user
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return false;
+    }
+    
     //为了保证线程安全,因为我们需要及时返还，又不能使用FMDatabaseQueue，只能加锁
     @synchronized (self) {
         //打开数据库
@@ -105,8 +111,8 @@
             //会话数据
             SessionData* data=[array objectAtIndex:s];
             //查询当前用户是否已经存在这个会话
-            FMResultSet *formers = [db executeQuery:@"select * from session where sessionInsertUser = ? and sessionExtendId=?"
-                               withArgumentsInArray:@[[FlappyData shareInstance].getUser.userExtendId,data.sessionExtendId]];
+            FMResultSet *formers = [db executeQuery:@"select * from session where sessionInsertUser = ? and sessionId=?"
+                               withArgumentsInArray:@[user.userExtendId,data.sessionId]];
             //如果存在
             if([formers next]){
                 //存在
@@ -152,7 +158,7 @@
                     [NSNumber numberWithInteger:data.isDelete],
                     [FlappyStringTool toUnNullStr:data.deleteDate],
                     [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:usersDataDic]],
-                    [FlappyStringTool toUnNullStr:[FlappyData shareInstance].getUser.userExtendId],
+                    [FlappyStringTool toUnNullStr:user.userExtendId],
                     data.sessionExtendId
                     
                 ]];
@@ -186,7 +192,7 @@
                     [NSNumber numberWithInteger:data.isDelete],
                     [FlappyStringTool toUnNullStr:data.deleteDate],
                     [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:usersDataDic]],
-                    [FlappyStringTool toUnNullStr:[FlappyData shareInstance].getUser.userExtendId]
+                    [FlappyStringTool toUnNullStr:user.userExtendId]
                     
                 ]];
                 
@@ -218,6 +224,12 @@
 //插入单条会话,如果存在就更新
 -(Boolean)insertSession:(SessionData*)data{
     
+    //获取user
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return false;
+    }
+    
     @synchronized (self) {
         //获取db
         FMDatabase* db=[self openDB];
@@ -228,7 +240,7 @@
         Boolean totalSuccess=true;
         //查询当前用户是否存在一条当前一样的会话
         FMResultSet *formers = [db executeQuery:@"select * from session where sessionInsertUser = ? and sessionExtendId=?"
-                           withArgumentsInArray:@[[FlappyData shareInstance].getUser.userExtendId,data.sessionExtendId]];
+                           withArgumentsInArray:@[user.userExtendId,data.sessionExtendId]];
         //如果存在
         if([formers next]){
             //如果存在就更新
@@ -257,7 +269,7 @@
                 [NSNumber numberWithInteger:data.isDelete],
                 [FlappyStringTool toUnNullStr:data.deleteDate],
                 [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:usersDataDic]],
-                [FlappyStringTool toUnNullStr:[FlappyData shareInstance].getUser.userExtendId],
+                [FlappyStringTool toUnNullStr:user.userExtendId],
                 data.sessionExtendId
                 
             ]];
@@ -292,7 +304,7 @@
                 [NSNumber numberWithInteger:data.isDelete],
                 [FlappyStringTool toUnNullStr:data.deleteDate],
                 [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:usersDataDic]],
-                [FlappyStringTool toUnNullStr:[FlappyData shareInstance].getUser.userExtendId]
+                [FlappyStringTool toUnNullStr:user.userExtendId]
                 
             ]];
             
@@ -314,15 +326,21 @@
 -(SessionData*)getUserSessionByExtendID:(NSString*)sessionExtendId{
     @synchronized (self) {
         
-        NSString* userExtendID=[FlappyData shareInstance].getUser.userExtendId;
-        
         //获取db
         FMDatabase* db=[self openDB];
         if(db==nil){
             return nil;
         }
+        
+        //获取user
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return nil;
+        }
+        
+        
         FMResultSet *result = [db executeQuery:@"select * from session where sessionInsertUser = ? and sessionExtendId=?"
-                          withArgumentsInArray:@[userExtendID,sessionExtendId]];
+                          withArgumentsInArray:@[user.userExtendId,sessionExtendId]];
         //返回消息
         if ([result next]) {
             
