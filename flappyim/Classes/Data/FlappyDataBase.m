@@ -86,24 +86,27 @@
 
 //插入多条会话，如果存在就更新
 -(Boolean)insertSessions:(NSMutableArray*)array{
-    //没有的情况下就是成功
-    if(array==nil||array.count==0){
-        return true;
-    }
-    
-    //获取user
-    ChatUser* user = [[FlappyData shareInstance] getUser];
-    if(user==nil){
-        return false;
-    }
     
     //为了保证线程安全,因为我们需要及时返还，又不能使用FMDatabaseQueue，只能加锁
     @synchronized (self) {
+        
+        //没有的情况下就是成功
+        if(array==nil||array.count==0){
+            return true;
+        }
+        
+        //获取user
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return false;
+        }
+        
         //打开数据库
         FMDatabase* db=[self openDB];
         if(db==nil){
             return false;
         }
+        
         //查询浙西数组是否存在
         NSMutableArray* contains=[[NSMutableArray alloc] init];
         //遍历
@@ -203,12 +206,12 @@
                 }
             }
         }
+        //如果全部成功了
         if(totalSuccess){
-            //如果全部成功了
             [db commit];
         }
+        //失败了就回滚
         else{
-            //失败了就回滚
             [db rollback];
         }
         [db close];
