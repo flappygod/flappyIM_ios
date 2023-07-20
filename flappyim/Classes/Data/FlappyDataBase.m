@@ -646,12 +646,20 @@
 //通过ID获取消息
 -(ChatMessage*)getMessageByID:(NSString*)messageID{
     @synchronized (self) {
+        
+        //获取user
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return false;
+        }
+        
         //获取db
         FMDatabase* db=[self openDB];
         if(db==nil){
             return nil;
         }
-        FMResultSet *result = [db executeQuery:@"select * from message where messageId = ?" withArgumentsInArray:@[messageID]];
+        
+        FMResultSet *result = [db executeQuery:@"select * from message where messageId = ? and messageInsertUser = ?" withArgumentsInArray:@[messageID,user.userExtendId]];
         //返回消息
         if ([result next]) {
             ChatMessage *msg = [ChatMessage new];
@@ -686,12 +694,18 @@
 //更新数据
 -(Boolean)updateMessage:(ChatMessage*)msg{
     @synchronized (self) {
+        //获取user
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return false;
+        }
         //获取db
         FMDatabase* db=[self openDB];
         if(db==nil){
             return false;
         }
-        BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ?"
+        //更新消息
+        BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ? and messageInsertUser = ?"
                    withArgumentsInArray:@[
             [FlappyStringTool toUnNullStr:msg.messageSession],
             [NSNumber numberWithInteger:msg.messageSessionType],
@@ -708,7 +722,8 @@
             [FlappyStringTool toUnNullStr:msg.messageDate],
             [FlappyStringTool toUnNullStr:msg.deleteDate],
             [NSNumber numberWithInteger:msg.isDelete],
-            msg.messageId]];
+            msg.messageId,
+            user.userExtendId]];
         [db close];
         if (result) {
             return true;
@@ -721,13 +736,19 @@
 //通过会话ID获取最近的一次会话
 -(ChatMessage*)getSessionLatestMessage:(NSString*)sessionID{
     @synchronized (self) {
+        //获取user
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return nil;
+        }
         //获取db
         FMDatabase* db=[self openDB];
         if(db==nil){
             return nil;
         }
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? order by messageTableSeq desc,messageStamp desc limit 1" withArgumentsInArray:@[sessionID]];
+        
         //返回消息
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageInsertUser = ? order by messageTableSeq desc,messageStamp desc limit 1" withArgumentsInArray:@[sessionID,user.userExtendId]];
         if ([result next]) {
             ChatMessage *msg = [ChatMessage new];
             msg.messageId = [result stringForColumn:@"messageId"];
@@ -749,7 +770,6 @@
             msg.deleteDate = [result stringForColumn:@"deleteDate"];
             [result close];
             [db close];
-            //返回消息
             return msg;
         }
         [result close];
@@ -761,18 +781,21 @@
 //获取消息
 -(NSMutableArray*)getSessionSequeceMessage:(NSString*)sessionID
                                 withOffset:(NSString*)tabSequece{
+    //获取user
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return [[NSMutableArray alloc]init];
+    }
     //获取db
     FMDatabase* db=[self openDB];
     if(db==nil){
-        return nil;
+        return [[NSMutableArray alloc]init];
     }
-    FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageTableSeq=? order by messageStamp  desc" withArgumentsInArray:@[sessionID,tabSequece]];
     
-    //创建消息列表
+    //获取消息
+    FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageTableSeq=? and messageInsertUser = ? order by messageStamp  desc" withArgumentsInArray:@[sessionID,tabSequece,user.userExtendId]];
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
-    //返回消息
     while ([result next]) {
-        //获取之前的消息
         ChatMessage *msg = [ChatMessage new];
         msg.messageId = [result stringForColumn:@"messageId"];
         msg.messageSession = [result stringForColumn:@"messageSession"];
@@ -801,18 +824,23 @@
 //获取没有处理的系统消息
 -(NSMutableArray*)getNotActionSystemMessageWithSession:(NSString*)sessionID{
     @synchronized (self) {
+        
+        //获取user
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return [[NSMutableArray alloc]init];
+        }
+        
         //获取db
         FMDatabase* db=[self openDB];
         if(db==nil){
-            return nil;
+            return [[NSMutableArray alloc]init];
         }
-        FMResultSet *result = [db executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageSession=? order by messageTableSeq  desc" withArgumentsInArray:@[sessionID]];
         
-        //创建消息列表
+        //获取列表
+        FMResultSet *result = [db executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageSession=? and messageInsertUser = ? order by messageTableSeq  desc" withArgumentsInArray:@[sessionID,user.userExtendId]];
         NSMutableArray* retArray=[[NSMutableArray alloc]init];
-        //返回消息
         while ([result next]) {
-            //获取之前的消息
             ChatMessage *msg = [ChatMessage new];
             msg.messageId = [result stringForColumn:@"messageId"];
             msg.messageSession = [result stringForColumn:@"messageSession"];
@@ -842,18 +870,23 @@
 //获取没有处理的系统消息
 -(NSMutableArray*)getNotActionSystemMessage{
     @synchronized (self) {
+        
+        //获取user
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return [[NSMutableArray alloc]init];
+        }
+        
         //获取db
         FMDatabase* db=[self openDB];
         if(db==nil){
-            return nil;
+            return [[NSMutableArray alloc]init];
         }
-        FMResultSet *result = [db executeQuery:@"select * from message where messageReadState = 0 and messageType=0 order by messageTableSeq  desc"];
         
-        //创建消息列表
+        //获取消息
+        FMResultSet *result = [db executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageInsertUser = ? order by messageTableSeq  desc" withArgumentsInArray:@[user.userExtendId]];
         NSMutableArray* retArray=[[NSMutableArray alloc]init];
-        //返回消息
         while ([result next]) {
-            //获取之前的消息
             ChatMessage *msg = [ChatMessage new];
             msg.messageId = [result stringForColumn:@"messageId"];
             msg.messageSession = [result stringForColumn:@"messageSession"];
@@ -891,6 +924,19 @@
     
     
     @synchronized (self) {
+        //获取user
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return [[NSMutableArray alloc]init];
+        }
+        
+        //获取db
+        FMDatabase* db=[self openDB];
+        if(db==nil){
+            return [[NSMutableArray alloc]init];
+        }
+        
+        
         NSMutableArray* retArray=[[NSMutableArray alloc] init];
         //当前的
         NSMutableArray* sequeceArray=[self getSessionSequeceMessage:sessionID
@@ -903,18 +949,10 @@
             }
         }
         
-        //获取db
-        FMDatabase* db=[self openDB];
-        if(db==nil){
-            return nil;
-        }
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageTableSeq<? order by messageTableSeq desc,messageStamp  desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableSeq],[NSNumber numberWithInteger:size]]];
-        
-        //创建消息列表
+        //获取消息
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageTableSeq<? and messageInsertUser = ? order by messageTableSeq desc,messageStamp desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableSeq],user.userExtendId,[NSNumber numberWithInteger:size]]];
         NSMutableArray* listArray=[[NSMutableArray alloc]init];
-        //返回消息
         while ([result next]) {
-            //获取之前的消息
             ChatMessage *msg = [ChatMessage new];
             msg.messageId = [result stringForColumn:@"messageId"];
             msg.messageSession = [result stringForColumn:@"messageSession"];
@@ -941,7 +979,7 @@
         [db close];
         //结果集
         [retArray addObjectsFromArray:listArray];
-        
+        //获取
         if(retArray.count>size){
             NSMutableArray* newArray=[[NSMutableArray alloc]init];
             for(int s=0;s<size;s++){
