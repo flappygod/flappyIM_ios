@@ -388,7 +388,7 @@
         //获取db
         FMDatabase* db=[self openDB];
         if(db==nil){
-            return nil;
+            return [[NSMutableArray alloc] init];
         }
         FMResultSet *result = [db executeQuery:@"select * from session where sessionInsertUser = ?"
                           withArgumentsInArray:@[userExtendID]];
@@ -650,7 +650,7 @@
         //获取user
         ChatUser* user = [[FlappyData shareInstance] getUser];
         if(user==nil){
-            return false;
+            return nil;
         }
         
         //获取db
