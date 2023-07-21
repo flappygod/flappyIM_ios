@@ -105,6 +105,26 @@
     }]];
 }
 
+//获取唯一的ID
++(NSString*)getUUID{
+    NSString* former=[[FlappyData shareInstance]getPush];
+    if([FlappyStringTool isStringEmpty:former]){
+        NSString* UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [[FlappyData shareInstance]savePush:UUID];
+    }
+    return [[FlappyData shareInstance]getPush];
+}
+
+//设备的token
+-(void)setUUID:(NSString*)token{
+    //设置
+    [[FlappyData shareInstance]savePush:token];
+    //获取唯一的推送ID
+    self.pushID=token;
+}
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored"-Wdeprecated-declarations"
 
 //发送本地通知
 - (void)sendLocalNotification:(ChatMessage*)msg{
@@ -202,23 +222,7 @@
     }
 }
 
-//获取唯一的ID
-+(NSString*)getUUID{
-    NSString* former=[[FlappyData shareInstance]getPush];
-    if([FlappyStringTool isStringEmpty:former]){
-        NSString* UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        [[FlappyData shareInstance]savePush:UUID];
-    }
-    return [[FlappyData shareInstance]getPush];
-}
 
-//设备的token
--(void)setUUID:(NSString*)token{
-    //设置
-    [[FlappyData shareInstance]savePush:token];
-    //获取唯一的推送ID
-    self.pushID=token;
-}
 
 //注册远程推送和本地消息通知
 -(void)registerRemoteNotice:(UIApplication *)application{
@@ -268,6 +272,9 @@
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     }
 }
+
+#pragma GCC diagnostic pop
+
 
 //监听到本地的通知
 -(void)didReceiveRemoteNotification:(NSDictionary *)userInfo{
@@ -598,11 +605,8 @@
         }
         
         //当前是已经连接的，不需要继续登录了
-        if(self.flappysocket!=nil){
-            //不为空而且已经连接，不需要继续登录了
-            if(self.flappysocket.socket!=nil&&self.flappysocket.socket.isConnected){
-                return;
-            }
+        if(self.flappysocket!=nil && self.flappysocket.socket!=nil && self.flappysocket.socket.isConnected){
+            return;
         }
         
         //如果正在登录,那么延后执行
@@ -656,8 +660,8 @@
             }
         }else{
             [safeSelf performSelector:@selector(setupReconnect)
-                       withObject:nil
-                       afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
+                           withObject:nil
+                           afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
         }
     }];
 }
@@ -721,18 +725,16 @@
     
     @synchronized(FlappyIM.class){
         
-        //如果当前正在loading
+        //如果当前正在登录，那么直接失败，否则就设置为正在登录状态
         if(self.isLoginProgress){
-            
-            //直接失败
             failure([NSError errorWithDomain:@"A login thread also run"
                                         code:RESULT_NETERROR
                                     userInfo:nil],RESULT_NETERROR);
             return ;
+        }else{
+            self.isLoginProgress=true;
         }
         
-        //当前的设备正在登录
-        self.isLoginProgress=true;
         
         //如果当前有正在连接的socket,之前的正常下线
         if(self.flappysocket!=nil){
@@ -775,8 +777,8 @@
                                                      andFailure:wrap
                                                         andDead:^{
             [safeSelf performSelector:@selector(setupReconnect)
-                       withObject:nil
-                       afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
+                           withObject:nil
+                           afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
         }];
         
         //请求数据
@@ -904,8 +906,8 @@
                                                      andFailure:wrap
                                                         andDead:^{
             [safeSelf performSelector:@selector(setupReconnect)
-                       withObject:nil
-                       afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
+                           withObject:nil
+                           afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
         }];
         
         //请求数据
