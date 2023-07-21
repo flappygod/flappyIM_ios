@@ -659,7 +659,8 @@
             return nil;
         }
         
-        FMResultSet *result = [db executeQuery:@"select * from message where messageId = ? and messageInsertUser = ?" withArgumentsInArray:@[messageID,user.userExtendId]];
+        FMResultSet *result = [db executeQuery:@"select * from message where messageId = ? and messageInsertUser = ?"
+                          withArgumentsInArray:@[messageID,user.userExtendId]];
         //返回消息
         if ([result next]) {
             ChatMessage *msg = [ChatMessage new];
@@ -748,7 +749,8 @@
         }
         
         //返回消息
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageInsertUser = ? order by messageTableSeq desc,messageStamp desc limit 1" withArgumentsInArray:@[sessionID,user.userExtendId]];
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageInsertUser = ? order by messageTableSeq desc,messageStamp desc limit 1"
+                          withArgumentsInArray:@[sessionID,user.userExtendId]];
         if ([result next]) {
             ChatMessage *msg = [ChatMessage new];
             msg.messageId = [result stringForColumn:@"messageId"];
@@ -793,7 +795,8 @@
     }
     
     //获取消息
-    FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageTableSeq=? and messageInsertUser = ? order by messageStamp  desc" withArgumentsInArray:@[sessionID,tabSequece,user.userExtendId]];
+    FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageTableSeq=? and messageInsertUser = ? order by messageStamp  desc"
+                      withArgumentsInArray:@[sessionID,tabSequece,user.userExtendId]];
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
@@ -838,7 +841,8 @@
         }
         
         //获取列表
-        FMResultSet *result = [db executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageSession=? and messageInsertUser = ? order by messageTableSeq  desc" withArgumentsInArray:@[sessionID,user.userExtendId]];
+        FMResultSet *result = [db executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageSession=? and messageInsertUser = ? order by messageTableSeq  desc"
+                          withArgumentsInArray:@[sessionID,user.userExtendId]];
         NSMutableArray* retArray=[[NSMutableArray alloc]init];
         while ([result next]) {
             ChatMessage *msg = [ChatMessage new];
@@ -884,7 +888,8 @@
         }
         
         //获取消息
-        FMResultSet *result = [db executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageInsertUser = ? order by messageTableSeq  desc" withArgumentsInArray:@[user.userExtendId]];
+        FMResultSet *result = [db executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageInsertUser = ? order by messageTableSeq  desc"
+                          withArgumentsInArray:@[user.userExtendId]];
         NSMutableArray* retArray=[[NSMutableArray alloc]init];
         while ([result next]) {
             ChatMessage *msg = [ChatMessage new];
@@ -950,7 +955,8 @@
         }
         
         //获取消息
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageTableSeq<? and messageInsertUser = ? order by messageTableSeq desc,messageStamp desc limit ?" withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableSeq],user.userExtendId,[NSNumber numberWithInteger:size]]];
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSession = ? and messageTableSeq<? and messageInsertUser = ? order by messageTableSeq desc,messageStamp desc limit ?"
+                          withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableSeq],user.userExtendId,[NSNumber numberWithInteger:size]]];
         NSMutableArray* listArray=[[NSMutableArray alloc]init];
         while ([result next]) {
             ChatMessage *msg = [ChatMessage new];
