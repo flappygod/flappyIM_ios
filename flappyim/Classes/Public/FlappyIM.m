@@ -742,10 +742,8 @@
             self.flappysocket=nil;
         }
         
-        //注册地址
+        //构建注册请求参数
         NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
-        
-        //请求体，参数（NSDictionary 类型）
         NSDictionary *parameters = @{@"userID":@"",
                                      @"userExtendID":userExtendID,
                                      @"device":DEVICE_TYPE,
@@ -753,20 +751,13 @@
                                      @"pushplat":[FlappyApiConfig shareInstance].pushPlat
         };
         
-        //弱引用保证
-        __weak typeof(self) safeSelf=self;
-        
-        
         //错误这里讲socket 和 接口请求都合并起来，一个失败就代表都失败
+        __weak typeof(self) safeSelf=self;
         FlappyFailureWrap* wrap=[[FlappyFailureWrap alloc] initWithFailure:^(NSError *error,NSInteger code){
-            //失败
             failure(error,code);
-            //不在加载中状态
             safeSelf.isLoginProgress=false;
         }];
         
-        //安全
-        __weak typeof(wrap) safeWrap=wrap;
         
         
         //创建socket
@@ -776,12 +767,15 @@
         }
                                                      andFailure:wrap
                                                         andDead:^{
+            //如果socket非正常死亡，那么就跳转进入自动重连模式
             [safeSelf performSelector:@selector(setupReconnect)
                            withObject:nil
                            afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
         }];
         
+        
         //请求数据
+        __weak typeof(wrap) safeWrap=wrap;
         [FlappyApiRequest postRequest:urlString
                        withParameters:parameters
                           withSuccess:^(id data) {
