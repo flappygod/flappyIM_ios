@@ -624,7 +624,7 @@
         }
         
         //如果网络是正常连接的
-        if([_hostReachability currentReachabilityStatus]!=NotReachable&&self.isForground){
+        if([_hostReachability currentReachabilityStatus] != NotReachable&&self.isForground){
             
             //开始
             __weak typeof(self) safeSelf=self;
@@ -656,9 +656,6 @@
         }
     }
 }
-
-
-
 
 //创建账号
 -(void)createAccount:(NSString*)userID
@@ -802,52 +799,8 @@
             safeSelf.isLoginProgress=false;
         }];
     }
-    
 }
 
-
-//退出登录下线
--(void)logout:(FlappySuccess)success
-   andFailure:(FlappyFailure)failure{
-    
-    //加锁当前的
-    @synchronized (self) {
-        //为空直接出错
-        if([[FlappyData shareInstance] getUser] == nil){
-            //返回没有登录
-            failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
-            return ;
-        }
-        
-        //之前的正常下线
-        [self.flappysocket offline:true];
-        self.flappysocket=nil;
-        
-        //注册地址
-        NSString *urlString = [FlappyApiConfig shareInstance].URL_logout;
-        
-        //请求体，参数（NSDictionary 类型）
-        NSDictionary *parameters = @{@"userID":@"",
-                                     @"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
-                                     @"device":DEVICE_TYPE,
-                                     @"pushid":self.pushID,
-                                     @"pushplat":[FlappyApiConfig shareInstance].pushPlat
-        };
-        //请求数据
-        [FlappyApiRequest postRequest:urlString
-                       withParameters:parameters
-                          withSuccess:^(id data) {
-            //退出登录成功
-            success(data);
-            //清空当前相应的用户信息
-            [[FlappyData shareInstance] clearUser];
-        } withFailure:^(NSError * error, NSInteger code) {
-            //登录失败，清空回调
-            failure(error,code);
-        }];
-    }
-    
-}
 
 //自动登录
 -(void)autoLogin:(FlappySuccess)success
@@ -949,6 +902,49 @@
         }
     }];
 }
+
+//退出登录下线
+-(void)logout:(FlappySuccess)success
+   andFailure:(FlappyFailure)failure{
+    
+    //加锁当前的
+    @synchronized (self) {
+        //为空直接出错
+        if([[FlappyData shareInstance] getUser] == nil){
+            //返回没有登录
+            failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
+            return ;
+        }
+        
+        //之前的正常下线
+        [self.flappysocket offline:true];
+        self.flappysocket=nil;
+        
+        //注册地址
+        NSString *urlString = [FlappyApiConfig shareInstance].URL_logout;
+        
+        //请求体，参数（NSDictionary 类型）
+        NSDictionary *parameters = @{@"userID":@"",
+                                     @"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
+                                     @"device":DEVICE_TYPE,
+                                     @"pushid":self.pushID,
+                                     @"pushplat":[FlappyApiConfig shareInstance].pushPlat
+        };
+        //请求数据
+        [FlappyApiRequest postRequest:urlString
+                       withParameters:parameters
+                          withSuccess:^(id data) {
+            //退出登录成功
+            success(data);
+            //清空当前相应的用户信息
+            [[FlappyData shareInstance] clearUser];
+        } withFailure:^(NSError * error, NSInteger code) {
+            //登录失败，清空回调
+            failure(error,code);
+        }];
+    }
+}
+
 
 //保存推送类型
 -(void)savePushData:(id)data{
