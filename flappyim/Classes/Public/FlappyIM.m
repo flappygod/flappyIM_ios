@@ -619,7 +619,7 @@
         }
         
         //当前是已经连接的，不需要继续登录了
-        if(self.flappysocket!=nil && self.flappysocket.socket!=nil && self.flappysocket.socket.isConnected){
+        if([self isOnline]){
             return;
         }
         
