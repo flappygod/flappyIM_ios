@@ -589,7 +589,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     
     
     //如果再后台
-    if([FlappyIM shareInstance].isActive){
+    if([FlappyIM shareInstance].isForground){
         NSLog(@"当前处于UNMutableNotificationContent,收到信息");
         //存活状态才返回信息
         ChatUser* user=[[FlappyData shareInstance]getUser];

@@ -415,7 +415,7 @@
         //重新连接
         [self checkAutoLoginHttp];
         //当前是活跃的
-        self.isActive=true;
+        self.isForground=true;
     }
 }
 
@@ -432,7 +432,7 @@
         //重新连接
         [self checkAutoLoginHttp];
         //当前是活跃的
-        self.isActive=true;
+        self.isForground=true;
     }
 }
 
@@ -536,7 +536,7 @@
 
 //监听被home键盘
 -(void)applicationWillResignActive:(NSNotification *)notification{
-    self.isActive=false;
+    self.isForground=false;
     if(self.flappysocket!=nil){
         [self.flappysocket offline:true];
         self.flappysocket=nil;
@@ -546,7 +546,7 @@
 
 //监听进入页面
 -(void)applicationDidBecomeActive:(NSNotification *)notification{
-    self.isActive=true;
+    self.isForground=true;
     [self checkAutoLoginHttp];
 }
 
@@ -611,9 +611,11 @@
             return;
         }
         
-        //如果正在自动登录,那么延后执行
+        //如果正在自动登录,那么不执行
         if(self.isAutoLoginProgress){
             return;
+        }else{
+            self.isAutoLoginProgress=true;
         }
         
         //当前是已经连接的，不需要继续登录了
@@ -622,46 +624,40 @@
         }
         
         //如果网络是正常连接的
-        if([_hostReachability currentReachabilityStatus]!=NotReachable&&self.isActive){
-            NSLog(@"setupReconnect");
-            [self autoLogin];
+        if([_hostReachability currentReachabilityStatus]!=NotReachable&&self.isForground){
+            
+            //开始
+            __weak typeof(self) safeSelf=self;
+            
+            //防止重复请求
+            [self autoLogin:^(id data) {
+                NSLog(@"自动登录成功");
+                //自动登录成功了
+                safeSelf.isAutoLoginProgress=false;
+                
+            } andFailure:^(NSError * error, NSInteger code) {
+                //自动登录失败了
+                safeSelf.isAutoLoginProgress=false;
+                //当前账户已经被踢下线了
+                if(code==RESULT_KNICKED){
+                    ChatUser* uesr=[[FlappyData shareInstance]getUser];
+                    uesr.login=false;
+                    [[FlappyData shareInstance]saveUser:uesr];
+                    if(safeSelf.knicked!=nil){
+                        safeSelf.knicked();
+                        safeSelf.knicked=nil;
+                    }
+                }else{
+                    [safeSelf performSelector:@selector(checkAutoLoginHttp)
+                                   withObject:nil
+                                   afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
+                }
+            }];
         }
     }
 }
 
-//执行自动登录的方法
--(void)autoLogin{
-    //开始
-    __weak typeof(self) safeSelf=self;
-    
-    //开始自动登录
-    self.isAutoLoginProgress=true;
-    
-    //防止重复请求
-    [self autoLogin:^(id data) {
-        NSLog(@"自动登录成功");
-        //自动登录成功了
-        safeSelf.isAutoLoginProgress=false;
-        
-    } andFailure:^(NSError * error, NSInteger code) {
-        //自动登录失败了
-        safeSelf.isAutoLoginProgress=false;
-        //当前账户已经被踢下线了
-        if(code==RESULT_KNICKED){
-            ChatUser* uesr=[[FlappyData shareInstance]getUser];
-            uesr.login=false;
-            [[FlappyData shareInstance]saveUser:uesr];
-            if(safeSelf.knicked!=nil){
-                safeSelf.knicked();
-                safeSelf.knicked=nil;
-            }
-        }else{
-            [safeSelf performSelector:@selector(checkAutoLoginHttp)
-                           withObject:nil
-                           afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
-        }
-    }];
-}
+
 
 
 //创建账号
@@ -857,105 +853,101 @@
 -(void)autoLogin:(FlappySuccess)success
       andFailure:(FlappyFailure)failure{
     
-    //加锁保证正常
-    @synchronized (FlappyIM.class) {
-        
-        ChatUser* chatUser=[[FlappyData shareInstance] getUser];
-        
-        //直接失败
-        if(chatUser==nil){
-            failure([NSError errorWithDomain:@"A login thread also run"
-                                        code:RESULT_NETERROR
-                                    userInfo:nil],RESULT_NOTLOGIN);
-            return;
-        }
-        
-        //当前有flappysocket，而且正在登录
-        if(self.isLoginProgress){
-            //直接失败
-            failure([NSError errorWithDomain:@"A login thread also run"
-                                        code:RESULT_NETERROR
-                                    userInfo:nil],RESULT_NETERROR);
-            return ;
-        }
-        
-        //如果当前有正在连接的socket,先下线了
-        if(self.flappysocket!=nil){
-            [self.flappysocket offline:true];
-            self.flappysocket=nil;
-        }
-        
-        //自动登录
-        NSString *urlString = [FlappyApiConfig shareInstance].URL_autoLogin;
-        
-        //请求体，参数（NSDictionary 类型）
-        NSDictionary *parameters = @{@"userID":[[FlappyData shareInstance] getUser].userId,
-                                     @"device":DEVICE_TYPE,
-                                     @"pushid":self.pushID,
-                                     @"pushplat":[FlappyApiConfig shareInstance].pushPlat
-        };
-        
-        
-        //进行
-        FlappyFailureWrap* wrap=[[FlappyFailureWrap alloc] initWithFailure:failure];
-        
-        //安全
-        __weak typeof(wrap) safeWrap=wrap;
-        
-        //当前的
-        __weak typeof(self) safeSelf=self;
-        
-        //创建新的socket
-        self.flappysocket=[[FlappySocket alloc] initWithSuccess:success
-                                                     andFailure:wrap
-                                                        andDead:^{
-            [safeSelf performSelector:@selector(checkAutoLoginHttp)
-                           withObject:nil
-                           afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
-        }];
-        
-        //请求数据
-        [FlappyApiRequest postRequest:urlString
-                       withParameters:parameters
-                          withSuccess:^(id data) {
-            
-            //得到当前的用户数据
-            NSDictionary* dic=data[@"user"];
-            //用户
-            ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
-            //更新信息
-            ChatUser* newUser=[[FlappyData shareInstance]getUser];
-            
-            //更新登录信息
-            if([user.userId isEqualToString:newUser.userId]){
-                //保存推送类型数据
-                [safeSelf savePushData:data];
-                //最后的时间保存起来
-                newUser.userName=user.userName;
-                //头像
-                newUser.userAvatar=user.userAvatar;
-                //保存
-                [[FlappyData shareInstance]saveUser:newUser];
-                //设置登录返回的数据
-                safeSelf.flappysocket.loginData=data;
-                //连接服务器
-                [safeSelf.flappysocket connectSocket:data[@"serverIP"]
-                                            withPort:data[@"serverPort"]
-                                            withUser:newUser];
-            }
-            
-        } withFailure:^(NSError * error, NSInteger code) {
-            //登录失败，清空回调
-            __strong typeof(safeWrap) strongWrap = safeWrap;
-            //失败调用
-            if(strongWrap!=nil){
-                //执行
-                [strongWrap completeBlock:error andCode:code];
-                //清空
-                strongWrap=nil;
-            }
-        }];
+    ChatUser* chatUser=[[FlappyData shareInstance] getUser];
+    
+    //直接失败
+    if(chatUser==nil){
+        failure([NSError errorWithDomain:@"A login thread also run"
+                                    code:RESULT_NETERROR
+                                userInfo:nil],RESULT_NOTLOGIN);
+        return;
     }
+    
+    //当前有flappysocket，而且正在登录
+    if(self.isLoginProgress){
+        //直接失败
+        failure([NSError errorWithDomain:@"A login thread also run"
+                                    code:RESULT_NETERROR
+                                userInfo:nil],RESULT_NETERROR);
+        return ;
+    }
+    
+    //如果当前有正在连接的socket,先下线了
+    if(self.flappysocket!=nil){
+        [self.flappysocket offline:true];
+        self.flappysocket=nil;
+    }
+    
+    //自动登录
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_autoLogin;
+    
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"userID":[[FlappyData shareInstance] getUser].userId,
+                                 @"device":DEVICE_TYPE,
+                                 @"pushid":self.pushID,
+                                 @"pushplat":[FlappyApiConfig shareInstance].pushPlat
+    };
+    
+    
+    //进行
+    FlappyFailureWrap* wrap=[[FlappyFailureWrap alloc] initWithFailure:failure];
+    
+    //安全
+    __weak typeof(wrap) safeWrap=wrap;
+    
+    //当前的
+    __weak typeof(self) safeSelf=self;
+    
+    //创建新的socket
+    self.flappysocket=[[FlappySocket alloc] initWithSuccess:success
+                                                 andFailure:wrap
+                                                    andDead:^{
+        [safeSelf performSelector:@selector(checkAutoLoginHttp)
+                       withObject:nil
+                       afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
+    }];
+    
+    //请求数据
+    [FlappyApiRequest postRequest:urlString
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+        
+        //得到当前的用户数据
+        NSDictionary* dic=data[@"user"];
+        //用户
+        ChatUser* user=[ChatUser mj_objectWithKeyValues:dic];
+        //更新信息
+        ChatUser* newUser=[[FlappyData shareInstance]getUser];
+        
+        //更新登录信息
+        if([user.userId isEqualToString:newUser.userId]){
+            //保存推送类型数据
+            [safeSelf savePushData:data];
+            //最后的时间保存起来
+            newUser.userName=user.userName;
+            //头像
+            newUser.userAvatar=user.userAvatar;
+            //保存
+            [[FlappyData shareInstance]saveUser:newUser];
+            //设置登录返回的数据
+            safeSelf.flappysocket.loginData=data;
+            //连接服务器
+            [safeSelf.flappysocket connectSocket:data[@"serverIP"]
+                                        withPort:data[@"serverPort"]
+                                        withUser:newUser];
+        }
+        
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        __strong typeof(safeWrap) strongWrap = safeWrap;
+        //失败调用
+        if(strongWrap!=nil){
+            //执行
+            [strongWrap completeBlock:error andCode:code];
+            //清空
+            strongWrap=nil;
+        }
+    }];
 }
 
 //保存推送类型

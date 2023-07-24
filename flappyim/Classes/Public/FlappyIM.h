@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString*  pushID;
 
 //当前是否活跃
-@property (nonatomic,assign) bool  isActive;
+@property (nonatomic,assign) bool  isForground;
 
 //消息创建、发送
 @property (nonatomic,strong) NSMutableDictionary*  messageListeners;
