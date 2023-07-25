@@ -539,16 +539,6 @@
     //消息
     [self msgInsert:chatMsg];
     
-    //获取socket
-    FlappySocket* socket=self.flappySocket;
-    
-    //连接已经断开了
-    if(socket==nil){
-        [self msgFailure:chatMsg];
-        failure(chatMsg,[NSError errorWithDomain:@"连接已断开" code:0 userInfo:nil],RESULT_NETERROR);
-        return;
-    }
-    
     //之前的回调错误信息
     ChatMessage* former=[self.sendingMessages objectForKey:chatMsg.messageId];
     if(former!=nil){
@@ -562,7 +552,11 @@
     //消息ID保存
     [self.sendingMessages setObject:chatMsg forKey:chatMsg.messageId];
     
-    [socket sendMessage:chatMsg];
+    //获取socket,如果当前的socket是正常的状态直接发送消息
+    FlappySocket* socket=self.flappySocket;
+    if(socket!=nil && socket.isActive){
+        [socket sendMessage:chatMsg];
+    }
     
 }
 
