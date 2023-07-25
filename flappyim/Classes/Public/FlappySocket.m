@@ -336,7 +336,6 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 //发送消息
 -(void)sendMessage:(ChatMessage*) chatMsg{
-    
     @try {
         //发送消息轻轻
         FlappyRequest* request=[[FlappyRequest alloc]init];
@@ -344,22 +343,12 @@ static  GCDAsyncSocket*  _instanceSocket;
         request.type=REQ_MSG;
         //消息内容
         request.msg=[FlappyBaseSession changeToMessage:chatMsg];
-        
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
         NSData* reqData=[request delimitedData];
-        
         //写入时间
         long time=(long)[NSDate date].timeIntervalSince1970*1000;
-        
-        //不是正常的
-        if(!self.isActive){
-            @throw [[NSException alloc] initWithName:@"failed" reason:@"socket not active" userInfo:nil];
-        }
-        
         //写入请求数据
         [self.socket writeData:reqData withTimeout:-1 tag:time];
-        
-        
     } @catch (NSException *exception) {
         //通知所有的消息错误
         __weak typeof(self) safeSelf=self;
@@ -370,8 +359,6 @@ static  GCDAsyncSocket*  _instanceSocket;
             [[FlappySender shareInstance] failureCallback:message];
         });
     }
-    
-    
 }
 
 
@@ -400,6 +387,8 @@ static  GCDAsyncSocket*  _instanceSocket;
     self.user.login=true;
     //保存用户登录数据
     [[FlappyData shareInstance] saveUser:self.user];
+    
+    
     //登录成功后保存推送类型，保存用户所有的会话列表
     @try {
         //推送类型
@@ -431,10 +420,11 @@ static  GCDAsyncSocket*  _instanceSocket;
     } @catch (NSException *exception) {
         NSLog(@"FlappyIM:%@",exception.description);
     }
+    
+    
+    //消息信息
     @try {
-        //消息信息
         NSMutableArray* array=respones.msgArray;
-        
         //转换
         NSMutableArray* messageList=[[NSMutableArray alloc]init];
         for(long s=0;s<array.count;s++){
@@ -442,7 +432,6 @@ static  GCDAsyncSocket*  _instanceSocket;
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
             [messageList addObject:chatMsg];
         }
-        
         //进行排序
         [messageList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             ChatMessage* one=obj1;
@@ -452,7 +441,6 @@ static  GCDAsyncSocket*  _instanceSocket;
             }
             return NSOrderedAscending;
         }];
-        
         //转换
         for(long s=0;s<messageList.count;s++){
             //获取消息
@@ -472,21 +460,23 @@ static  GCDAsyncSocket*  _instanceSocket;
                 [self messageArrivedReceipt:chatMsg andFormer:former];
             }
         }
-        
     } @catch (NSException *exception) {
         NSLog(@"FlappyIM:%@",exception.description);
     }
+    
     //登录成功
     if(self.loginSuccess!=nil){
         self.loginSuccess(self.loginData);
     }
-    
-    //清空回调和数据
     self.loginSuccess=nil;
     self.loginFailure=nil;
     self.loginData=nil;
     
+    //检查session 是否需要更新
     [self checkSessionNeedUpdate];
+    
+    //检查之前是否有消息再消息栈中而且没有发送成功
+    [self checkFormerMessagesToSend];
 }
 
 //接收到消息
@@ -727,6 +717,25 @@ static  GCDAsyncSocket*  _instanceSocket;
             }
         }
     }
+}
+
+//登录成功后发送已经被缓存的消息数据
+-(void)checkFormerMessagesToSend{
+    __weak typeof(self) safeSelf=self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableDictionary* dic=[FlappySender shareInstance].sendingMessages;
+        NSMutableArray* messageList=[[NSMutableArray alloc]init];
+        NSArray* array=dic.allKeys;
+        for(int s=0;s<array.count;s++){
+            ChatMessage* msg=[dic objectForKey:array[s]];
+            if(msg!=nil){
+                [messageList addObject: msg];
+            }
+        }
+        for(int s=0;s<messageList.count;s++){
+            [safeSelf sendMessage:messageList[s]];
+        }
+    });
 }
 
 
