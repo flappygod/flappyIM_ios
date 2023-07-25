@@ -721,12 +721,10 @@
                                         code:RESULT_NETERROR
                                     userInfo:nil],RESULT_NETERROR);
             return ;
-        }else{
-            self.isLoginProgress=true;
         }
         
-        
         //如果当前有正在连接的socket,之前的正常下线
+        self.isLoginProgress=true;
         if(self.flappysocket!=nil){
             [self.flappysocket offline:true];
             self.flappysocket=nil;
@@ -747,7 +745,6 @@
             failure(error,code);
             safeSelf.isLoginProgress=false;
         }];
-        
         
         
         //创建socket
