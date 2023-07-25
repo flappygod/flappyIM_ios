@@ -83,6 +83,16 @@
     return db;
 }
 
+//设置之前没有发送成功的消息
+-(void)clearSendingMessage{
+    //打开数据库
+    FMDatabase* db=[self openDB];
+    if(db==nil){
+        return;
+    }
+    [db executeUpdate:@"update message set messageSendState = 9 where messageSendState = 0"];
+    [db close];
+}
 
 //插入多条会话，如果存在就更新
 -(Boolean)insertSessions:(NSMutableArray*)array{

@@ -163,9 +163,7 @@
     NSInteger timeInteval = 5;
     //用户信息
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc]init];
-    
     userInfo[@"message"]=[FlappyJsonTool JSONObjectToJSONString:[msg mj_keyValues]];
-    
     if (@available(iOS 10.0, *)) {
         // 1.创建通知内容
         UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
@@ -200,9 +198,7 @@
         // 5.把通知加到UNUserNotificationCenter, 到指定触发点会被触发
         [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
         }];
-        
     } else {
-        
         UILocalNotification *localNotification = [[UILocalNotification alloc] init];
         // 1.设置触发时间（如果要立即触发，无需设置）
         localNotification.timeZone = [NSTimeZone defaultTimeZone];
@@ -221,8 +217,6 @@
         //[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
     }
 }
-
-
 
 //注册远程推送和本地消息通知
 -(void)registerRemoteNotice:(UIApplication *)application{
@@ -507,6 +501,8 @@
 -(void)setupDataBase{
     //初始化数据库
     [[FlappyDataBase shareInstance] setup];
+    //清空消息
+    [[FlappyDataBase shareInstance] clearSendingMessage];
 }
 
 #pragma  NOTIFY 网络状态监听通知

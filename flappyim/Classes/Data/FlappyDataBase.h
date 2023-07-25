@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 //初始化数据库
 -(void)setup;
 
+//清空发送的消息
+-(void)clearSendingMessage;
+
 //插入单条会话
 -(Boolean)insertSession:(SessionData*)data;
 
