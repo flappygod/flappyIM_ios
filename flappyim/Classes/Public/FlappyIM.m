@@ -860,6 +860,7 @@
         
         //保存推送类型数据
         [self savePushData:data];
+        [newUser setLogin:1];
         [[FlappyData shareInstance] saveUser:newUser];
         
         //如果当前有正在连接的socket,先下线了
