@@ -860,8 +860,13 @@
         
         //保存推送类型数据
         [self savePushData:data];
-        [newUser setLogin:1];
-        [[FlappyData shareInstance] saveUser:newUser];
+        
+        //保存数据
+        [formerUser setLogin:1];
+        formerUser.userAvatar=newUser.userAvatar;
+        formerUser.userName=newUser.userName;
+        formerUser.userData=newUser.userData;
+        [[FlappyData shareInstance] saveUser:formerUser];
         
         //如果当前有正在连接的socket,先下线了
         if(self.flappysocket!=nil){
