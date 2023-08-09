@@ -1193,6 +1193,32 @@
         session.session=model;
         [ret addObject:session];
     }
+    
+    //进行一个排序
+    NSArray* sortArray = [ret sortedArrayUsingComparator:^NSComparisonResult(FlappyChatSession* _Nonnull one,
+                                                                             FlappyChatSession* _Nonnull two) {
+        if(one.session.sessionType==TYPE_SYSTEM ){
+            return NSOrderedDescending;
+        }
+        if(two.session.sessionType==TYPE_SYSTEM){
+            return NSOrderedAscending;
+        }
+        ChatMessage* msgOne=[one getLatestMessage];
+        ChatMessage* msgTwo=[two getLatestMessage];
+        if(msgOne==nil){
+            return NSOrderedAscending;
+        }
+        if(msgTwo==nil){
+            return NSOrderedDescending;
+        }
+        if(msgOne.messageTableSeq>msgTwo.messageTableSeq){
+            return NSOrderedDescending;
+        }else{
+            return NSOrderedAscending;
+        }
+    }];
+    ret = [[NSMutableArray alloc] initWithArray:sortArray];
+    
     //成功
     if(ret!=nil && ret.count!= 0){
         success(ret);
@@ -1233,6 +1259,32 @@
             session.session=model;
             [ret addObject:session];
         }
+        
+        //进行一个排序
+        NSArray* sortArray = [ret sortedArrayUsingComparator:^NSComparisonResult(FlappyChatSession* _Nonnull one,
+                                                                                 FlappyChatSession* _Nonnull two) {
+            if(one.session.sessionType==TYPE_SYSTEM ){
+                return NSOrderedDescending;
+            }
+            if(two.session.sessionType==TYPE_SYSTEM){
+                return NSOrderedAscending;
+            }
+            ChatMessage* msgOne=[one getLatestMessage];
+            ChatMessage* msgTwo=[two getLatestMessage];
+            if(msgOne==nil){
+                return NSOrderedAscending;
+            }
+            if(msgTwo==nil){
+                return NSOrderedDescending;
+            }
+            if(msgOne.messageTableSeq>msgTwo.messageTableSeq){
+                return NSOrderedDescending;
+            }else{
+                return NSOrderedAscending;
+            }
+        }];
+        ret = [[NSMutableArray alloc] initWithArray:sortArray];
+        
         //成功
         success(ret);
         

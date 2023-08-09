@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 #define TYPE_SINGLE 1
 //群聊
 #define TYPE_GROUP 2
+//系统
+#define TYPE_SYSTEM 3
 
 
 //会话
