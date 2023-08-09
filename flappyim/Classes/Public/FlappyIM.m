@@ -1198,23 +1198,23 @@
     NSArray* sortArray = [ret sortedArrayUsingComparator:^NSComparisonResult(FlappyChatSession* _Nonnull one,
                                                                              FlappyChatSession* _Nonnull two) {
         if(one.session.sessionType==TYPE_SYSTEM ){
-            return NSOrderedDescending;
+            return NSOrderedAscending;
         }
         if(two.session.sessionType==TYPE_SYSTEM){
-            return NSOrderedAscending;
+            return NSOrderedDescending;
         }
         ChatMessage* msgOne=[one getLatestMessage];
         ChatMessage* msgTwo=[two getLatestMessage];
         if(msgOne==nil){
-            return NSOrderedAscending;
+            return NSOrderedDescending;
         }
         if(msgTwo==nil){
-            return NSOrderedDescending;
+            return NSOrderedAscending;
         }
         if(msgOne.messageTableSeq>msgTwo.messageTableSeq){
-            return NSOrderedDescending;
-        }else{
             return NSOrderedAscending;
+        }else{
+            return NSOrderedDescending;
         }
     }];
     ret = [[NSMutableArray alloc] initWithArray:sortArray];
@@ -1264,23 +1264,23 @@
         NSArray* sortArray = [ret sortedArrayUsingComparator:^NSComparisonResult(FlappyChatSession* _Nonnull one,
                                                                                  FlappyChatSession* _Nonnull two) {
             if(one.session.sessionType==TYPE_SYSTEM ){
-                return NSOrderedDescending;
+                return NSOrderedAscending;
             }
             if(two.session.sessionType==TYPE_SYSTEM){
-                return NSOrderedAscending;
+                return NSOrderedDescending;
             }
             ChatMessage* msgOne=[one getLatestMessage];
             ChatMessage* msgTwo=[two getLatestMessage];
             if(msgOne==nil){
-                return NSOrderedAscending;
+                return NSOrderedDescending;
             }
             if(msgTwo==nil){
-                return NSOrderedDescending;
+                return NSOrderedAscending;
             }
             if(msgOne.messageTableSeq>msgTwo.messageTableSeq){
-                return NSOrderedDescending;
-            }else{
                 return NSOrderedAscending;
+            }else{
+                return NSOrderedDescending;
             }
         }];
         ret = [[NSMutableArray alloc] initWithArray:sortArray];
