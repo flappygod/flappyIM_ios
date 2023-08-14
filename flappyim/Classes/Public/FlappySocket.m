@@ -455,6 +455,9 @@ static  GCDAsyncSocket*  _instanceSocket;
             [self messageSendSuccess:chatMsg];
             //通知接收到消息
             [self notifyMessageReceive:chatMsg andFormer:former];
+            //通知事件消息
+            [self notifyMessageAction:chatMsg andFormer:former];
+            
             //最后一条消息
             if(s==(messageList.count-1)){
                 [self messageArrivedReceipt:chatMsg andFormer:former];
@@ -646,6 +649,26 @@ static  GCDAsyncSocket*  _instanceSocket;
             }
         }
     });
+}
+
+//消息已读回执和删除回执,对方的阅读消息存在的时候才会执行
+-(void)notifyMessageAction:(ChatMessage*)message
+                 andFormer:(ChatMessage*)former{
+    if(message.messageType == MSG_TYPE_ACTION && former == nil ){
+        ChatAction* chatAction = [message getChatAction];
+        switch(chatAction.actionType){
+            case ACTION_TYPE_READ:{
+                [self notifyMessageRead:chatAction.actionIds[1]
+                       andTableSequecne:chatAction.actionIds[2]];
+                break;
+            }
+            case ACTION_TYPE_DELETE:{
+                [self notifyMessageDelete:chatAction.actionIds[1]
+                         andTableSequecne:chatAction.actionIds[2]];
+                break;
+            }
+        }
+    }
 }
 
 //通知消息失败
