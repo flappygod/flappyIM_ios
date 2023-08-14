@@ -572,15 +572,9 @@
     NSInteger value=(user.latest!=nil? user.latest.integerValue:0)+1;
     //还没发送成功，那么放在最后一条
     msg.messageTableSeq=value;
-    //之前有没有
-    ChatMessage* former=[[FlappyDataBase shareInstance] getMessageByID:msg.messageId];
-    //没有就插入，有就更新
-    if(former==nil){
-        [[FlappyDataBase shareInstance] insertMsg:msg];
-    }else{
-        //否则更新
-        [[FlappyDataBase shareInstance] updateMessage:msg];
-    }
+    //插入数据
+    [[FlappyDataBase shareInstance] insertMessage:msg];
+    //通知发送
     [self notifyMessageSend:msg];
 }
 

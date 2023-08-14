@@ -440,35 +440,28 @@
 }
 
 //插入消息
--(Boolean)insertMsg:(ChatMessage*)msg{
+-(void)insertMessage:(ChatMessage*)msg{
     @synchronized (self) {
         //获取db
         FMDatabase* db=[self openDB];
         if(db==nil){
-            return false;
+            return ;
         }
-        
         
         //获取user
         ChatUser* user = [[FlappyData shareInstance] getUser];
         if(user==nil){
-            return false;
+            return ;
         }
-        
-        
-        //是否成功
-        Boolean totalSuccess=true;
         
         //查询当前用户是否存在一条当前一样的会话
         FMResultSet *formers = [db executeQuery:@"select * from message where messageId = ? and messageInsertUser = ?"
                            withArgumentsInArray:@[msg.messageId,user.userExtendId]];
         
         if([formers next]){
-            
             [formers close];
-            
-            BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ? and messageInsertUser = ?"
-                       withArgumentsInArray:@[
+            [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ? and messageInsertUser = ?"
+         withArgumentsInArray:@[
                 [FlappyStringTool toUnNullStr:msg.messageSession],
                 [NSNumber numberWithInteger:msg.messageSessionType],
                 [NSNumber numberWithInteger:msg.messageSessionOffset],
@@ -486,15 +479,14 @@
                 [NSNumber numberWithInteger:msg.isDelete],
                 msg.messageId,
                 user.userExtendId]];
-            if(!result){
-                totalSuccess=false;
-            }
+            //关闭数据库
+            [db close];
+            //检测actionMessage
+            [self handleActionMessageUpdate:msg];
         }else{
-            
             [formers close];
-            
-            BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSendId,messageSendExtendId,messageReceiveId,messageReceiveExtendId,messageContent,messageSendState,messageReadState,messageDate,deleteDate,messageStamp,isDelete,messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                       withArgumentsInArray:@[
+            [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSendId,messageSendExtendId,messageReceiveId,messageReceiveExtendId,messageContent,messageSendState,messageReadState,messageDate,deleteDate,messageStamp,isDelete,messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+         withArgumentsInArray:@[
                 //插入部分
                 [FlappyStringTool toUnNullStr:msg.messageId],
                 [FlappyStringTool toUnNullStr:msg.messageSession],
@@ -515,40 +507,45 @@
                 [NSNumber numberWithInteger:msg.isDelete],
                 user.userExtendId
             ]];
-            if(!result){
-                totalSuccess=false;
-            }
-        }
-        
-        
-        [db close];
-        if (totalSuccess) {
-            return true;
-        } else {
-            return false;
+            //关闭数据库
+            [db close];
+            //收到actionMessage
+            [self handleActionMessageInsert:msg];
         }
     }
 }
 
+//处理动作消息插入
+-(void)handleActionMessageInsert:(ChatMessage*)msg{
+    
+    
+}
+
+//处理动作消息插入
+-(void)handleActionMessageUpdate:(ChatMessage*)msg{
+    
+    
+}
+
 //插入消息列表
--(Boolean)insertMsgs:(NSMutableArray*)array{
+-(void)insertMessages:(NSMutableArray*)array{
     @synchronized (self) {
         
         //如果为空
         if(array==nil||array.count==0){
-            return true;
+            return ;
         }
         
         //获取user
         ChatUser* user = [[FlappyData shareInstance] getUser];
         if(user==nil){
-            return false;
+            return ;
         }
         
         //获取db
         FMDatabase* db=[self openDB];
         if(db==nil){
-            return false;
+            return ;
         }
         
         //消息
@@ -571,8 +568,6 @@
         
         //开始事务
         [db beginTransaction];
-        //是否成功
-        Boolean totalSuccess=true;
         //遍历
         for(int s=0;s<array.count;s++){
             ChatMessage* msg=[array objectAtIndex:s];
@@ -580,9 +575,8 @@
             NSNumber* nuber=[contains objectAtIndex:s];
             //包含更新
             if(nuber.intValue==1){
-                
-                BOOL result = [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ? and messageInsertUser = ?"
-                           withArgumentsInArray:@[
+                [db executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ? and messageInsertUser = ?"
+             withArgumentsInArray:@[
                     [FlappyStringTool toUnNullStr:msg.messageSession],
                     [NSNumber numberWithInteger:msg.messageSessionType],
                     [NSNumber numberWithInteger:msg.messageSessionOffset],
@@ -600,13 +594,10 @@
                     [NSNumber numberWithInteger:msg.isDelete],
                     msg.messageId,
                     user.userExtendId]];
-                if(!result){
-                    totalSuccess=false;
-                }
             }else{
                 //不包含插入
-                BOOL result = [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSendId,messageSendExtendId,messageReceiveId,messageReceiveExtendId,messageContent,messageSendState,messageReadState,messageDate,deleteDate,messageStamp,isDelete) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                           withArgumentsInArray:@[
+                [db executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSendId,messageSendExtendId,messageReceiveId,messageReceiveExtendId,messageContent,messageSendState,messageReadState,messageDate,deleteDate,messageStamp,isDelete) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+             withArgumentsInArray:@[
                     //插入部分
                     [FlappyStringTool toUnNullStr:msg.messageId],
                     [FlappyStringTool toUnNullStr:msg.messageSession],
@@ -625,29 +616,13 @@
                     [FlappyStringTool toUnNullStr:msg.deleteDate],
                     [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],
                     [NSNumber numberWithInteger:msg.isDelete]
-                    
                 ]];
-                if(!result){
-                    totalSuccess=false;
-                }
             }
-            
         }
-        //如果全部成功了
-        if(totalSuccess){
-            [db commit];
-        }
-        //失败了就回滚
-        else{
-            [db rollback];
-        }
+        //提交
+        [db commit];
+        //关闭
         [db close];
-        //是否成功
-        if (totalSuccess) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }
 
@@ -668,7 +643,6 @@
         if(db==nil){
             return nil;
         }
-        
         FMResultSet *result = [db executeQuery:@"select * from message where messageId = ? and messageInsertUser = ?"
                           withArgumentsInArray:@[messageID,user.userExtendId]];
         //返回消息

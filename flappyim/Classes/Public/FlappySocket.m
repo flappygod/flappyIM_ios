@@ -450,7 +450,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             //修改消息状态
             [self messageArrivedState:chatMsg andFormer:former];
             //保存消息
-            [[FlappyDataBase shareInstance] insertMsg:chatMsg];
+            [[FlappyDataBase shareInstance] insertMessage:chatMsg];
             //发送成功
             [self messageSendSuccess:chatMsg];
             //通知接收到消息
@@ -492,7 +492,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         //修改消息状态
         [self messageArrivedState:chatMsg andFormer:former];
         //添加数据
-        [[FlappyDataBase shareInstance] insertMsg:chatMsg];
+        [[FlappyDataBase shareInstance] insertMessage:chatMsg];
         //消息发送成功
         [self messageSendSuccess:chatMsg];
         //通知接收到消息
@@ -529,7 +529,7 @@ static  GCDAsyncSocket*  _instanceSocket;
                     //更新消息设置
                     msg.messageReadState=1;
                     //插入消息
-                    [[FlappyDataBase shareInstance] insertMsg:msg];
+                    [[FlappyDataBase shareInstance] insertMessage:msg];
                 }
             }
             //移除正在更新的
