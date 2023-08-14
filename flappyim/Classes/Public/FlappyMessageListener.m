@@ -14,19 +14,25 @@
     MessageListener _updateListener;
     MessageListener _receiveListener;
     MessageListener _failureListener;
+    MessageReadListener _readListener;
+    MessageDeleteListener _deleteListener;
 }
 
 ///init with blocks
 -(instancetype)initWithSend:(MessageListener)sendListener
                  andFailure:(MessageListener)failureListener
                   andUpdate:(MessageListener)updateListener
-                 andReceive:(MessageListener)receiveListener{
+                 andReceive:(MessageListener)receiveListener
+                    andRead:(MessageReadListener)readListener
+                  andDelete:(MessageDeleteListener)deleteListener{
     self=[super init];
     if(self){
         _sendListener=sendListener;
         _failureListener=failureListener;
         _updateListener=updateListener;
         _receiveListener=receiveListener;
+        _readListener=readListener;
+        _deleteListener=deleteListener;
     }
     return self;
 }
@@ -52,6 +58,18 @@
 -(void)onFailure:(ChatMessage*) msg{
     if(_failureListener!=nil){
         _failureListener(msg);
+    }
+}
+
+-(void)onRead:(NSString*) message{
+    if(_readListener!=nil){
+        _readListener(message);
+    }
+}
+
+-(void)onDelete:(NSString*) message{
+    if(_deleteListener!=nil){
+        _deleteListener(message);
     }
 }
 

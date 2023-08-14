@@ -57,13 +57,18 @@
 //        NSLog(@"创建失败");
 //    }];
     
-    [[FlappyIM shareInstance] addGloableMsgListener:[[FlappyMessageListener alloc] initWithSend:^(ChatMessage * _Nullable message) {
+    [[FlappyIM shareInstance] addGloableMsgListener:[[FlappyMessageListener alloc]
+                                                     initWithSend:^(ChatMessage * _Nullable message) {
         
     } andFailure:^(ChatMessage * _Nullable message) {
         
     } andUpdate:^(ChatMessage * _Nullable message) {
         
     } andReceive:^(ChatMessage * _Nullable message) {
+        
+    } andRead:^(NSString * _Nullable tableSeqence) {
+        
+    } andDelete:^(NSString * _Nullable messageId) {
         
     }]];
     
@@ -148,6 +153,10 @@
         
     } andReceive:^(ChatMessage * _Nullable message) {
         safeSelf.lable.text=[message getChatText];
+    } andRead:^(NSString * _Nullable tableSeqence) {
+        
+    } andDelete:^(NSString * _Nullable messageId) {
+        
     }]];
 }
 

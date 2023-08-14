@@ -102,6 +102,10 @@
             //判断当前是在后台还是在前台
             [safeSelf sendLocalNotification:message];
         }
+    } andRead:^(NSString * _Nullable tableSeqence) {
+        
+    } andDelete:^(NSString * _Nullable messageId) {
+        
     }]];
 }
 

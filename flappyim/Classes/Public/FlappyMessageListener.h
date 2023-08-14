@@ -15,7 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype)initWithSend:(MessageListener)sendListener
                  andFailure:(MessageListener)failureListener
                   andUpdate:(MessageListener)updateListener
-                 andReceive:(MessageListener)receiveListener;
+                 andReceive:(MessageListener)receiveListener
+                    andRead:(MessageReadListener)readListener
+                  andDelete:(MessageDeleteListener)deleteListener;
 
 
 -(void)onSend:(ChatMessage*) msg;
@@ -25,6 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)onReceive:(ChatMessage*) msg;
 
 -(void)onFailure:(ChatMessage*) msg;
+
+-(void)onRead:(NSString*) message;
+
+-(void)onDelete:(NSString*) message;
 
 @end
 
