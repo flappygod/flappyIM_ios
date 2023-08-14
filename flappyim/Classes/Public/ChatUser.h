@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) NSInteger isDelete;
 //用户的删除s日期
 @property(nonatomic,copy) NSString* deleteDate;
+//推送的ID
+@property(nonatomic,copy) NSString* sessionMemberLatestRead;
 
 
 //推送的ID

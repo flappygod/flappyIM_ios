@@ -336,6 +336,65 @@
     }
 }
 
+
+//获取用户的会话
+-(SessionData*)getUserSessionByID:(NSString*)sessionId{
+    @synchronized (self) {
+        
+        //获取db
+        FMDatabase* db=[self openDB];
+        if(db==nil){
+            return nil;
+        }
+        
+        //获取user
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return nil;
+        }
+        
+        //会话
+        FMResultSet *result = [db executeQuery:@"select * from session where sessionInsertUser = ? and sessionId=?"
+                          withArgumentsInArray:@[
+            user.userExtendId,
+            sessionId
+        ]];
+        
+        //返回消息
+        if ([result next]) {
+            SessionData *msg = [SessionData new];
+            msg.sessionId = [result stringForColumn:@"sessionId"];
+            msg.sessionExtendId = [result stringForColumn:@"sessionExtendId"];
+            msg.sessionType = [result intForColumn:@"sessionType"];
+            msg.sessionInfo = [result stringForColumn:@"sessionInfo"];
+            msg.sessionName = [result stringForColumn:@"sessionName"];
+            msg.sessionImage = [result stringForColumn:@"sessionImage"];
+            msg.sessionOffset = [result stringForColumn:@"sessionOffset"];
+            msg.sessionStamp = [result longForColumn:@"sessionStamp"];
+            msg.sessionCreateDate = [result stringForColumn:@"sessionCreateDate"];
+            msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
+            msg.isDelete = [result intForColumn:@"sessionDeleted"];
+            msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
+            //转换
+            NSArray* array=[FlappyJsonTool JSONStringToDictionary:[result stringForColumn:@"users"]];
+            NSMutableArray* usersArr=[[NSMutableArray alloc]init];
+            for(int s=0;s<array.count;s++){
+                ChatUser* session=[ChatUser mj_objectWithKeyValues:[array objectAtIndex:s]];
+                [usersArr addObject:session];
+            }
+            msg.users=usersArr;
+            [result close];
+            [db close];
+            return msg;
+        }else{
+            //没有拿到用户会话
+            [result close];
+            [db close];
+            return nil;
+        }
+    }
+}
+
 //获取用户的会话
 -(SessionData*)getUserSessionByExtendID:(NSString*)sessionExtendId{
     @synchronized (self) {
@@ -400,6 +459,7 @@
         if(db==nil){
             return [[NSMutableArray alloc] init];
         }
+        
         FMResultSet *result = [db executeQuery:@"select * from session where sessionInsertUser = ?"
                           withArgumentsInArray:@[userExtendID]];
         
@@ -517,14 +577,160 @@
 
 //处理动作消息插入
 -(void)handleActionMessageInsert:(ChatMessage*)msg{
+    //获取user
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return;
+    }
     
+    //不是动作类型不处理
+    if(msg.messageType != MSG_TYPE_ACTION){
+        return;
+    }
     
+    ChatAction* action =[msg getChatAction];
+    switch(action.actionType){
+            //更新消息已读
+        case ACTION_TYPE_READ:{
+            NSString* userId = action.actionIds[0];
+            NSString* sessionId = action.actionIds[1];
+            NSString* tableSequence = action.actionIds[2];
+            //更新消息状态
+            [self updateMessageRead:userId
+                       andSessionId:sessionId
+                        andTableSeq:tableSequence];
+            //更新最近消息状态
+            [self updateSessionMemberLatestRead:userId
+                                   andSessionId:sessionId
+                                    andTableSeq:tableSequence];
+            break;
+        }
+            
+            //更新消息删除
+        case ACTION_TYPE_DELETE:{
+            NSString* userId = action.actionIds[0];
+            NSString* sessionId = action.actionIds[1];
+            NSString* messageId = action.actionIds[2];
+            //不是自己发送的消息，进行删除，如果是自己插入的话，需要等到消息发送成功之后在handleActionMessageUpdate中操作
+            if([user.userId integerValue] != [userId integerValue]){
+                [self updateMessageDelete:userId
+                             andSessionId:sessionId
+                             andMessageId:messageId];
+                
+            }
+            
+            break;
+        }
+    }
 }
+
+
 
 //处理动作消息插入
 -(void)handleActionMessageUpdate:(ChatMessage*)msg{
     
+    //不是动作类型不处理
+    if(msg.messageType != MSG_TYPE_ACTION){
+        return;
+    }
     
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return;
+    }
+    ChatAction* action =[msg getChatAction];
+    switch(action.actionType){
+            //更新消息已读
+        case ACTION_TYPE_READ:{
+            NSString* userId = action.actionIds[0];
+            NSString* sessionId = action.actionIds[1];
+            NSString* tableSequence = action.actionIds[2];
+            //更新消息状态
+            [self updateMessageRead:userId
+                       andSessionId:sessionId
+                        andTableSeq:tableSequence];
+            //更新最近消息状态
+            [self updateSessionMemberLatestRead:userId
+                                   andSessionId:sessionId
+                                    andTableSeq:tableSequence];
+            break;
+        }
+            
+            //更新消息删除
+        case ACTION_TYPE_DELETE:{
+            NSString* userId = action.actionIds[0];
+            NSString* sessionId = action.actionIds[1];
+            NSString* messageId = action.actionIds[2];
+            [self updateMessageDelete:userId
+                         andSessionId:sessionId
+                         andMessageId:messageId];
+            break;
+        }
+    }
+    
+}
+
+//更新消息已读
+-(void)updateMessageRead:userId
+            andSessionId:sessionId
+             andTableSeq:tableSequence{
+    @synchronized (self) {
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return;
+        }
+        FMDatabase* db=[self openDB];
+        if(db==nil){
+            return ;
+        }
+        [db executeUpdate:@"update message set messageReadState=1 where messageInsertUser = ? and messageSendId != ? and messageSession = ? and messageTableSeq <= ?"
+     withArgumentsInArray:@[
+            user.userExtendId,
+            userId,
+            sessionId,
+            tableSequence]];
+        [db close];
+    }
+}
+
+//更新消息已读
+-(void)updateMessageDelete:userId
+              andSessionId:sessionId
+              andMessageId:messageId{
+    @synchronized (self) {
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if(user==nil){
+            return;
+        }
+        FMDatabase* db=[self openDB];
+        if(db==nil){
+            return ;
+        }
+        [db executeUpdate:@"update message set isDelete=1 where messageInsertUser = ? and messageSession = ? and messageId = ?"
+     withArgumentsInArray:@[
+            user.userExtendId,
+            sessionId,
+            messageId
+        ]];
+        [db close];
+    }
+}
+
+//更新最近已读的消息
+-(void)updateSessionMemberLatestRead:userId
+                        andSessionId:sessionId
+                         andTableSeq:tableSequence{
+    @synchronized (self) {
+        //更新会话
+        SessionData* data = [self getUserSessionByID:sessionId];
+        NSMutableArray* userList=data.users;
+        for(ChatUser* user in userList){
+            if([user.userId integerValue]==[userId integerValue]){
+                user.sessionMemberLatestRead=tableSequence;
+            }
+        }
+        [self insertSession:data];
+    }
 }
 
 //插入消息列表
@@ -925,9 +1131,8 @@
             return [[NSMutableArray alloc]init];
         }
         
-        
-        NSMutableArray* retArray=[[NSMutableArray alloc] init];
         //当前的
+        NSMutableArray* retArray=[[NSMutableArray alloc] init];
         NSMutableArray* sequeceArray=[self getSessionSequeceMessage:sessionID
                                                          withOffset:[NSString stringWithFormat:@"%ld",(long)msg.messageTableSeq]];
         
@@ -977,7 +1182,6 @@
             }
             retArray=newArray;
         }
-        
         return retArray;
     }
 }
