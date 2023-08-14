@@ -124,6 +124,22 @@
     return nil;
 }
 
+//设置|获取动作
+-(void)setChatAction:(ChatAction*)chatAction{
+    if(chatAction!=nil){
+        _messageContent=[self base64EncodeString:[FlappyJsonTool DicToJSONString:[chatAction mj_keyValues]]];
+    }
+}
+-(ChatAction*)getChatAction{
+    if(_messageContent!=nil&&self.messageType==MSG_TYPE_FILE){
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[self base64DecodeString:_messageContent]];
+        if(dic!=nil){
+            return [ChatAction mj_objectWithKeyValues:dic];
+        }
+    }
+    return nil;
+}
+
 //设置|获取自定义
 -(void)setChatCustom:(NSString*)chatText{
     if(chatText!=nil){

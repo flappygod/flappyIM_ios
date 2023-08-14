@@ -426,6 +426,73 @@
     return chatmsg;
 }
 
+//发送已读消息
+-(ChatMessage*)readSessionMessage:(FlappySendSuccess)success
+                       andFailure:(FlappySendFailure)failure{
+    
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    
+    chatmsg.messageId=[FlappyStringTool uuidString];
+    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionType=self.session.sessionType;
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
+    chatmsg.messageType=MSG_TYPE_ACTION;
+    
+    ChatAction* action=[[ChatAction alloc]init];
+    action.actionType=ACTION_TYPE_READ;
+    action.actionIds=@[
+        [self getMine].userId,
+        self.session.sessionId,
+        [NSString stringWithFormat:@"%ld",[self getLatestMessage].messageTableSeq]
+    ];
+    [chatmsg setChatAction:action];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageSendState=SEND_STATE_CREATE;
+    
+    //发送消息
+    [[FlappySender shareInstance] sendMessage:chatmsg
+                                   andSuccess:success
+                                   andFailure:failure];
+    
+    return chatmsg;
+}
+
+//删除已经发送的消息
+-(ChatMessage*)deleteSessionMessage:(NSString*)messageId
+                         andSuccess:(FlappySendSuccess)success
+                         andFailure:(FlappySendFailure)failure{
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    
+    chatmsg.messageId=[FlappyStringTool uuidString];
+    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionType=self.session.sessionType;
+    chatmsg.messageSendId=[self getMine].userId;
+    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
+    chatmsg.messageType=MSG_TYPE_ACTION;
+    
+    ChatAction* action=[[ChatAction alloc]init];
+    action.actionType=ACTION_TYPE_DELETE;
+    action.actionIds=@[
+        [self getMine].userId,
+        self.session.sessionId,
+        messageId
+    ];
+    [chatmsg setChatAction:action];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageSendState=SEND_STATE_CREATE;
+    
+    //发送消息
+    [[FlappySender shareInstance] sendMessage:chatmsg
+                                   andSuccess:success
+                                   andFailure:failure];
+    
+    return chatmsg;
+}
 
 
 //重新发送

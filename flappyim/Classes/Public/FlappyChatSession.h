@@ -118,6 +118,17 @@ NS_ASSUME_NONNULL_BEGIN
           andFailure:(FlappySendFailure)failure;
 
 
+//消息发送已读
+-(ChatMessage*)readSessionMessage:(FlappySendSuccess)success
+                       andFailure:(FlappySendFailure)failure;
+
+
+//删除会话消息
+-(ChatMessage*)deleteSessionMessage:(NSString*)messageId
+                         andSuccess:(FlappySendSuccess)success
+                         andFailure:(FlappySendFailure)failure;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

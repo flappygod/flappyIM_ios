@@ -12,6 +12,7 @@
 #import "ChatLocation.h"
 #import "ChatSystem.h"
 #import "ChatFile.h"
+#import "ChatAction.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -43,7 +44,15 @@ NS_ASSUME_NONNULL_BEGIN
 #define MSG_TYPE_FILE  6
 //自定义消息
 #define MSG_TYPE_CUSTOM  7
+//动作类消息
+#define MSG_TYPE_ACTION  8
 
+
+
+//读取消息
+#define ACTION_TYPE_READ   1
+//删除消息
+#define ACTION_TYPE_DELETE 2
 
 
 //会话的消息
@@ -113,6 +122,10 @@ NS_ASSUME_NONNULL_BEGIN
 //文件
 -(void)setChatFile:(ChatFile*)chatFile;
 -(ChatFile*)getChatFile;
+
+//动作
+-(void)setChatAction:(ChatAction*)chatFile;
+-(ChatAction*)getChatAction;
 
 //自定义
 -(void)setChatCustom:(NSString*)chatText;
