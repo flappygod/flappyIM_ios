@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "ChatAction.h"
 #import "ChatFile.h"
 #import "ChatImage.h"
 #import "ChatLocation.h"

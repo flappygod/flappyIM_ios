@@ -23,8 +23,6 @@
 #import "FlappyDef.h"
 
 
-#define GlobalKey @"Global"
-
 
 @interface FlappyIM ()
 

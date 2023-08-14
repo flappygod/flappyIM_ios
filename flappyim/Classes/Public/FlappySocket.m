@@ -4,7 +4,7 @@
 //
 //  Created by lijunlin on 2019/8/17.
 //
-
+#import "FlappyIM.h"
 #import "FlappySocket.h"
 #import "FlappySender.h"
 #import "MJExtension.h"
@@ -632,13 +632,16 @@ static  GCDAsyncSocket*  _instanceSocket;
         NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
         for(int s=0;s<array.count;s++){
             NSString* str=[array objectAtIndex:s];
-            NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-            for(int w=0;w<listeners.count;w++){
-                FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                if(former==nil){
-                    [listener onReceive:message];
-                }else{
-                    [listener onUpdate:message];
+            //当前会话或者全局
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:message.messageSession]){
+                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                    if(former==nil){
+                        [listener onReceive:message];
+                    }else{
+                        [listener onUpdate:message];
+                    }
                 }
             }
         }
@@ -654,10 +657,59 @@ static  GCDAsyncSocket*  _instanceSocket;
         NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
         for(int s=0;s<array.count;s++){
             NSString* str=[array objectAtIndex:s];
-            NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-            for(int w=0;w<listeners.count;w++){
-                FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                [listener onFailure:message];
+            //当前会话或者全局
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:message.messageSession]){
+                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                    [listener onFailure:message];
+                }
+            }
+        }
+    });
+}
+
+
+//通知有新的消息
+-(void)notifyMessageRead:(NSString*)sessionId
+        andTableSequecne:(NSString*)tableSequence{
+    if(sessionId==nil || tableSequence==nil){
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            //当前会话或者全局
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:sessionId]){
+                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                    [listener onRead:tableSequence];
+                }
+            }
+            
+        }
+    });
+}
+
+//通知有新的消息
+-(void)notifyMessageDelete:(NSString*)sessionId
+          andTableSequecne:(NSString*)messageId{
+    if(sessionId==nil || messageId==nil){
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            //当前会话或者全局
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:sessionId]){
+                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                    [listener onDelete:messageId];
+                }
             }
         }
     });

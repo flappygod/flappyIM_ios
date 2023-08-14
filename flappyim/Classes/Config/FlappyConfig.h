@@ -75,6 +75,8 @@
 #define RES_UPDATE  5
 
 
+#define GlobalKey @"Global"
+
 
 
 #endif /* FlappyConfig_h */
