@@ -654,6 +654,9 @@ static  GCDAsyncSocket*  _instanceSocket;
 //消息已读回执和删除回执,对方的阅读消息存在的时候才会执行
 -(void)notifyMessageAction:(ChatMessage*)message
                  andFormer:(ChatMessage*)former{
+    if(message==nil){
+        return;
+    }
     if(message.messageType == MSG_TYPE_ACTION && former == nil ){
         ChatAction* chatAction = [message getChatAction];
         switch(chatAction.actionType){
