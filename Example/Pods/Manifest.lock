@@ -15,19 +15,17 @@ PODS:
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
   - CocoaAsyncSocket (7.6.5)
-  - flappyim (1.3.8):
+  - flappyim (1.3.10):
     - AFNetworking (~> 4.0.1)
     - CocoaAsyncSocket (~> 7.6.5)
     - FMDB (~> 2.7.5)
     - MJExtension (~> 3.4.1)
     - Protobuf (~> 3.21.5)
-    - Reachability (~> 3.2)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
   - MJExtension (3.4.1)
   - Protobuf (3.21.12)
-  - Reachability (3.2)
 
 DEPENDENCIES:
   - flappyim (from `../`)
@@ -39,7 +37,6 @@ SPEC REPOS:
     - FMDB
     - MJExtension
     - Protobuf
-    - Reachability
 
 EXTERNAL SOURCES:
   flappyim:
@@ -48,12 +45,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  flappyim: 1c0c4f67ca9ad633df39b94873df02721d31bc35
+  flappyim: 210dcedeca603f4a060890a2805a37511d8ca634
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   Protobuf: 120350fc38646e2dedc26f49ecba778184ea1de2
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
 
 PODFILE CHECKSUM: 97bbbf73f870a1e486eb99911450fd02103263b5
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.14.2

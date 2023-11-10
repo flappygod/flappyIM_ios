@@ -29,10 +29,10 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 
 //! Project version number for MacOSReachability.
-FOUNDATION_EXPORT double ReachabilityVersionNumber;
+FOUNDATION_EXPORT double FlappyReachabilityVersionNumber;
 
 //! Project version string for MacOSReachability.
-FOUNDATION_EXPORT const unsigned char ReachabilityVersionString[];
+FOUNDATION_EXPORT const unsigned char FlappyReachabilityVersionString[];
 
 /**
  * Create NS_ENUM macro if it does not exist on the targeted version of iOS or OS X.
@@ -43,27 +43,27 @@ FOUNDATION_EXPORT const unsigned char ReachabilityVersionString[];
 #define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
 #endif
 
-extern NSString *const kReachabilityChangedNotification;
+extern NSString *const kFlappyReachabilityChangedNotification;
 
-typedef NS_ENUM(NSInteger, NetworkStatus) {
+typedef NS_ENUM(NSInteger, FlappyNetworkStatus) {
     // Apple NetworkStatus Compatible Names.
-    NotReachable = 0,
-    ReachableViaWiFi = 2,
-    ReachableViaWWAN = 1
+    FlappyNotReachable = 0,
+    FlappyReachableViaWiFi = 2,
+    FlappyReachableViaWWAN = 1
 };
 
 @class FlappyReachability;
 
-typedef void (^NetworkReachable)(FlappyReachability * reachability);
-typedef void (^NetworkUnreachable)(FlappyReachability * reachability);
-typedef void (^NetworkReachability)(FlappyReachability * reachability, SCNetworkConnectionFlags flags);
+typedef void (^FlappyNetworkReachable)(FlappyReachability * reachability);
+typedef void (^FlappyNetworkUnreachable)(FlappyReachability * reachability);
+typedef void (^FlappyNetworkReachability)(FlappyReachability * reachability, SCNetworkConnectionFlags flags);
 
 
 @interface FlappyReachability : NSObject
 
-@property (nonatomic, copy) NetworkReachable    reachableBlock;
-@property (nonatomic, copy) NetworkUnreachable  unreachableBlock;
-@property (nonatomic, copy) NetworkReachability reachabilityBlock;
+@property (nonatomic, copy) FlappyNetworkReachable    reachableBlock;
+@property (nonatomic, copy) FlappyNetworkUnreachable  unreachableBlock;
+@property (nonatomic, copy) FlappyNetworkReachability reachabilityBlock;
 
 @property (nonatomic, assign) BOOL reachableOnWWAN;
 
@@ -95,7 +95,7 @@ typedef void (^NetworkReachability)(FlappyReachability * reachability, SCNetwork
 // Is user intervention required?
 -(BOOL)isInterventionRequired;
 
--(NetworkStatus)currentReachabilityStatus;
+-(FlappyNetworkStatus)currentReachabilityStatus;
 -(SCNetworkReachabilityFlags)reachabilityFlags;
 -(NSString*)currentReachabilityString;
 -(NSString*)currentReachabilityFlags;

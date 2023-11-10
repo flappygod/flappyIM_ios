@@ -27,7 +27,7 @@
 @interface FlappyIM ()
 
 //用于监听网络变化
-@property (nonatomic,strong) Reachability* hostReachability;
+@property (nonatomic,strong) FlappyReachability* hostReachability;
 //用于联网的socket
 @property (nonatomic,strong) FlappySocket* flappysocket;
 //被踢下线了
@@ -512,11 +512,11 @@
     //监听网络状态变化
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reachabilityChanged:)
-                                                 name:kReachabilityChangedNotification
+                                                 name:kFlappyReachabilityChangedNotification
                                                object:nil];
     // 设置网络检测的站点
     NSString *remoteHostName = @"www.baidu.com";
-    self.hostReachability = [Reachability reachabilityWithHostName:remoteHostName];
+    self.hostReachability = [FlappyReachability reachabilityWithHostName:remoteHostName];
     [self.hostReachability startNotifier];
     [self updateInterfaceWithReachability:self.hostReachability];
     
@@ -555,10 +555,10 @@
 }
 
 //更新网络状态
-- (void)updateInterfaceWithReachability:(Reachability *)reachability
+- (void)updateInterfaceWithReachability:(FlappyReachability *)reachability
 {
     
-    NetworkStatus netStatus = [reachability currentReachabilityStatus];
+    FlappyNetworkStatus netStatus = [reachability currentReachabilityStatus];
     switch (netStatus) {
         case 0:
             break;
@@ -575,7 +575,7 @@
 -(void)stopOberver{
     //移除监听
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:kReachabilityChangedNotification
+                                                    name:kFlappyReachabilityChangedNotification
                                                   object:nil];
     
     
@@ -771,7 +771,7 @@
         }
         
         //网络不可达或者当前不在前台
-        if([_hostReachability currentReachabilityStatus] == NotReachable||!self.isForground){
+        if([_hostReachability currentReachabilityStatus] == FlappyNotReachable||!self.isForground){
             return;
         }
         
@@ -853,7 +853,7 @@
         }
         
         //网络不可达或者当前不在前台
-        if([_hostReachability currentReachabilityStatus] == NotReachable||!self.isForground){
+        if([_hostReachability currentReachabilityStatus] == FlappyNotReachable||!self.isForground){
             return;
         }
         
@@ -1425,19 +1425,19 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     //用户推送的信息
     NSDictionary * userInfo = response.notification.request.content.userInfo;
     // 收到推送的请求
-    UNNotificationRequest *request = response.notification.request;
+    //UNNotificationRequest *request = response.notification.request;
     // 收到推送的消息内容
-    UNNotificationContent *content = request.content;
+    //UNNotificationContent *content = request.content;
     // 推送消息的角标
-    NSNumber *badge = content.badge;
+    //NSNumber *badge = content.badge;
     // 推送消息体
-    NSString *body = content.body;
+    //NSString *body = content.body;
     // 推送消息的声音
-    UNNotificationSound *sound = content.sound;
+    //UNNotificationSound *sound = content.sound;
     // 推送消息的副标题
-    NSString *subtitle = content.subtitle;
+    //NSString *subtitle = content.subtitle;
     // 推送消息的标题
-    NSString *title = content.title;
+    //NSString *title = content.title;
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         //远程通知
         [self didReceiveRemoteNotification:userInfo];

@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
     s.source           = { :git => 'https://github.com/flappygod/flappyIM_ios.git', :tag => s.version.to_s }
     # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
     
-    s.ios.deployment_target = '11.0'
+    s.ios.deployment_target = '9.0'
     
     s.source_files = 'flappyim/Classes/**/*'
     s.public_header_files = 'flappyim/Classes/Public/*.h'
@@ -34,6 +34,7 @@ Pod::Spec.new do |s|
     # s.resource_bundles = {
     #   'flappyim' => ['flappyim/Assets/*.png']
     # }
+    
     
     # s.public_header_files = 'Pod/Classes/**/*.h'
     # s.frameworks = 'UIKit', 'MapKit'
@@ -46,5 +47,4 @@ Pod::Spec.new do |s|
     s.dependency 'Protobuf', '~> 3.21.5'
     s.dependency 'CocoaAsyncSocket', '~> 7.6.5'
     s.dependency 'FMDB', '~> 2.7.5'
-    s.dependency 'Reachability','~> 3.2'
 end

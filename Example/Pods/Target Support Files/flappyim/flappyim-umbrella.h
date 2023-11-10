@@ -28,6 +28,7 @@
 #import "FlappyFailureWrap.h"
 #import "FlappyIM.h"
 #import "FlappyMessageListener.h"
+#import "FlappyReachability.h"
 #import "FlappySocket.h"
 #import "SessionData.h"
 

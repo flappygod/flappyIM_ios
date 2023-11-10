@@ -114,8 +114,6 @@
                 
                 //文件名
                 NSString *fileName = [model.path componentsSeparatedByString:@"/"].lastObject;
-                //错误
-                NSError *error;
                 //URL
                 NSURL* url;
                 //如果以file开头

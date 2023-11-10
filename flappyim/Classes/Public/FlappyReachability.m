@@ -35,7 +35,7 @@
 #import <netdb.h>
 
 
-NSString *const kReachabilityChangedNotification = @"kReachabilityChangedNotification";
+NSString *const kFlappyReachabilityChangedNotification = @"kFlappyReachabilityChangedNotification";
 
 
 @interface FlappyReachability ()
@@ -416,19 +416,19 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 #pragma mark - reachability status stuff
 
--(NetworkStatus)currentReachabilityStatus
+-(FlappyNetworkStatus)currentReachabilityStatus
 {
     if([self isReachable])
     {
         if([self isReachableViaWiFi])
-            return ReachableViaWiFi;
+            return     FlappyReachableViaWiFi;
         
 #if    TARGET_OS_IPHONE
-        return ReachableViaWWAN;
+        return     FlappyReachableViaWWAN;
 #endif
     }
     
-    return NotReachable;
+    return FlappyNotReachable;
 }
 
 -(SCNetworkReachabilityFlags)reachabilityFlags
@@ -445,14 +445,14 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 -(NSString*)currentReachabilityString
 {
-    NetworkStatus temp = [self currentReachabilityStatus];
+    FlappyNetworkStatus temp = [self currentReachabilityStatus];
     
-    if(temp == ReachableViaWWAN)
+    if(temp ==     FlappyReachableViaWWAN)
     {
         // Updated for the fact that we have CDMA phones now!
         return NSLocalizedString(@"Cellular", @"");
     }
-    if (temp == ReachableViaWiFi)
+    if (temp ==     FlappyReachableViaWiFi)
     {
         return NSLocalizedString(@"WiFi", @"");
     }
@@ -491,7 +491,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
     
     // this makes sure the change notification happens on the MAIN THREAD
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:kReachabilityChangedNotification
+        [[NSNotificationCenter defaultCenter] postNotificationName:kFlappyReachabilityChangedNotification
                                                             object:self];
     });
 }

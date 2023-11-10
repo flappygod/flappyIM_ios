@@ -181,7 +181,8 @@
 //url解码
 +(NSString *)URLDecodedString:(NSString *)str
 {
-    NSString *decodedString=(__bridge_transfer NSString *)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (__bridge CFStringRef)str, CFSTR(""), CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding));
+    
+    NSString *decodedString = (NSString*)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, (CFStringRef)str, CFSTR("")));
     decodedString=[decodedString stringByReplacingOccurrencesOfString:@"+" withString:@" "];
     return decodedString;
 }

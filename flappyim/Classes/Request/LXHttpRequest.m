@@ -365,6 +365,8 @@
     }
 }
 
+
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 //使用https的时候安全验证默认是通过（IOS9.0以下）
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
     return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
@@ -378,5 +380,6 @@
         [[challenge sender]  continueWithoutCredentialForAuthenticationChallenge: challenge];
     }
 }
+#pragma clang diagnostic pop
 
 @end
