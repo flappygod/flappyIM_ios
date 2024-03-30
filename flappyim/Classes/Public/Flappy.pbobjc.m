@@ -218,6 +218,7 @@ typedef struct FlappyResponse__storage_ {
 @dynamic device;
 @dynamic pushId;
 @dynamic latest;
+@dynamic secret;
 
 typedef struct ReqLogin__storage_ {
   uint32_t _has_storage_[1];
@@ -225,6 +226,7 @@ typedef struct ReqLogin__storage_ {
   NSString *device;
   NSString *pushId;
   NSString *latest;
+  NSString *secret;
 } ReqLogin__storage_;
 
 // This method is threadsafe because it is initially called
@@ -266,6 +268,15 @@ typedef struct ReqLogin__storage_ {
         .number = ReqLogin_FieldNumber_Latest,
         .hasIndex = 3,
         .offset = (uint32_t)offsetof(ReqLogin__storage_, latest),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "secret",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ReqLogin_FieldNumber_Secret,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(ReqLogin__storage_, secret),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
@@ -614,6 +625,8 @@ typedef struct Session__storage_ {
 @dynamic messageContent;
 @dynamic messageSendState;
 @dynamic messageReadState;
+@dynamic messageSecretSend;
+@dynamic messageSecretReceive;
 @dynamic messageDate;
 @dynamic isDelete;
 @dynamic deleteDate;
@@ -631,6 +644,8 @@ typedef struct Message__storage_ {
   NSString *messageSendExtendId;
   NSString *messageReceiveExtendId;
   NSString *messageContent;
+  NSString *messageSecretSend;
+  NSString *messageSecretReceive;
   NSString *messageDate;
   NSString *deleteDate;
   int64_t messageTableSeq;
@@ -762,10 +777,28 @@ typedef struct Message__storage_ {
         .dataType = GPBDataTypeInt32,
       },
       {
+        .name = "messageSecretSend",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Message_FieldNumber_MessageSecretSend,
+        .hasIndex = 13,
+        .offset = (uint32_t)offsetof(Message__storage_, messageSecretSend),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "messageSecretReceive",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Message_FieldNumber_MessageSecretReceive,
+        .hasIndex = 14,
+        .offset = (uint32_t)offsetof(Message__storage_, messageSecretReceive),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "messageDate",
         .dataTypeSpecific.clazz = Nil,
         .number = Message_FieldNumber_MessageDate,
-        .hasIndex = 13,
+        .hasIndex = 15,
         .offset = (uint32_t)offsetof(Message__storage_, messageDate),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -774,7 +807,7 @@ typedef struct Message__storage_ {
         .name = "isDelete",
         .dataTypeSpecific.clazz = Nil,
         .number = Message_FieldNumber_IsDelete,
-        .hasIndex = 14,
+        .hasIndex = 16,
         .offset = (uint32_t)offsetof(Message__storage_, isDelete),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt32,
@@ -783,7 +816,7 @@ typedef struct Message__storage_ {
         .name = "deleteDate",
         .dataTypeSpecific.clazz = Nil,
         .number = Message_FieldNumber_DeleteDate,
-        .hasIndex = 15,
+        .hasIndex = 17,
         .offset = (uint32_t)offsetof(Message__storage_, deleteDate),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -799,8 +832,8 @@ typedef struct Message__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\020\001\t\000\002\016\000\003\022\000\004\024\000\005\017\000\006\013\000\007\r\000\010\023\000\t\020\000\n\026\000\013\016\000\014\020\000\r\020\000"
-        "\016\013\000\017\010\000\020\n\000";
+        "\022\001\t\000\002\016\000\003\022\000\004\024\000\005\017\000\006\013\000\007\r\000\010\023\000\t\020\000\n\026\000\013\016\000\014\020\000\r\020\000"
+        "\016\021\000\017\024\000\020\013\000\021\010\000\022\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG
@@ -888,16 +921,16 @@ typedef struct FlappyKafka__storage_ {
 @dynamic device;
 @dynamic pushId;
 @dynamic pushType;
-@dynamic time;
 @dynamic pushPlat;
+@dynamic time;
 
 typedef struct Route__storage_ {
   uint32_t _has_storage_[1];
   NSString *device;
   NSString *pushId;
   NSString *pushType;
-  NSString *time;
   NSString *pushPlat;
+  NSString *time;
   int64_t userId;
 } Route__storage_;
 
@@ -944,21 +977,21 @@ typedef struct Route__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "time",
-        .dataTypeSpecific.clazz = Nil,
-        .number = Route_FieldNumber_Time,
-        .hasIndex = 4,
-        .offset = (uint32_t)offsetof(Route__storage_, time),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
-        .dataType = GPBDataTypeString,
-      },
-      {
         .name = "pushPlat",
         .dataTypeSpecific.clazz = Nil,
         .number = Route_FieldNumber_PushPlat,
-        .hasIndex = 5,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(Route__storage_, pushPlat),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "time",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Route_FieldNumber_Time,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(Route__storage_, time),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
     };
@@ -972,7 +1005,7 @@ typedef struct Route__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\001\005A\000\003\006\000\004\010\000\006\010\000";
+        "\004\001\005A\000\003\006\000\004\010\000\005\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG

@@ -120,6 +120,7 @@ typedef GPB_ENUM(ReqLogin_FieldNumber) {
   ReqLogin_FieldNumber_Device = 2,
   ReqLogin_FieldNumber_PushId = 3,
   ReqLogin_FieldNumber_Latest = 4,
+  ReqLogin_FieldNumber_Secret = 5,
 };
 
 GPB_FINAL @interface ReqLogin : GPBMessage
@@ -135,6 +136,9 @@ GPB_FINAL @interface ReqLogin : GPBMessage
 
 /** 最后的消息序号 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *latest;
+
+/** 秘钥验证 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *secret;
 
 @end
 
@@ -249,9 +253,11 @@ typedef GPB_ENUM(Message_FieldNumber) {
   Message_FieldNumber_MessageContent = 11,
   Message_FieldNumber_MessageSendState = 12,
   Message_FieldNumber_MessageReadState = 13,
-  Message_FieldNumber_MessageDate = 14,
-  Message_FieldNumber_IsDelete = 15,
-  Message_FieldNumber_DeleteDate = 16,
+  Message_FieldNumber_MessageSecretSend = 14,
+  Message_FieldNumber_MessageSecretReceive = 15,
+  Message_FieldNumber_MessageDate = 16,
+  Message_FieldNumber_IsDelete = 17,
+  Message_FieldNumber_DeleteDate = 18,
 };
 
 GPB_FINAL @interface Message : GPBMessage
@@ -294,6 +300,12 @@ GPB_FINAL @interface Message : GPBMessage
 
 /** 消息是否已经被阅读 */
 @property(nonatomic, readwrite) int32_t messageReadState;
+
+/** 消息发送秘钥 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageSecretSend;
+
+/** 消息发送秘钥 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageSecretReceive;
 
 /** 消息时间 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *messageDate;
@@ -338,8 +350,8 @@ typedef GPB_ENUM(Route_FieldNumber) {
   Route_FieldNumber_Device = 2,
   Route_FieldNumber_PushId = 3,
   Route_FieldNumber_PushType = 4,
-  Route_FieldNumber_Time = 5,
-  Route_FieldNumber_PushPlat = 6,
+  Route_FieldNumber_PushPlat = 5,
+  Route_FieldNumber_Time = 6,
 };
 
 GPB_FINAL @interface Route : GPBMessage
@@ -356,11 +368,11 @@ GPB_FINAL @interface Route : GPBMessage
 /** 推送类型 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *pushType;
 
-/** 时间 */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *time;
-
 /** 推送平台类型 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *pushPlat;
+
+/** 时间 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *time;
 
 @end
 
