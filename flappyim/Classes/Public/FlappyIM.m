@@ -60,8 +60,6 @@
         //不能再使用alloc方法
         //因为已经重写了allocWithZone方法，所以这里要调用父类的分配空间的方法
         _sharedSingleton = [[super allocWithZone:NULL] init];
-        //设置一个唯一的UUID
-        _sharedSingleton.pushID=[FlappyIM getUUID];
         //回调
         _sharedSingleton.messageListeners=[[NSMutableDictionary alloc] init];
         //会话的监听
@@ -108,7 +106,7 @@
 }
 
 //获取唯一的ID
-+(NSString*)getUUID{
++(NSString*)getPushId{
     NSString* former=[[FlappyData shareInstance]getPush];
     if([FlappyStringTool isStringEmpty:former]){
         NSString* UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
@@ -117,13 +115,6 @@
     return [[FlappyData shareInstance]getPush];
 }
 
-//设备的token
--(void)setUUID:(NSString*)token{
-    //设置
-    [[FlappyData shareInstance]savePush:token];
-    //获取唯一的推送ID
-    self.pushID=token;
-}
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored"-Wdeprecated-declarations"
@@ -310,8 +301,8 @@
         deviceTokenStr=[NSMutableString stringWithFormat:@"%@",token];
     }
     
-    //设置token
-    [self setUUID:deviceTokenStr];
+    //保存推送ID
+    [[FlappyData shareInstance]savePush: deviceTokenStr];
     
     //更新字符串
     [self updateDeviceToken:deviceTokenStr];
@@ -319,47 +310,43 @@
 
 //更新deviceToken
 -(void)updateDeviceToken:(NSString*)deviceTokenStr{
-    //如果当前是登录的状态
-    if([[FlappyData shareInstance]getUser]!=nil&&[[FlappyData shareInstance]getUser].login==true){
-        
-        //没有设置或者不相同
-        if([[FlappyData shareInstance]getUser].pushID==nil||![[[FlappyData shareInstance]getUser].pushID isEqualToString:deviceTokenStr]){
-            
-            //请求体，参数（NSDictionary 类型）
-            NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
-                                         @"device":DEVICE_TYPE,
-                                         @"pushId":deviceTokenStr
-            };
-            //注册地址
-            NSString *urlString = [FlappyApiConfig shareInstance].URL_changePush;
-            //循环引用
-            __weak typeof(self) safeSelf=self;
-            //请求数据
-            [FlappyApiRequest postRequest:urlString
-                           withParameters:parameters
-                              withSuccess:^(id data) {
-                
-                //保存推送设置
-                PushSettings* settings=[PushSettings mj_objectWithKeyValues:data];
-                [[FlappyData shareInstance]savePushSetting:settings];
-                
-                
-                //保存
-                ChatUser* user=[[FlappyData shareInstance]getUser];
-                user.pushID=deviceTokenStr;
-                [[FlappyData shareInstance]saveUser:user];
-                
-            } withFailure:^(NSError * error, NSInteger code) {
-                [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
-                                                         selector:@selector(updateDeviceToken:)
-                                                           object:deviceTokenStr];
-                //修改失败
-                [safeSelf performSelector:@selector(updateDeviceToken:)
-                               withObject:deviceTokenStr
-                               afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
-            }];
-        }
+    
+    //用户为空或者没有登录
+    if([[FlappyData shareInstance]getUser]==nil||[[FlappyData shareInstance]getUser].login==false){
+        return;
     }
+    
+    //设置的推送ID相等
+    if([[FlappyData shareInstance] getPush]!=nil&&[[[FlappyData shareInstance] getPush] isEqualToString:deviceTokenStr]){
+        return;
+    }
+    
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
+                                 @"device":DEVICE_TYPE,
+                                 @"pushId":deviceTokenStr
+    };
+    //注册地址
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_changePush;
+    //循环引用
+    __weak typeof(self) safeSelf=self;
+    //请求数据
+    [FlappyApiRequest postRequest:urlString
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+        //保存推送设置
+        PushSettings* settings=[PushSettings mj_objectWithKeyValues:data];
+        [[FlappyData shareInstance]savePushSetting:settings];
+        
+    } withFailure:^(NSError * error, NSInteger code) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:safeSelf
+                                                 selector:@selector(updateDeviceToken:)
+                                                   object:deviceTokenStr];
+        //修改失败
+        [safeSelf performSelector:@selector(updateDeviceToken:)
+                       withObject:deviceTokenStr
+                       afterDelay:[FlappyApiConfig shareInstance].autoLoginInterval];
+    }];
 }
 
 //设置当前的推送信息
@@ -368,7 +355,23 @@
              andNoDisturb:(NSString*)pushNoDisturb
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure{
-    //请求体，参数（NSDictionary 类型）
+    
+    //保存推送的基本信息
+    PushSettings* settings=[[PushSettings alloc] init];
+    settings.routePushPrivacy = pushPrivacy;
+    settings.routePushLanguage = pushLanguage;
+    settings.routePushNoDisturb = pushNoDisturb;
+    
+    //没有登录的状态
+    if([[FlappyData shareInstance]getUser]==nil&&[[FlappyData shareInstance]getUser].login==false){
+        [[FlappyData shareInstance] savePushSetting:settings];
+        if(success!=nil){
+            success([[FlappyData shareInstance] getPushSetting]);
+        }
+        return;
+    }
+    
+    //已经登录的状态
     NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"device":DEVICE_TYPE,
                                  @"pushLanguage":pushLanguage,
@@ -383,13 +386,10 @@
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-        
-        PushSettings* settings=[PushSettings mj_objectWithKeyValues:data];
-        [[FlappyData shareInstance]savePushSetting:settings];
-        
-        //成功
+        //成功了才保存
+        [[FlappyData shareInstance] savePushSetting:settings];
         if(success!=nil){
-            success(settings);
+            success([[FlappyData shareInstance] getPushSetting]);
         }
         
     } withFailure:^(NSError * error, NSInteger code) {
@@ -718,7 +718,7 @@
         NSDictionary *parameters = @{@"userID":@"",
                                      @"userExtendID":userExtendID,
                                      @"device":DEVICE_TYPE,
-                                     @"pushId":self.pushID,
+                                     @"pushId":[FlappyIM getPushId],
                                      @"pushPlat":[FlappyApiConfig shareInstance].pushPlat
         };
         
@@ -833,7 +833,7 @@
         NSString *urlString = [FlappyApiConfig shareInstance].URL_autoLogin;
         NSDictionary *parameters = @{@"userID":[[FlappyData shareInstance] getUser].userId,
                                      @"device":DEVICE_TYPE,
-                                     @"pushId":self.pushID,
+                                     @"pushId":[FlappyIM getPushId],
                                      @"pushPlat":[FlappyApiConfig shareInstance].pushPlat
         };
         __weak typeof(self) safeSelf=self;
@@ -976,7 +976,7 @@
         NSDictionary *parameters = @{@"userID":@"",
                                      @"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                      @"device":DEVICE_TYPE,
-                                     @"pushId":self.pushID,
+                                     @"pushId":[FlappyIM getPushId],
                                      @"pushPlat":[FlappyApiConfig shareInstance].pushPlat
         };
         //请求数据

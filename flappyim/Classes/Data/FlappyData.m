@@ -71,7 +71,14 @@
 
 //保存推送设置
 -(void)savePushSetting:(PushSettings*)setting{
-    NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[setting mj_keyValues]];
+    
+    //更新推送信息，并保存起来
+    PushSettings* update = [self getPushSetting];
+    update.routePushPrivacy = (setting.routePushPrivacy == nil ? update.routePushPrivacy:setting.routePushPrivacy);
+    update.routePushLanguage = (setting.routePushLanguage == nil ? update.routePushLanguage:setting.routePushLanguage);
+    update.routePushNoDisturb = (setting.routePushNoDisturb == nil ? update.routePushNoDisturb:setting.routePushNoDisturb);
+    
+    NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[update mj_keyValues]];
     UNSaveObject(str, KEY_PUSHSETTING);
 }
 
@@ -83,7 +90,12 @@
         PushSettings* ret=[PushSettings mj_objectWithKeyValues:dic];
         return ret;
     }
-    return nil;
+    //返回默认设置
+    PushSettings* settings = [[PushSettings alloc] init];
+    settings.routePushLanguage = @"zh";
+    settings.routePushPrivacy = @"0";
+    settings.routePushNoDisturb = @"0";
+    return settings;
 }
 
 

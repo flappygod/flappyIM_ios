@@ -33,9 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface FlappyIM : NSObject<GCDAsyncSocketDelegate,UNUserNotificationCenterDelegate>
 
 
-//推送的ID
-@property (nonatomic,copy) NSString*  pushID;
-
 //当前是否活跃
 @property (nonatomic,assign) bool  isForground;
 
