@@ -668,8 +668,8 @@
         NSDictionary *parameters = @{@"userID":@"",
                                      @"userExtendID":userExtendID,
                                      @"device":DEVICE_TYPE,
-                                     @"pushid":self.pushID,
-                                     @"pushplat":[FlappyApiConfig shareInstance].pushPlat
+                                     @"pushId":self.pushID,
+                                     @"pushPlat":[FlappyApiConfig shareInstance].pushPlat
         };
         
         //http做登录处理
@@ -783,8 +783,8 @@
         NSString *urlString = [FlappyApiConfig shareInstance].URL_autoLogin;
         NSDictionary *parameters = @{@"userID":[[FlappyData shareInstance] getUser].userId,
                                      @"device":DEVICE_TYPE,
-                                     @"pushid":self.pushID,
-                                     @"pushplat":[FlappyApiConfig shareInstance].pushPlat
+                                     @"pushId":self.pushID,
+                                     @"pushPlat":[FlappyApiConfig shareInstance].pushPlat
         };
         __weak typeof(self) safeSelf=self;
         [FlappyApiRequest postRequest:urlString
@@ -926,8 +926,8 @@
         NSDictionary *parameters = @{@"userID":@"",
                                      @"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                      @"device":DEVICE_TYPE,
-                                     @"pushid":self.pushID,
-                                     @"pushplat":[FlappyApiConfig shareInstance].pushPlat
+                                     @"pushId":self.pushID,
+                                     @"pushPlat":[FlappyApiConfig shareInstance].pushPlat
         };
         //请求数据
         [FlappyApiRequest postRequest:urlString
