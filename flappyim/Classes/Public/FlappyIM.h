@@ -68,11 +68,12 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setPushPlatfrom:(NSString*)platform;
 
 //设置当前的推送信息
--(void)changePushLanguage:(NSString*)pushLanguage
-              andPrivacy:(NSString*)pushPrivacy
-            andNoDisturb:(NSString*)pushNoDisturb
-              andSuccess:(FlappySuccess)success
-              andFailure:(FlappyFailure)failure;
+-(void)changePushType:(NSString*)pushType
+          andLanguage:(NSString*)pushLanguage
+           andPrivacy:(NSString*)pushPrivacy
+         andNoDisturb:(NSString*)pushNoDisturb
+           andSuccess:(FlappySuccess)success
+           andFailure:(FlappyFailure)failure;
 
 
 //设置当前的推送信息

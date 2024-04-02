@@ -78,7 +78,7 @@
 //增加本地通知
 -(void)initLocalNotification{
     //后台了，但是还没有被墓碑的情况
-    __weak typeof(self) safeSelf=self;
+    //__weak typeof(self) safeSelf=self;
     [self addGloableMsgListener:[[FlappyMessageListener alloc]
                                  initWithSend:^(ChatMessage * _Nullable message) {
         
@@ -379,8 +379,6 @@
     };
     //注册地址
     NSString *urlString = [FlappyApiConfig shareInstance].URL_changePush;
-    //循环引用
-    __weak typeof(self) safeSelf=self;
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters

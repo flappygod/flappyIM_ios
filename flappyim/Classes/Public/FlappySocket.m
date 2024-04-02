@@ -111,7 +111,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         //用户ID
         info.userId=self.user.userId;
         //推送ID
-        info.pushId=[FlappyIM shareInstance].pushID;
+        info.pushId=[[FlappyData shareInstance] getPush];
         //登录信息
         if([[FlappyData shareInstance] getUser]!=nil){
             info.latest=[[FlappyData shareInstance] getUser].latest;
@@ -391,13 +391,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     
     //登录成功后保存推送类型，保存用户所有的会话列表
     @try {
-        //推送类型
-        id dataType=self.loginData[@"route"][@"routePushType"];
-        //推送类型
-        NSInteger type=(long)dataType;
-        //保存
-        [[FlappyData shareInstance] savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
-        
+
         if(self.loginData[@"sessions"]!=nil && self.loginData[@"sessions"]!=[NSNull null]){
             //修改
             NSArray* array=self.loginData[@"sessions"];
