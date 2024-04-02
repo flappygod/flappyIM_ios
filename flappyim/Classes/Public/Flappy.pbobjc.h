@@ -351,7 +351,10 @@ typedef GPB_ENUM(Route_FieldNumber) {
   Route_FieldNumber_PushId = 3,
   Route_FieldNumber_PushType = 4,
   Route_FieldNumber_PushPlat = 5,
-  Route_FieldNumber_Time = 6,
+  Route_FieldNumber_PushLanguage = 6,
+  Route_FieldNumber_PushPrivacy = 7,
+  Route_FieldNumber_PushNoDisturb = 8,
+  Route_FieldNumber_Time = 9,
 };
 
 GPB_FINAL @interface Route : GPBMessage
@@ -370,6 +373,15 @@ GPB_FINAL @interface Route : GPBMessage
 
 /** 推送平台类型 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *pushPlat;
+
+/** 推送平台语言 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *pushLanguage;
+
+/** 推送平台隐私 */
+@property(nonatomic, readwrite) int32_t pushPrivacy;
+
+/** 推送平台免打扰 */
+@property(nonatomic, readwrite) int32_t pushNoDisturb;
 
 /** 时间 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *time;

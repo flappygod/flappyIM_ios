@@ -922,14 +922,20 @@ typedef struct FlappyKafka__storage_ {
 @dynamic pushId;
 @dynamic pushType;
 @dynamic pushPlat;
+@dynamic pushLanguage;
+@dynamic pushPrivacy;
+@dynamic pushNoDisturb;
 @dynamic time;
 
 typedef struct Route__storage_ {
   uint32_t _has_storage_[1];
+  int32_t pushPrivacy;
+  int32_t pushNoDisturb;
   NSString *device;
   NSString *pushId;
   NSString *pushType;
   NSString *pushPlat;
+  NSString *pushLanguage;
   NSString *time;
   int64_t userId;
 } Route__storage_;
@@ -986,10 +992,37 @@ typedef struct Route__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
+        .name = "pushLanguage",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Route_FieldNumber_PushLanguage,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(Route__storage_, pushLanguage),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "pushPrivacy",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Route_FieldNumber_PushPrivacy,
+        .hasIndex = 6,
+        .offset = (uint32_t)offsetof(Route__storage_, pushPrivacy),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt32,
+      },
+      {
+        .name = "pushNoDisturb",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Route_FieldNumber_PushNoDisturb,
+        .hasIndex = 7,
+        .offset = (uint32_t)offsetof(Route__storage_, pushNoDisturb),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt32,
+      },
+      {
         .name = "time",
         .dataTypeSpecific.clazz = Nil,
         .number = Route_FieldNumber_Time,
-        .hasIndex = 5,
+        .hasIndex = 8,
         .offset = (uint32_t)offsetof(Route__storage_, time),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -1005,7 +1038,7 @@ typedef struct Route__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\001\005A\000\003\006\000\004\010\000\005\010\000";
+        "\007\001\005A\000\003\006\000\004\010\000\005\010\000\006\014\000\007\013\000\010\r\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG
