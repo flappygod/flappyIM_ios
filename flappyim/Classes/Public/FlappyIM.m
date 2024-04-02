@@ -327,7 +327,7 @@
             //请求体，参数（NSDictionary 类型）
             NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                          @"device":DEVICE_TYPE,
-                                         @"pushid":deviceTokenStr
+                                         @"pushId":deviceTokenStr
             };
             //注册地址
             NSString *urlString = [FlappyApiConfig shareInstance].URL_changePush;
