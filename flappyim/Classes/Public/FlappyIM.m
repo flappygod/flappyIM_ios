@@ -38,10 +38,8 @@
 
 //被踢下线了
 @property (nonatomic,assign) bool isSetup;
-
 //当前正在登录
 @property (nonatomic,assign) bool isRunningLogin;
-
 //当前正在登录
 @property (nonatomic,assign) bool isRunningAutoLogin;
 
@@ -66,8 +64,6 @@
         _sharedSingleton.sessionListeners=[[NSMutableArray alloc]init];
         //还没有被初始化
         _sharedSingleton.isSetup=false;
-        //不再使用本地推送了
-        //[_sharedSingleton initLocalNotification];
     });
     return _sharedSingleton;
 }
@@ -96,7 +92,7 @@
         //如果再后台
         if(state == UIApplicationStateBackground || state == UIApplicationStateInactive){
             //判断当前是在后台还是在前台
-            [safeSelf sendLocalNotification:message];
+            //[safeSelf sendLocalNotification:message];
         }
     } andRead:^(NSString * _Nullable tableSeqence) {
         
@@ -119,97 +115,97 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored"-Wdeprecated-declarations"
 
-//发送本地通知
-- (void)sendLocalNotification:(ChatMessage*)msg{
-    //标题
-    NSString *title = @"消息提醒";
-    //新的信息
-    NSString *body =  @"您有一条新的信息";
-    //消息类型
-    if(msg.messageType==MSG_TYPE_TEXT){
-        //邓肯
-        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[[FlappyData shareInstance]getPushType]].integerValue;
-        //普通
-        if(pushTy==0){
-            body=[msg getChatText];
-        }
-    }
-    else if(msg.messageType==MSG_TYPE_IMG){
-        //邓肯
-        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[[FlappyData shareInstance]getPushType]].integerValue;
-        //普通
-        if(pushTy==0){
-            body=@"您有一条图片信息";
-        }
-    }
-    else if(msg.messageType==MSG_TYPE_TEXT){
-        //邓肯
-        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[[FlappyData shareInstance]getPushType]].integerValue;
-        //普通
-        if(pushTy==0){
-            body=@"您有一条语音信息";
-        }
-    }
-    //badge
-    NSInteger badge = 1;
-    //时间
-    NSInteger timeInteval = 5;
-    //用户信息
-    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc]init];
-    userInfo[@"message"]=[FlappyJsonTool JSONObjectToJSONString:[msg mj_keyValues]];
-    if (@available(iOS 10.0, *)) {
-        // 1.创建通知内容
-        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-        content.sound = [UNNotificationSound defaultSound];
-        content.title = title;
-        content.body = body;
-        content.badge = @(badge);
-        content.userInfo = userInfo;
-        
-        //// 2.设置通知附件内容
-        //NSError *error = nil;
-        //NSString *path = [[NSBundle mainBundle] pathForResource:@"logo_img_02@2x" ofType:@"png"];
-        //UNNotificationAttachment *att = [UNNotificationAttachment attachmentWithIdentifier:@"att1" URL:[NSURL fileURLWithPath:path] options:nil error:&error];
-        //if (error) {
-        //    NSLog(@"attachment error %@", error);
-        //}
-        //content.attachments = @[att];
-        //content.launchImageName = @"icon_certification_status1@2x";
-        
-        // 2.设置声音
-        UNNotificationSound *sound = [UNNotificationSound defaultSound];
-        // [UNNotificationSound defaultSound];
-        content.sound = sound;
-        // 3.触发模式
-        UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:timeInteval repeats:NO];
-        
-        // 4.设置UNNotificationRequest
-        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:msg.messageId
-                                                                              content:content
-                                                                              trigger:trigger];
-        
-        // 5.把通知加到UNUserNotificationCenter, 到指定触发点会被触发
-        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-        }];
-    } else {
-        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-        // 1.设置触发时间（如果要立即触发，无需设置）
-        localNotification.timeZone = [NSTimeZone defaultTimeZone];
-        localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:5];
-        // 2.设置通知标题
-        localNotification.alertBody = title;
-        // 3.设置通知动作按钮的标题
-        localNotification.alertAction = @"查看";
-        // 4.设置提醒的声音
-        localNotification.soundName = @"sound01.wav";
-        // 5.设置通知的 传递的userInfo
-        localNotification.userInfo = userInfo;
-        // 6.在规定的日期触发通知
-        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
-        // 6.立即触发一个通知
-        //[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-    }
-}
+////发送本地通知
+//- (void)sendLocalNotification:(ChatMessage*)msg{
+//    //标题
+//    NSString *title = @"消息提醒";
+//    //新的信息
+//    NSString *body =  @"您有一条新的信息";
+//    //消息类型
+//    if(msg.messageType==MSG_TYPE_TEXT){
+//        //邓肯
+//        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[[FlappyData shareInstance]getPushType]].integerValue;
+//        //普通
+//        if(pushTy==0){
+//            body=[msg getChatText];
+//        }
+//    }
+//    else if(msg.messageType==MSG_TYPE_IMG){
+//        //邓肯
+//        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[[FlappyData shareInstance]getPushType]].integerValue;
+//        //普通
+//        if(pushTy==0){
+//            body=@"您有一条图片信息";
+//        }
+//    }
+//    else if(msg.messageType==MSG_TYPE_TEXT){
+//        //邓肯
+//        NSInteger pushTy=[FlappyStringTool toUnNullZeroStr:[[FlappyData shareInstance]getPushType]].integerValue;
+//        //普通
+//        if(pushTy==0){
+//            body=@"您有一条语音信息";
+//        }
+//    }
+//    //badge
+//    NSInteger badge = 1;
+//    //时间
+//    NSInteger timeInteval = 5;
+//    //用户信息
+//    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc]init];
+//    userInfo[@"message"]=[FlappyJsonTool JSONObjectToJSONString:[msg mj_keyValues]];
+//    if (@available(iOS 10.0, *)) {
+//        // 1.创建通知内容
+//        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+//        content.sound = [UNNotificationSound defaultSound];
+//        content.title = title;
+//        content.body = body;
+//        content.badge = @(badge);
+//        content.userInfo = userInfo;
+//
+//        //// 2.设置通知附件内容
+//        //NSError *error = nil;
+//        //NSString *path = [[NSBundle mainBundle] pathForResource:@"logo_img_02@2x" ofType:@"png"];
+//        //UNNotificationAttachment *att = [UNNotificationAttachment attachmentWithIdentifier:@"att1" URL:[NSURL fileURLWithPath:path] options:nil error:&error];
+//        //if (error) {
+//        //    NSLog(@"attachment error %@", error);
+//        //}
+//        //content.attachments = @[att];
+//        //content.launchImageName = @"icon_certification_status1@2x";
+//
+//        // 2.设置声音
+//        UNNotificationSound *sound = [UNNotificationSound defaultSound];
+//        // [UNNotificationSound defaultSound];
+//        content.sound = sound;
+//        // 3.触发模式
+//        UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:timeInteval repeats:NO];
+//
+//        // 4.设置UNNotificationRequest
+//        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:msg.messageId
+//                                                                              content:content
+//                                                                              trigger:trigger];
+//
+//        // 5.把通知加到UNUserNotificationCenter, 到指定触发点会被触发
+//        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+//        }];
+//    } else {
+//        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+//        // 1.设置触发时间（如果要立即触发，无需设置）
+//        localNotification.timeZone = [NSTimeZone defaultTimeZone];
+//        localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:5];
+//        // 2.设置通知标题
+//        localNotification.alertBody = title;
+//        // 3.设置通知动作按钮的标题
+//        localNotification.alertAction = @"查看";
+//        // 4.设置提醒的声音
+//        localNotification.soundName = @"sound01.wav";
+//        // 5.设置通知的 传递的userInfo
+//        localNotification.userInfo = userInfo;
+//        // 6.在规定的日期触发通知
+//        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+//        // 6.立即触发一个通知
+//        //[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+//    }
+//}
 
 //注册远程推送和本地消息通知
 -(void)registerRemoteNotice:(UIApplication *)application{
@@ -350,17 +346,19 @@
 }
 
 //设置当前的推送信息
--(void)changePushLanguage:(NSString*)pushLanguage
-               andPrivacy:(NSString*)pushPrivacy
-             andNoDisturb:(NSString*)pushNoDisturb
-               andSuccess:(FlappySuccess)success
-               andFailure:(FlappyFailure)failure{
+-(void)changePushType:(NSString*)pushType
+          andLanguage:(NSString*)pushLanguage
+           andPrivacy:(NSString*)pushPrivacy
+         andNoDisturb:(NSString*)pushNoDisturb
+           andSuccess:(FlappySuccess)success
+           andFailure:(FlappyFailure)failure{
     
     //保存推送的基本信息
     PushSettings* settings=[[PushSettings alloc] init];
     settings.routePushPrivacy = pushPrivacy;
     settings.routePushLanguage = pushLanguage;
     settings.routePushNoDisturb = pushNoDisturb;
+    settings.routePushType = pushType;
     
     //没有登录的状态
     if([[FlappyData shareInstance]getUser]==nil&&[[FlappyData shareInstance]getUser].login==false){
@@ -374,6 +372,7 @@
     //已经登录的状态
     NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"device":DEVICE_TYPE,
+                                 @"pushType":pushType,
                                  @"pushLanguage":pushLanguage,
                                  @"pushPrivacy":pushPrivacy,
                                  @"pushNoDisturb":pushNoDisturb,
@@ -753,8 +752,6 @@
             self.flappysocket=nil;
         }
         
-        //保存推送状态数据
-        [self savePushData:data];
         //得到当前的用户数据
         NSDictionary* dic=data[@"user"];
         //用户
@@ -773,6 +770,7 @@
         
         //开始链接
         self.flappysocket=[[FlappySocket alloc] initWithSuccess:^(id sdata) {
+            [safeSelf savePushData:data];
             success(sdata);
             safeSelf.isRunningLogin=false;
         }
@@ -910,9 +908,6 @@
         //正在自动登录
         self.isRunningAutoLogin=true;
         
-        //保存推送类型数据
-        [self savePushData:data];
-        
         //保存数据
         [formerUser setLogin:1];
         formerUser.userAvatar=newUser.userAvatar;
@@ -930,6 +925,7 @@
         __weak typeof(self) safeSelf=self;
         //创建新的socket
         self.flappysocket=[[FlappySocket alloc] initWithSuccess:^(id sdata) {
+            [safeSelf savePushData:data];
             safeSelf.isRunningAutoLogin=false;
         }
                                                      andFailure:[[FlappyFailureWrap alloc] initWithFailure:^(NSError *error,NSInteger code){
@@ -1009,11 +1005,8 @@
 -(void)savePushData:(id)data{
     //保存推送类型
     @try {
-        id dataType=data[@"route"][@"routePushType"];
-        //推送类型
-        NSInteger type=(long)dataType;
-        //设置
-        [[FlappyData shareInstance]savePushType:[NSString stringWithFormat:@"%ld",(long)type]];
+        PushSettings* settings=[PushSettings mj_objectWithKeyValues:data[@"route"]];
+        [[FlappyData shareInstance] savePushSetting:settings];
     } @catch (NSException *exception) {
         //打印错误日志
         NSLog(@"FlappyIM:%@",exception.description);

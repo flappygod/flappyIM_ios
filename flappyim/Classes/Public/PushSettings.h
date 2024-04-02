@@ -11,6 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PushSettings : NSObject
 
+//推送类型
+@property(nonatomic,copy) NSString*  routePushType;
+
 //推送语言
 @property(nonatomic,copy) NSString* routePushLanguage;
 

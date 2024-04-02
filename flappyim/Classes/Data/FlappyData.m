@@ -13,7 +13,6 @@
 
 #define  KEY_USER  @"KEY_USER"
 #define  KEY_PUSHID  @"KEY_PUSHID"
-#define  KEY_PUSHTYPE  @"KEY_PUSHTYPE"
 #define  KEY_PUSHSETTING  @"KEY_PUSHSETTING"
 
 @implementation FlappyData
@@ -74,11 +73,15 @@
     
     //更新推送信息，并保存起来
     PushSettings* update = [self getPushSetting];
+    //必定有值
+    update = (update==nil ? [[PushSettings alloc] init]:update);
+    //更新
     update.routePushPrivacy = (setting.routePushPrivacy == nil ? update.routePushPrivacy:setting.routePushPrivacy);
     update.routePushLanguage = (setting.routePushLanguage == nil ? update.routePushLanguage:setting.routePushLanguage);
     update.routePushNoDisturb = (setting.routePushNoDisturb == nil ? update.routePushNoDisturb:setting.routePushNoDisturb);
-    
+    update.routePushType = (setting.routePushType == nil ? update.routePushType:setting.routePushType);
     NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[update mj_keyValues]];
+    //保存
     UNSaveObject(str, KEY_PUSHSETTING);
 }
 
@@ -90,23 +93,9 @@
         PushSettings* ret=[PushSettings mj_objectWithKeyValues:dic];
         return ret;
     }
-    //返回默认设置
-    PushSettings* settings = [[PushSettings alloc] init];
-    settings.routePushLanguage = @"zh";
-    settings.routePushPrivacy = @"0";
-    settings.routePushNoDisturb = @"0";
-    return settings;
+    return nil;
 }
 
-
--(void)savePushType:(NSString*)type{
-    UNSaveObject(type, KEY_PUSHTYPE);
-}
-
--(NSString*)getPushType{
-    NSString* str=UNGetObject(KEY_PUSHTYPE);
-    return str;
-}
 
 //清空用户
 -(void)clearUser{

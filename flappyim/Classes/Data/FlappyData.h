@@ -40,13 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
 //获取推送设置
 -(PushSettings*)getPushSetting;
 
-//保存推送展示类型
--(void)savePushType:(NSString*)type;
-
-//获取推送展示类型
--(NSString*)getPushType;
-
-
 @end
 
 NS_ASSUME_NONNULL_END
