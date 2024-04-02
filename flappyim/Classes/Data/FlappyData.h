@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "Flappy.pbobjc.h"
 #import "ChatUser.h"
+#import "PushSettings.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,6 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 //获取推送ID
 -(NSString*)getPush;
+
+//保存推送设置
+-(void)savePushSetting:(PushSettings*)setting;
+
+//获取推送设置
+-(PushSettings*)getPushSetting;
 
 //保存推送展示类型
 -(void)savePushType:(NSString*)type;

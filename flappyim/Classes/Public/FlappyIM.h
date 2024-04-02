@@ -19,6 +19,7 @@
 #import "FlappyApiRequest.h"
 #import "FlappySocket.h"
 #import "FlappyReachability.h"
+#import "PushSettings.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <AFNetworking/AFNetworking-umbrella.h>
@@ -68,6 +69,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 //设置当前的平台
 -(void)setPushPlatfrom:(NSString*)platform;
+
+//设置当前的推送信息
+-(void)changePushLanguage:(NSString*)pushLanguage
+              andPrivacy:(NSString*)pushPrivacy
+            andNoDisturb:(NSString*)pushNoDisturb
+              andSuccess:(FlappySuccess)success
+              andFailure:(FlappyFailure)failure;
+
+
+//设置当前的推送信息
+-(PushSettings*)getPushSettings;
+
 
 //判断当前账号是否登录
 -(Boolean)isLogin;

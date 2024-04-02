@@ -324,6 +324,7 @@
         
         //没有设置或者不相同
         if([[FlappyData shareInstance]getUser].pushID==nil||![[[FlappyData shareInstance]getUser].pushID isEqualToString:deviceTokenStr]){
+            
             //请求体，参数（NSDictionary 类型）
             NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
                                          @"device":DEVICE_TYPE,
@@ -337,6 +338,12 @@
             [FlappyApiRequest postRequest:urlString
                            withParameters:parameters
                               withSuccess:^(id data) {
+                
+                //保存推送设置
+                PushSettings* settings=[PushSettings mj_objectWithKeyValues:data];
+                [[FlappyData shareInstance]savePushSetting:settings];
+                
+                
                 //保存
                 ChatUser* user=[[FlappyData shareInstance]getUser];
                 user.pushID=deviceTokenStr;
@@ -353,6 +360,49 @@
             }];
         }
     }
+}
+
+//设置当前的推送信息
+-(void)changePushLanguage:(NSString*)pushLanguage
+               andPrivacy:(NSString*)pushPrivacy
+             andNoDisturb:(NSString*)pushNoDisturb
+               andSuccess:(FlappySuccess)success
+               andFailure:(FlappyFailure)failure{
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
+                                 @"device":DEVICE_TYPE,
+                                 @"pushLanguage":pushLanguage,
+                                 @"pushPrivacy":pushPrivacy,
+                                 @"pushNoDisturb":pushNoDisturb,
+    };
+    //注册地址
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_changePush;
+    //循环引用
+    __weak typeof(self) safeSelf=self;
+    //请求数据
+    [FlappyApiRequest postRequest:urlString
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+        
+        PushSettings* settings=[PushSettings mj_objectWithKeyValues:data];
+        [[FlappyData shareInstance]savePushSetting:settings];
+        
+        //成功
+        if(success!=nil){
+            success(settings);
+        }
+        
+    } withFailure:^(NSError * error, NSInteger code) {
+        //失败
+        if(failure!=nil){
+            failure(error,code);
+        }
+    }];
+}
+
+//获取当前的推送设置
+-(PushSettings*)getPushSettings{
+    return   [[FlappyData shareInstance] getPushSetting];
 }
 
 

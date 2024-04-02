@@ -14,12 +14,13 @@
 #define  KEY_USER  @"KEY_USER"
 #define  KEY_PUSHID  @"KEY_PUSHID"
 #define  KEY_PUSHTYPE  @"KEY_PUSHTYPE"
+#define  KEY_PUSHSETTING  @"KEY_PUSHSETTING"
 
 @implementation FlappyData
 {
     ChatUser* _user;
 }
-    
+
 
 //使用单例模式
 + (instancetype)shareInstance {
@@ -33,7 +34,7 @@
     return _sharedSingleton;
 }
 
-    
+
 //保存用户
 -(void)saveUser:(ChatUser*)user{
     _user=user;
@@ -41,7 +42,7 @@
     NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[user mj_keyValues]];
     UNSaveObject(str, KEY_USER);
 }
-    
+
 //获取用户
 -(ChatUser*)getUser{
     if(_user!=nil){
@@ -56,23 +57,40 @@
     }
     return nil;
 }
-    
+
 //保存
 -(void)savePush:(NSString*)pushID{
     UNSaveObject(pushID, KEY_PUSHID);
 }
-    
+
 //获取推送ID
 -(NSString*)getPush{
     NSString* str=UNGetObject(KEY_PUSHID);
     return str;
 }
-    
+
+//保存推送设置
+-(void)savePushSetting:(PushSettings*)setting{
+    NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[setting mj_keyValues]];
+    UNSaveObject(str, KEY_PUSHSETTING);
+}
+
+//获取推送设置
+-(PushSettings*)getPushSetting{
+    NSString* str=UNGetObject(KEY_PUSHSETTING);
+    if(str!=nil){
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:str];
+        PushSettings* ret=[PushSettings mj_objectWithKeyValues:dic];
+        return ret;
+    }
+    return nil;
+}
+
 
 -(void)savePushType:(NSString*)type{
     UNSaveObject(type, KEY_PUSHTYPE);
 }
-    
+
 -(NSString*)getPushType{
     NSString* str=UNGetObject(KEY_PUSHTYPE);
     return str;
@@ -82,5 +100,5 @@
 -(void)clearUser{
     UNSaveObject(@"", KEY_USER);
 }
-    
-    @end
+
+@end

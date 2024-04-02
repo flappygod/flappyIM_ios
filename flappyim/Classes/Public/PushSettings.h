@@ -11,6 +11,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PushSettings : NSObject
 
+//推送语言
+@property(nonatomic,copy) NSString* routePushLanguage;
+
+//推送隐私
+@property(nonatomic,copy) NSString* routePushPrivacy;
+
+//推送免打扰
+@property(nonatomic,copy) NSString* routePushNoDisturb;
+
 @end
 
 NS_ASSUME_NONNULL_END
