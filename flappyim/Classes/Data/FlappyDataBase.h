@@ -64,6 +64,9 @@ NS_ASSUME_NONNULL_BEGIN
                             withMessageID:(NSString*)messageId
                                  withSize:(NSInteger)size;
 
+//获取未读消息的数量
+-(int)getSessionUnReadMessageCount:(NSString*)sessionId;
+
 @end
 
 NS_ASSUME_NONNULL_END

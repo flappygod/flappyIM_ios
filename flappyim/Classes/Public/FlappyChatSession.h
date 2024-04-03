@@ -128,6 +128,9 @@ NS_ASSUME_NONNULL_BEGIN
                          andSuccess:(FlappySendSuccess)success
                          andFailure:(FlappySendFailure)failure;
 
+//获取未读消息数量
+-(NSInteger)getUnReadMessageCount;
+
 
 @end
 

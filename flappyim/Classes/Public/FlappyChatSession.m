@@ -544,5 +544,10 @@
     
 }
 
+//获取未读消息数量
+-(NSInteger)getUnReadMessageCount{
+    return  [[FlappyDataBase shareInstance] getSessionUnReadMessageCount:self.session.sessionId];
+}
+
 
 @end
