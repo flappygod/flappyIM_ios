@@ -617,15 +617,19 @@
 //处理动作消息插入
 -(void)handleActionMessageUpdate:(ChatMessage*)msg{
     
-    //不是动作类型不处理
-    if(msg.messageType != MSG_TYPE_ACTION){
-        return;
-    }
+    
     
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
         return;
     }
+    
+    //不是动作类型不处理
+    if(msg.messageType != MSG_TYPE_ACTION){
+        return;
+    }
+    
+    
     ChatAction* action =[msg getChatAction];
     switch(action.actionType){
             //更新消息已读
