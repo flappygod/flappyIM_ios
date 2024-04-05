@@ -131,7 +131,7 @@
     }
 }
 -(ChatAction*)getChatAction{
-    if(_messageContent!=nil&&self.messageType==MSG_TYPE_FILE){
+    if(_messageContent!=nil&&self.messageType==MSG_TYPE_ACTION){
         NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[self base64DecodeString:_messageContent]];
         if(dic!=nil){
             return [ChatAction mj_objectWithKeyValues:dic];
