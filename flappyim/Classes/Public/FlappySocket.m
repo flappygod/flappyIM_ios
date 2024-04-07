@@ -644,6 +644,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         return;
     }
     if(message.messageType == MSG_TYPE_ACTION){
+        [[FlappyDataBase shareInstance] handleActionMessageUpdate:message];
         ChatAction* chatAction = [message getChatAction];
         switch(chatAction.actionType){
             case ACTION_TYPE_READ:{
