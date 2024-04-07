@@ -6,9 +6,7 @@
 //
 
 #import "FlappyApiConfig.h"
-
-//线上服务器
-#define FLAPPY_BASE @"http://49.234.106.91"
+#import "FlappyConfig.h"
 
 @implementation FlappyApiConfig
 
@@ -40,18 +38,12 @@
 
 //设置心跳
 -(void)setHeartInterval:(NSInteger)heartInterval{
-    _heartInterval=heartInterval;
-    if(_heartInterval<3){
-        _heartInterval=3;
-    }
+    _heartInterval=MAX(heartInterval, 3);
 }
 
 //自动登录时间间隔
 -(void)setAutoLoginInterval:(NSInteger)autoLoginInterval{
-    _autoLoginInterval=autoLoginInterval;
-    if(_autoLoginInterval<3){
-        _autoLoginInterval=3;
-    }
+    _autoLoginInterval=MAX(autoLoginInterval, 3);
 }
 
 // 防止外部调用copy

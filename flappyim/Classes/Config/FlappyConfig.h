@@ -12,12 +12,8 @@
 //当前的设备类型
 #define  DEVICE_TYPE   @"Ios"
 
-
-
-
-
-
-
+//线上服务器
+#define FLAPPY_BASE @"http://139.224.204.128"
 
 //请求出错
 #define  RESULT_FAILURE    0
