@@ -47,7 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)handleActionMessageUpdate:(ChatMessage*)msg;
 
 //通过ID获取消息
--(ChatMessage*)getMessageByID:(NSString*)messageID;
+-(ChatMessage*)getMessageByID:(NSString*)messageID
+                showActionMsg:(Boolean)showActionMsg;
 
 //更新数据
 -(Boolean)updateMessage:(ChatMessage*)msg;

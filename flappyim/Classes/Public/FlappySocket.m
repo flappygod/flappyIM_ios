@@ -434,7 +434,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             //获取消息
             ChatMessage* chatMsg=[messageList objectAtIndex:s];
             //获取之前的消息ID
-            ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId];
+            ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId showActionMsg:true];
             //修改消息状态
             [self messageArrivedState:chatMsg andFormer:former];
             //保存消息
@@ -444,7 +444,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             //通知接收到消息
             [self notifyMessageReceive:chatMsg andFormer:former];
             //通知事件消息
-            [self notifyMessageAction:chatMsg andFormer:former];
+            [self notifyMessageAction:chatMsg];
             
             //最后一条消息
             if(s==(messageList.count-1)){
@@ -479,7 +479,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         //转换一下
         ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
         //获取之前的消息ID
-        ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId];
+        ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId showActionMsg:true];
         //修改消息状态
         [self messageArrivedState:chatMsg andFormer:former];
         //添加数据
@@ -490,6 +490,8 @@ static  GCDAsyncSocket*  _instanceSocket;
         [self notifyMessageReceive:chatMsg andFormer:former];
         //消息接收到
         [self messageArrivedReceipt:chatMsg andFormer:former];
+        //通知事件消息
+        [self notifyMessageAction:chatMsg];
     }
     [self checkSessionNeedUpdate];
 }
@@ -637,12 +639,11 @@ static  GCDAsyncSocket*  _instanceSocket;
 }
 
 //消息已读回执和删除回执,对方的阅读消息存在的时候才会执行
--(void)notifyMessageAction:(ChatMessage*)message
-                 andFormer:(ChatMessage*)former{
+-(void)notifyMessageAction:(ChatMessage*)message{
     if(message==nil){
         return;
     }
-    if(message.messageType == MSG_TYPE_ACTION && former == nil ){
+    if(message.messageType == MSG_TYPE_ACTION){
         ChatAction* chatAction = [message getChatAction];
         switch(chatAction.actionType){
             case ACTION_TYPE_READ:{

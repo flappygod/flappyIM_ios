@@ -890,7 +890,8 @@
 
 
 //通过ID获取消息
--(ChatMessage*)getMessageByID:(NSString*)messageID{
+-(ChatMessage*)getMessageByID:(NSString*)messageID
+                showActionMsg:(Boolean)showActionMsg{
     //获取user
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
@@ -899,8 +900,14 @@
     
     //获取db
     [self openDB];
-    FMResultSet *result = [database executeQuery:@"select * from message where messageId = ? and messageInsertUser = ?"
-                            withArgumentsInArray:@[messageID,user.userExtendId]];
+    FMResultSet *result = nil;
+    if(showActionMsg){
+        result =[database executeQuery:@"select * from message where messageId = ? and messageInsertUser = ?"
+          withArgumentsInArray:@[messageID,user.userExtendId]];
+    }else{
+        result =[database executeQuery:@"select * from message where messageId = ? and messageType != 8 and messageInsertUser = ?"
+          withArgumentsInArray:@[messageID,user.userExtendId]];
+    }
     //返回消息
     if ([result next]) {
         ChatMessage *msg = [ChatMessage new];
@@ -1084,7 +1091,7 @@
     [self openDB];
     
     //获取当前的消息ID
-    ChatMessage* msg=[self getMessageByID:messageId];
+    ChatMessage* msg=[self getMessageByID:messageId showActionMsg:false];
     
     //当前的
     NSMutableArray* retArray=[[NSMutableArray alloc] init];
