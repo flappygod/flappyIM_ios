@@ -53,15 +53,46 @@
     //获取db
     [self openDB];
     //4.数据库中创建表（可创建多张）
-    NSString *sql = @"create table if not exists message (messageId TEXT,messageSession TEXT,messageSessionType INTEGER,messageSessionOffset INTEGER,messageTableSeq INTEGER,messageType INTEGER ,messageSendId TEXT,messageSendExtendId TEXT,messageReceiveId TEXT,messageReceiveExtendId TEXT,messageContent TEXT,messageSendState INTEGER,messageReadState INTEGER,isDelete INTEGER,messageDate TEXT,messageStamp INTEGER,deleteDate TEXT,messageInsertUser TEXT,primary key (messageId,messageInsertUser))";
+    NSString *sql = @"create table if not exists message ("
+    "messageId TEXT,"
+    "messageSession TEXT,"
+    "messageSessionType INTEGER,"
+    "messageSessionOffset INTEGER,"
+    "messageTableSeq INTEGER,"
+    "messageType INTEGER ,"
+    "messageSendId TEXT,"
+    "messageSendExtendId TEXT,"
+    "messageReceiveId TEXT,"
+    "messageReceiveExtendId TEXT,"
+    "messageContent TEXT,"
+    "messageSendState INTEGER,"
+    "messageReadState INTEGER,"
+    "isDelete INTEGER,"
+    "messageDate TEXT,"
+    "messageStamp INTEGER,"
+    "deleteDate TEXT,"
+    "messageInsertUser TEXT,"
+    "primary key (messageId,messageInsertUser))";
     
-    NSString *sqlTwo=@"create table if not exists session (sessionId TEXT,sessionExtendId TEXT,sessionType INTEGER,sessionInfo TEXT,sessionName TEXT,sessionImage TEXT,sessionOffset TEXT,sessionStamp INTEGER,sessionCreateDate TEXT,sessionCreateUser TEXT,sessionDeleted INTEGER,sessionDeletedDate TEXT,users TEXT,sessionInsertUser TEXT,primary key (sessionId,sessionInsertUser))";
+    NSString *sqlTwo=@"create table if not exists session ("
+    "sessionId TEXT,"
+    "sessionExtendId TEXT,"
+    "sessionType INTEGER,"
+    "sessionInfo TEXT,"
+    "sessionName TEXT,"
+    "sessionImage TEXT,"
+    "sessionOffset TEXT,"
+    "sessionStamp INTEGER,"
+    "sessionCreateDate TEXT,"
+    "sessionCreateUser TEXT,"
+    "sessionDeleted INTEGER,"
+    "sessionDeletedDate TEXT,"
+    "users TEXT,"
+    "sessionInsertUser TEXT,"
+    "primary key (sessionId,sessionInsertUser))";
     
-    //5.执行更新操作 此处database直接操作，不考虑多线程问题，多线程问题，用FMDatabaseQueue 每次数据库操作之后都会返回bool数值，YES，表示success，NO，表示fail,可以通过 @see lastError @see lastErrorCode @see lastErrorMessage
-    BOOL result = [database executeUpdate:sql];
-    //两个语句
-    BOOL resultTwo = [database executeUpdate:sqlTwo];
-    if (result&&resultTwo) {
+    //执行创建表任务
+    if ([database executeUpdate:sql]&&[database executeUpdate:sqlTwo]) {
         NSLog(@"create table success");
     }
     [self closeDB];
@@ -79,11 +110,11 @@
             //2.创建对应路径下数据库
             FMDatabase* db = [FMDatabase databaseWithPath:dbPath];
             //3.在数据库中进行增删改查操作时，需要判断数据库是否open，如果open失败，可能是权限或者资源不足，数据库操作完成通常使用close关闭数据库
-            [db open];
-            if (![db open]) {
-                NSLog(@"db open fail");
+            bool openFlag = [db open];
+            //如果打开成功赋值
+            if (openFlag) {
+                database = db;
             }
-            database = db;
         }
     }
 }
@@ -110,36 +141,31 @@
 
 //插入多条会话，如果存在就更新
 -(Boolean)insertSessions:(NSMutableArray*)array{
-    
     //没有的情况下就是成功
     if(array==nil||array.count==0){
         return true;
     }
-    
     //获取user
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
         return false;
     }
-    
     //打开数据库
     [self openDB];
     
     //查询浙西数组是否存在
     NSMutableArray* contains=[[NSMutableArray alloc] init];
-    //遍历
     for(int s=0;s<array.count;s++){
-        //会话数据
         SessionData* data=[array objectAtIndex:s];
         //查询当前用户是否已经存在这个会话
         FMResultSet *formers = [database executeQuery:@"select * from session where sessionInsertUser = ? and sessionId=?"
                                  withArgumentsInArray:@[user.userExtendId,data.sessionId]];
         //如果存在
         if([formers next]){
-            //存在
             [contains addObject:[NSNumber numberWithInteger:1]];
-        }else{
-            //不存在
+        }
+        //不存在
+        else{
             [contains addObject:[NSNumber numberWithInteger:0]];
         }
         [formers close];
@@ -150,7 +176,6 @@
     Boolean totalSuccess=true;
     //遍历
     for(int s=0;s<array.count;s++){
-        
         //会话数据
         SessionData* data=[array objectAtIndex:s];
         //是否包含
@@ -163,7 +188,24 @@
                 [usersDataDic addObject:[[usersData objectAtIndex:s] mj_keyValues]];
             }
             //存在就更新数据
-            BOOL result = [database executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionInfo=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionInsertUser = ? and sessionExtendId=?"
+            BOOL result = [database executeUpdate:@"update session set "
+                           "sessionId=?,"
+                           "sessionExtendId=?,"
+                           "sessionType=?,"
+                           "sessionInfo=?,"
+                           "sessionName=?,"
+                           "sessionImage=?,"
+                           "sessionOffset=?,"
+                           "sessionStamp=?,"
+                           "sessionCreateDate=?,"
+                           "sessionCreateUser=?,"
+                           "sessionDeleted=?,"
+                           "sessionDeletedDate=?,"
+                           "users=?"
+                           " where "
+                           "sessionInsertUser = ?"
+                           " and "
+                           "sessionExtendId=?"
                              withArgumentsInArray:@[
                 
                 [FlappyStringTool toUnNullStr:data.sessionId],
@@ -181,7 +223,6 @@
                 [FlappyStringTool toUnNullStr:[FlappyJsonTool DicToJSONString:usersDataDic]],
                 [FlappyStringTool toUnNullStr:user.userExtendId],
                 data.sessionExtendId
-                
             ]];
             
             //如果一条失败了，就回滚
@@ -195,7 +236,21 @@
             for(int s=0;s<usersData.count;s++){
                 [usersDataDic addObject:[[usersData objectAtIndex:s] mj_keyValues]];
             }
-            BOOL result = [database executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionInfo,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+            BOOL result = [database executeUpdate:@"insert into session("
+                           "sessionId,"
+                           "sessionExtendId,"
+                           "sessionType,"
+                           "sessionInfo,"
+                           "sessionName,"
+                           "sessionImage,"
+                           "sessionOffset,"
+                           "sessionStamp,"
+                           "sessionCreateDate,"
+                           "sessionCreateUser,"
+                           "sessionDeleted,"
+                           "sessionDeletedDate,"
+                           "users,"
+                           "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                              withArgumentsInArray:@[
                 [FlappyStringTool toUnNullStr:data.sessionId],
                 [FlappyStringTool toUnNullStr:data.sessionExtendId],
@@ -249,7 +304,7 @@
     [self openDB];
     
     //是否成功
-    Boolean totalSuccess=true;
+    Boolean isSuccess=false;
     //查询当前用户是否存在一条当前一样的会话
     FMResultSet *formers = [database executeQuery:@"select * from session where sessionInsertUser=? and sessionExtendId=?"
                              withArgumentsInArray:@[user.userExtendId,data.sessionExtendId]];
@@ -257,16 +312,31 @@
     if([formers next]){
         //如果存在就更新
         [formers close];
-        
-        //User数据
         NSMutableArray<ChatUser*>* usersData=data.users;
         NSMutableArray<NSDictionary*>* usersDataDic=[[NSMutableArray alloc]init];
         for(int s=0;s<usersData.count;s++){
             [usersDataDic addObject:[[usersData objectAtIndex:s] mj_keyValues]];
         }
         //更新数据
-        BOOL result = [database executeUpdate:@"update session set sessionId=?,sessionExtendId=?,sessionType=?,sessionInfo=?,sessionName=?,sessionImage=?,sessionOffset=?,sessionStamp=?,sessionCreateDate=?,sessionCreateUser=?,sessionDeleted=?,sessionDeletedDate=?,users=? where sessionInsertUser = ? and sessionExtendId=?"
-                         withArgumentsInArray:@[
+        isSuccess = [database executeUpdate:@"update session set "
+                     "sessionId=?,"
+                     "sessionExtendId=?,"
+                     "sessionType=?,"
+                     "sessionInfo=?,"
+                     "sessionName=?,"
+                     "sessionImage=?,"
+                     "sessionOffset=?,"
+                     "sessionStamp=?,"
+                     "sessionCreateDate=?,"
+                     "sessionCreateUser=?,"
+                     "sessionDeleted=?,"
+                     "sessionDeletedDate=?,"
+                     "users=?"
+                     " where "
+                     "sessionInsertUser = ?"
+                     " and "
+                     "sessionExtendId=?"
+                       withArgumentsInArray:@[
             
             [FlappyStringTool toUnNullStr:data.sessionId],
             [FlappyStringTool toUnNullStr:data.sessionExtendId],
@@ -285,11 +355,6 @@
             data.sessionExtendId
             
         ]];
-        
-        //如果一条失败了，就回滚
-        if(!result){
-            totalSuccess=false;
-        }
     }else{
         //如果不存在就插入数据
         [formers close];
@@ -300,8 +365,22 @@
             [usersDataDic addObject:[[usersData objectAtIndex:s] mj_keyValues]];
         }
         //插入数据
-        BOOL result = [database executeUpdate:@"insert into session(sessionId,sessionExtendId,sessionType,sessionInfo,sessionName,sessionImage,sessionOffset,sessionStamp,sessionCreateDate,sessionCreateUser,sessionDeleted,sessionDeletedDate,users,sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                         withArgumentsInArray:@[
+        isSuccess = [database executeUpdate:@"insert into session("
+                     "sessionId,"
+                     "sessionExtendId,"
+                     "sessionType,"
+                     "sessionInfo,"
+                     "sessionName,"
+                     "sessionImage,"
+                     "sessionOffset,"
+                     "sessionStamp,"
+                     "sessionCreateDate,"
+                     "sessionCreateUser,"
+                     "sessionDeleted,"
+                     "sessionDeletedDate,"
+                     "users,"
+                     "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                       withArgumentsInArray:@[
             
             [FlappyStringTool toUnNullStr:data.sessionId],
             [FlappyStringTool toUnNullStr:data.sessionExtendId],
@@ -319,27 +398,20 @@
             [FlappyStringTool toUnNullStr:user.userExtendId]
             
         ]];
-        
-        //如果一条失败了，就回滚
-        if(!result){
-            totalSuccess=false;
-        }
     }
     [self closeDB];
-    if (totalSuccess) {
-        return true;
-    } else {
-        return false;
-    }
+    return isSuccess;
 }
 
 //获取未读消息的数量
 -(int)getSessionUnReadMessageCount:(NSString*)sessionId{
-    [self openDB];
+    //用户
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
         return 0;
     }
+    
+    [self openDB];
     FMResultSet *results = [database executeQuery:@"SELECT COUNT(*) FROM message  WHERE messageInsertUser = ? and messageSession = ? and messageSendId != ? and messageReadState = 0 and messageType != 0 and messageType != 8"
                              withArgumentsInArray:@[
         user.userExtendId,
@@ -349,8 +421,10 @@
     [self closeDB];
     if ([results next]) {
         return [results intForColumnIndex:0];
+    }else{
+        
+        return 0;
     }
-    return 0;
 }
 
 
@@ -406,6 +480,19 @@
     }
 }
 
+
+//用户列表的json转换为用户信息
+-(NSMutableArray*)usersStringToChatUser:(NSString*)usersStr{
+    NSArray* array=[FlappyJsonTool JSONStringToDictionary:usersStr];
+    NSMutableArray* usersArr=[[NSMutableArray alloc]init];
+    for(int s=0;s<array.count;s++){
+        ChatUser* session=[ChatUser mj_objectWithKeyValues:[array objectAtIndex:s]];
+        [usersArr addObject:session];
+    }
+    return usersArr;
+}
+
+
 //获取用户的会话
 -(SessionData*)getUserSessionByExtendID:(NSString*)sessionExtendId{
     //获取db
@@ -417,12 +504,10 @@
         return nil;
     }
     
-    
+    //返回消息
     FMResultSet *result = [database executeQuery:@"select * from session where sessionInsertUser = ? and sessionExtendId=?"
                             withArgumentsInArray:@[user.userExtendId,sessionExtendId]];
-    //返回消息
     if ([result next]) {
-        
         SessionData *msg = [SessionData new];
         msg.sessionId = [result stringForColumn:@"sessionId"];
         msg.sessionExtendId = [result stringForColumn:@"sessionExtendId"];
@@ -436,14 +521,7 @@
         msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
         msg.isDelete = [result intForColumn:@"sessionDeleted"];
         msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
-        //转换
-        NSArray* array=[FlappyJsonTool JSONStringToDictionary:[result stringForColumn:@"users"]];
-        NSMutableArray* usersArr=[[NSMutableArray alloc]init];
-        for(int s=0;s<array.count;s++){
-            ChatUser* session=[ChatUser mj_objectWithKeyValues:[array objectAtIndex:s]];
-            [usersArr addObject:session];
-        }
-        msg.users=usersArr;
+        msg.users=[self usersStringToChatUser:[result stringForColumn:@"users"]];
         msg.unReadMessageCount = [self getSessionUnReadMessageCount:msg.sessionId];
         [result close];
         [self closeDB];
@@ -476,14 +554,7 @@
         msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
         msg.isDelete = [result intForColumn:@"sessionDeleted"];
         msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
-        //转换
-        NSArray* array=[FlappyJsonTool JSONStringToDictionary:[result stringForColumn:@"users"]];
-        NSMutableArray* usersArr=[[NSMutableArray alloc]init];
-        for(int s=0;s<array.count;s++){
-            ChatUser* session=[ChatUser mj_objectWithKeyValues:[array objectAtIndex:s]];
-            [usersArr addObject:session];
-        }
-        msg.users=usersArr;
+        msg.users=[self usersStringToChatUser:[result stringForColumn:@"users"]];
         msg.unReadMessageCount = [self getSessionUnReadMessageCount:msg.sessionId];
         [retSessions addObject:msg];
     }
@@ -509,7 +580,26 @@
     
     if([formers next]){
         [formers close];
-        [database executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ? and messageInsertUser = ?"
+        [database executeUpdate:@"update message set "
+         "messageSession=?,"
+         "messageSessionType=?,"
+         "messageSessionOffset=?,"
+         "messageTableSeq=?,"
+         "messageType=?,"
+         "messageSendId=?,"
+         "messageSendExtendId=?,"
+         "messageReceiveId=?,"
+         "messageReceiveExtendId=?,"
+         "messageContent=?,"
+         "messageSendState=?,"
+         "messageReadState=?,"
+         "messageDate=?,"
+         "deleteDate=?,"
+         "isDelete=?"
+         " where "
+         "messageId = ?"
+         " and "
+         "messageInsertUser = ?"
            withArgumentsInArray:@[
             [FlappyStringTool toUnNullStr:msg.messageSession],
             [NSNumber numberWithInteger:msg.messageSessionType],
@@ -534,7 +624,25 @@
         [self handleActionMessageUpdate:msg];
     }else{
         [formers close];
-        [database executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSendId,messageSendExtendId,messageReceiveId,messageReceiveExtendId,messageContent,messageSendState,messageReadState,messageDate,deleteDate,messageStamp,isDelete,messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+        [database executeUpdate:@"insert into message("
+         "messageId,"
+         "messageSession,"
+         "messageSessionType,"
+         "messageSessionOffset,"
+         "messageTableSeq,"
+         "messageType,"
+         "messageSendId,"
+         "messageSendExtendId,"
+         "messageReceiveId,"
+         "messageReceiveExtendId,"
+         "messageContent,"
+         "messageSendState,"
+         "messageReadState,"
+         "messageDate,"
+         "deleteDate,"
+         "messageStamp,"
+         "isDelete,"
+         "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
            withArgumentsInArray:@[
             //插入部分
             [FlappyStringTool toUnNullStr:msg.messageId],
@@ -570,12 +678,10 @@
     if(user==nil){
         return;
     }
-    
     //不是动作类型不处理
     if(msg.messageType != MSG_TYPE_ACTION){
         return;
     }
-    
     ChatAction* action =[msg getChatAction];
     switch(action.actionType){
             //更新消息已读
@@ -604,9 +710,7 @@
                 [self updateMessageDelete:userId
                              andSessionId:sessionId
                              andMessageId:messageId];
-                
             }
-            
             break;
         }
     }
@@ -616,20 +720,16 @@
 
 //处理动作消息插入
 -(void)handleActionMessageUpdate:(ChatMessage*)msg{
-    
-    
-    
+    //未登录状态
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
         return;
     }
-    
     //不是动作类型不处理
     if(msg.messageType != MSG_TYPE_ACTION){
         return;
     }
-    
-    
+    //获取
     ChatAction* action =[msg getChatAction];
     switch(action.actionType){
             //更新消息已读
@@ -647,7 +747,6 @@
                                     andTableSeq:tableSequence];
             break;
         }
-            
             //更新消息删除
         case ACTION_TYPE_DELETE:{
             NSString* userId = action.actionIds[0];
@@ -731,8 +830,6 @@
     
     //消息
     NSMutableArray* contains=[[NSMutableArray alloc]init];
-    
-    //查询当前用户是否存在一条当前一样的会话
     for(int s=0;s<array.count;s++){
         ChatMessage* msg=[array objectAtIndex:s];
         FMResultSet *formers = [database executeQuery:@"select * from message where messageId = ? and messageInsertUser = ?"
@@ -756,7 +853,26 @@
         NSNumber* nuber=[contains objectAtIndex:s];
         //包含更新
         if(nuber.intValue==1){
-            [database executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ? and messageInsertUser = ?"
+            [database executeUpdate:@"update message set "
+             "messageSession=?,"
+             "messageSessionType=?,"
+             "messageSessionOffset=?,"
+             "messageTableSeq=?,"
+             "messageType=?,"
+             "messageSendId=?,"
+             "messageSendExtendId=?,"
+             "messageReceiveId=?,"
+             "messageReceiveExtendId=?,"
+             "messageContent=?,"
+             "messageSendState=?,"
+             "messageReadState=?,"
+             "messageDate=?,"
+             "deleteDate=?,"
+             "isDelete=?"
+             " where "
+             "messageId = ?"
+             " and "
+             "messageInsertUser = ?"
                withArgumentsInArray:@[
                 [FlappyStringTool toUnNullStr:msg.messageSession],
                 [NSNumber numberWithInteger:msg.messageSessionType],
@@ -777,7 +893,24 @@
                 user.userExtendId]];
         }else{
             //不包含插入
-            [database executeUpdate:@"insert into message(messageId,messageSession,messageSessionType,messageSessionOffset,messageTableSeq,messageType,messageSendId,messageSendExtendId,messageReceiveId,messageReceiveExtendId,messageContent,messageSendState,messageReadState,messageDate,deleteDate,messageStamp,isDelete) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+            [database executeUpdate:@"insert into message("
+             "messageId,"
+             "messageSession,"
+             "messageSessionType,"
+             "messageSessionOffset,"
+             "messageTableSeq,"
+             "messageType,"
+             "messageSendId,"
+             "messageSendExtendId,"
+             "messageReceiveId,"
+             "messageReceiveExtendId,"
+             "messageContent,"
+             "messageSendState,"
+             "messageReadState,"
+             "messageDate,"
+             "deleteDate,"
+             "messageStamp,"
+             "isDelete) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                withArgumentsInArray:@[
                 //插入部分
                 [FlappyStringTool toUnNullStr:msg.messageId],
@@ -859,7 +992,26 @@
     //获取db
     [self openDB];
     //更新消息
-    BOOL result = [database executeUpdate:@"update message set messageSession=?,messageSessionType=?,messageSessionOffset=?,messageTableSeq=?,messageType=?,messageSendId=?,messageSendExtendId=?,messageReceiveId=?,messageReceiveExtendId=?,messageContent=?,messageSendState=?,messageReadState=?,messageDate=?,deleteDate=?,isDelete=? where messageId = ? and messageInsertUser = ?"
+    BOOL result = [database executeUpdate:@"update message set "
+                   "messageSession=?,"
+                   "messageSessionType=?,"
+                   "messageSessionOffset=?,"
+                   "messageTableSeq=?,"
+                   "messageType=?,"
+                   "messageSendId=?,"
+                   "messageSendExtendId=?,"
+                   "messageReceiveId=?,"
+                   "messageReceiveExtendId=?,"
+                   "messageContent=?,"
+                   "messageSendState=?,"
+                   "messageReadState=?,"
+                   "messageDate=?,"
+                   "deleteDate=?,"
+                   "isDelete=?"
+                   " where "
+                   "messageId = ?"
+                   " and "
+                   "messageInsertUser = ?"
                      withArgumentsInArray:@[
         [FlappyStringTool toUnNullStr:msg.messageSession],
         [NSNumber numberWithInteger:msg.messageSessionType],
@@ -897,7 +1049,7 @@
     [self openDB];
     
     //返回消息
-    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageInsertUser = ? order by messageTableSeq desc,messageStamp desc limit 1"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageInsertUser = ? and messageType!=8 order by messageTableSeq desc,messageStamp desc limit 1"
                             withArgumentsInArray:@[sessionID,user.userExtendId]];
     if ([result next]) {
         ChatMessage *msg = [ChatMessage new];
@@ -939,90 +1091,8 @@
     [self openDB];
     
     //获取消息
-    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageTableSeq=? and messageInsertUser = ? order by messageStamp  desc"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageTableSeq=? and messageType!=8 and messageInsertUser = ? order by messageStamp  desc"
                             withArgumentsInArray:@[sessionID,tabSequece,user.userExtendId]];
-    NSMutableArray* retArray=[[NSMutableArray alloc]init];
-    while ([result next]) {
-        ChatMessage *msg = [ChatMessage new];
-        msg.messageId = [result stringForColumn:@"messageId"];
-        msg.messageSession = [result stringForColumn:@"messageSession"];
-        msg.messageSessionType = [result intForColumn:@"messageSessionType"];
-        msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
-        msg.messageType = [result intForColumn:@"messageType"];
-        msg.messageSendId = [result stringForColumn:@"messageSendId"];
-        msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
-        msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
-        msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
-        msg.messageContent = [result stringForColumn:@"messageContent"];
-        msg.messageSendState = [result intForColumn:@"messageSendState"];
-        msg.messageReadState = [result intForColumn:@"messageReadState"];
-        msg.messageDate = [result stringForColumn:@"messageDate"];
-        msg.isDelete = [result intForColumn:@"isDelete"];
-        msg.messageStamp = [result longForColumn:@"messageStamp"];
-        msg.deleteDate = [result stringForColumn:@"deleteDate"];
-        [retArray addObject:msg];
-    }
-    [result close];
-    [self closeDB];
-    return retArray;
-}
-
-//获取没有处理的系统消息
--(NSMutableArray*)getNotActionSystemMessageWithSession:(NSString*)sessionID{
-    //获取user
-    ChatUser* user = [[FlappyData shareInstance] getUser];
-    if(user==nil){
-        return [[NSMutableArray alloc]init];
-    }
-    
-    //获取db
-    [self openDB];
-    
-    //获取列表
-    FMResultSet *result = [database executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageSession=? and messageInsertUser = ? order by messageTableSeq  desc"
-                            withArgumentsInArray:@[sessionID,user.userExtendId]];
-    NSMutableArray* retArray=[[NSMutableArray alloc]init];
-    while ([result next]) {
-        ChatMessage *msg = [ChatMessage new];
-        msg.messageId = [result stringForColumn:@"messageId"];
-        msg.messageSession = [result stringForColumn:@"messageSession"];
-        msg.messageSessionType = [result intForColumn:@"messageSessionType"];
-        msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
-        msg.messageType = [result intForColumn:@"messageType"];
-        msg.messageSendId = [result stringForColumn:@"messageSendId"];
-        msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
-        msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
-        msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
-        msg.messageContent = [result stringForColumn:@"messageContent"];
-        msg.messageSendState = [result intForColumn:@"messageSendState"];
-        msg.messageReadState = [result intForColumn:@"messageReadState"];
-        msg.messageDate = [result stringForColumn:@"messageDate"];
-        msg.isDelete = [result intForColumn:@"isDelete"];
-        msg.messageStamp = [result longForColumn:@"messageStamp"];
-        msg.deleteDate = [result stringForColumn:@"deleteDate"];
-        [retArray addObject:msg];
-    }
-    [result close];
-    [self closeDB];
-    return retArray;
-}
-
-//获取没有处理的系统消息
--(NSMutableArray*)getNotActionSystemMessage{
-    //获取user
-    ChatUser* user = [[FlappyData shareInstance] getUser];
-    if(user==nil){
-        return [[NSMutableArray alloc]init];
-    }
-    
-    //获取db
-    [self openDB];
-    
-    //获取消息
-    FMResultSet *result = [database executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageInsertUser = ? order by messageTableSeq  desc"
-                            withArgumentsInArray:@[user.userExtendId]];
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
@@ -1055,10 +1125,6 @@
                             withMessageID:(NSString*)messageId
                                  withSize:(NSInteger)size{
     
-    
-    //获取当前的消息ID
-    ChatMessage* msg=[self getMessageByID:messageId];
-    
     //获取user
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
@@ -1068,20 +1134,21 @@
     //获取db
     [self openDB];
     
+    //获取当前的消息ID
+    ChatMessage* msg=[self getMessageByID:messageId];
+    
     //当前的
     NSMutableArray* retArray=[[NSMutableArray alloc] init];
     NSMutableArray* sequeceArray=[self getSessionSequeceMessage:sessionID
                                                      withOffset:[NSString stringWithFormat:@"%ld",(long)msg.messageTableSeq]];
-    
     for(int s=0;s<sequeceArray.count;s++){
         ChatMessage* mem=[sequeceArray objectAtIndex:s];
         if(mem.messageStamp<msg.messageStamp){
             [retArray addObject:mem];
         }
     }
-    
     //获取消息
-    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageTableSeq<? and messageInsertUser = ? order by messageTableSeq desc,messageStamp desc limit ?"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageTableSeq<? and messageType!=8 and messageInsertUser = ? order by messageTableSeq desc,messageStamp desc limit ?"
                             withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableSeq],user.userExtendId,[NSNumber numberWithInteger:size]]];
     NSMutableArray* listArray=[[NSMutableArray alloc]init];
     while ([result next]) {
@@ -1121,6 +1188,89 @@
     }
     return retArray;
 }
+
+
+
+
+//获取没有处理的系统消息
+-(NSMutableArray*)getNotActionSystemMessageWithSession:(NSString*)sessionID{
+    //获取user
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return [[NSMutableArray alloc]init];
+    }
+    
+    
+    //获取消息
+    [self openDB];
+    FMResultSet *result = [database executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageSession=? and messageInsertUser = ? order by messageTableSeq  desc"
+                            withArgumentsInArray:@[sessionID,user.userExtendId]];
+    NSMutableArray* retArray=[[NSMutableArray alloc]init];
+    while ([result next]) {
+        ChatMessage *msg = [ChatMessage new];
+        msg.messageId = [result stringForColumn:@"messageId"];
+        msg.messageSession = [result stringForColumn:@"messageSession"];
+        msg.messageSessionType = [result intForColumn:@"messageSessionType"];
+        msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
+        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+        msg.messageType = [result intForColumn:@"messageType"];
+        msg.messageSendId = [result stringForColumn:@"messageSendId"];
+        msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
+        msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
+        msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
+        msg.messageContent = [result stringForColumn:@"messageContent"];
+        msg.messageSendState = [result intForColumn:@"messageSendState"];
+        msg.messageReadState = [result intForColumn:@"messageReadState"];
+        msg.messageDate = [result stringForColumn:@"messageDate"];
+        msg.isDelete = [result intForColumn:@"isDelete"];
+        msg.messageStamp = [result longForColumn:@"messageStamp"];
+        msg.deleteDate = [result stringForColumn:@"deleteDate"];
+        [retArray addObject:msg];
+    }
+    [result close];
+    [self closeDB];
+    return retArray;
+}
+
+//获取没有处理的系统消息
+-(NSMutableArray*)getNotActionSystemMessage{
+    //获取user
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return [[NSMutableArray alloc]init];
+    }
+    
+    //获取消息
+    [self openDB];
+    FMResultSet *result = [database executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageInsertUser = ? order by messageTableSeq  desc"
+                            withArgumentsInArray:@[user.userExtendId]];
+    NSMutableArray* retArray=[[NSMutableArray alloc]init];
+    while ([result next]) {
+        ChatMessage *msg = [ChatMessage new];
+        msg.messageId = [result stringForColumn:@"messageId"];
+        msg.messageSession = [result stringForColumn:@"messageSession"];
+        msg.messageSessionType = [result intForColumn:@"messageSessionType"];
+        msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
+        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+        msg.messageType = [result intForColumn:@"messageType"];
+        msg.messageSendId = [result stringForColumn:@"messageSendId"];
+        msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
+        msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
+        msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
+        msg.messageContent = [result stringForColumn:@"messageContent"];
+        msg.messageSendState = [result intForColumn:@"messageSendState"];
+        msg.messageReadState = [result intForColumn:@"messageReadState"];
+        msg.messageDate = [result stringForColumn:@"messageDate"];
+        msg.isDelete = [result intForColumn:@"isDelete"];
+        msg.messageStamp = [result longForColumn:@"messageStamp"];
+        msg.deleteDate = [result stringForColumn:@"deleteDate"];
+        [retArray addObject:msg];
+    }
+    [result close];
+    [self closeDB];
+    return retArray;
+}
+
 
 
 
