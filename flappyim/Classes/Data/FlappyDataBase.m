@@ -418,11 +418,14 @@
         sessionId,
         user.userId,
     ]];
-    [self closeDB];
     if ([results next]) {
-        return [results intForColumnIndex:0];
+        int count =[results intForColumnIndex:0];
+        [results close];
+        [self closeDB];
+        return count;
     }else{
-        
+        [results close];
+        [self closeDB];
         return 0;
     }
 }
