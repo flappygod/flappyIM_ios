@@ -14,7 +14,8 @@
     MessageListener _updateListener;
     MessageListener _receiveListener;
     MessageListener _failureListener;
-    MessageReadListener _readListener;
+    MessageReadListener _otherReadListener;
+    MessageReadListener _selfReadListener;
     MessageDeleteListener _deleteListener;
 }
 
@@ -23,7 +24,8 @@
                  andFailure:(MessageListener)failureListener
                   andUpdate:(MessageListener)updateListener
                  andReceive:(MessageListener)receiveListener
-                    andRead:(MessageReadListener)readListener
+               andReadOther:(MessageReadListener)otherReadListener
+                andReadSelf:(MessageReadListener)selfReadListener
                   andDelete:(MessageDeleteListener)deleteListener{
     self=[super init];
     if(self){
@@ -31,7 +33,8 @@
         _failureListener=failureListener;
         _updateListener=updateListener;
         _receiveListener=receiveListener;
-        _readListener=readListener;
+        _otherReadListener=otherReadListener;
+        _selfReadListener=selfReadListener;
         _deleteListener=deleteListener;
     }
     return self;
@@ -61,9 +64,19 @@
     }
 }
 
--(void)onRead:(NSString*) message{
-    if(_readListener!=nil){
-        _readListener(message);
+-(void)onOtherRead:(NSString*)sessionId
+       andReaderId:(NSString*)readerId
+        andSequece:(NSString*)tableSequece{
+    if(_otherReadListener!=nil){
+        _otherReadListener(sessionId,readerId,tableSequece);
+    }
+}
+
+-(void)onSelfRead:(NSString*)sessionId
+      andReaderId:(NSString*)readerId
+       andSequece:(NSString*)tableSequece{
+    if(_selfReadListener!=nil){
+        _selfReadListener(sessionId,readerId,tableSequece);
     }
 }
 

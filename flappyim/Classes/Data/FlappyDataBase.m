@@ -620,8 +620,6 @@
             user.userExtendId]];
         //关闭数据库
         [self closeDB];
-        //检测actionMessage
-        [self handleActionMessageUpdate:msg];
     }else{
         [formers close];
         [database executeUpdate:@"insert into message("
@@ -666,56 +664,8 @@
         ]];
         //关闭数据库
         [self closeDB];
-        //收到actionMessage
-        [self handleActionMessageInsert:msg];
     }
 }
-
-//处理动作消息插入
--(void)handleActionMessageInsert:(ChatMessage*)msg{
-    //获取user
-    ChatUser* user = [[FlappyData shareInstance] getUser];
-    if(user==nil){
-        return;
-    }
-    //不是动作类型不处理
-    if(msg.messageType != MSG_TYPE_ACTION){
-        return;
-    }
-    ChatAction* action =[msg getChatAction];
-    switch(action.actionType){
-            //更新消息已读
-        case ACTION_TYPE_READ:{
-            NSString* userId = action.actionIds[0];
-            NSString* sessionId = action.actionIds[1];
-            NSString* tableSequence = action.actionIds[2];
-            //更新消息状态
-            [self updateMessageRead:userId
-                       andSessionId:sessionId
-                        andTableSeq:tableSequence];
-            //更新最近消息状态
-            [self updateSessionMemberLatestRead:userId
-                                   andSessionId:sessionId
-                                    andTableSeq:tableSequence];
-            break;
-        }
-            
-            //更新消息删除
-        case ACTION_TYPE_DELETE:{
-            NSString* userId = action.actionIds[0];
-            NSString* sessionId = action.actionIds[1];
-            NSString* messageId = action.actionIds[2];
-            //不是自己发送的消息，进行删除，如果是自己插入的话，需要等到消息发送成功之后在handleActionMessageUpdate中操作
-            if([user.userId integerValue] != [userId integerValue]){
-                [self updateMessageDelete:userId
-                             andSessionId:sessionId
-                             andMessageId:messageId];
-            }
-            break;
-        }
-    }
-}
-
 
 
 //处理动作消息插入
@@ -758,7 +708,6 @@
             break;
         }
     }
-    
 }
 
 //更新消息已读

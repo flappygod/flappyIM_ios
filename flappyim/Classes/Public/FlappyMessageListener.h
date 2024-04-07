@@ -12,13 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FlappyMessageListener : NSObject
 
+//初始化
 -(instancetype)initWithSend:(MessageListener)sendListener
                  andFailure:(MessageListener)failureListener
                   andUpdate:(MessageListener)updateListener
                  andReceive:(MessageListener)receiveListener
-                    andRead:(MessageReadListener)readListener
+               andReadOther:(MessageReadListener)otherReadListener
+                andReadSelf:(MessageReadListener)readListener
                   andDelete:(MessageDeleteListener)deleteListener;
-
 
 -(void)onSend:(ChatMessage*) msg;
 
@@ -28,7 +29,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)onFailure:(ChatMessage*) msg;
 
--(void)onRead:(NSString*) message;
+-(void)onOtherRead:(NSString*)sessionId
+       andReaderId:(NSString*)readerId
+        andSequece:(NSString*)tableSequece;
+
+-(void)onSelfRead:(NSString*)sessionId
+      andReaderId:(NSString*)readerId
+       andSequece:(NSString*)tableSequece;
 
 -(void)onDelete:(NSString*) message;
 

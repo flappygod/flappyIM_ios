@@ -66,7 +66,9 @@
         
     } andReceive:^(ChatMessage * _Nullable message) {
         
-    } andRead:^(NSString * _Nullable tableSeqence) {
+    } andReadOther:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
+        
+    } andReadSelf:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
         
     } andDelete:^(NSString * _Nullable messageId) {
         
@@ -153,7 +155,9 @@
         
     } andReceive:^(ChatMessage * _Nullable message) {
         safeSelf.lable.text=[message getChatText];
-    } andRead:^(NSString * _Nullable tableSeqence) {
+    } andReadOther:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
+        
+    } andReadSelf:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
         
     } andDelete:^(NSString * _Nullable messageId) {
         
