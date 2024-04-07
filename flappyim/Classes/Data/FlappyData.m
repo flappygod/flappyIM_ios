@@ -15,9 +15,11 @@
 #define  KEY_PUSHID  @"KEY_PUSHID"
 #define  KEY_PUSHSETTING  @"KEY_PUSHSETTING"
 
-@implementation FlappyData
-{
-    ChatUser* _user;
+
+
+//数据缓存
+@implementation FlappyData{
+    ChatUser* _cachedUser;
 }
 
 
@@ -36,25 +38,29 @@
 
 //保存用户
 -(void)saveUser:(ChatUser*)user{
-    _user=user;
-    //装环为字符串
+    _cachedUser=user;
     NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[user mj_keyValues]];
     UNSaveObject(str, KEY_USER);
 }
 
 //获取用户
 -(ChatUser*)getUser{
-    if(_user!=nil){
-        return _user;
+    if(_cachedUser!=nil){
+        return  _cachedUser;
     }
     NSString* str=UNGetObject(KEY_USER);
     if(str!=nil){
         NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:str];
-        ChatUser* ret=[ChatUser mj_objectWithKeyValues:dic];
-        _user=ret;
-        return ret;
+        _cachedUser=[ChatUser mj_objectWithKeyValues:dic];
+        return _cachedUser;
     }
     return nil;
+}
+
+//清空用户
+-(void)clearUser{
+    _cachedUser=nil;
+    UNSaveObject(@"", KEY_USER);
 }
 
 //保存
@@ -70,18 +76,14 @@
 
 //保存推送设置
 -(void)savePushSetting:(PushSettings*)setting{
-    
     //更新推送信息，并保存起来
     PushSettings* update = [self getPushSetting];
-    //必定有值
     update = (update==nil ? [[PushSettings alloc] init]:update);
-    //更新
     update.routePushPrivacy = (setting.routePushPrivacy == nil ? update.routePushPrivacy:setting.routePushPrivacy);
     update.routePushLanguage = (setting.routePushLanguage == nil ? update.routePushLanguage:setting.routePushLanguage);
     update.routePushNoDisturb = (setting.routePushNoDisturb == nil ? update.routePushNoDisturb:setting.routePushNoDisturb);
     update.routePushType = (setting.routePushType == nil ? update.routePushType:setting.routePushType);
     NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[update mj_keyValues]];
-    //保存
     UNSaveObject(str, KEY_PUSHSETTING);
 }
 
@@ -97,9 +99,6 @@
 }
 
 
-//清空用户
--(void)clearUser{
-    UNSaveObject(@"", KEY_USER);
-}
+
 
 @end
