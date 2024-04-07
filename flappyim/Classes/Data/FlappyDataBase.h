@@ -49,7 +49,6 @@ NS_ASSUME_NONNULL_BEGIN
 //更新数据
 -(Boolean)updateMessage:(ChatMessage*)msg;
 
-
 //通过会话ID获取最近的一次会话
 -(ChatMessage*)getSessionLatestMessage:(NSString*)sessionID;
 

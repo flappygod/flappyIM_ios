@@ -430,8 +430,16 @@
 -(ChatMessage*)readSessionMessage:(FlappySendSuccess)success
                        andFailure:(FlappySendFailure)failure{
     
-    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    //没有未读的消息
+    if([self getUnReadMessageCount]==0){
+        if(success!=nil){
+            success(nil);
+        }
+        return  nil;
+    }
     
+    //创建阅读的消息
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSession=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
