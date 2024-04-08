@@ -238,6 +238,14 @@
 		F0D6C8DDEFDF0F3A615478F18522F28C /* MJFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE770AAE4C2483AD13BDEAFFD7F83F2 /* MJFoundation.m */; };
 		F108881BF494261F73BEA18428199D30 /* GPBDuration.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BD3178E6F924944F9F1525AEBA56B8 /* GPBDuration.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1D87801447F8DD985630C5665F159C3 /* NSObject+MJClass.m in Sources */ = {isa = PBXBuildFile; fileRef = C163E02B526298BE1D335436BACF5175 /* NSObject+MJClass.m */; };
+		F23E3F912BC3D63E00B87EBE /* Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = F23E3F892BC3D63E00B87EBE /* Base64.h */; };
+		F23E3F922BC3D63E00B87EBE /* Aes128.h in Headers */ = {isa = PBXBuildFile; fileRef = F23E3F8A2BC3D63E00B87EBE /* Aes128.h */; };
+		F23E3F932BC3D63E00B87EBE /* Aes256.m in Sources */ = {isa = PBXBuildFile; fileRef = F23E3F8B2BC3D63E00B87EBE /* Aes256.m */; };
+		F23E3F942BC3D63E00B87EBE /* Aes128.m in Sources */ = {isa = PBXBuildFile; fileRef = F23E3F8C2BC3D63E00B87EBE /* Aes128.m */; };
+		F23E3F952BC3D63E00B87EBE /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = F23E3F8D2BC3D63E00B87EBE /* Base64.m */; };
+		F23E3F962BC3D63E00B87EBE /* NSData+CommonCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = F23E3F8E2BC3D63E00B87EBE /* NSData+CommonCrypto.h */; };
+		F23E3F972BC3D63E00B87EBE /* NSData+CommonCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = F23E3F8F2BC3D63E00B87EBE /* NSData+CommonCrypto.m */; };
+		F23E3F982BC3D63E00B87EBE /* Aes256.h in Headers */ = {isa = PBXBuildFile; fileRef = F23E3F902BC3D63E00B87EBE /* Aes256.h */; };
 		F3B53FE3C20190A0D407F28A6ABD3BAD /* PushSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = E450ABC50C67EA6F47068C19ABBD156C /* PushSettings.m */; };
 		F3C8E1F791468AC1F45C360230DDE0BA /* ChatImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 249EE34FB6F1DA534A929CA0AD173DF0 /* ChatImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F6858B6AAA9556A7C7EE036761904382 /* FlappyBaseSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 55CF30C9F542D21C82DB77DD6ADBD3AB /* FlappyBaseSession.m */; };
@@ -355,7 +363,7 @@
 		010E0A36A90B44667828B0F3D4541444 /* ChatSystem.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChatSystem.m; sourceTree = "<group>"; };
 		017DF811D5432FCA90AF2A7E0A41C662 /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLRequestSerialization.m; path = AFNetworking/AFURLRequestSerialization.m; sourceTree = "<group>"; };
 		018DCD3FE86CFABA9E23BFF9217D2BB4 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseQueue.m; path = src/fmdb/FMDatabaseQueue.m; sourceTree = "<group>"; };
-		02BCE53AE9743E64C8179A76FB3773D9 /* flappyim.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = flappyim.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		02BCE53AE9743E64C8179A76FB3773D9 /* flappyim.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = flappyim.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		02FA299D1A73EB016029C023C097E84A /* GPBRuntimeTypes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBRuntimeTypes.h; path = objectivec/GPBRuntimeTypes.h; sourceTree = "<group>"; };
 		03E0CAC01B50D009299B3DCEC505A6D6 /* GPBAny.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBAny.pbobjc.h; path = objectivec/GPBAny.pbobjc.h; sourceTree = "<group>"; };
 		05496734C64BFB5A2F1ADD94C611AE11 /* Wrappers.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Wrappers.pbobjc.h; path = objectivec/google/protobuf/Wrappers.pbobjc.h; sourceTree = "<group>"; };
@@ -521,9 +529,9 @@
 		9954AA448B137EC140D021F8629DBF8D /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIActivityIndicatorView+AFNetworking.h"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
 		998E652CEC9207073C672475354047F8 /* FlappyApiRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyApiRequest.h; sourceTree = "<group>"; };
 		99D1425DA17E89A6CDB79EC0BDC8C4C9 /* GPBEmpty.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBEmpty.pbobjc.h; path = objectivec/GPBEmpty.pbobjc.h; sourceTree = "<group>"; };
-		9AB6176A27F9D81D920754EBDB305592 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		9AB6176A27F9D81D920754EBDB305592 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		9CE0ECCDE141297C112916B298369E66 /* FlappyBlocks.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyBlocks.h; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F518329B636D60279465F9B462EC742 /* ChatSession.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChatSession.m; sourceTree = "<group>"; };
 		A05A86D9A76A5365A4773D25B597F1B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		A262B8321DB7D467EA85DA86E8087A4F /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
@@ -590,7 +598,7 @@
 		CBDBFB13AED3C97359E22E8614F48B0D /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLResponseSerialization.h; path = AFNetworking/AFURLResponseSerialization.h; sourceTree = "<group>"; };
 		CE2B38E5502C73CA2FFFA55C4068D7A0 /* LXHttpsRequest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LXHttpsRequest.m; sourceTree = "<group>"; };
 		CFACE6CBF1A65F00BEA60EF61D651E17 /* GPBWireFormat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBWireFormat.h; path = objectivec/GPBWireFormat.h; sourceTree = "<group>"; };
-		CFC7CC3CEBA77E7C3A437ADD729C8148 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		CFC7CC3CEBA77E7C3A437ADD729C8148 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D021DF1017C41C54D76F3A8D4F19E039 /* FMDB-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FMDB-Info.plist"; sourceTree = "<group>"; };
 		D4CCD08E8BD05ABFFF152469DC6E774C /* GPBTimestamp.pbobjc.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBTimestamp.pbobjc.m; path = objectivec/GPBTimestamp.pbobjc.m; sourceTree = "<group>"; };
 		D68F2E56F47BA17F9A028CFF431AEF85 /* MJPropertyType.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJPropertyType.m; path = MJExtension/MJPropertyType.m; sourceTree = "<group>"; };
@@ -611,7 +619,7 @@
 		E266800068F4FD2FFE7619CE6894B98D /* FlappyReachability.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = FlappyReachability.m; sourceTree = "<group>"; };
 		E450ABC50C67EA6F47068C19ABBD156C /* PushSettings.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PushSettings.m; sourceTree = "<group>"; };
 		E465B1E41A5068CE912811B9D156E71B /* FlappyApiRequest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = FlappyApiRequest.m; sourceTree = "<group>"; };
-		E534CCAFA025A9990AD21CE77456D8ED /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = privacy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		E534CCAFA025A9990AD21CE77456D8ED /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = privacy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		E67ED3976957317051BBEAEF538BA64F /* AFSecurityPolicy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFSecurityPolicy.m; path = AFNetworking/AFSecurityPolicy.m; sourceTree = "<group>"; };
 		E7B4B232127906EE3E4B8639018785C0 /* Struct.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Struct.pbobjc.h; path = objectivec/google/protobuf/Struct.pbobjc.h; sourceTree = "<group>"; };
 		E854E109442CF83A4C1BFA95B3DAF670 /* FMDB-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FMDB-dummy.m"; sourceTree = "<group>"; };
@@ -626,6 +634,14 @@
 		F00BFA80C8F890A7E51B4B793F40BA39 /* FlappyMessageListener.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = FlappyMessageListener.m; sourceTree = "<group>"; };
 		F010E264F4714D3A1ED1F86463FB853F /* GPBRootObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBRootObject.h; path = objectivec/GPBRootObject.h; sourceTree = "<group>"; };
 		F223A947EFBE6F65578875AA0B510789 /* GPBDuration.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBDuration.pbobjc.h; path = objectivec/GPBDuration.pbobjc.h; sourceTree = "<group>"; };
+		F23E3F892BC3D63E00B87EBE /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
+		F23E3F8A2BC3D63E00B87EBE /* Aes128.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Aes128.h; sourceTree = "<group>"; };
+		F23E3F8B2BC3D63E00B87EBE /* Aes256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Aes256.m; sourceTree = "<group>"; };
+		F23E3F8C2BC3D63E00B87EBE /* Aes128.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Aes128.m; sourceTree = "<group>"; };
+		F23E3F8D2BC3D63E00B87EBE /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
+		F23E3F8E2BC3D63E00B87EBE /* NSData+CommonCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CommonCrypto.h"; sourceTree = "<group>"; };
+		F23E3F8F2BC3D63E00B87EBE /* NSData+CommonCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CommonCrypto.m"; sourceTree = "<group>"; };
+		F23E3F902BC3D63E00B87EBE /* Aes256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Aes256.h; sourceTree = "<group>"; };
 		F262E094CDBA165AF5CAFE20BEA59383 /* ChatLocation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChatLocation.h; sourceTree = "<group>"; };
 		F282D715E2593F3F11E125E58C2B7F6D /* Protobuf-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Protobuf-dummy.m"; sourceTree = "<group>"; };
 		F3CEF253E7EC95EC1D4545C338EC814F /* GPBMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBMessage.h; path = objectivec/GPBMessage.h; sourceTree = "<group>"; };
@@ -757,6 +773,7 @@
 		1AF053943509AFBF8C0C6C31C283539C /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				F23E3F882BC3D61A00B87EBE /* Encrypt */,
 				E3522FCA64102E8D632FD72CC7EC427F /* DateTool */,
 				CAE92DE8D880A7A3611F310451D2BE66 /* JsonTool */,
 				D4097E4EB6C5FC3A85B748D0C45F2202 /* NetTool */,
@@ -844,7 +861,6 @@
 				05496734C64BFB5A2F1ADD94C611AE11 /* Wrappers.pbobjc.h */,
 				56129ABE5EEF5D1D34B767090D4AAB26 /* Support Files */,
 			);
-			name = Protobuf;
 			path = Protobuf;
 			sourceTree = "<group>";
 		};
@@ -930,7 +946,6 @@
 				924265A43979EA6999E27002DA11AF01 /* NSString+MJExtension.m */,
 				02F3768EA89A780091AB3C97B4D47F68 /* Support Files */,
 			);
-			name = MJExtension;
 			path = MJExtension;
 			sourceTree = "<group>";
 		};
@@ -975,7 +990,6 @@
 				F62E727FCB21E740A2702529EE51BADC /* Support Files */,
 				BA29337A84BD03F79A587ABEE88D9F8D /* UIKit */,
 			);
-			name = AFNetworking;
 			path = AFNetworking;
 			sourceTree = "<group>";
 		};
@@ -1033,7 +1047,6 @@
 				DE5224560C07FF7BFE8B4A7D116288B6 /* FlappyUploadTool.h */,
 				36D445CFA980E4EA0D7B43FE6E33D15C /* FlappyUploadTool.m */,
 			);
-			name = UploadImage;
 			path = UploadImage;
 			sourceTree = "<group>";
 		};
@@ -1062,7 +1075,6 @@
 				A3790F4B40342FE7E3419EDB43938B4C /* GCDAsyncUdpSocket.m */,
 				AED593E9C309581D1D3F691C54BF48F3 /* Support Files */,
 			);
-			name = CocoaAsyncSocket;
 			path = CocoaAsyncSocket;
 			sourceTree = "<group>";
 		};
@@ -1121,7 +1133,6 @@
 				CBA06863796A0CEE2BD6383CE2BDDB25 /* standard */,
 				4800674AF016190759FD713BA48AEEB2 /* Support Files */,
 			);
-			name = FMDB;
 			path = FMDB;
 			sourceTree = "<group>";
 		};
@@ -1146,7 +1157,6 @@
 				F513BED458FF606EC436F9A44FC058D4 /* FlappyStringTool.h */,
 				74A22464EDB8FF1A7B39755852FBBA33 /* FlappyStringTool.m */,
 			);
-			name = StringTool;
 			path = StringTool;
 			sourceTree = "<group>";
 		};
@@ -1244,7 +1254,6 @@
 				8AB7E8E9CA3627BDD3BB315EAFAC0E25 /* FlappyJsonTool.h */,
 				DEF42C8A3713E8E231D58CE02950E16E /* FlappyJsonTool.m */,
 			);
-			name = JsonTool;
 			path = JsonTool;
 			sourceTree = "<group>";
 		};
@@ -1308,7 +1317,6 @@
 				0F4BB8B0BC93633F34C6824A87B77231 /* FlappyNetTool.h */,
 				2847072ADEE26B807D513B41F65A7306 /* FlappyNetTool.m */,
 			);
-			name = NetTool;
 			path = NetTool;
 			sourceTree = "<group>";
 		};
@@ -1343,7 +1351,6 @@
 				41E44A49A8E6D4BA2D60F1B05D12C496 /* FlappyDateTool.h */,
 				65612B1AE0AFAB38A77706E5A9715CE8 /* FlappyDateTool.m */,
 			);
-			name = DateTool;
 			path = DateTool;
 			sourceTree = "<group>";
 		};
@@ -1353,6 +1360,21 @@
 				A3BDB610DCD3F7BC049A7802B73E7E8F /* iOS */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F23E3F882BC3D61A00B87EBE /* Encrypt */ = {
+			isa = PBXGroup;
+			children = (
+				F23E3F8A2BC3D63E00B87EBE /* Aes128.h */,
+				F23E3F8C2BC3D63E00B87EBE /* Aes128.m */,
+				F23E3F902BC3D63E00B87EBE /* Aes256.h */,
+				F23E3F8B2BC3D63E00B87EBE /* Aes256.m */,
+				F23E3F892BC3D63E00B87EBE /* Base64.h */,
+				F23E3F8D2BC3D63E00B87EBE /* Base64.m */,
+				F23E3F8E2BC3D63E00B87EBE /* NSData+CommonCrypto.h */,
+				F23E3F8F2BC3D63E00B87EBE /* NSData+CommonCrypto.m */,
+			);
+			path = Encrypt;
 			sourceTree = "<group>";
 		};
 		F62E727FCB21E740A2702529EE51BADC /* Support Files */ = {
@@ -1396,15 +1418,19 @@
 				6DB244706298D81730C5537279B7B635 /* AFNetworking-umbrella.h in Headers */,
 				27AB52C7962046BC8963B2CD626F22BD /* AFNetworkReachabilityManager.h in Headers */,
 				0FC2C7300D3DE350BD73741888D9A1A8 /* AFSecurityPolicy.h in Headers */,
+				F23E3F962BC3D63E00B87EBE /* NSData+CommonCrypto.h in Headers */,
 				918AD88A49B79CD1B13BAD5415FE5621 /* AFURLRequestSerialization.h in Headers */,
 				81C76941D750B3F226E07AE600A67FC6 /* AFURLResponseSerialization.h in Headers */,
+				F23E3F912BC3D63E00B87EBE /* Base64.h in Headers */,
 				22AD28E260EF21FECAAEF40B04E8E020 /* AFURLSessionManager.h in Headers */,
 				B8AD58C4501F99461CB07AC05DCB8705 /* UIActivityIndicatorView+AFNetworking.h in Headers */,
 				9F5D472E0B58C95613C76C43148FC8B5 /* UIButton+AFNetworking.h in Headers */,
 				27A1AA22D234973BA30D8493C546884C /* UIImageView+AFNetworking.h in Headers */,
+				F23E3F982BC3D63E00B87EBE /* Aes256.h in Headers */,
 				3E7A25BCE5BAC256FBBA56106C3192CD /* UIKit+AFNetworking.h in Headers */,
 				B8B4A245FEFA2CE20339CA8CA8BE68EC /* UIProgressView+AFNetworking.h in Headers */,
 				65163D7E6539C8A1D65F5FCBA0E6EFD2 /* UIRefreshControl+AFNetworking.h in Headers */,
+				F23E3F922BC3D63E00B87EBE /* Aes128.h in Headers */,
 				57744CA757400E7183DFC0D37EFB5214 /* WKWebView+AFNetworking.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1939,10 +1965,14 @@
 				FA57C7B9116769DBBCAEE173060683A3 /* AFImageDownloader.m in Sources */,
 				BAB08D6748C698A6AA6DC7D6A2BFFE49 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				4DCB59DE84A69063E9485E4D8BF8C637 /* AFNetworking-dummy.m in Sources */,
+				F23E3F942BC3D63E00B87EBE /* Aes128.m in Sources */,
 				63419018E7222B414E161CD480398E20 /* AFNetworkReachabilityManager.m in Sources */,
+				F23E3F932BC3D63E00B87EBE /* Aes256.m in Sources */,
 				5BE27AF46E2DE81F61752081EDB7E52B /* AFSecurityPolicy.m in Sources */,
+				F23E3F952BC3D63E00B87EBE /* Base64.m in Sources */,
 				CDEF12A353FEBC8FE4E2EA0D3FFAC615 /* AFURLRequestSerialization.m in Sources */,
 				97EB8976E78AA2C17544A6453BC1EF04 /* AFURLResponseSerialization.m in Sources */,
+				F23E3F972BC3D63E00B87EBE /* NSData+CommonCrypto.m in Sources */,
 				637243EE5807271030AE4D9741392852 /* AFURLSessionManager.m in Sources */,
 				AD6158AF5746E99C7136F3ECA9423C63 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				B7DA5AE2EE8808176A31F845A204C190 /* UIButton+AFNetworking.m in Sources */,
@@ -2484,8 +2514,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
