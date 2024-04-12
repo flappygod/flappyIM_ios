@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 ///通过私钥加密
-+(NSString*)decryptWithPrivateKey:(NSString*)privateKey
++(NSString*)decryptWithPrivateKeyPKCS1:(NSString*)privateKey
                          withData:(NSString*)data;
 
 

@@ -31,6 +31,7 @@
 #import "FlappyReachability.h"
 #import "FlappySocket.h"
 #import "PushSettings.h"
+#import "RSATool.h"
 #import "SessionData.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
