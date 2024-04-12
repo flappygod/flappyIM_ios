@@ -11,6 +11,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RSATool : NSObject
 
+///通过公钥加密
++(NSString*)encryptWithPublicKey:(NSString*)publicKey
+                        withData:(NSString*)data;
+
+
+///通过私钥加密
++(NSString*)decryptWithPrivateKey:(NSString*)privateKey
+                         withData:(NSString*)data;
+
+
+
+
 @end
 
 NS_ASSUME_NONNULL_END
