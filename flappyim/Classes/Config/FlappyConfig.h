@@ -47,16 +47,8 @@
 #define REQ_UPDATE  5
 
 
-
-
 //消息接收回执
 #define RECEIPT_MSG_ARRIVE 1
-
-//更新信息
-#define UPDATE_SESSION_SGINGLE 1
-
-
-
 
 
 //登录返回消息
@@ -69,6 +61,17 @@
 #define RES_RECEIPT  4
 //更新
 #define RES_UPDATE  5
+
+
+
+//更新信息
+#define UPDATE_DO_NOTHING 0
+
+#define UPDATE_SESSION_ALL 1
+
+#define UPDATE_SESSION_MEMBER_GET 1
+
+#define UPDATE_SESSION_MEMBER_DEL 1
 
 
 #define GlobalKey @"Global"
