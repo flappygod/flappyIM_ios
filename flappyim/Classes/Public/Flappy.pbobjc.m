@@ -150,12 +150,14 @@ typedef struct FlappyRequest__storage_ {
 @dynamic type;
 @dynamic msgArray, msgArray_Count;
 @dynamic sessionsArray, sessionsArray_Count;
+@dynamic hasUpdate, update;
 
 typedef struct FlappyResponse__storage_ {
   uint32_t _has_storage_[1];
   int32_t type;
   NSMutableArray *msgArray;
   NSMutableArray *sessionsArray;
+  ReqUpdate *update;
 } FlappyResponse__storage_;
 
 // This method is threadsafe because it is initially called
@@ -189,6 +191,15 @@ typedef struct FlappyResponse__storage_ {
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(FlappyResponse__storage_, sessionsArray),
         .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "update",
+        .dataTypeSpecific.clazz = GPBObjCClass(ReqUpdate),
+        .number = FlappyResponse_FieldNumber_Update,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(FlappyResponse__storage_, update),
+        .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
     };

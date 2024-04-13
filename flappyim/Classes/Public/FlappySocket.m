@@ -24,6 +24,8 @@
 
 //读取的数据
 @property (nonatomic,strong) NSMutableData*  receiveData;
+//读取的数据
+@property (nonatomic,strong) NSMutableArray*  updatingArray;
 //心跳计时
 @property (nonatomic,strong) NSTimer*  connectTimer;
 
@@ -45,6 +47,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     if(self!=nil){
         self.isActive=false;
         self.receiveData=[[NSMutableData alloc]init];
+        self.updatingArray =[[NSMutableArray alloc]init];
         self.loginSuccess=success;
         self.loginFailure=failure;
         self.dead=dead;
@@ -511,6 +514,12 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 //接收更新
 -(void)receiveUpdate:(FlappyResponse *)respones{
+    
+    //移除
+    if(respones.update!=nil && respones.update.updateId!=nil){
+        [self.updatingArray removeObject:respones.update.updateId];
+    }
+    
     NSMutableArray* sessions=respones.sessionsArray;
     //返回的session
     if(sessions!=nil&&sessions.count>0){
@@ -818,10 +827,18 @@ static  GCDAsyncSocket*  _instanceSocket;
 -(void)updateSessionAll:(NSMutableArray*)array{
     //开始写数据了
     for(ChatMessage* msg in array){
+        
+        //UpdateID
+        NSString* updateId = msg.messageSession;
+        if([self.updatingArray containsObject:updateId]){
+            continue;;
+        }
+        [self.updatingArray addObject:updateId];
+        
         //创建update
         ReqUpdate* reqUpdate=[[ReqUpdate alloc]init];
         //ID
-        reqUpdate.updateId=msg.messageSession;
+        reqUpdate.updateId = updateId;
         //更新类型
         reqUpdate.updateType=UPDATE_SESSION_ALL;
         //更新请求
@@ -845,10 +862,18 @@ static  GCDAsyncSocket*  _instanceSocket;
 -(void)updateSessionMember:(NSMutableArray*)array{
     //开始写数据了
     for(ChatMessage* msg in array){
+        
+        //UpdateID
+        NSString* updateId = [NSString stringWithFormat:@"%@,%@",msg.messageSession,[msg getChatSystem].sysData];
+        if([self.updatingArray containsObject:updateId]){
+            continue;;
+        }
+        [self.updatingArray addObject:updateId];
+        
         //创建update
         ReqUpdate* reqUpdate=[[ReqUpdate alloc]init];
         //ID
-        reqUpdate.updateId=[NSString stringWithFormat:@"%@,%@",msg.messageSession,[msg getChatSystem].sysData];
+        reqUpdate.updateId=updateId;
         //更新类型
         reqUpdate.updateType=UPDATE_SESSION_MEMBER_GET;
         //更新请求

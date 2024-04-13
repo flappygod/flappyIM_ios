@@ -94,6 +94,7 @@ typedef GPB_ENUM(FlappyResponse_FieldNumber) {
   FlappyResponse_FieldNumber_Type = 1,
   FlappyResponse_FieldNumber_MsgArray = 2,
   FlappyResponse_FieldNumber_SessionsArray = 3,
+  FlappyResponse_FieldNumber_Update = 4,
 };
 
 GPB_FINAL @interface FlappyResponse : GPBMessage
@@ -110,6 +111,11 @@ GPB_FINAL @interface FlappyResponse : GPBMessage
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<Session*> *sessionsArray;
 /** The number of items in @c sessionsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger sessionsArray_Count;
+
+/** 更新信息 */
+@property(nonatomic, readwrite, strong, null_resettable) ReqUpdate *update;
+/** Test to see if @c update has been set. */
+@property(nonatomic, readwrite) BOOL hasUpdate;
 
 @end
 
