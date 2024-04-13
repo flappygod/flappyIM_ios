@@ -45,7 +45,6 @@ static  GCDAsyncSocket*  _instanceSocket;
     if(self!=nil){
         self.isActive=false;
         self.receiveData=[[NSMutableData alloc]init];
-        self.updateArray=[[NSMutableArray alloc]init];
         self.loginSuccess=success;
         self.loginFailure=failure;
         self.dead=dead;
