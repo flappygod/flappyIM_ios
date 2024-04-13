@@ -24,55 +24,7 @@
 {
     [super viewDidLoad];
     
-    
-    NSString * encrypt = [RSATool encryptWithPublicKey:@"-----BEGIN PUBLIC KEY-----\n"
-                          "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA/EUkiEsrSMsdS3Eb8d5+\n"
-                          "RuJlcCa9sQ9nImZ7glnTT9pGfyPPqW5HFcKamNsd1PRb+VFr6OK01i1neakLjHA4\n"
-                          "XGBxDg6JKdAdWakk+xMib5OZnhDEin9wGNBmTLCJLreN+vJkj0Knb6D9ClLgHWkl\n"
-                          "6mcQUvkU59ckr7NcG4/h9pbFWVigDrDitlpTRZBxOhUH9cOcRlu5nCc2r07hQRvk\n"
-                          "ZUBCfg5Gs0liXJsUfeCigpqvKYpFTx2Iz48uRUD9bJKVHyvI3girTR32flbt0pmi\n"
-                          "8k/1/Rs74+g6YD1/RC/Bc03eOXfdHQMsy1XjN94sjHNhHgLPE+1TKXjEeOpnb8Gk\n"
-                          "kQIDAQAB\n"
-                          "-----END PUBLIC KEY-----" withData:@"四川雅安河道现大熊猫尸体"];
-    
-    
-    NSLog(@"%@",encrypt);
-    
-    
-    NSString * decrypt = [RSATool decryptWithPrivateKeyPKCS1:@"-----BEGIN RSA PRIVATE KEY-----\n"
-                          "MIIEpAIBAAKCAQEA/EUkiEsrSMsdS3Eb8d5+RuJlcCa9sQ9nImZ7glnTT9pGfyPP\n"
-                          "qW5HFcKamNsd1PRb+VFr6OK01i1neakLjHA4XGBxDg6JKdAdWakk+xMib5OZnhDE\n"
-                          "in9wGNBmTLCJLreN+vJkj0Knb6D9ClLgHWkl6mcQUvkU59ckr7NcG4/h9pbFWVig\n"
-                          "DrDitlpTRZBxOhUH9cOcRlu5nCc2r07hQRvkZUBCfg5Gs0liXJsUfeCigpqvKYpF\n"
-                          "Tx2Iz48uRUD9bJKVHyvI3girTR32flbt0pmi8k/1/Rs74+g6YD1/RC/Bc03eOXfd\n"
-                          "HQMsy1XjN94sjHNhHgLPE+1TKXjEeOpnb8GkkQIDAQABAoIBADogwHs7Pt0GGFjy\n"
-                          "1iqURuqUbiU6eAkdcHlHvfvaMMu8kvPmz4nN5ElKTw8bpjMUn0DClyfRXTPgwHAT\n"
-                          "GJsinIoEmuhPRyHAV5L6W5AS56NoEkSOvorfNHgzRO802ldOakPBqJQuGqCpKsU/\n"
-                          "NW7xdJAfcW59AGkvdL+bh4S+UaXcwL0jT0Zt/Qsc9vk7lnagyFYvYljFRhN9Pdwt\n"
-                          "eWu6cUCrds7a2zeNGDiEAenfwgdO+0gwuSKs6Y+anXiRT6pFEw2EiDeLqu8txaYq\n"
-                          "ibnmLKK40c1J07k4dXoQGu3uFovnO/xyoaJHK0ur4jFtcHaAbxj97mgwq4JdgX0G\n"
-                          "24G0IFUCgYEA/xh1T+ZHc3VZVgXZAc6fqYfTlSZFO+6AEx4inV43mv0ypWVQKoSW\n"
-                          "a76iGf0rRoPrL2wWJUwpr92FOwO9aEeUuHRHky4/SlQzD7rcG/74OK+RiSDyIicY\n"
-                          "3gpGeLmGIK5Nj9w9rsQzryLT84KP1MfY7z9uKJcErtKWlM8zH8porQcCgYEA/Soe\n"
-                          "sNet8trHsDJDgInD8cOr1fXdlXvS9Iz2iFH3i42kR5DXB3FM3Lhhd3Hha6zA++W7\n"
-                          "kwtpOQGzM/GR0ZqyiVX7ujQEq6rw43nRYYrwl1sugaRXmeF9/mSedzl1scGQRM7v\n"
-                          "LoSaKlszdydRZWpvQa7kinJHOaO++nChhU9E06cCgYEA8d6D5LUoDC44/VpgDtmW\n"
-                          "A0047VMzFAcoQngxQ9rAiGEIc1AjeZzrbs96rX+hV6PfC8DFIqobYJd+Kp16KnSs\n"
-                          "a1Q9RSz1b4l0PLbk2lqfikfVixrE2mMNrgI6HV9y8Gu0OPIPPjTj+GviYSHrNEok\n"
-                          "w3v1++Bs3UHo6sGm7L6jD2MCgYBWXgY2Yn4veb/iNmOc+GLmmdCHn+dGVgXz9Bsv\n"
-                          "CnefHmVLHPiey2Jjcmud6jXzG+6CgS9qzNvK3O+b6u/KSDJcc/762UA2qIyhri9m\n"
-                          "TZYirLLC+6P/FVR8cys0lV+3ksd7EfW7MvW9OXvnTHySUqs+B0JkkPQHj/tZSQ9x\n"
-                          "gUeDxQKBgQDPZt/fjAmtW8uJEzrd0Wk11tfYQynh0kOYzcccU8IuWncYqqBbxnFc\n"
-                          "J9OvW96SmrPFIa/z8MYeKU2LnBf5w76MPcZbtpZmvwypwkouF+ishxfpCM7vZ+nv\n"
-                          "MFag3D6PCFBtUm0oUIA5WOmELt6s1ovIL/IFYmp10E62G/EbclHp3g==\n"
-                          "-----END RSA PRIVATE KEY-----"
-                                               withData:@"DbcZd8V870MimyU68pviq35JzQ4zQIOpHfwFENL/R/yw4hM+U3Tf6cnpE6KWdJ7NRwPpH5hjTJ21MRkD3V9OImGKdlT3GEGUQtYR1MS++tMvkB81kA2LRw55Z6OdvOMiJ58JBv2Cvx+uV2Vr84bspnme0q1cObnJx/iOLaX8t83OZ+5v/aad646n++5Ti62rTAkmxtnO+1Ui5FgeFs3psx/6PcuZ+13sO7plZNYlO33cslRkoNK/cpd/h4iwLfriAwOS+DWmf2rzPii11EDNQBjuehmBlEXseBqYi3YgjVRtmtdTSdupt38g0PS1MMNAKKv99W5Okf0uAVFn7hGjlw=="];
-    
-    
-    NSLog(@"%@",decrypt);
-    
-    
-    
+
     [[FlappyIM shareInstance] setPushPlatfrom:@"Apple"];
     
     //初始化
