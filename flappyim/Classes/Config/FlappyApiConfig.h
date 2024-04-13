@@ -23,7 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) NSInteger  autoLoginInterval;
 
 
-
 //基础地址
 @property(nonatomic,copy) NSString* BaseUrl;
 //基础地址

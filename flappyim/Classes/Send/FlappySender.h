@@ -7,11 +7,11 @@
 
 #import <Foundation/Foundation.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
-#import "ChatMessage.h"
 #import "FlappyApiRequest.h"
-#import "FlappyConfig.h"
 #import "Flappy.pbobjc.h"
+#import "FlappyConfig.h"
 #import "FlappySocket.h"
+#import "ChatMessage.h"
 
 
 @interface FlappySender : NSObject
