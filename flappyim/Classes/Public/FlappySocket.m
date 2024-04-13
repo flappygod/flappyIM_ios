@@ -152,29 +152,88 @@ static  GCDAsyncSocket*  _instanceSocket;
     @try {
         //数据
         [self.receiveData appendData:data];
-        //读取data的头部占用字节 和 从头部读取内容长度
-        //验证结果：数据比较小时头部占用字节为1，数据比较大时头部占用字节为2
+        
+        //读取data的头部占用字节和从头部读取内容长度
         int32_t headL = 0;
         int32_t contentL = [FlappyApiRequest getContentLength:self.receiveData
                                                withHeadLength:&headL];
+        //数据获取并不完成的情况
         if (contentL < 1){
             [sock readDataWithTimeout:-1 tag:0];
             return;
         }
+        
         //拆包情况下：继续接收下一条消息，直至接收完这条消息所有的拆包，再解析
         if (headL + contentL > self.receiveData.length){
             [sock readDataWithTimeout:-1 tag:0];
             return;
         }
+        
         //当receiveData长度不小于第一条消息内容长度时，开始解析receiveData
         [self parseContentDataWithHeadLength:headL withContentLength:contentL];
+        
         //修改
         [sock readDataWithTimeout:-1 tag:tag];
+        
     } @catch (NSException *exception) {
         NSLog(@"%@",exception.description);
     }
     
 }
+
+//解析二进制数据：NSData --> 自定义模型对象
+- (void)parseContentDataWithHeadLength:(int32_t)headL withContentLength:(int32_t)contentL{
+    
+    @try {
+        //本次解析data的范围
+        NSRange range = NSMakeRange(0, headL + contentL);
+        
+        //本次解析的data
+        NSData *data = [self.receiveData subdataWithRange:range];
+        
+        //接收到的所有数据转换为数据流
+        GPBCodedInputStream *inputStream = [GPBCodedInputStream streamWithData:data];
+        //错误
+        NSError *error;
+        //解析数据
+        FlappyResponse *obj = [FlappyResponse parseDelimitedFromCodedInputStream:inputStream
+                                                               extensionRegistry:nil
+                                                                           error:&error];
+        //如果正确解析
+        if (!error){
+            //保存解析正确的模型对象
+            if (obj){
+                [self msgRecieved:obj];
+            }
+            //移除已经解析过的data
+            [self.receiveData replaceBytesInRange:range
+                                        withBytes:NULL
+                                           length:0];
+        }
+        //且没有更多数据
+        if (self.receiveData.length < 1)
+            return;
+        
+        
+        //实际包不足解析，继续接收下一个包
+        headL = 0;
+        contentL = [FlappyApiRequest getContentLength:self.receiveData
+                                       withHeadLength:&headL];
+        if (headL + contentL > self.receiveData.length) {
+            return;
+        }
+        
+        
+        //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
+        [self parseContentDataWithHeadLength:headL
+                           withContentLength:contentL];
+    } @catch (NSException *exception) {
+        
+        NSLog(@"%@",exception.description);
+    }
+    
+}
+
 
 - (void)socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
     
@@ -281,52 +340,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     }
 }
 
-//解析二进制数据：NSData --> 自定义模型对象
-- (void)parseContentDataWithHeadLength:(int32_t)headL withContentLength:(int32_t)contentL{
-    
-    @try {
-        //本次解析data的范围
-        NSRange range = NSMakeRange(0, headL + contentL);
-        
-        //本次解析的data
-        NSData *data = [self.receiveData subdataWithRange:range];
-        
-        //接收到的所有数据转换为数据流
-        GPBCodedInputStream *inputStream = [GPBCodedInputStream streamWithData:data];
-        //错误
-        NSError *error;
-        //解析数据
-        FlappyResponse *obj = [FlappyResponse parseDelimitedFromCodedInputStream:inputStream
-                                                               extensionRegistry:nil
-                                                                           error:&error];
-        //如果正确解析
-        if (!error){
-            //保存解析正确的模型对象
-            if (obj){
-                [self msgRecieved:obj];
-            }
-            //移除已经解析过的data
-            [self.receiveData replaceBytesInRange:range
-                                        withBytes:NULL
-                                           length:0];
-        }
-        if (self.receiveData.length < 1)
-            return;
-        //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
-        headL = 0;
-        contentL = [FlappyApiRequest getContentLength:self.receiveData
-                                       withHeadLength:&headL];
-        //实际包不足解析，继续接收下一个包
-        if (headL + contentL > self.receiveData.length) return;
-        //继续解析下一条
-        [self parseContentDataWithHeadLength:headL
-                           withContentLength:contentL];
-    } @catch (NSException *exception) {
-        
-        NSLog(@"%@",exception.description);
-    }
-    
-}
+
 
 
 //发送消息
@@ -382,7 +396,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     self.user.login=true;
     //保存用户登录数据
     [[FlappyData shareInstance] saveUser:self.user];
-
+    
     //登录成功后保存推送类型，保存用户所有的会话列表
     @try {
         

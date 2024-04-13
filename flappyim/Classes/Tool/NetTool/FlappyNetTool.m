@@ -52,9 +52,7 @@
     }
     // WiFi
     else {
-        
         return 2;
-        
     }
     
 }

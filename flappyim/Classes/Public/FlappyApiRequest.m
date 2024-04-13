@@ -117,46 +117,38 @@
 }
 
 
-
-
-
 /** 获取data数据的内容长度和头部长度: index --> 头部占用长度 (头部占用长度1-4个字节) */
 + (int32_t)getContentLength:(NSData *)data withHeadLength:(int32_t *)index{
-    int8_t tmp = [self readRawByte:data headIndex:index];
-    if (tmp >= 0) return tmp;
-    int32_t result = tmp & 0x7f;
-    if ((tmp = [self readRawByte:data headIndex:index]) >= 0) {
-        result |= tmp << 7;
-    } else {
-        result |= (tmp & 0x7f) << 7;
-        if ((tmp = [self readRawByte:data headIndex:index]) >= 0) {
-            result |= tmp << 14;
-        } else {
-            result |= (tmp & 0x7f) << 14;
-            if ((tmp = [self readRawByte:data headIndex:index]) >= 0) {
-                result |= tmp << 21;
-            } else {
-                result |= (tmp & 0x7f) << 21;
-                result |= (tmp = [self readRawByte:data headIndex:index]) << 28;
-                if (tmp < 0) {
-                    for (int i = 0; i < 5; i++) {
-                        if ([self readRawByte:data headIndex:index] >= 0) {
-                            return result;
-                        }
-                    }
-                    result = -1;
-                }
-            }
+    int32_t result = 0;
+    int32_t shift = 0;
+    int8_t tmp;
+    
+    do {
+        tmp = [self readRawByte:data headIndex:index];
+        if (tmp == -1) {
+            // 数据不足，无法读取更多字节
+            return -1;
         }
+        result |= (tmp & 0x7f) << shift;
+        shift += 7;
+    } while (shift < 32 && (tmp & 0x80) != 0);
+    
+    // 如果我们尝试读取超过5个字节，那么这不是一个有效的编码
+    if (shift >= 32 && (tmp & 0x80) != 0) {
+        return -1;
     }
     return result;
 }
 
 /** 读取字节 */
 + (int8_t)readRawByte:(NSData *)data headIndex:(int32_t *)index{
-    if (*index >= data.length) return -1;
+    if (*index >= data.length) {
+        // 数据越界，返回错误指示
+        return -1;
+    }
+    int8_t byte = ((int8_t *)data.bytes)[*index];
     *index = *index + 1;
-    return ((int8_t *)data.bytes)[*index - 1];
+    return byte;
 }
 
 
