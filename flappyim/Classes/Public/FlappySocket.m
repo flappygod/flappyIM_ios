@@ -782,8 +782,6 @@ static  GCDAsyncSocket*  _instanceSocket;
 -(void)checkSessionNeedUpdate{
     //获取未处理的系统消息
     NSMutableArray* array= [[FlappyDataBase shareInstance] getNotActionSystemMessage];
-    //创建
-    NSMutableDictionary* dic=[[NSMutableDictionary alloc]init];
     
     //数据信息拆分
     NSMutableArray* actionUpdateSessionAll = [[NSMutableArray alloc] init];
