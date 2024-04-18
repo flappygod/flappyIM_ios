@@ -63,8 +63,23 @@
 #define RES_UPDATE  5
 
 
+
+//系统消息动作
+#define SYSTEM_MSG_NOTHING 0
+#define SYSTEM_MSG_UPDATE_SESSION 1
+#define SYSTEM_MSG_UPDATE_MEMBER 2
+#define SYSTEM_MSG_DELETE_MEMBER 3
+#define SYSTEM_MSG_ADD_MEMBER 4
+
+
+
 //更新信息
 #define UPDATE_SESSION_ALL 1
+
+
+
+
+
 
 
 #define GlobalKey @"Global"

@@ -28,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 //插入多条会话
 -(Boolean)insertSessions:(NSMutableArray*)array;
 
+//插入会话的用户
+-(Boolean)insertSessionMember:(SessionDataMember*) member;
+
 //获取当前用户的所有会话
 -(NSMutableArray*)getUserSessions:(NSString*)userExtendID;
 
@@ -36,6 +39,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //获取用户的指定会话
 -(SessionData*)getUserSessionByID:(NSString*)sessionId;
+
+//删除用户的会话
+-(Boolean)deleteUserSession:(NSString*)sessionId;
 
 //插入单条消息
 -(void)insertMessage:(ChatMessage*)msg;

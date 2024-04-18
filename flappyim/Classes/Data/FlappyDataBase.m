@@ -348,7 +348,11 @@
     if(user==nil){
         return false;
     }
-    return  [database executeUpdate:@"INSERT OR REPLACE INTO session_member("
+    
+    // 打开数据库
+    [self openDB];
+    
+    Boolean flag=   [database executeUpdate:@"INSERT OR REPLACE INTO session_member("
              "userId,"
              "userExtendId,"
              "userName,"
@@ -381,6 +385,11 @@
         [NSNumber numberWithInteger:member.isLeave],
         [FlappyStringTool toUnNullStr:user.userExtendId]
     ]];
+    
+    // 关闭数据库
+    [self closeDB];
+    
+    return  flag;
 }
 
 //获取会话ID的用户列表
@@ -617,6 +626,33 @@
     [self closeDB];
     return retSessions;
 }
+
+//删除用户的会话
+-(Boolean)deleteUserSession:(NSString*)sessionId{
+    //获取user
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return nil;
+    }
+    
+    //打开数据库
+    [self openDB];
+    
+    //删除消息
+    Boolean flagOne  =  [database executeUpdate:@"DELETE FROM message where messageSession = ? and messageInsertUser = ?"
+                           withArgumentsInArray:@[sessionId,user.userExtendId]];
+    
+    //删除会话
+    Boolean flagTwo  =  [database executeUpdate:@"DELETE FROM session where sessionId = ? and sessionInsertUser = ?"
+                           withArgumentsInArray:@[sessionId,user.userExtendId]];
+    
+    //关闭数据库
+    [self closeDB];
+    
+    return flagOne&&flagTwo;
+    
+}
+
 
 //插入消息
 -(void)insertMessage:(ChatMessage*)msg {

@@ -19,6 +19,7 @@
 #import "FlappySender.h"
 #import "FlappyApiConfig.h"
 #import "FlappyBaseSession.h"
+#import "FlappyJsonTool.h"
 
 @interface FlappySocket()
 
@@ -789,6 +790,13 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 //检查是否有会话需要更新
 -(void)checkSessionNeedUpdate{
+    
+    //用户数据
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return;
+    }
+    
     //获取未处理的系统消息
     NSMutableArray* array= [[FlappyDataBase shareInstance] getNotActionSystemMessage];
     
@@ -799,26 +807,40 @@ static  GCDAsyncSocket*  _instanceSocket;
     
     //获取需要更新的会话
     for(int s=0;s<array.count;s++){
-        //进行合并
+        //全量更新
         ChatMessage* message=[array objectAtIndex:s];
-        if([message getChatSystem].sysAction ==UPDATE_SESSION_ALL ){
+        if([message getChatSystem].sysAction ==SYSTEM_MSG_UPDATE_SESSION ){
             [actionUpdateSessionAll addObject:message];
         }
-        if([message getChatSystem].sysAction ==UPDATE_SESSION_MEMBER_GET ){
-            [actionUpdateSessionMember addObject:message];
+        //用户加入是自己也全量更新
+        if([message getChatSystem].sysAction ==SYSTEM_MSG_ADD_MEMBER ){
+            NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[message getChatSystem].sysData];
+            SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
+            if([member.userId isEqualToString: user.userId]){
+                [actionUpdateSessionAll addObject:message];
+            }else{
+                [actionUpdateSessionMember addObject:message];
+            }
         }
-        if([message getChatSystem].sysAction ==UPDATE_SESSION_MEMBER_DEL ){
-            [actionUpdateSessionMemberDel addObject:message];
+        //用户删除是自己删除会话
+        if([message getChatSystem].sysAction ==SYSTEM_MSG_DELETE_MEMBER ){
+            NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[message getChatSystem].sysData];
+            SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
+            if([member.userId isEqualToString: user.userId]){
+                [actionUpdateSessionMemberDel addObject:message];
+            }else{
+                [actionUpdateSessionMember addObject:message];
+            }
         }
     }
     if(actionUpdateSessionAll.count>0){
         [self updateSessionAll:actionUpdateSessionAll];
     }
     if(actionUpdateSessionMember.count>0){
-        [self updateSessionMember:actionUpdateSessionMember];
+        [self updateSessionMemberUpdate:actionUpdateSessionMember];
     }
     if(actionUpdateSessionMemberDel.count>0){
-        [self updateSessionMemberDel:actionUpdateSessionMemberDel];
+        [self updateSessionMemberDelete:actionUpdateSessionMemberDel];
     }
 }
 
@@ -827,14 +849,12 @@ static  GCDAsyncSocket*  _instanceSocket;
 -(void)updateSessionAll:(NSMutableArray*)array{
     //开始写数据了
     for(ChatMessage* msg in array){
-        
         //UpdateID
         NSString* updateId = msg.messageSession;
         if([self.updatingArray containsObject:updateId]){
             continue;;
         }
         [self.updatingArray addObject:updateId];
-        
         //创建update
         ReqUpdate* reqUpdate=[[ReqUpdate alloc]init];
         //ID
@@ -859,59 +879,39 @@ static  GCDAsyncSocket*  _instanceSocket;
 }
 
 //会话更新用户数据
--(void)updateSessionMember:(NSMutableArray*)array{
+-(void)updateSessionMemberUpdate:(NSMutableArray*)array{
     //开始写数据了
     for(ChatMessage* msg in array){
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[msg getChatSystem].sysData];
+        SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
+        [[FlappyDataBase shareInstance] insertSessionMember:member];
         
-        //UpdateID
-        NSString* updateId = [NSString stringWithFormat:@"%@,%@",msg.messageSession,[msg getChatSystem].sysData];
-        if([self.updatingArray containsObject:updateId]){
-            continue;;
-        }
-        [self.updatingArray addObject:updateId];
+        //设置消息已读，不再继续处理
+        msg.messageReadState = 1;
+        //更新消息已读状态
+        [[FlappyDataBase shareInstance] updateMessage:msg];
         
-        //创建update
-        ReqUpdate* reqUpdate=[[ReqUpdate alloc]init];
-        //ID
-        reqUpdate.updateId=updateId;
-        //更新类型
-        reqUpdate.updateType=UPDATE_SESSION_MEMBER_GET;
-        //更新请求
-        FlappyRequest* req=[[FlappyRequest alloc]init];
-        //更新内容
-        req.update=reqUpdate;
-        //请求更新
-        req.type=REQ_UPDATE;
-        //请求数据，已经GPBComputeRawVarint32SizeForInteger
-        NSData* reqData=[req delimitedData];
-        //写入请求数据
-        @try {
-            [self.socket writeData:reqData withTimeout:-1 tag:0];
-        } @catch (NSException *exception) {
-            NSLog(@"%@",exception.description);
-        }
+        //发送会话更新通知
+        [self notifySession:[[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSession]];
     }
 }
 
 //会话更新用户删除
--(void)updateSessionMemberDel:(NSMutableArray*)array{
+-(void)updateSessionMemberDelete:(NSMutableArray*)array{
+    
     //开始写数据了
     for(ChatMessage* msg in array){
-        SessionData* data = [[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSession];
-        NSMutableArray* usersArray =data.users;
-        for(ChatUser* user in usersArray){
-            NSString* userID = user.userId;
-            if([userID isEqualToString:[msg getChatSystem].sysData]){
-                [usersArray removeObject:user];
-                break;
-            }
-        }
-        data.users = usersArray;
-        //插入数据
-        [[FlappyDataBase shareInstance] insertSession:data];
-        //通知会话更新了
-        [self notifySession:data];
+        
+        //获取会话信息
+        SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSession];
+        
+        //删除用户会话
+        [[FlappyDataBase shareInstance] deleteUserSession:msg.messageSession];
+        
+        //发送会话更新通知
+        [self notifySession:session];
     }
+    
 }
 
 
