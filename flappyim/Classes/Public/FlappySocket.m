@@ -882,6 +882,8 @@ static  GCDAsyncSocket*  _instanceSocket;
 -(void)updateSessionMemberUpdate:(NSMutableArray*)array{
     //开始写数据了
     for(ChatMessage* msg in array){
+        
+        //获取更新的数据
         NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[msg getChatSystem].sysData];
         SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
         [[FlappyDataBase shareInstance] insertSessionMember:member];
