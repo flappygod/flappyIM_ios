@@ -222,12 +222,14 @@
         ]];
         
         //插入用户数据
-        for(SessionDataMember* member in data.users){
-            // 如果一条失败了，就回滚
-            BOOL memberResult = [self insertSessionMember:member];
-            if(!memberResult){
-                totalSuccess = false;
-                break;
+        if(data.users!=nil){
+            for(SessionDataMember* member in data.users){
+                // 如果一条失败了，就回滚
+                BOOL memberResult = [self insertSessionMember:member];
+                if(!memberResult){
+                    totalSuccess = false;
+                    break;
+                }
             }
         }
         
@@ -315,12 +317,13 @@
     }
     
     // 插入用户数据
-    for(SessionDataMember* member in data.users){
-        // 如果一条失败了，就回滚
-        BOOL memberResult = [self insertSessionMember:member];
-        if(!memberResult){
-            totalSuccess = false;
-            break;
+    if(data.users!=nil){
+        for(SessionDataMember* member in data.users){
+            BOOL memberResult = [self insertSessionMember:member];
+            if(!memberResult){
+                totalSuccess = false;
+                break;
+            }
         }
     }
     
