@@ -809,6 +809,12 @@ static  GCDAsyncSocket*  _instanceSocket;
     for(int s=0;s<array.count;s++){
         //全量更新
         ChatMessage* message=[array objectAtIndex:s];
+        //消息
+        if([message getChatSystem].sysAction ==SYSTEM_MSG_NOTHING ){
+            message.messageReadState = 1;
+            [[FlappyDataBase shareInstance] insertMessage:message];
+        }
+        //会话
         if([message getChatSystem].sysAction ==SYSTEM_MSG_UPDATE_SESSION ){
             [actionUpdateSessionAll addObject:message];
         }
@@ -890,7 +896,6 @@ static  GCDAsyncSocket*  _instanceSocket;
         
         //设置消息已读，不再继续处理
         msg.messageReadState = 1;
-        //更新消息已读状态
         [[FlappyDataBase shareInstance] updateMessage:msg];
         
         //发送会话更新通知
@@ -906,6 +911,11 @@ static  GCDAsyncSocket*  _instanceSocket;
         
         //获取会话信息
         SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSession];
+        session.isDelete = 1;
+        
+        //设置消息已读，不再继续处理
+        msg.messageReadState = 1;
+        [[FlappyDataBase shareInstance] updateMessage:msg];
         
         //删除用户会话
         [[FlappyDataBase shareInstance] deleteUserSession:msg.messageSession];
