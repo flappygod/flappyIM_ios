@@ -103,6 +103,7 @@
     "userData TEXT,"
     "userCreateDate TEXT,"
     "userLoginDate TEXT,"
+    "sessionId TEXT,"
     "sessionMemberLatestRead TEXT,"
     "sessionMemberMarkName TEXT,"
     "sessionMemberNoDisturb INTEGER,"
@@ -632,7 +633,7 @@
     //获取user
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
-        return nil;
+        return false;
     }
     
     //打开数据库
