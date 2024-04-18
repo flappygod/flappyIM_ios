@@ -63,15 +63,8 @@
 #define RES_UPDATE  5
 
 
-
 //更新信息
-#define UPDATE_DO_NOTHING 0
-
 #define UPDATE_SESSION_ALL 1
-
-#define UPDATE_SESSION_MEMBER_GET 1
-
-#define UPDATE_SESSION_MEMBER_DEL 1
 
 
 #define GlobalKey @"Global"

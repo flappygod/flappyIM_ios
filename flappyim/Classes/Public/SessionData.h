@@ -6,15 +6,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SessionDataMember.h"
 #import "ChatSession.h"
-#import "ChatUser.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SessionData : ChatSession
 
-@property(nonatomic,strong) NSMutableArray<ChatUser*>*  users;
+@property(nonatomic,strong) NSMutableArray<SessionDataMember*>*  users;
 
 @end
 
