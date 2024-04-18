@@ -33,6 +33,7 @@
 #import "PushSettings.h"
 #import "RSATool.h"
 #import "SessionData.h"
+#import "SessionDataMember.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
 FOUNDATION_EXPORT const unsigned char flappyimVersionString[];
