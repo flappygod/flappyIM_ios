@@ -427,6 +427,50 @@
 
 
 
+//获取会话ID的用户列表
+-(SessionDataMember*)getSessionMember:(NSString*)sessionId
+                          andMemberId:(NSString*)userId{
+    
+    //获取user
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return nil;
+    }
+    
+    //获取db
+    [self openDB];
+    
+    //查询
+    FMResultSet *result = [database executeQuery:@"select * from session_member where sessionInsertUser = ? and sessionId = ? and userId = ?"
+                            withArgumentsInArray:@[user.userExtendId,sessionId,userId]];
+    
+    SessionDataMember *member = [SessionDataMember new];
+    if ([result next]) {
+        member.userId = [result stringForColumn:@"userId"];
+        member.userExtendId = [result stringForColumn:@"userExtendId"];
+        member.userName = [result stringForColumn:@"userName"];
+        member.userAvatar = [result stringForColumn:@"userAvatar"];
+        member.userData = [result stringForColumn:@"userData"];
+        member.userCreateDate = [result stringForColumn:@"userCreateDate"];
+        member.userLoginDate = [result stringForColumn:@"userLoginDate"];
+        member.sessionId = [result stringForColumn:@"sessionId"];
+        member.sessionMemberLatestRead = [result stringForColumn:@"sessionMemberLatestRead"];
+        member.sessionMemberMarkName = [result stringForColumn:@"sessionMemberMarkName"];
+        member.sessionMemberNoDisturb = [result intForColumn:@"sessionMemberNoDisturb"];
+        member.sessionJoinDate = [result stringForColumn:@"sessionJoinDate"];
+        member.sessionLeaveDate = [result stringForColumn:@"sessionLeaveDate"];
+        member.isLeave = [result intForColumn:@"isLeave"];
+        [result close];
+        [self closeDB];
+        return  member;
+    }
+    [result close];
+    [self closeDB];
+    return nil;
+}
+
+
+
 //获取未读消息的数量
 -(int)getSessionUnReadMessageCount:(NSString*)sessionId{
     //用户
@@ -588,27 +632,27 @@
     
     // 插入或替换数据
     BOOL result = [database executeUpdate:@"INSERT OR REPLACE INTO message("
-                     "messageId,"
-                     "messageSession,"
-                     "messageSessionType,"
-                     "messageSessionOffset,"
-                     "messageTableSeq,"
-                     "messageType,"
-                     "messageSendId,"
-                     "messageSendExtendId,"
-                     "messageReceiveId,"
-                     "messageReceiveExtendId,"
-                     "messageContent,"
-                     "messageSendState,"
-                     "messageReadState,"
-                     "messageSecretSend,"
-                     "messageSecretReceive,"
-                     "messageDate,"
-                     "deleteDate,"
-                     "messageStamp,"
-                     "isDelete,"
-                     "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                       withArgumentsInArray:@[
+                   "messageId,"
+                   "messageSession,"
+                   "messageSessionType,"
+                   "messageSessionOffset,"
+                   "messageTableSeq,"
+                   "messageType,"
+                   "messageSendId,"
+                   "messageSendExtendId,"
+                   "messageReceiveId,"
+                   "messageReceiveExtendId,"
+                   "messageContent,"
+                   "messageSendState,"
+                   "messageReadState,"
+                   "messageSecretSend,"
+                   "messageSecretReceive,"
+                   "messageDate,"
+                   "deleteDate,"
+                   "messageStamp,"
+                   "isDelete,"
+                   "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                     withArgumentsInArray:@[
         [FlappyStringTool toUnNullStr:msg.messageId],
         [FlappyStringTool toUnNullStr:msg.messageSession],
         [NSNumber numberWithInteger:msg.messageSessionType],
@@ -722,15 +766,20 @@
 -(void)updateSessionMemberLatestRead:userId
                         andSessionId:sessionId
                          andTableSeq:tableSequence{
-    //更新会话
-    SessionData* data = [self getUserSessionByID:sessionId];
-    NSMutableArray* userList=data.users;
-    for(ChatUser* user in userList){
-        if([user.userId integerValue]==[userId integerValue]){
-            user.sessionMemberLatestRead=tableSequence;
-        }
+    //打开数据库
+    [self openDB];
+    
+    //获取这个用户数据
+    SessionDataMember* data = [self getSessionMember:sessionId andMemberId:userId];
+    
+    //如果不为空就更新
+    if(data!=nil){
+        data.sessionMemberLatestRead=tableSequence;
+        [self insertSessionMember:data];
     }
-    [self insertSession:data];
+    
+    //关闭数据库
+    [self closeDB];
 }
 
 //插入消息列表
@@ -756,27 +805,27 @@
     for(ChatMessage* msg in array){
         // 插入或替换数据
         BOOL result = [database executeUpdate:@"INSERT OR REPLACE INTO message("
-                         "messageId,"
-                         "messageSession,"
-                         "messageSessionType,"
-                         "messageSessionOffset,"
-                         "messageTableSeq,"
-                         "messageType,"
-                         "messageSendId,"
-                         "messageSendExtendId,"
-                         "messageReceiveId,"
-                         "messageReceiveExtendId,"
-                         "messageContent,"
-                         "messageSendState,"
-                         "messageReadState,"
-                         "messageSecretSend,"
-                         "messageSecretReceive,"
-                         "messageDate,"
-                         "deleteDate,"
-                         "messageStamp,"
-                         "isDelete,"
-                         "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                           withArgumentsInArray:@[
+                       "messageId,"
+                       "messageSession,"
+                       "messageSessionType,"
+                       "messageSessionOffset,"
+                       "messageTableSeq,"
+                       "messageType,"
+                       "messageSendId,"
+                       "messageSendExtendId,"
+                       "messageReceiveId,"
+                       "messageReceiveExtendId,"
+                       "messageContent,"
+                       "messageSendState,"
+                       "messageReadState,"
+                       "messageSecretSend,"
+                       "messageSecretReceive,"
+                       "messageDate,"
+                       "deleteDate,"
+                       "messageStamp,"
+                       "isDelete,"
+                       "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                         withArgumentsInArray:@[
             [FlappyStringTool toUnNullStr:msg.messageId],
             [FlappyStringTool toUnNullStr:msg.messageSession],
             [NSNumber numberWithInteger:msg.messageSessionType],
@@ -810,8 +859,6 @@
     
     // 提交事务
     [database commit];
-    
-    // 关闭数据库
     [self closeDB];
 }
 
