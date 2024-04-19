@@ -1223,7 +1223,7 @@
     
     //获取消息
     [self openDB];
-    FMResultSet *result = [database executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageInsertUser = ? order by messageTableSeq  desc"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageInsertUser = ? order by messageTableSeq  asc"
                             withArgumentsInArray:@[user.userExtendId]];
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
     while ([result next]) {
