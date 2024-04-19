@@ -818,6 +818,10 @@ static  GCDAsyncSocket*  _instanceSocket;
         if([message getChatSystem].sysAction ==SYSTEM_MSG_UPDATE_SESSION ){
             [actionUpdateSessionAll addObject:message];
         }
+        //更新用户信息
+        if([message getChatSystem].sysAction ==SYSTEM_MSG_UPDATE_MEMBER ){
+            [actionUpdateSessionMember addObject:message];
+        }
         //用户加入是自己也全量更新
         if([message getChatSystem].sysAction ==SYSTEM_MSG_ADD_MEMBER ){
             NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[message getChatSystem].sysData];
