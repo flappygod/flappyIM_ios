@@ -651,7 +651,6 @@ typedef struct Message__storage_ {
   int32_t messageReadState;
   int32_t isDelete;
   NSString *messageId;
-  NSString *messageSession;
   NSString *messageSendExtendId;
   NSString *messageReceiveExtendId;
   NSString *messageContent;
@@ -659,6 +658,7 @@ typedef struct Message__storage_ {
   NSString *messageSecretReceive;
   NSString *messageDate;
   NSString *deleteDate;
+  int64_t messageSession;
   int64_t messageTableSeq;
   int64_t messageSendId;
   int64_t messageReceiveId;
@@ -686,7 +686,7 @@ typedef struct Message__storage_ {
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(Message__storage_, messageSession),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
-        .dataType = GPBDataTypeString,
+        .dataType = GPBDataTypeInt64,
       },
       {
         .name = "messageSessionType",
@@ -940,11 +940,11 @@ typedef struct FlappyKafka__storage_ {
 
 typedef struct Route__storage_ {
   uint32_t _has_storage_[1];
+  int32_t pushType;
   int32_t pushPrivacy;
   int32_t pushNoDisturb;
   NSString *device;
   NSString *pushId;
-  NSString *pushType;
   NSString *pushPlat;
   NSString *pushLanguage;
   NSString *time;
@@ -991,7 +991,7 @@ typedef struct Route__storage_ {
         .hasIndex = 3,
         .offset = (uint32_t)offsetof(Route__storage_, pushType),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
-        .dataType = GPBDataTypeString,
+        .dataType = GPBDataTypeInt32,
       },
       {
         .name = "pushPlat",

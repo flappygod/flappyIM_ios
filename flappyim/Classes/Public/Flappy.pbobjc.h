@@ -272,7 +272,7 @@ GPB_FINAL @interface Message : GPBMessage
 @property(nonatomic, readwrite, copy, null_resettable) NSString *messageId;
 
 /** 消息会话 */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *messageSession;
+@property(nonatomic, readwrite) int64_t messageSession;
 
 /** 消息会话类型 */
 @property(nonatomic, readwrite) int32_t messageSessionType;
@@ -375,7 +375,7 @@ GPB_FINAL @interface Route : GPBMessage
 @property(nonatomic, readwrite, copy, null_resettable) NSString *pushId;
 
 /** 推送类型 */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *pushType;
+@property(nonatomic, readwrite) int32_t pushType;
 
 /** 推送平台类型 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *pushPlat;
