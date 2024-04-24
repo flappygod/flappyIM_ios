@@ -161,10 +161,7 @@
 
 //解密
 -(NSString*)decrypt{
-    NSString* secret = _messageSecretReceive;
-    if(secret==nil||secret.length==0){
-        secret = _messageSecretSend;
-    }
+    NSString* secret = _messageSecretSend;
     if(secret==nil||secret.length==0){
         return [self base64Decode:_messageContent];
     }else{

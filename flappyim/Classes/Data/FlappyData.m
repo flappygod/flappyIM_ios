@@ -13,6 +13,7 @@
 
 #define  KEY_USER  @"KEY_USER"
 #define  KEY_PUSHID  @"KEY_PUSHID"
+#define  KEY_RSA_KEY  @"KEY_RSA_KEY"
 #define  KEY_PUSHSETTING  @"KEY_PUSHSETTING"
 
 
@@ -70,8 +71,7 @@
 
 //获取推送ID
 -(NSString*)getPush{
-    NSString* str=UNGetObject(KEY_PUSHID);
-    return str;
+    return UNGetObject(KEY_PUSHID);
 }
 
 //保存推送设置
@@ -98,6 +98,16 @@
     return nil;
 }
 
+
+//RSA秘钥
+-(void)saveRsaKey:(NSString*)key{
+    UNSaveObject(key, KEY_RSA_KEY);
+}
+
+//获取RSA秘钥
+-(NSString*)getRsaKey{
+    return UNGetObject(KEY_RSA_KEY);
+}
 
 
 

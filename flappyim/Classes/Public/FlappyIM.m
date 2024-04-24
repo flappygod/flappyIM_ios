@@ -393,6 +393,15 @@
     [FlappyApiConfig shareInstance].pushPlat=platform;
 }
 
+//设置RSA public key
+-(void)setRsaPublicKey:(NSString*)key{
+    [[FlappyData shareInstance] saveRsaKey:key];
+}
+
+//获取RSA public key
+-(NSString*)getRsaPublicKey{
+    return [[FlappyData shareInstance] getRsaKey];
+}
 
 //增加消息的监听
 -(void)addGloableMsgListener:(FlappyMessageListener*)listener{

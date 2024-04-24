@@ -68,6 +68,12 @@ NS_ASSUME_NONNULL_BEGIN
 //设置当前的平台
 -(void)setPushPlatfrom:(NSString*)platform;
 
+//设置RsaPublicKey
+-(void)setRsaPublicKey:(NSString*)key;
+
+//获取RsaPublicKey
+-(NSString*)getRsaPublicKey;
+
 //设置当前的推送信息
 -(void)changePushType:(NSString*)pushType
           andLanguage:(NSString*)pushLanguage

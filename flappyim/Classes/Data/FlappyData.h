@@ -40,6 +40,13 @@ NS_ASSUME_NONNULL_BEGIN
 //获取推送设置
 -(PushSettings*)getPushSetting;
 
+//RSA秘钥
+-(void)saveRsaKey:(NSString*)key;
+
+//获取RSA秘钥
+-(NSString*)getRsaKey;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

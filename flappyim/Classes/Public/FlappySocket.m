@@ -20,6 +20,8 @@
 #import "FlappyApiConfig.h"
 #import "FlappyBaseSession.h"
 #import "FlappyJsonTool.h"
+#import "FlappyStringTool.h"
+#import "Aes128.h"
 
 @interface FlappySocket()
 
@@ -29,6 +31,8 @@
 @property (nonatomic,strong) NSMutableArray*  updatingArray;
 //心跳计时
 @property (nonatomic,strong) NSTimer*  connectTimer;
+//当前socket的秘钥
+@property (nonatomic,copy) NSString*  secret;
 
 @end
 
@@ -49,6 +53,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         self.isActive=false;
         self.receiveData=[[NSMutableData alloc]init];
         self.updatingArray =[[NSMutableArray alloc]init];
+        self.secret = [FlappyStringTool RandomString:16];
         self.loginSuccess=success;
         self.loginFailure=failure;
         self.dead=dead;
@@ -115,6 +120,16 @@ static  GCDAsyncSocket*  _instanceSocket;
         info.userId=self.user.userId;
         //推送ID
         info.pushId=[[FlappyData shareInstance] getPush];
+        //设置秘钥
+        NSString* rsaKey = [[FlappyData shareInstance] getRsaKey];
+        if(rsaKey!=nil && rsaKey.length!=0){
+            info.secret = [RSATool encryptWithPublicKey:rsaKey
+                                               withData:self.secret];
+        }
+        //没有设置就用当前的
+        else{
+            info.secret = self.secret;
+        }
         //登录信息
         if([[FlappyData shareInstance] getUser]!=nil){
             info.latest=[[FlappyData shareInstance] getUser].latest;
@@ -351,10 +366,19 @@ static  GCDAsyncSocket*  _instanceSocket;
     @try {
         //发送消息轻轻
         FlappyRequest* request=[[FlappyRequest alloc]init];
+        
         //消息请求
         request.type=REQ_MSG;
+        
         //消息内容
         request.msg=[FlappyBaseSession changeToMessage:chatMsg];
+        
+        //秘钥加密
+        if(chatMsg.messageSecretSend!=nil && chatMsg.messageSecretSend.length!=0){
+            request.msg.messageSecretSend = [Aes128 AES128Encrypt:chatMsg.messageSecretSend
+                                                          withKey:self.secret];
+        }
+        
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
         NSData* reqData=[request delimitedData];
         //写入时间
@@ -450,8 +474,14 @@ static  GCDAsyncSocket*  _instanceSocket;
         for(long s=0;s<messageList.count;s++){
             //获取消息
             ChatMessage* chatMsg=[messageList objectAtIndex:s];
+            //解密秘钥
+            if(chatMsg.messageSecretSend!=nil && chatMsg.messageSecretSend.length!=0){
+                chatMsg.messageSecretSend = [Aes128 AES128Decrypt:chatMsg.messageSecretSend
+                                                          withKey:self.secret];
+            }
             //获取之前的消息ID
-            ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId showActionMsg:true];
+            ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId
+                                                                showActionMsg:true];
             //修改消息状态
             [self messageArrivedState:chatMsg andFormer:former];
             //保存消息
@@ -495,6 +525,11 @@ static  GCDAsyncSocket*  _instanceSocket;
         Message* message=[array objectAtIndex:s];
         //转换一下
         ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
+        //解密秘钥
+        if(chatMsg.messageSecretSend!=nil && chatMsg.messageSecretSend.length!=0){
+            chatMsg.messageSecretSend = [Aes128 AES128Decrypt:chatMsg.messageSecretSend
+                                                      withKey:self.secret];
+        }
         //获取之前的消息ID
         ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId showActionMsg:true];
         //修改消息状态
