@@ -118,38 +118,29 @@
 
 
 /** 获取data数据的内容长度和头部长度: index --> 头部占用长度 (头部占用长度1-4个字节) */
-+ (int32_t)getContentLength:(NSData *)data withHeadLength:(int32_t *)index{
++ (int32_t)getContentLength:(NSData *)data withHeadLength:(int32_t *)index {
     int32_t result = 0;
     int32_t shift = 0;
     int8_t tmp;
-    
     do {
-        tmp = [self readRawByte:data headIndex:index];
-        if (tmp == -1) {
-            // 数据不足，无法读取更多字节
+        //数据不完整
+        if (*index >= data.length) {
             return -1;
         }
+        tmp = ((int8_t *)data.bytes)[*index];
         result |= (tmp & 0x7f) << shift;
         shift += 7;
-    } while (shift < 32 && (tmp & 0x80) != 0);
-    
-    // 如果我们尝试读取超过5个字节，那么这不是一个有效的编码
-    if (shift >= 32 && (tmp & 0x80) != 0) {
+        
+        (*index)++;
+    } while (tmp < 0 && shift < 32);
+    // 继续读取下一个字节，直到找到一个正数或者读取了32位
+    if (tmp < 0) {
+        // 如果最后一个字节是负数，则表示数据格式错误
         return -1;
     }
     return result;
 }
 
-/** 读取字节 */
-+ (int8_t)readRawByte:(NSData *)data headIndex:(int32_t *)index{
-    if (*index >= data.length) {
-        // 数据越界，返回错误指示
-        return -1;
-    }
-    int8_t byte = ((int8_t *)data.bytes)[*index];
-    *index = *index + 1;
-    return byte;
-}
 
 
 @end

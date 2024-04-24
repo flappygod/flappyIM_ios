@@ -27,9 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (int32_t)getContentLength:(NSData *)data
              withHeadLength:(int32_t *)index;
 
-//读取字节
-+ (int8_t)readRawByte:(NSData *)data
-            headIndex:(int32_t *)index;
 
 
 @end
