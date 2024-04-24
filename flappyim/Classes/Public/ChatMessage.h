@@ -135,6 +135,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setChatCustom:(NSString*)chatText;
 -(NSString*)getChatCustom;
 
+//转换为json
+-(NSMutableDictionary*)toJson;
+
 
 @end
 

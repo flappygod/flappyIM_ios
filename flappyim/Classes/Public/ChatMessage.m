@@ -149,6 +149,44 @@
     return nil;
 }
 
+-(nonnull NSMutableDictionary *)toJson {
+    NSMutableDictionary* dic = [self mj_keyValues];
+    switch (_messageType) {
+        case MSG_TYPE_SYSTEM:
+            dic[@"messageData"] = [[self getChatSystem] mj_keyValues];
+            break;
+        case MSG_TYPE_TEXT:
+            dic[@"messageData"] = [self getChatText];
+            break;
+        case MSG_TYPE_IMG:
+            dic[@"messageData"] = [[self getChatImage] mj_keyValues];
+            break;
+        case MSG_TYPE_VOICE:
+            dic[@"messageData"] = [[self getChatVoice] mj_keyValues];
+            break;
+        case MSG_TYPE_LOCATE:
+            dic[@"messageData"] = [[self getChatLocation] mj_keyValues];
+            break;
+        case MSG_TYPE_VIDEO:
+            dic[@"messageData"] = [[self getChatVideo] mj_keyValues];
+            break;
+        case MSG_TYPE_FILE:
+            dic[@"messageData"] = [[self getChatFile] mj_keyValues];
+            break;
+        case MSG_TYPE_CUSTOM:
+            dic[@"messageData"] =[self getChatCustom];
+            break;
+        case MSG_TYPE_ACTION:
+            dic[@"messageData"] =[[self getChatAction] mj_keyValues];
+            break;
+        default:
+            break;
+    }
+    return dic;
+}
+
+
+
 //加密
 -(NSString*)encrypt:(NSString*) data withSecret:(NSString*)secret{
     _messageSecretSend = secret;
@@ -185,6 +223,8 @@
     //2、把二进制数据转换成字符串
     return [[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding] stringByReplacingOccurrencesOfString:@"\n" withString:@""];
 }
+
+
 
 
 @end
