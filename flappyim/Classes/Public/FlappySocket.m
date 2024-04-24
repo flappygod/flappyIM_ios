@@ -4,24 +4,25 @@
 //
 //  Created by lijunlin on 2019/8/17.
 //
-#import "FlappyIM.h"
+#import "FlappyBaseSession.h"
+#import "FlappyStringTool.h"
+#import "FlappyApiConfig.h"
+#import "FlappyJsonTool.h"
+#import "FlappyDataBase.h"
+#import "FlappyNetTool.h"
+#import "FlappySender.h"
 #import "FlappySocket.h"
+#import "FlappyConfig.h"
 #import "FlappySender.h"
 #import "MJExtension.h"
+#import "FlappyData.h"
+#import "FlappyIM.h"
+#import "Aes128.h"
+
 #import <sys/socket.h>
 #import <netinet/in.h>
 #import <arpa/inet.h>
 #import <unistd.h>
-#import "FlappyConfig.h"
-#import "FlappyData.h"
-#import "FlappyDataBase.h"
-#import "FlappyNetTool.h"
-#import "FlappySender.h"
-#import "FlappyApiConfig.h"
-#import "FlappyBaseSession.h"
-#import "FlappyJsonTool.h"
-#import "FlappyStringTool.h"
-#import "Aes128.h"
 
 @interface FlappySocket()
 
@@ -457,8 +458,16 @@ static  GCDAsyncSocket*  _instanceSocket;
         //转换
         NSMutableArray* messageList=[[NSMutableArray alloc]init];
         for(long s=0;s<array.count;s++){
+            //获取消息
             Message* message=[array objectAtIndex:s];
+            //转换消息
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
+            //解密秘钥
+            if(chatMsg.messageSecretSend!=nil && chatMsg.messageSecretSend.length!=0){
+                chatMsg.messageSecretSend = [Aes128 AES128Decrypt:chatMsg.messageSecretSend
+                                                          withKey:self.secret];
+            }
+            //进行添加
             [messageList addObject:chatMsg];
         }
         //进行排序
@@ -474,11 +483,6 @@ static  GCDAsyncSocket*  _instanceSocket;
         for(long s=0;s<messageList.count;s++){
             //获取消息
             ChatMessage* chatMsg=[messageList objectAtIndex:s];
-            //解密秘钥
-            if(chatMsg.messageSecretSend!=nil && chatMsg.messageSecretSend.length!=0){
-                chatMsg.messageSecretSend = [Aes128 AES128Decrypt:chatMsg.messageSecretSend
-                                                          withKey:self.secret];
-            }
             //获取之前的消息ID
             ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId
                                                                 showActionMsg:true];
@@ -555,7 +559,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     if(respones.update!=nil && respones.update.updateId!=nil){
         [self.updatingArray removeObject:respones.update.updateId];
     }
-    
+    //Session Array
     NSMutableArray* sessions=respones.sessionsArray;
     //返回的session
     if(sessions!=nil&&sessions.count>0){

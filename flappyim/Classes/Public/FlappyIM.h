@@ -46,6 +46,12 @@ NS_ASSUME_NONNULL_BEGIN
 //单例模式
 + (instancetype)shareInstance;
 
+//初始化
+-(void)setup;
+
+//通过服务器地址初始化
+-(void)setup:(NSString*)serverUrl  withUploadUrl:(NSString*)uploadUrl;
+
 //重设用户名和密码
 -(void)resetServer:(NSString*)serverUrl
       andUploadUrl:(NSString*)upload;
@@ -58,12 +64,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 //注册设备信息
 -(void)registerDeviceToken:(NSData *)deviceToken;
-
-//初始化
--(void)setup;
-
-//通过服务器地址初始化
--(void)setup:(NSString*)serverUrl  withUploadUrl:(NSString*)uploadUrl;
 
 //设置当前的平台
 -(void)setPushPlatfrom:(NSString*)platform;
