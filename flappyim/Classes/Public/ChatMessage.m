@@ -149,35 +149,36 @@
     return nil;
 }
 
--(nonnull NSMutableDictionary *)toJson {
+//转换map
+-(NSMutableDictionary *)toMap {
     NSMutableDictionary* dic = [self mj_keyValues];
     switch (_messageType) {
         case MSG_TYPE_SYSTEM:
-            dic[@"messageData"] = [[self getChatSystem] mj_keyValues];
+            dic[@"messageData"] = [FlappyJsonTool DicToJSONString: [[self getChatSystem] mj_keyValues]];
             break;
         case MSG_TYPE_TEXT:
             dic[@"messageData"] = [self getChatText];
             break;
         case MSG_TYPE_IMG:
-            dic[@"messageData"] = [[self getChatImage] mj_keyValues];
+            dic[@"messageData"] = [FlappyJsonTool DicToJSONString: [[self getChatImage] mj_keyValues]];
             break;
         case MSG_TYPE_VOICE:
-            dic[@"messageData"] = [[self getChatVoice] mj_keyValues];
+            dic[@"messageData"] = [FlappyJsonTool DicToJSONString: [[self getChatVoice] mj_keyValues]];
             break;
         case MSG_TYPE_LOCATE:
-            dic[@"messageData"] = [[self getChatLocation] mj_keyValues];
+            dic[@"messageData"] = [FlappyJsonTool DicToJSONString: [[self getChatLocation] mj_keyValues]];
             break;
         case MSG_TYPE_VIDEO:
-            dic[@"messageData"] = [[self getChatVideo] mj_keyValues];
+            dic[@"messageData"] = [FlappyJsonTool DicToJSONString: [[self getChatVideo] mj_keyValues]];
             break;
         case MSG_TYPE_FILE:
-            dic[@"messageData"] = [[self getChatFile] mj_keyValues];
+            dic[@"messageData"] = [FlappyJsonTool DicToJSONString: [[self getChatFile] mj_keyValues]];
             break;
         case MSG_TYPE_CUSTOM:
             dic[@"messageData"] =[self getChatCustom];
             break;
         case MSG_TYPE_ACTION:
-            dic[@"messageData"] =[[self getChatAction] mj_keyValues];
+            dic[@"messageData"] = [FlappyJsonTool DicToJSONString: [[self getChatAction] mj_keyValues]];
             break;
         default:
             break;
