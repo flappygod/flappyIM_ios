@@ -31,7 +31,6 @@
 #import "FlappyReachability.h"
 #import "FlappySocket.h"
 #import "PushSettings.h"
-#import "RSATool.h"
 #import "SessionData.h"
 #import "SessionDataMember.h"
 

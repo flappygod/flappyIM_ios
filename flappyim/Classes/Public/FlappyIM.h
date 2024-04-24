@@ -20,7 +20,6 @@
 #import "FlappySocket.h"
 #import "FlappyReachability.h"
 #import "PushSettings.h"
-#import "RSATool.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <AFNetworking/AFNetworking-umbrella.h>

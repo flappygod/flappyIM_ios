@@ -18,6 +18,7 @@
 #import "FlappyData.h"
 #import "FlappyIM.h"
 #import "Aes128.h"
+#import "RSATool.h"
 
 #import <sys/socket.h>
 #import <netinet/in.h>
