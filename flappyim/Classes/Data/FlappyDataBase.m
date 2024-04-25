@@ -68,8 +68,7 @@
     "messageContent TEXT,"
     "messageSendState INTEGER,"
     "messageReadState INTEGER,"
-    "messageSecretSend TEXT,"
-    "messageSecretReceive TEXT,"
+    "messageSecret TEXT,"
     "isDelete INTEGER,"
     "messageDate TEXT,"
     "messageStamp INTEGER,"
@@ -357,22 +356,22 @@
     [self openDB];
     
     Boolean flag=   [database executeUpdate:@"INSERT OR REPLACE INTO session_member("
-             "userId,"
-             "userExtendId,"
-             "userName,"
-             "userAvatar,"
-             "userData,"
-             "userCreateDate,"
-             "userLoginDate,"
-             "sessionId,"
-             "sessionMemberLatestRead,"
-             "sessionMemberMarkName,"
-             "sessionMemberNoDisturb,"
-             "sessionJoinDate,"
-             "sessionLeaveDate,"
-             "isLeave,"
-             "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-               withArgumentsInArray:@[
+                     "userId,"
+                     "userExtendId,"
+                     "userName,"
+                     "userAvatar,"
+                     "userData,"
+                     "userCreateDate,"
+                     "userLoginDate,"
+                     "sessionId,"
+                     "sessionMemberLatestRead,"
+                     "sessionMemberMarkName,"
+                     "sessionMemberNoDisturb,"
+                     "sessionJoinDate,"
+                     "sessionLeaveDate,"
+                     "isLeave,"
+                     "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                       withArgumentsInArray:@[
         [FlappyStringTool toUnNullStr:member.userId],
         [FlappyStringTool toUnNullStr:member.userExtendId],
         [FlappyStringTool toUnNullStr:member.userName],
@@ -685,13 +684,12 @@
                    "messageContent,"
                    "messageSendState,"
                    "messageReadState,"
-                   "messageSecretSend,"
-                   "messageSecretReceive,"
+                   "messageSecret,"
                    "messageDate,"
                    "deleteDate,"
                    "messageStamp,"
                    "isDelete,"
-                   "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                   "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                      withArgumentsInArray:@[
         [FlappyStringTool toUnNullStr:msg.messageId],
         [FlappyStringTool toUnNullStr:msg.messageSession],
@@ -706,8 +704,7 @@
         [FlappyStringTool toUnNullStr:msg.messageContent],
         [NSNumber numberWithInteger:msg.messageSendState],
         [NSNumber numberWithInteger:msg.messageReadState],
-        [FlappyStringTool toUnNullStr:msg.messageSecretSend],
-        [FlappyStringTool toUnNullStr:msg.messageSecretReceive],
+        [FlappyStringTool toUnNullStr:msg.messageSecret],
         [FlappyStringTool toUnNullStr:msg.messageDate],
         [FlappyStringTool toUnNullStr:msg.deleteDate],
         [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],
@@ -858,13 +855,12 @@
                        "messageContent,"
                        "messageSendState,"
                        "messageReadState,"
-                       "messageSecretSend,"
-                       "messageSecretReceive,"
+                       "messageSecret,"
                        "messageDate,"
                        "deleteDate,"
                        "messageStamp,"
                        "isDelete,"
-                       "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                       "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                          withArgumentsInArray:@[
             [FlappyStringTool toUnNullStr:msg.messageId],
             [FlappyStringTool toUnNullStr:msg.messageSession],
@@ -879,8 +875,7 @@
             [FlappyStringTool toUnNullStr:msg.messageContent],
             [NSNumber numberWithInteger:msg.messageSendState],
             [NSNumber numberWithInteger:msg.messageReadState],
-            [FlappyStringTool toUnNullStr:msg.messageSecretSend],
-            [FlappyStringTool toUnNullStr:msg.messageSecretReceive],
+            [FlappyStringTool toUnNullStr:msg.messageSecret],
             [FlappyStringTool toUnNullStr:msg.messageDate],
             [FlappyStringTool toUnNullStr:msg.deleteDate],
             [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)],
@@ -937,8 +932,7 @@
         msg.messageContent = [result stringForColumn:@"messageContent"];
         msg.messageSendState = [result intForColumn:@"messageSendState"];
         msg.messageReadState = [result intForColumn:@"messageReadState"];
-        msg.messageSecretSend = [result stringForColumn:@"messageSecretSend"];
-        msg.messageSecretReceive = [result stringForColumn:@"messageSecretReceive"];
+        msg.messageSecret = [result stringForColumn:@"messageSecret"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.isDelete = [result intForColumn:@"isDelete"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
@@ -976,8 +970,7 @@
                    "messageContent=?,"
                    "messageSendState=?,"
                    "messageReadState=?,"
-                   "messageSecretSend=?,"
-                   "messageSecretReceive=?,"
+                   "messageSecret=?,"
                    "messageDate=?,"
                    "deleteDate=?,"
                    "isDelete=?"
@@ -998,8 +991,7 @@
         [FlappyStringTool toUnNullStr:msg.messageContent],
         [NSNumber numberWithInteger:msg.messageSendState],
         [NSNumber numberWithInteger:msg.messageReadState],
-        [FlappyStringTool toUnNullStr:msg.messageSecretSend],
-        [FlappyStringTool toUnNullStr:msg.messageSecretReceive],
+        [FlappyStringTool toUnNullStr:msg.messageSecret],
         [FlappyStringTool toUnNullStr:msg.messageDate],
         [FlappyStringTool toUnNullStr:msg.deleteDate],
         [NSNumber numberWithInteger:msg.isDelete],
@@ -1041,8 +1033,7 @@
         msg.messageContent = [result stringForColumn:@"messageContent"];
         msg.messageSendState = [result intForColumn:@"messageSendState"];
         msg.messageReadState = [result intForColumn:@"messageReadState"];
-        msg.messageSecretSend = [result stringForColumn:@"messageSecretSend"];
-        msg.messageSecretReceive = [result stringForColumn:@"messageSecretReceive"];
+        msg.messageSecret = [result stringForColumn:@"messageSecret"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.isDelete = [result intForColumn:@"isDelete"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
@@ -1086,8 +1077,7 @@
         msg.messageContent = [result stringForColumn:@"messageContent"];
         msg.messageSendState = [result intForColumn:@"messageSendState"];
         msg.messageReadState = [result intForColumn:@"messageReadState"];
-        msg.messageSecretSend = [result stringForColumn:@"messageSecretSend"];
-        msg.messageSecretReceive = [result stringForColumn:@"messageSecretReceive"];
+        msg.messageSecret = [result stringForColumn:@"messageSecret"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.isDelete = [result intForColumn:@"isDelete"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
@@ -1145,8 +1135,7 @@
         msg.messageContent = [result stringForColumn:@"messageContent"];
         msg.messageSendState = [result intForColumn:@"messageSendState"];
         msg.messageReadState = [result intForColumn:@"messageReadState"];
-        msg.messageSecretSend = [result stringForColumn:@"messageSecretSend"];
-        msg.messageSecretReceive = [result stringForColumn:@"messageSecretReceive"];
+        msg.messageSecret = [result stringForColumn:@"messageSecret"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
         msg.isDelete = [result intForColumn:@"isDelete"];
@@ -1200,8 +1189,7 @@
         msg.messageContent = [result stringForColumn:@"messageContent"];
         msg.messageSendState = [result intForColumn:@"messageSendState"];
         msg.messageReadState = [result intForColumn:@"messageReadState"];
-        msg.messageSecretSend = [result stringForColumn:@"messageSecretSend"];
-        msg.messageSecretReceive = [result stringForColumn:@"messageSecretReceive"];
+        msg.messageSecret = [result stringForColumn:@"messageSecret"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.isDelete = [result intForColumn:@"isDelete"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
@@ -1241,8 +1229,7 @@
         msg.messageContent = [result stringForColumn:@"messageContent"];
         msg.messageSendState = [result intForColumn:@"messageSendState"];
         msg.messageReadState = [result intForColumn:@"messageReadState"];
-        msg.messageSecretSend = [result stringForColumn:@"messageSecretSend"];
-        msg.messageSecretReceive = [result stringForColumn:@"messageSecretReceive"];
+        msg.messageSecret = [result stringForColumn:@"messageSecret"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.isDelete = [result intForColumn:@"isDelete"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];

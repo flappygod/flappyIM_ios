@@ -376,9 +376,9 @@ static  GCDAsyncSocket*  _instanceSocket;
         request.msg=[FlappyBaseSession changeToMessage:chatMsg];
         
         //秘钥加密
-        if(chatMsg.messageSecretSend!=nil && chatMsg.messageSecretSend.length!=0){
-            request.msg.messageSecretSend = [Aes128 AES128Encrypt:chatMsg.messageSecretSend
-                                                          withKey:self.secret];
+        if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0){
+            request.msg.messageSecret = [Aes128 AES128Encrypt:chatMsg.messageSecret
+                                                      withKey:self.secret];
         }
         
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
@@ -464,9 +464,9 @@ static  GCDAsyncSocket*  _instanceSocket;
             //转换消息
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
             //解密秘钥
-            if(chatMsg.messageSecretSend!=nil && chatMsg.messageSecretSend.length!=0){
-                chatMsg.messageSecretSend = [Aes128 AES128Decrypt:chatMsg.messageSecretSend
-                                                          withKey:self.secret];
+            if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0){
+                chatMsg.messageSecret = [Aes128 AES128Decrypt:chatMsg.messageSecret
+                                                      withKey:self.secret];
             }
             //进行添加
             [messageList addObject:chatMsg];
@@ -531,9 +531,9 @@ static  GCDAsyncSocket*  _instanceSocket;
         //转换一下
         ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
         //解密秘钥
-        if(chatMsg.messageSecretSend!=nil && chatMsg.messageSecretSend.length!=0){
-            chatMsg.messageSecretSend = [Aes128 AES128Decrypt:chatMsg.messageSecretSend
-                                                      withKey:self.secret];
+        if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0){
+            chatMsg.messageSecret = [Aes128 AES128Decrypt:chatMsg.messageSecret
+                                                  withKey:self.secret];
         }
         //获取之前的消息ID
         ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId showActionMsg:true];

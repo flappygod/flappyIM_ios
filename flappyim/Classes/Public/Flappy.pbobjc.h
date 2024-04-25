@@ -259,11 +259,10 @@ typedef GPB_ENUM(Message_FieldNumber) {
   Message_FieldNumber_MessageContent = 11,
   Message_FieldNumber_MessageSendState = 12,
   Message_FieldNumber_MessageReadState = 13,
-  Message_FieldNumber_MessageSecretSend = 14,
-  Message_FieldNumber_MessageSecretReceive = 15,
-  Message_FieldNumber_MessageDate = 16,
-  Message_FieldNumber_IsDelete = 17,
-  Message_FieldNumber_DeleteDate = 18,
+  Message_FieldNumber_MessageSecret = 14,
+  Message_FieldNumber_MessageDate = 15,
+  Message_FieldNumber_IsDelete = 16,
+  Message_FieldNumber_DeleteDate = 17,
 };
 
 GPB_FINAL @interface Message : GPBMessage
@@ -308,10 +307,7 @@ GPB_FINAL @interface Message : GPBMessage
 @property(nonatomic, readwrite) int32_t messageReadState;
 
 /** 消息发送秘钥 */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *messageSecretSend;
-
-/** 消息发送秘钥 */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *messageSecretReceive;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageSecret;
 
 /** 消息时间 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *messageDate;

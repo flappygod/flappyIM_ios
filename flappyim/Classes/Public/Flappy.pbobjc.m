@@ -636,8 +636,7 @@ typedef struct Session__storage_ {
 @dynamic messageContent;
 @dynamic messageSendState;
 @dynamic messageReadState;
-@dynamic messageSecretSend;
-@dynamic messageSecretReceive;
+@dynamic messageSecret;
 @dynamic messageDate;
 @dynamic isDelete;
 @dynamic deleteDate;
@@ -654,8 +653,7 @@ typedef struct Message__storage_ {
   NSString *messageSendExtendId;
   NSString *messageReceiveExtendId;
   NSString *messageContent;
-  NSString *messageSecretSend;
-  NSString *messageSecretReceive;
+  NSString *messageSecret;
   NSString *messageDate;
   NSString *deleteDate;
   int64_t messageSession;
@@ -788,20 +786,11 @@ typedef struct Message__storage_ {
         .dataType = GPBDataTypeInt32,
       },
       {
-        .name = "messageSecretSend",
+        .name = "messageSecret",
         .dataTypeSpecific.clazz = Nil,
-        .number = Message_FieldNumber_MessageSecretSend,
+        .number = Message_FieldNumber_MessageSecret,
         .hasIndex = 13,
-        .offset = (uint32_t)offsetof(Message__storage_, messageSecretSend),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
-        .dataType = GPBDataTypeString,
-      },
-      {
-        .name = "messageSecretReceive",
-        .dataTypeSpecific.clazz = Nil,
-        .number = Message_FieldNumber_MessageSecretReceive,
-        .hasIndex = 14,
-        .offset = (uint32_t)offsetof(Message__storage_, messageSecretReceive),
+        .offset = (uint32_t)offsetof(Message__storage_, messageSecret),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
@@ -809,7 +798,7 @@ typedef struct Message__storage_ {
         .name = "messageDate",
         .dataTypeSpecific.clazz = Nil,
         .number = Message_FieldNumber_MessageDate,
-        .hasIndex = 15,
+        .hasIndex = 14,
         .offset = (uint32_t)offsetof(Message__storage_, messageDate),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -818,7 +807,7 @@ typedef struct Message__storage_ {
         .name = "isDelete",
         .dataTypeSpecific.clazz = Nil,
         .number = Message_FieldNumber_IsDelete,
-        .hasIndex = 16,
+        .hasIndex = 15,
         .offset = (uint32_t)offsetof(Message__storage_, isDelete),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt32,
@@ -827,7 +816,7 @@ typedef struct Message__storage_ {
         .name = "deleteDate",
         .dataTypeSpecific.clazz = Nil,
         .number = Message_FieldNumber_DeleteDate,
-        .hasIndex = 17,
+        .hasIndex = 16,
         .offset = (uint32_t)offsetof(Message__storage_, deleteDate),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -843,8 +832,8 @@ typedef struct Message__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\022\001\t\000\002\016\000\003\022\000\004\024\000\005\017\000\006\013\000\007\r\000\010\023\000\t\020\000\n\026\000\013\016\000\014\020\000\r\020\000"
-        "\016\021\000\017\024\000\020\013\000\021\010\000\022\n\000";
+        "\021\001\t\000\002\016\000\003\022\000\004\024\000\005\017\000\006\013\000\007\r\000\010\023\000\t\020\000\n\026\000\013\016\000\014\020\000\r\020\000"
+        "\016\r\000\017\013\000\020\010\000\021\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG

@@ -190,8 +190,8 @@
 
 //加密
 -(NSString*)encrypt:(NSString*) data withSecret:(NSString*)secret{
-    _messageSecretSend = secret;
-    if(_messageSecretSend==nil||_messageSecretSend.length==0){
+    _messageSecret = secret;
+    if(_messageSecret==nil||_messageSecret.length==0){
         return [self base64Encode:data];
     }else{
         return [Aes128 AES128Encrypt:data withKey:secret];
@@ -200,7 +200,7 @@
 
 //解密
 -(NSString*)decrypt{
-    NSString* secret = _messageSecretSend;
+    NSString* secret = _messageSecret;
     if(secret==nil||secret.length==0){
         return [self base64Decode:_messageContent];
     }else{

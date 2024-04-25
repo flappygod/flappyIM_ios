@@ -85,9 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) NSInteger messageReadState;
 
-@property(nonatomic,copy)NSString* messageSecretSend;
-
-@property(nonatomic,copy)NSString* messageSecretReceive;
+@property(nonatomic,copy)NSString* messageSecret;
 
 @property(nonatomic,copy)NSString* messageDate;
 
