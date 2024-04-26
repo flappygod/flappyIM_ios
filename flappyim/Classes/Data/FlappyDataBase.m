@@ -59,7 +59,7 @@
     "messageSession TEXT,"
     "messageSessionType INTEGER,"
     "messageSessionOffset INTEGER,"
-    "messageTableSeq INTEGER,"
+    "messageTableOffset INTEGER,"
     "messageType INTEGER ,"
     "messageSendId TEXT,"
     "messageSendExtendId TEXT,"
@@ -675,7 +675,7 @@
                    "messageSession,"
                    "messageSessionType,"
                    "messageSessionOffset,"
-                   "messageTableSeq,"
+                   "messageTableOffset,"
                    "messageType,"
                    "messageSendId,"
                    "messageSendExtendId,"
@@ -695,7 +695,7 @@
         [FlappyStringTool toUnNullStr:msg.messageSession],
         [NSNumber numberWithInteger:msg.messageSessionType],
         [NSNumber numberWithInteger:msg.messageSessionOffset],
-        [NSNumber numberWithInteger:msg.messageTableSeq],
+        [NSNumber numberWithInteger:msg.messageTableOffset],
         [NSNumber numberWithInteger:msg.messageType],
         [FlappyStringTool toUnNullStr:msg.messageSendId],
         [FlappyStringTool toUnNullStr:msg.messageSendExtendId],
@@ -739,15 +739,15 @@
         case ACTION_TYPE_READ:{
             NSString* userId = action.actionIds[0];
             NSString* sessionId = action.actionIds[1];
-            NSString* tableSequence = action.actionIds[2];
+            NSString* tableOffset = action.actionIds[2];
             //更新消息状态
             [self updateMessageRead:userId
                        andSessionId:sessionId
-                        andTableSeq:tableSequence];
+                        andTableSeq:tableOffset];
             //更新最近消息状态
             [self updateSessionMemberLatestRead:userId
                                    andSessionId:sessionId
-                                    andTableSeq:tableSequence];
+                                    andTableSeq:tableOffset];
             break;
         }
             //更新消息删除
@@ -766,18 +766,18 @@
 //更新消息已读
 -(void)updateMessageRead:userId
             andSessionId:sessionId
-             andTableSeq:tableSequence{
+             andTableSeq:tableOffset{
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
         return;
     }
     [self openDB];
-    [database executeUpdate:@"update message set messageReadState=1 where messageInsertUser = ? and messageSendId != ? and messageSession = ? and messageTableSeq <= ?"
+    [database executeUpdate:@"update message set messageReadState=1 where messageInsertUser = ? and messageSendId != ? and messageSession = ? and messageTableOffset <= ?"
        withArgumentsInArray:@[
         user.userExtendId,
         userId,
         sessionId,
-        tableSequence]];
+        tableOffset]];
     [self closeDB];
 }
 
@@ -802,7 +802,7 @@
 //更新最近已读的消息
 -(void)updateSessionMemberLatestRead:userId
                         andSessionId:sessionId
-                         andTableSeq:tableSequence{
+                         andTableSeq:tableOffset{
     //打开数据库
     [self openDB];
     
@@ -811,7 +811,7 @@
     
     //如果不为空就更新
     if(data!=nil){
-        data.sessionMemberLatestRead=tableSequence;
+        data.sessionMemberLatestRead=tableOffset;
         [self insertSessionMember:data];
     }
     
@@ -846,7 +846,7 @@
                        "messageSession,"
                        "messageSessionType,"
                        "messageSessionOffset,"
-                       "messageTableSeq,"
+                       "messageTableOffset,"
                        "messageType,"
                        "messageSendId,"
                        "messageSendExtendId,"
@@ -866,7 +866,7 @@
             [FlappyStringTool toUnNullStr:msg.messageSession],
             [NSNumber numberWithInteger:msg.messageSessionType],
             [NSNumber numberWithInteger:msg.messageSessionOffset],
-            [NSNumber numberWithInteger:msg.messageTableSeq],
+            [NSNumber numberWithInteger:msg.messageTableOffset],
             [NSNumber numberWithInteger:msg.messageType],
             [FlappyStringTool toUnNullStr:msg.messageSendId],
             [FlappyStringTool toUnNullStr:msg.messageSendExtendId],
@@ -923,7 +923,7 @@
         msg.messageSession = [result stringForColumn:@"messageSession"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+        msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
         msg.messageType = [result intForColumn:@"messageType"];
         msg.messageSendId = [result stringForColumn:@"messageSendId"];
         msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
@@ -961,7 +961,7 @@
                    "messageSession=?,"
                    "messageSessionType=?,"
                    "messageSessionOffset=?,"
-                   "messageTableSeq=?,"
+                   "messageTableOffset=?,"
                    "messageType=?,"
                    "messageSendId=?,"
                    "messageSendExtendId=?,"
@@ -982,7 +982,7 @@
         [FlappyStringTool toUnNullStr:msg.messageSession],
         [NSNumber numberWithInteger:msg.messageSessionType],
         [NSNumber numberWithInteger:msg.messageSessionOffset],
-        [NSNumber numberWithInteger:msg.messageTableSeq],
+        [NSNumber numberWithInteger:msg.messageTableOffset],
         [NSNumber numberWithInteger:msg.messageType],
         [FlappyStringTool toUnNullStr:msg.messageSendId],
         [FlappyStringTool toUnNullStr:msg.messageSendExtendId],
@@ -1016,7 +1016,7 @@
     [self openDB];
     
     //返回消息
-    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageInsertUser = ? and messageType!=8 order by messageTableSeq desc,messageStamp desc limit 1"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageInsertUser = ? and messageType!=8 order by messageTableOffset desc,messageStamp desc limit 1"
                             withArgumentsInArray:@[sessionID,user.userExtendId]];
     if ([result next]) {
         ChatMessage *msg = [ChatMessage new];
@@ -1024,7 +1024,7 @@
         msg.messageSession = [result stringForColumn:@"messageSession"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+        msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
         msg.messageType = [result intForColumn:@"messageType"];
         msg.messageSendId = [result stringForColumn:@"messageSendId"];
         msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
@@ -1059,7 +1059,7 @@
     [self openDB];
     
     //获取消息
-    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageTableSeq=? and messageType!=8 and messageInsertUser = ? order by messageStamp  desc"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageTableOffset=? and messageType!=8 and messageInsertUser = ? order by messageStamp  desc"
                             withArgumentsInArray:@[sessionID,tabSequece,user.userExtendId]];
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
     while ([result next]) {
@@ -1068,7 +1068,7 @@
         msg.messageSession = [result stringForColumn:@"messageSession"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+        msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
         msg.messageType = [result intForColumn:@"messageType"];
         msg.messageSendId = [result stringForColumn:@"messageSendId"];
         msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
@@ -1109,7 +1109,7 @@
     //当前的
     NSMutableArray* retArray=[[NSMutableArray alloc] init];
     NSMutableArray* sequeceArray=[self getSessionSequeceMessage:sessionID
-                                                     withOffset:[NSString stringWithFormat:@"%ld",(long)msg.messageTableSeq]];
+                                                     withOffset:[NSString stringWithFormat:@"%ld",(long)msg.messageTableOffset]];
     for(int s=0;s<sequeceArray.count;s++){
         ChatMessage* mem=[sequeceArray objectAtIndex:s];
         if(mem.messageStamp<msg.messageStamp){
@@ -1117,8 +1117,8 @@
         }
     }
     //获取消息
-    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageTableSeq<? and messageType!=8 and messageInsertUser = ? order by messageTableSeq desc,messageStamp desc limit ?"
-                            withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableSeq],user.userExtendId,[NSNumber numberWithInteger:size]]];
+    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageTableOffset<? and messageType!=8 and messageInsertUser = ? order by messageTableOffset desc,messageStamp desc limit ?"
+                            withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableOffset],user.userExtendId,[NSNumber numberWithInteger:size]]];
     NSMutableArray* listArray=[[NSMutableArray alloc]init];
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
@@ -1126,7 +1126,7 @@
         msg.messageSession = [result stringForColumn:@"messageSession"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+        msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
         msg.messageType = [result intForColumn:@"messageType"];
         msg.messageSendId = [result stringForColumn:@"messageSendId"];
         msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
@@ -1171,7 +1171,7 @@
     }
     //获取消息
     [self openDB];
-    FMResultSet *result = [database executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageSession=? and messageInsertUser = ? order by messageTableSeq  desc"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageSession=? and messageInsertUser = ? order by messageTableOffset  desc"
                             withArgumentsInArray:@[sessionID,user.userExtendId]];
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
     while ([result next]) {
@@ -1180,7 +1180,7 @@
         msg.messageSession = [result stringForColumn:@"messageSession"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+        msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
         msg.messageType = [result intForColumn:@"messageType"];
         msg.messageSendId = [result stringForColumn:@"messageSendId"];
         msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
@@ -1211,7 +1211,7 @@
     
     //获取消息
     [self openDB];
-    FMResultSet *result = [database executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageInsertUser = ? order by messageTableSeq  asc"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageReadState = 0 and messageType=0 and messageInsertUser = ? order by messageTableOffset  asc"
                             withArgumentsInArray:@[user.userExtendId]];
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
     while ([result next]) {
@@ -1220,7 +1220,7 @@
         msg.messageSession = [result stringForColumn:@"messageSession"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-        msg.messageTableSeq = [result intForColumn:@"messageTableSeq"];
+        msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
         msg.messageType = [result intForColumn:@"messageType"];
         msg.messageSendId = [result stringForColumn:@"messageSendId"];
         msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];

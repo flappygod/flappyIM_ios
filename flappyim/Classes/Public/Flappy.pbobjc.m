@@ -627,7 +627,7 @@ typedef struct Session__storage_ {
 @dynamic messageSession;
 @dynamic messageSessionType;
 @dynamic messageSessionOffset;
-@dynamic messageTableSeq;
+@dynamic messageTableOffset;
 @dynamic messageType;
 @dynamic messageSendId;
 @dynamic messageSendExtendId;
@@ -644,7 +644,6 @@ typedef struct Session__storage_ {
 typedef struct Message__storage_ {
   uint32_t _has_storage_[1];
   int32_t messageSessionType;
-  int32_t messageSessionOffset;
   int32_t messageType;
   int32_t messageSendState;
   int32_t messageReadState;
@@ -657,7 +656,8 @@ typedef struct Message__storage_ {
   NSString *messageDate;
   NSString *deleteDate;
   int64_t messageSession;
-  int64_t messageTableSeq;
+  int64_t messageSessionOffset;
+  int64_t messageTableOffset;
   int64_t messageSendId;
   int64_t messageReceiveId;
 } Message__storage_;
@@ -702,14 +702,14 @@ typedef struct Message__storage_ {
         .hasIndex = 3,
         .offset = (uint32_t)offsetof(Message__storage_, messageSessionOffset),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
-        .dataType = GPBDataTypeInt32,
+        .dataType = GPBDataTypeInt64,
       },
       {
-        .name = "messageTableSeq",
+        .name = "messageTableOffset",
         .dataTypeSpecific.clazz = Nil,
-        .number = Message_FieldNumber_MessageTableSeq,
+        .number = Message_FieldNumber_MessageTableOffset,
         .hasIndex = 4,
-        .offset = (uint32_t)offsetof(Message__storage_, messageTableSeq),
+        .offset = (uint32_t)offsetof(Message__storage_, messageTableOffset),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
@@ -832,7 +832,7 @@ typedef struct Message__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\021\001\t\000\002\016\000\003\022\000\004\024\000\005\017\000\006\013\000\007\r\000\010\023\000\t\020\000\n\026\000\013\016\000\014\020\000\r\020\000"
+        "\021\001\t\000\002\016\000\003\022\000\004\024\000\005\022\000\006\013\000\007\r\000\010\023\000\t\020\000\n\026\000\013\016\000\014\020\000\r\020\000"
         "\016\r\000\017\013\000\020\010\000\021\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS

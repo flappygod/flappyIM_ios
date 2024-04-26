@@ -475,7 +475,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         [messageList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             ChatMessage* one=obj1;
             ChatMessage* two=obj2;
-            if(one.messageTableSeq>two.messageTableSeq){
+            if(one.messageTableOffset>two.messageTableOffset){
                 return NSOrderedDescending;
             }
             return NSOrderedAscending;
@@ -623,10 +623,10 @@ static  GCDAsyncSocket*  _instanceSocket;
     //设置用户
     ChatUser* user=[[FlappyData shareInstance] getUser];
     if(user.latest==nil){
-        user.latest  = [NSString stringWithFormat:@"%ld",(long)message.messageTableSeq];
+        user.latest  = [NSString stringWithFormat:@"%ld",(long)message.messageTableOffset];
     }else{
         long formerL = user.latest.longLongValue;
-        long newerL  = message.messageTableSeq;
+        long newerL  = message.messageTableOffset;
         user.latest  = [NSString stringWithFormat:@"%ld",(formerL>newerL ? formerL:newerL )];
     }
     [[FlappyData shareInstance]saveUser:user];
@@ -645,7 +645,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             request.type=REQ_RECEIPT;
             ReqReceipt* reciept=[[ReqReceipt alloc]init];
             reciept.receiptType=RECEIPT_MSG_ARRIVE;
-            reciept.receiptId=[NSString stringWithFormat:@"%ld",(long)message.messageTableSeq];
+            reciept.receiptId=[NSString stringWithFormat:@"%ld",(long)message.messageTableOffset];
             
             @try {
                 //设置请求的回执数据
@@ -757,8 +757,8 @@ static  GCDAsyncSocket*  _instanceSocket;
 //通知有新的消息
 -(void)notifyMessageOtherRead:(NSString*)sessionId
                   andReaderId:(NSString*)readerId
-             andTableSequecne:(NSString*)tableSequence{
-    if(sessionId==nil || tableSequence==nil){
+             andTableSequecne:(NSString*)tableOffset{
+    if(sessionId==nil || tableOffset==nil){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -772,7 +772,7 @@ static  GCDAsyncSocket*  _instanceSocket;
                     FlappyMessageListener* listener=[listeners objectAtIndex:w];
                     [listener onOtherRead:sessionId
                               andReaderId:readerId
-                               andSequece:tableSequence];
+                               andSequece:tableOffset];
                 }
             }
             
@@ -783,8 +783,8 @@ static  GCDAsyncSocket*  _instanceSocket;
 //通知有新的消息
 -(void)notifyMessageSelfRead:(NSString*)sessionId
                  andReaderId:(NSString*)readerId
-            andTableSequecne:(NSString*)tableSequence{
-    if(sessionId==nil || tableSequence==nil){
+            andTableSequecne:(NSString*)tableOffset{
+    if(sessionId==nil || tableOffset==nil){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -798,7 +798,7 @@ static  GCDAsyncSocket*  _instanceSocket;
                     FlappyMessageListener* listener=[listeners objectAtIndex:w];
                     [listener onSelfRead:sessionId
                              andReaderId:readerId
-                              andSequece:tableSequence];
+                              andSequece:tableOffset];
                 }
             }
             

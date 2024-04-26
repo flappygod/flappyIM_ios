@@ -571,7 +571,7 @@
     //数据
     NSInteger value=(user.latest!=nil? user.latest.integerValue:0)+1;
     //还没发送成功，那么放在最后一条
-    msg.messageTableSeq=value;
+    msg.messageTableOffset=value;
     //插入数据
     [[FlappyDataBase shareInstance] insertMessage:msg];
     //通知发送

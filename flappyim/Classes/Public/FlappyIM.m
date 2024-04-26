@@ -1172,7 +1172,7 @@
         if(msgTwo==nil){
             return NSOrderedAscending;
         }
-        if(msgOne.messageTableSeq>msgTwo.messageTableSeq){
+        if(msgOne.messageTableOffset>msgTwo.messageTableOffset){
             return NSOrderedAscending;
         }else{
             return NSOrderedDescending;
@@ -1238,7 +1238,7 @@
             if(msgTwo==nil){
                 return NSOrderedAscending;
             }
-            if(msgOne.messageTableSeq>msgTwo.messageTableSeq){
+            if(msgOne.messageTableOffset>msgTwo.messageTableOffset){
                 return NSOrderedAscending;
             }else{
                 return NSOrderedDescending;

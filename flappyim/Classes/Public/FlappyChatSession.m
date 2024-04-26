@@ -454,7 +454,7 @@
     action.actionIds=@[
         [self getMine].userId,
         self.session.sessionId,
-        [NSString stringWithFormat:@"%ld",[self getLatestMessage].messageTableSeq]
+        [NSString stringWithFormat:@"%ld",[self getLatestMessage].messageTableOffset]
     ];
     [chatmsg setChatAction:action];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];

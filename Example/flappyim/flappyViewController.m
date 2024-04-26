@@ -126,7 +126,7 @@
         
         ChatMessage* msg=[safeSelf.session getLatestMessage];
         
-        NSLog(@"%ld",(long)msg.messageTableSeq);
+        NSLog(@"%ld",(long)msg.messageTableOffset);
         
         if(msg!=nil){
             NSMutableArray* formers=[safeSelf.session getFormerMessages:msg.messageId
@@ -135,7 +135,7 @@
             for(int s=0;s<formers.count;s++){
                 ChatMessage* message=[formers objectAtIndex:s];
                 
-                NSLog(@"%ld",(long)message.messageTableSeq);
+                NSLog(@"%ld",(long)message.messageTableOffset);
             }
         }
         

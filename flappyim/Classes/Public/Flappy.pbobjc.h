@@ -250,7 +250,7 @@ typedef GPB_ENUM(Message_FieldNumber) {
   Message_FieldNumber_MessageSession = 2,
   Message_FieldNumber_MessageSessionType = 3,
   Message_FieldNumber_MessageSessionOffset = 4,
-  Message_FieldNumber_MessageTableSeq = 5,
+  Message_FieldNumber_MessageTableOffset = 5,
   Message_FieldNumber_MessageType = 6,
   Message_FieldNumber_MessageSendId = 7,
   Message_FieldNumber_MessageSendExtendId = 8,
@@ -277,10 +277,10 @@ GPB_FINAL @interface Message : GPBMessage
 @property(nonatomic, readwrite) int32_t messageSessionType;
 
 /** 消息会话偏移量 */
-@property(nonatomic, readwrite) int32_t messageSessionOffset;
+@property(nonatomic, readwrite) int64_t messageSessionOffset;
 
 /** 消息序列 */
-@property(nonatomic, readwrite) int64_t messageTableSeq;
+@property(nonatomic, readwrite) int64_t messageTableOffset;
 
 /** 消息类型 */
 @property(nonatomic, readwrite) int32_t messageType;
