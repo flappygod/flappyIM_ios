@@ -184,6 +184,9 @@
               andFailure:(FlappySendFailure)failure{
     
     
+        //消息
+        ChatMessage* message=[[FlappySender shareInstance].sendingMessages
+                              objectForKey:chatMsg.messageId];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
@@ -500,6 +503,14 @@
                                    andFailure:failure];
     
     return chatmsg;
+}
+
+//重新发送
+-(void)resendMessageById:(NSString*)messageId
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure{
+    ChatMessage* message = [[FlappyDataBase shareInstance] getMessageByID:messageId];
+    [self resendMessage:message andSuccess:success andFailure:failure];
 }
 
 
