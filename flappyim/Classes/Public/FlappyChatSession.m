@@ -136,7 +136,7 @@
     chatmsg.messageType=MSG_TYPE_TEXT;
     [chatmsg setChatText:text];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     //发送消息
     [[FlappySender shareInstance] sendMessage:chatmsg
@@ -169,7 +169,7 @@
     [chatmsg setChatImage:image];
     
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     [[FlappySender shareInstance] uploadImageAndSend:chatmsg
                                           andSuccess:success
@@ -196,7 +196,7 @@
     chatmsg.messageType=MSG_TYPE_IMG;
     [chatmsg setChatImage:image];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
@@ -226,7 +226,7 @@
     voice.sendPath=path;
     [chatmsg setChatVoice:voice];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     [[FlappySender shareInstance] uploadVoiceAndSend:chatmsg
                                           andSuccess:success
@@ -254,7 +254,7 @@
     chatmsg.messageType=MSG_TYPE_VOICE;
     [chatmsg setChatVoice:voice];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
@@ -280,7 +280,7 @@
     chatmsg.messageType=MSG_TYPE_LOCATE;
     [chatmsg setChatLocation:location];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
@@ -309,7 +309,7 @@
     [chatmsg setChatVideo:video];
     
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     [[FlappySender shareInstance] uploadVideoAndSend:chatmsg
                                           andSuccess:success
@@ -335,7 +335,7 @@
     chatmsg.messageType=MSG_TYPE_VIDEO;
     [chatmsg setChatVideo:video];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
@@ -365,7 +365,7 @@
     chatmsg.messageType=MSG_TYPE_FILE;
     [chatmsg setChatFile:file];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     [[FlappySender shareInstance] uploadFileAndSend:chatmsg
                                          andSuccess:success
@@ -390,7 +390,7 @@
     chatmsg.messageType=MSG_TYPE_FILE;
     [chatmsg setChatFile:file];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
@@ -416,7 +416,7 @@
     chatmsg.messageType=MSG_TYPE_CUSTOM;
     [chatmsg setChatCustom:text];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     //发送消息
     [[FlappySender shareInstance] sendMessage:chatmsg
@@ -458,7 +458,7 @@
     ];
     [chatmsg setChatAction:action];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     //发送消息
     [[FlappySender shareInstance] sendMessage:chatmsg
@@ -492,7 +492,7 @@
     ];
     [chatmsg setChatAction:action];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_CREATE;
+    chatmsg.messageSendState=SEND_STATE_SENDING;
     
     //发送消息
     [[FlappySender shareInstance] sendMessage:chatmsg

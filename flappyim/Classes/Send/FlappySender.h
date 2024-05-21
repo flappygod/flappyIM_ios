@@ -52,14 +52,33 @@
         andSuccess:(FlappySendSuccess)success
         andFailure:(FlappySendFailure)failure;
 
+
+//消息已读回执和删除回执,对方的阅读消息存在的时候才会执行
+-(void)handleMessageAction:(ChatMessage*)message;
+
+
+//通知消息插入
+-(void)notifyMessageSendInsert:(ChatMessage*)msg;
+
+
+//通知消息接收
+-(void)notifyMessageReceive:(ChatMessage*)msg
+                  andFormer:(ChatMessage*)former;
+
+//通知消息失败
+-(void)notifyMessageFailure:(ChatMessage*)msg;
+
+//会话
+-(void)notifySession:(SessionData*)session;
+
 //成功
--(void)successCallback:(ChatMessage*)messageid;
+-(void)handleSendSuccessCallback:(ChatMessage*)messageid;
 
 //失败
--(void)failureCallback:(ChatMessage*)message;
+-(void)handleSendFailureCallback:(ChatMessage*)message;
 
 //全部失败
--(void)failureAllCallbacks;
+-(void)handleSendFailureAllCallback;
 
 
 @end

@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //消息被创建
-#define SEND_STATE_CREATE   0
+#define SEND_STATE_SENDING   0
 //消息已经发送
 #define SEND_STATE_SENDED   1
 //消息已经到达

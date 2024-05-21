@@ -107,7 +107,7 @@
                                                      options:nil];
         //获取长度
         if(audioAsset==nil){
-            [self msgFailure:chatMsg];
+            [self updateMsgFailure:chatMsg];
             failure(chatMsg,[NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
                     RESULT_PARSE_ERROR);
             return;
@@ -120,7 +120,7 @@
         //长度
         chatVoice.seconds=[NSString stringWithFormat:@"%ld",(long)audioDurationSeconds*1000];
     } @catch (NSException *exception) {
-        [self msgFailure:chatMsg];
+        [self updateMsgFailure:chatMsg];
         failure(chatMsg,[NSError errorWithDomain:@"音频读取失败" code:0 userInfo:nil],
                 RESULT_PARSE_ERROR);
         return;
@@ -130,7 +130,7 @@
     [chatMsg setChatVoice:chatVoice];
     
     //插入消息
-    [self msgInsert:chatMsg];
+    [self insertMessage:chatMsg];
     
     //开始请求
     FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
@@ -162,7 +162,7 @@
             //移除请求释放资源
             [safeSelf.reqArray removeObject:safeReq];
         }else{
-            [safeSelf msgFailure:chatMsg];
+            [safeSelf updateMsgFailure:chatMsg];
             //上传失败了
             failure(chatMsg,[NSError errorWithDomain:@"文件上传失败" code:0 userInfo:nil],
                     RESULT_NETERROR);
@@ -173,7 +173,7 @@
     
     //失败
     req.errorBlock=^(NSException*  error){
-        [safeSelf msgFailure:chatMsg];
+        [safeSelf updateMsgFailure:chatMsg];
         //上传失败了
         failure(chatMsg,[NSError errorWithDomain:error.reason code:0 userInfo:nil],
                 RESULT_NETERROR);
@@ -181,15 +181,16 @@
         [safeSelf.reqArray removeObject:safeReq];
     };
     
-    
     //上传文件
     FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
     uploadReq.path=chatVoice.sendPath;
     uploadReq.name=@"file";
     uploadReq.type=@"voice";
     
+    //上传文件
     [req uploadFileBaseModel:[FlappyApiConfig shareInstance].URL_fileUpload
                     andModel:uploadReq];
+    
     //添加进入请求列表，方式请求被回收
     [self.reqArray addObject:req];
     
@@ -227,7 +228,7 @@
             UIImage* image=[[UIImage alloc]initWithContentsOfFile:trueUrl];
             //不为空
             if(image==nil){
-                [self msgFailure:chatMsg];
+                [self updateMsgFailure:chatMsg];
                 failure(chatMsg,[NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
                         RESULT_PARSE_ERROR);
                 return;
@@ -239,7 +240,7 @@
         }
     } @catch (NSException *exception) {
         //失败了
-        [self msgFailure:chatMsg];
+        [self updateMsgFailure:chatMsg];
         //图片读取失败
         failure(chatMsg,[NSError errorWithDomain:@"图片读取失败" code:0 userInfo:nil],
                 RESULT_PARSE_ERROR);
@@ -249,20 +250,18 @@
     //更新消息
     [chatMsg setChatImage:chatImg];
     //插入消息
-    [self msgInsert:chatMsg];
+    [self insertMessage:chatMsg];
     //开始请求
     FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
     //自己
     __weak typeof(self) safeSelf=self;
     //用于引用
     __weak typeof (req) safeReq=req;
-    
     //成功
     req.successBlock=^(id data){
-        
         //字典
         NSDictionary* dic=data;
-        
+        //Code
         NSString* resultCode=dic[@"code"];
         //成功
         if(resultCode.integerValue==RESULT_SUCCESS && [dic[@"data"] isKindOfClass:NSArray.class]){
@@ -279,7 +278,7 @@
                        andFailure:failure];
             [safeSelf.reqArray removeObject:safeReq];
         }else{
-            [safeSelf msgFailure:chatMsg];
+            [safeSelf updateMsgFailure:chatMsg];
             //上传失败了
             failure(chatMsg,[NSError errorWithDomain:@"文件上传失败" code:0 userInfo:nil],
                     RESULT_NETERROR);
@@ -289,7 +288,7 @@
     };
     //失败
     req.errorBlock=^(NSException*  error){
-        [safeSelf msgFailure:chatMsg];
+        [safeSelf updateMsgFailure:chatMsg];
         //上传失败了
         failure(chatMsg,[NSError errorWithDomain:error.description code:0 userInfo:nil],
                 RESULT_NETERROR);
@@ -311,14 +310,10 @@
     
 }
 
-
-
-
 //发送音频文件
 -(void)uploadVideoAndSend:(ChatMessage*)chatMsg
                andSuccess:(FlappySendSuccess)success
                andFailure:(FlappySendFailure)failure{
-    
     //已经上传了
     if(![FlappyStringTool isStringEmpty:[chatMsg getChatImage].path]){
         
@@ -359,7 +354,7 @@
             //移除请求释放资源
             [safeSelf.reqArray removeObject:safeReq];
         }else{
-            [safeSelf msgFailure:chatMsg];
+            [safeSelf updateMsgFailure:chatMsg];
             //上传失败了
             failure(chatMsg,[NSError errorWithDomain:@"图片上传失败" code:0 userInfo:nil],
                     RESULT_NETERROR);
@@ -370,7 +365,7 @@
     
     //失败
     req.errorBlock=^(NSException*  error){
-        [safeSelf msgFailure:chatMsg];
+        [safeSelf updateMsgFailure:chatMsg];
         //上传失败了
         failure(chatMsg,[NSError errorWithDomain:error.reason code:0 userInfo:nil],
                 RESULT_NETERROR);
@@ -416,14 +411,14 @@
         [uplaods addObject:uploadReq];
         
     } @catch (NSException *exception) {
-        [self msgFailure:chatMsg];
+        [self updateMsgFailure:chatMsg];
         failure(chatMsg,[NSError errorWithDomain:@"视频读取失败" code:0 userInfo:nil],
                 RESULT_PARSE_ERROR);
         return;
     }
     
     //消息
-    [self msgInsert:chatMsg];
+    [self insertMessage:chatMsg];
     
     //上传文件
     FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
@@ -437,7 +432,6 @@
                     andModels:uplaods];
     //添加进入请求列表，方式请求被回收
     [self.reqArray addObject:req];
-    
 }
 
 
@@ -466,14 +460,14 @@
     [chatMsg setChatFile:chatFile];
     
     //插入消息
-    [self msgInsert:chatMsg];
-    
+    [self insertMessage:chatMsg];
     
     //开始请求
     FlappyUploadTool* req=[[FlappyUploadTool alloc]init];
     
     //自己
     __weak typeof(self) safeSelf=self;
+    
     //用于引用
     __weak typeof (req) safeReq=req;
     
@@ -483,7 +477,9 @@
         //字典
         NSDictionary* dic=data;
         
+        //code
         NSString* resultCode=dic[@"code"];
+        
         //成功
         if(resultCode.integerValue==RESULT_SUCCESS && [dic[@"data"] isKindOfClass:NSArray.class]){
             NSArray* dataList=dic[@"data"];
@@ -499,7 +495,7 @@
                        andFailure:failure];
             [safeSelf.reqArray removeObject:safeReq];
         }else{
-            [safeSelf msgFailure:chatMsg];
+            [safeSelf updateMsgFailure:chatMsg];
             //上传失败了
             failure(chatMsg,[NSError errorWithDomain:@"文件上传失败" code:0 userInfo:nil],
                     RESULT_NETERROR);
@@ -509,13 +505,11 @@
     };
     //失败
     req.errorBlock=^(NSException*  error){
-        [safeSelf msgFailure:chatMsg];
-        //上传失败了
+        [safeSelf updateMsgFailure:chatMsg];
         failure(chatMsg,[NSError errorWithDomain:error.description code:0 userInfo:nil],
                 RESULT_NETERROR);
         [safeSelf.reqArray removeObject:safeReq];
     };
-    
     
     //上传
     FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
@@ -530,6 +524,36 @@
     [self.reqArray addObject:req];
 }
 
+//插入数据库
+-(void)insertMessage:(ChatMessage*)msg{
+    //我们先姑且认为它是最后一条
+    ChatUser* user=[[FlappyData shareInstance]getUser];
+    
+    //最近的一条消息
+    msg.messageSendState=SEND_STATE_SENDING;
+    
+    //添加一个
+    NSInteger value=(user.latest!=nil? user.latest.integerValue:0)+1;
+    
+    //设置offset，仅用于排序，最终以服务器端返回为准
+    msg.messageTableOffset=value;
+    
+    //插入消息数据
+    [[FlappyDataBase shareInstance] insertMessage:msg];
+    
+    //发送插入消息通知
+    [self notifyMessageSendInsert:msg];
+}
+
+//发送失败
+-(void)updateMsgFailure:(ChatMessage*)msg{
+    //更新失败消息
+    msg.messageSendState=SEND_STATE_FAILURE;
+    [[FlappyDataBase shareInstance] updateMessage:msg];
+    
+    //发送失败通知
+    [self notifyMessageFailure:msg];
+}
 
 //发送消息
 -(void)sendMessage:(ChatMessage*)chatMsg
@@ -537,12 +561,12 @@
         andFailure:(FlappySendFailure)failure{
     
     //消息
-    [self msgInsert:chatMsg];
+    [self insertMessage:chatMsg];
     
     //之前的回调错误信息
     ChatMessage* former=[self.sendingMessages objectForKey:chatMsg.messageId];
     if(former!=nil){
-        [self failureCallback:chatMsg];
+        [self handleSendFailureCallback:chatMsg];
     }
     
     //消息ID保存
@@ -557,126 +581,244 @@
     if(socket!=nil && socket.isActive){
         [socket sendMessage:chatMsg];
     }
-    
 }
 
 
+//消息已读回执和删除回执,对方的阅读消息存在的时候才会执行
+-(void)handleMessageAction:(ChatMessage*)message{
+    if(message==nil){
+        return;
+    }
+    if(message.messageType == MSG_TYPE_ACTION){
+        [[FlappyDataBase shareInstance] handleActionMessageUpdate:message];
+        ChatAction* chatAction = [message getChatAction];
+        switch(chatAction.actionType){
+            case ACTION_TYPE_READ:{
+                ChatUser* user=[[FlappyData shareInstance] getUser];
+                //自己读的
+                if([user.userId isEqualToString:chatAction.actionIds[0]]){
+                    [self notifyMessageSelfRead:chatAction.actionIds[1]
+                                    andReaderId:chatAction.actionIds[0]
+                               andTableSequecne:chatAction.actionIds[2]];
+                }
+                //其他人读的
+                else{
+                    [self notifyMessageOtherRead:chatAction.actionIds[1]
+                                     andReaderId:chatAction.actionIds[0]
+                                andTableSequecne:chatAction.actionIds[2]];
+                }
+                break;
+            }
+            case ACTION_TYPE_DELETE:{
+                [self notifyMessageDelete:chatAction.actionIds[1]
+                         andTableSequecne:chatAction.actionIds[2]];
+                break;
+            }
+        }
+    }
+}
 
-//插入数据库
--(void)msgInsert:(ChatMessage*)msg{
-    //我们先姑且认为它是最后一条
-    ChatUser* user=[[FlappyData shareInstance]getUser];
-    //创建
-    msg.messageSendState=SEND_STATE_CREATE;
-    //数据
-    NSInteger value=(user.latest!=nil? user.latest.integerValue:0)+1;
-    //还没发送成功，那么放在最后一条
-    msg.messageTableOffset=value;
-    //插入数据
-    [[FlappyDataBase shareInstance] insertMessage:msg];
-    //通知发送
-    [self notifyMessageSend:msg];
+
+//通知有新的消息
+-(void)notifyMessageOtherRead:(NSString*)sessionId
+                  andReaderId:(NSString*)readerId
+             andTableSequecne:(NSString*)tableOffset{
+    if(sessionId==nil || tableOffset==nil){
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            //当前会话或者全局
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:sessionId]){
+                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                    [listener onOtherRead:sessionId
+                              andReaderId:readerId
+                               andSequece:tableOffset];
+                }
+            }
+            
+        }
+    });
+}
+
+//通知有新的消息
+-(void)notifyMessageSelfRead:(NSString*)sessionId
+                 andReaderId:(NSString*)readerId
+            andTableSequecne:(NSString*)tableOffset{
+    if(sessionId==nil || tableOffset==nil){
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            //当前会话或者全局
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:sessionId]){
+                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                    [listener onSelfRead:sessionId
+                             andReaderId:readerId
+                              andSequece:tableOffset];
+                }
+            }
+            
+        }
+    });
+}
+
+//通知有新的消息
+-(void)notifyMessageDelete:(NSString*)sessionId
+          andTableSequecne:(NSString*)messageId{
+    if(sessionId==nil || messageId==nil){
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            //当前会话或者全局
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:sessionId]){
+                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                    [listener onDelete:messageId];
+                }
+            }
+        }
+    });
 }
 
 //通知消息发送
--(void)notifyMessageSend:(ChatMessage*)msg{
+-(void)notifyMessageSendInsert:(ChatMessage*)msg{
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
         for(int s=0;s<array.count;s++){
             NSString* str=[array objectAtIndex:s];
-            NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-            for(int w=0;w<listeners.count;w++){
-                FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                [listener onSend:msg];
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSession]){
+                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                    [listener onSend:msg];
+                }
             }
         }
     });
 }
 
-
-//发送失败
--(void)msgFailure:(ChatMessage*)msg{
-    //发送成功了
-    msg.messageSendState=SEND_STATE_FAILURE;
-    //放入指定的位置
-    [[FlappyDataBase shareInstance] updateMessage:msg];
-    //发送失败的通知
-    __weak typeof(self) safeSelf=self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [safeSelf notifyMessageFailure:msg];
-    });
-}
-
-//通知消息失败
--(void)notifyMessageFailure:(ChatMessage*)message{
-    if(message==nil){
+//通知消息接收
+-(void)notifyMessageReceive:(ChatMessage*)msg
+                  andFormer:(ChatMessage*)former{
+    if(msg==nil){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
         for(int s=0;s<array.count;s++){
             NSString* str=[array objectAtIndex:s];
-            NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-            for(int w=0;w<listeners.count;w++){
-                FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                [listener onFailure:message];
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSession]){
+                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                    if(former==nil){
+                        [listener onReceive:msg];
+                    }else{
+                        [listener onUpdate:msg];
+                    }
+                }
             }
         }
     });
 }
 
+
+//通知消息失败
+-(void)notifyMessageFailure:(ChatMessage*)msg{
+    if(msg==nil){
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSession]){
+                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                    [listener onFailure:msg];
+                }
+            }
+        }
+    });
+}
+
+//会话
+-(void)notifySession:(SessionData*)session{
+    //在主线程之中执行
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].sessionListeners;
+        for(int s=0;s<array.count;s++){
+            SessionListener listener=[array objectAtIndex:s];
+            listener(session);
+        }
+    });
+}
+
+
 //成功
--(void)successCallback:(ChatMessage*)chatMsg{
-    
+-(void)handleSendSuccessCallback:(ChatMessage*)chatMsg{
     if(chatMsg==nil){
         return;
     }
+    //在主线程之中执行
+    dispatch_async(dispatch_get_main_queue(), ^{
+        FlappySendSuccess success=[self.successCallbacks objectForKey:chatMsg.messageId];
+        if(success!=nil){
+            success(chatMsg);
+            [self.successCallbacks removeObjectForKey:chatMsg.messageId];
+            [self.failureCallbacks removeObjectForKey:chatMsg.messageId];
+            [self.sendingMessages removeObjectForKey:chatMsg.messageId];
+        }
+    });
     
-    //获取回调
-    FlappySendSuccess success=[self.successCallbacks objectForKey:chatMsg.messageId];
-    //不为空
-    if(success!=nil){
-        //消息回调，成功的消息已经正常写入了
-        success(chatMsg);
-        [self.successCallbacks removeObjectForKey:chatMsg.messageId];
-        [self.failureCallbacks removeObjectForKey:chatMsg.messageId];
-        [self.sendingMessages removeObjectForKey:chatMsg.messageId];
-    }
 }
 
 //失败
--(void)failureCallback:(ChatMessage*)message{
+-(void)handleSendFailureCallback:(ChatMessage*)message{
     if(message==nil){
         return;
     }
-    FlappySendFailure failure=[self.failureCallbacks objectForKey:message.messageId];
-    if(failure!=nil && message!=nil){
-        [self msgFailure:message];
-        failure(message,[NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
-        [self.successCallbacks removeObjectForKey:message.messageId];
-        [self.failureCallbacks removeObjectForKey:message.messageId];
-        [self.sendingMessages removeObjectForKey:message.messageId];
-    }
+    //消息发送失败
+    [self updateMsgFailure:message];
+    //在主线程之中执行
+    dispatch_async(dispatch_get_main_queue(), ^{
+        FlappySendFailure failure=[self.failureCallbacks objectForKey:message.messageId];
+        if(failure!=nil && message!=nil){
+            failure(message,[NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
+            [self.successCallbacks removeObjectForKey:message.messageId];
+            [self.failureCallbacks removeObjectForKey:message.messageId];
+            [self.sendingMessages removeObjectForKey:message.messageId];
+        }
+    });
 }
 
-
 //全部失败
--(void)failureAllCallbacks{
-    //没有的时候饭很好
+-(void)handleSendFailureAllCallback{
     if(self.sendingMessages==nil||self.sendingMessages.count==0){
         return;
     }
     NSMutableDictionary* dic=self.sendingMessages;
     NSArray* array=dic.allKeys;
     for(int s=0;s<array.count;s++){
-        NSString* messageid=[array objectAtIndex:s];
-        [self failureCallback:[self.sendingMessages objectForKey:messageid]];
+        [self handleSendFailureCallback:[self.sendingMessages objectForKey:[array objectAtIndex:s]]];
     }
 }
 
-
-
-// 获取视频第一帧
+//获取视频第一帧
 #pragma mark ---- 获取图片第一帧
 
 //生成一个临时的图片地址用于保存封面图片
@@ -699,11 +841,10 @@
     return imagePath;
 }
 
+//获取网络url的video信息
 - (FlappyVideoInfo*)videoInfoForUrl:(NSURL *)url size:(CGSize)size
 {
-    
     FlappyVideoInfo* info=[[FlappyVideoInfo alloc] init];
-    
     // 获取视频第一帧
     NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
                                                      forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
@@ -725,13 +866,9 @@
     info.vwidth=[NSString stringWithFormat:@"%ld",(long)videoImage.size.width];
     info.vheight=[NSString stringWithFormat:@"%ld",(long)videoImage.size.height];
     CGImageRelease(img);
-    
     NSString* savePath=[self generateSaveImagePath];
-    
     [self saveToDocument:videoImage withFilePath:savePath];
-    
     info.overPath=savePath;
-    
     return info;
 }
 
@@ -763,8 +900,6 @@
         NSLog(@"保存图片失败");
     }
     return NO;
-    
 }
-
 
 @end

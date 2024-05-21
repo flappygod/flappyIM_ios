@@ -287,25 +287,7 @@ static  GCDAsyncSocket*  _instanceSocket;
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err{
     //非正常d退出
     [self offline:false];
-    //退出了
-    __weak typeof(self) safeSelf=self;
-    //通知所有的消息错误
-    dispatch_async(dispatch_get_main_queue(), ^{
-        //错误
-        if([FlappySender shareInstance].sendingMessages==nil||[FlappySender shareInstance].sendingMessages.count==0){
-            return;
-        }
-        NSMutableDictionary* dic=[FlappySender shareInstance].sendingMessages;
-        NSArray* array=dic.allKeys;
-        for(int s=0;s<array.count;s++){
-            NSString* messageid=[array objectAtIndex:s];
-            ChatMessage* chatMsg=[[FlappySender shareInstance].sendingMessages objectForKey:messageid];
-            if(chatMsg!=nil){
-                [safeSelf notifyMessageFailure:chatMsg];
-                [[FlappySender shareInstance] failureCallback:chatMsg];
-            }
-        }
-    });
+    [[FlappySender shareInstance] handleSendFailureAllCallback];
 }
 
 - (void)socketDidSecure:(GCDAsyncSocket *)sock{
@@ -388,14 +370,11 @@ static  GCDAsyncSocket*  _instanceSocket;
         //写入请求数据
         [self.socket writeData:reqData withTimeout:-1 tag:time];
     } @catch (NSException *exception) {
-        //通知所有的消息错误
-        __weak typeof(self) safeSelf=self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            ChatMessage* message=[[FlappySender shareInstance].sendingMessages
-                                  objectForKey:chatMsg.messageId];
-            [safeSelf notifyMessageFailure:message];
-            [[FlappySender shareInstance] failureCallback:message];
-        });
+        //消息
+        ChatMessage* message=[[FlappySender shareInstance].sendingMessages
+                              objectForKey:chatMsg.messageId];
+        //失败消息
+        [[FlappySender shareInstance] handleSendFailureCallback:message];
     }
 }
 
@@ -419,10 +398,13 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 //接收完成登录消息
 -(void)receiveLogin:(FlappyResponse *)respones{
+    
     //当前在线了
     self.isActive=true;
+    
     //用户已经登录过了
     self.user.login=true;
+    
     //保存用户登录数据
     [[FlappyData shareInstance] saveUser:self.user];
     
@@ -443,7 +425,7 @@ static  GCDAsyncSocket*  _instanceSocket;
                 //添加
                 [sessions addObject:data];
                 //会话更新了
-                [self notifySession:data];
+                [[FlappySender shareInstance] notifySession:data];
             }
             //插入会话数据
             [[FlappyDataBase shareInstance] insertSessions:sessions];
@@ -451,7 +433,6 @@ static  GCDAsyncSocket*  _instanceSocket;
     } @catch (NSException *exception) {
         NSLog(@"FlappyIM:%@",exception.description);
     }
-    
     
     //消息信息
     @try {
@@ -487,16 +468,15 @@ static  GCDAsyncSocket*  _instanceSocket;
             //获取之前的消息ID
             ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId];
             //修改消息状态
-            [self messageArrivedState:chatMsg andFormer:former];
+            [self handleMessageSendArriveState:chatMsg andFormer:former];
             //保存消息
             [[FlappyDataBase shareInstance] insertMessage:chatMsg];
             //发送成功
-            [self messageSendSuccess:chatMsg];
-            //通知接收到消息
-            [self notifyMessageReceive:chatMsg andFormer:former];
+            [[FlappySender shareInstance] handleSendSuccessCallback:chatMsg];
             //通知事件消息
-            [self notifyMessageAction:chatMsg];
-            
+            [[FlappySender shareInstance] handleMessageAction:chatMsg];
+            //通知接收到消息
+            [[FlappySender shareInstance] notifyMessageReceive:chatMsg andFormer:former];
             //最后一条消息
             if(s==(messageList.count-1)){
                 [self messageArrivedReceipt:chatMsg andFormer:former];
@@ -537,17 +517,17 @@ static  GCDAsyncSocket*  _instanceSocket;
         //获取之前的消息ID
         ChatMessage* former=[[FlappyDataBase shareInstance]getMessageByID:chatMsg.messageId];
         //修改消息状态
-        [self messageArrivedState:chatMsg andFormer:former];
+        [self handleMessageSendArriveState:chatMsg andFormer:former];
         //添加数据
         [[FlappyDataBase shareInstance] insertMessage:chatMsg];
         //消息发送成功
-        [self messageSendSuccess:chatMsg];
+        [[FlappySender shareInstance] handleSendSuccessCallback:chatMsg];
+        //通知事件消息
+        [[FlappySender shareInstance] handleMessageAction:chatMsg];
         //通知接收到消息
-        [self notifyMessageReceive:chatMsg andFormer:former];
+        [[FlappySender shareInstance] notifyMessageReceive:chatMsg andFormer:former];
         //消息接收到
         [self messageArrivedReceipt:chatMsg andFormer:former];
-        //通知事件消息
-        [self notifyMessageAction:chatMsg];
     }
     [self checkSessionNeedUpdate];
 }
@@ -571,7 +551,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             //插入消息
             [[FlappyDataBase shareInstance] insertSession:data];
             //会话更新了
-            [self notifySession:data];
+            [[FlappySender shareInstance] notifySession:data];
             //消息列表
             NSMutableArray* messages=[[FlappyDataBase shareInstance] getNotActionSystemMessageBySessionId:data.sessionId];
             //遍历更新
@@ -590,16 +570,9 @@ static  GCDAsyncSocket*  _instanceSocket;
     }
 }
 
-//信息发送成功
--(void)messageSendSuccess:(ChatMessage*)message{
-    //在主线程之中执行
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[FlappySender shareInstance] successCallback:message];
-    });
-}
 
 //消息收到状态
--(void)messageArrivedState:(ChatMessage*)message andFormer:(ChatMessage*)former{
+-(void)handleMessageSendArriveState:(ChatMessage*)message andFormer:(ChatMessage*)former{
     //更新发送或者接收的状态
     ChatUser* user=[[FlappyData shareInstance]getUser];
     if([user.userId isEqualToString:message.messageSendId]){
@@ -657,174 +630,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     }
 }
 
-//会话
--(void)notifySession:(SessionData*)session{
-    //在主线程之中执行
-    dispatch_async(dispatch_get_main_queue(), ^{
-        //新消息
-        NSArray* array=[FlappyIM shareInstance].sessionListeners;
-        //数量
-        for(int s=0;s<array.count;s++){
-            SessionListener listener=[array objectAtIndex:s];
-            listener(session);
-        }
-    });
-}
 
-
-//通知有新的消息
--(void)notifyMessageReceive:(ChatMessage*)message
-                  andFormer:(ChatMessage*)former{
-    if(message==nil){
-        return;
-    }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
-        for(int s=0;s<array.count;s++){
-            NSString* str=[array objectAtIndex:s];
-            if([str isEqualToString:GlobalKey] || [str isEqualToString:message.messageSession]){
-                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-                for(int w=0;w<listeners.count;w++){
-                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                    if(former==nil){
-                        [listener onReceive:message];
-                    }else{
-                        [listener onUpdate:message];
-                    }
-                }
-            }
-        }
-    });
-}
-
-//消息已读回执和删除回执,对方的阅读消息存在的时候才会执行
--(void)notifyMessageAction:(ChatMessage*)message{
-    if(message==nil){
-        return;
-    }
-    if(message.messageType == MSG_TYPE_ACTION){
-        [[FlappyDataBase shareInstance] handleActionMessageUpdate:message];
-        ChatAction* chatAction = [message getChatAction];
-        switch(chatAction.actionType){
-            case ACTION_TYPE_READ:{
-                ChatUser* user=[[FlappyData shareInstance] getUser];
-                //自己读的
-                if([user.userId isEqualToString:chatAction.actionIds[0]]){
-                    [self notifyMessageSelfRead:chatAction.actionIds[1]
-                                    andReaderId:chatAction.actionIds[0]
-                               andTableSequecne:chatAction.actionIds[2]];
-                }
-                //其他人读的
-                else{
-                    [self notifyMessageOtherRead:chatAction.actionIds[1]
-                                     andReaderId:chatAction.actionIds[0]
-                                andTableSequecne:chatAction.actionIds[2]];
-                }
-                break;
-            }
-            case ACTION_TYPE_DELETE:{
-                [self notifyMessageDelete:chatAction.actionIds[1]
-                         andTableSequecne:chatAction.actionIds[2]];
-                break;
-            }
-        }
-    }
-}
-
-//通知消息失败
--(void)notifyMessageFailure:(ChatMessage*)message{
-    if(message==nil){
-        return;
-    }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
-        for(int s=0;s<array.count;s++){
-            NSString* str=[array objectAtIndex:s];
-            //当前会话或者全局
-            if([str isEqualToString:GlobalKey] || [str isEqualToString:message.messageSession]){
-                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-                for(int w=0;w<listeners.count;w++){
-                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                    [listener onFailure:message];
-                }
-            }
-        }
-    });
-}
-
-//通知有新的消息
--(void)notifyMessageOtherRead:(NSString*)sessionId
-                  andReaderId:(NSString*)readerId
-             andTableSequecne:(NSString*)tableOffset{
-    if(sessionId==nil || tableOffset==nil){
-        return;
-    }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
-        for(int s=0;s<array.count;s++){
-            NSString* str=[array objectAtIndex:s];
-            //当前会话或者全局
-            if([str isEqualToString:GlobalKey] || [str isEqualToString:sessionId]){
-                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-                for(int w=0;w<listeners.count;w++){
-                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                    [listener onOtherRead:sessionId
-                              andReaderId:readerId
-                               andSequece:tableOffset];
-                }
-            }
-            
-        }
-    });
-}
-
-//通知有新的消息
--(void)notifyMessageSelfRead:(NSString*)sessionId
-                 andReaderId:(NSString*)readerId
-            andTableSequecne:(NSString*)tableOffset{
-    if(sessionId==nil || tableOffset==nil){
-        return;
-    }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
-        for(int s=0;s<array.count;s++){
-            NSString* str=[array objectAtIndex:s];
-            //当前会话或者全局
-            if([str isEqualToString:GlobalKey] || [str isEqualToString:sessionId]){
-                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-                for(int w=0;w<listeners.count;w++){
-                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                    [listener onSelfRead:sessionId
-                             andReaderId:readerId
-                              andSequece:tableOffset];
-                }
-            }
-            
-        }
-    });
-}
-
-//通知有新的消息
--(void)notifyMessageDelete:(NSString*)sessionId
-          andTableSequecne:(NSString*)messageId{
-    if(sessionId==nil || messageId==nil){
-        return;
-    }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
-        for(int s=0;s<array.count;s++){
-            NSString* str=[array objectAtIndex:s];
-            //当前会话或者全局
-            if([str isEqualToString:GlobalKey] || [str isEqualToString:sessionId]){
-                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-                for(int w=0;w<listeners.count;w++){
-                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                    [listener onDelete:messageId];
-                }
-            }
-        }
-    });
-}
 
 //检查是否有会话需要更新
 -(void)checkSessionNeedUpdate{
@@ -941,7 +747,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         [[FlappyDataBase shareInstance] updateMessage:msg];
         
         //发送会话更新通知
-        [self notifySession:[[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSession]];
+        [[FlappySender shareInstance] notifySession:[[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSession]];
     }
 }
 
@@ -963,7 +769,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         [[FlappyDataBase shareInstance] deleteUserSession:msg.messageSession];
         
         //发送会话更新通知
-        [self notifySession:session];
+        [[FlappySender shareInstance] notifySession:session];
     }
     
 }
