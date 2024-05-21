@@ -848,7 +848,7 @@
         
         if (!result) {
             NSLog(@"插入或更新消息失败: %@", [database lastErrorMessage]);
-            // 如果有一条插入失败，则回滚事务
+            //如果有一条插入失败，则回滚事务
             [database rollback];
             [self closeDB];
             return;
@@ -1144,7 +1144,6 @@
     return retArray;
 }
 
-
 //获取没有处理的系统消息
 -(NSMutableArray*)getNotActionSystemMessageBySessionId:(NSString*)sessionID{
     //获取user
@@ -1223,8 +1222,5 @@
     [self closeDB];
     return retArray;
 }
-
-
-
 
 @end
