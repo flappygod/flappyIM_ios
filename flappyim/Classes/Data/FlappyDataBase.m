@@ -1117,6 +1117,7 @@
     NSMutableArray* sequeceArray=[self getSessionSequeceMessage:sessionID
                                                       andOffset:[NSString stringWithFormat:@"%ld",(long)msg.messageTableOffset]
                                                        andStamp:[NSString stringWithFormat:@"%ld",(long)msg.messageStamp]];
+    [retArray addObjectsFromArray:sequeceArray];
     //获取消息
     FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageTableOffset<? and messageType!=8 and messageInsertUser = ? order by messageTableOffset desc,messageStamp desc limit ?"
                             withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableOffset],user.userExtendId,[NSNumber numberWithInteger:size]]];
@@ -1150,12 +1151,9 @@
     //结果集
     [retArray addObjectsFromArray:listArray];
     //获取
-    if(retArray.count>size){
-        NSMutableArray* newArray=[[NSMutableArray alloc]init];
-        for(int s=0;s<size;s++){
-            [newArray addObject: [retArray objectAtIndex:s]];
-        }
-        retArray=newArray;
+    if (retArray.count > size) {
+        NSRange range = NSMakeRange(0, size);
+        retArray = [[NSMutableArray alloc] initWithArray:[retArray subarrayWithRange:range]];
     }
     return retArray;
 }
