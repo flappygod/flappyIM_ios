@@ -343,8 +343,6 @@ static  GCDAsyncSocket*  _instanceSocket;
 }
 
 
-
-
 //发送消息
 -(void)sendMessage:(ChatMessage*) chatMsg{
     @try {
@@ -370,11 +368,8 @@ static  GCDAsyncSocket*  _instanceSocket;
         //写入请求数据
         [self.socket writeData:reqData withTimeout:-1 tag:time];
     } @catch (NSException *exception) {
-        //消息
-        ChatMessage* message=[[FlappySender shareInstance].sendingMessages
-                              objectForKey:chatMsg.messageId];
         //失败消息
-        [[FlappySender shareInstance] handleSendFailureCallback:message];
+        [[FlappySender shareInstance] handleSendFailureCallback:chatMsg];
     }
 }
 
