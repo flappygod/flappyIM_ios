@@ -583,6 +583,55 @@
     }
 }
 
+//成功
+-(void)handleSendSuccessCallback:(ChatMessage*)chatMsg{
+    if(chatMsg==nil){
+        return;
+    }
+    //在主线程之中执行
+    dispatch_async(dispatch_get_main_queue(), ^{
+        FlappySendSuccess success=[self.successCallbacks objectForKey:chatMsg.messageId];
+        if(success!=nil){
+            success(chatMsg);
+            [self.successCallbacks removeObjectForKey:chatMsg.messageId];
+            [self.failureCallbacks removeObjectForKey:chatMsg.messageId];
+            [self.sendingMessages removeObjectForKey:chatMsg.messageId];
+        }
+    });
+    
+}
+
+//失败
+-(void)handleSendFailureCallback:(ChatMessage*)message{
+    if(message==nil){
+        return;
+    }
+    //消息发送失败
+    [self updateMsgFailure:message];
+    //在主线程之中执行
+    dispatch_async(dispatch_get_main_queue(), ^{
+        FlappySendFailure failure=[self.failureCallbacks objectForKey:message.messageId];
+        if(failure!=nil && message!=nil){
+            failure(message,[NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
+            [self.successCallbacks removeObjectForKey:message.messageId];
+            [self.failureCallbacks removeObjectForKey:message.messageId];
+            [self.sendingMessages removeObjectForKey:message.messageId];
+        }
+    });
+}
+
+//全部失败
+-(void)handleSendFailureAllCallback{
+    if(self.sendingMessages==nil||self.sendingMessages.count==0){
+        return;
+    }
+    NSMutableDictionary* dic=self.sendingMessages;
+    NSArray* array=dic.allKeys;
+    for(int s=0;s<array.count;s++){
+        [self handleSendFailureCallback:[self.sendingMessages objectForKey:[array objectAtIndex:s]]];
+    }
+}
+
 
 //消息已读回执和删除回执,对方的阅读消息存在的时候才会执行
 -(void)handleMessageAction:(ChatMessage*)message{
@@ -766,56 +815,6 @@
             listener(session);
         }
     });
-}
-
-
-//成功
--(void)handleSendSuccessCallback:(ChatMessage*)chatMsg{
-    if(chatMsg==nil){
-        return;
-    }
-    //在主线程之中执行
-    dispatch_async(dispatch_get_main_queue(), ^{
-        FlappySendSuccess success=[self.successCallbacks objectForKey:chatMsg.messageId];
-        if(success!=nil){
-            success(chatMsg);
-            [self.successCallbacks removeObjectForKey:chatMsg.messageId];
-            [self.failureCallbacks removeObjectForKey:chatMsg.messageId];
-            [self.sendingMessages removeObjectForKey:chatMsg.messageId];
-        }
-    });
-    
-}
-
-//失败
--(void)handleSendFailureCallback:(ChatMessage*)message{
-    if(message==nil){
-        return;
-    }
-    //消息发送失败
-    [self updateMsgFailure:message];
-    //在主线程之中执行
-    dispatch_async(dispatch_get_main_queue(), ^{
-        FlappySendFailure failure=[self.failureCallbacks objectForKey:message.messageId];
-        if(failure!=nil && message!=nil){
-            failure(message,[NSError errorWithDomain:@"连接已经断开" code:0 userInfo:nil],RESULT_NETERROR);
-            [self.successCallbacks removeObjectForKey:message.messageId];
-            [self.failureCallbacks removeObjectForKey:message.messageId];
-            [self.sendingMessages removeObjectForKey:message.messageId];
-        }
-    });
-}
-
-//全部失败
--(void)handleSendFailureAllCallback{
-    if(self.sendingMessages==nil||self.sendingMessages.count==0){
-        return;
-    }
-    NSMutableDictionary* dic=self.sendingMessages;
-    NSArray* array=dic.allKeys;
-    for(int s=0;s<array.count;s++){
-        [self handleSendFailureCallback:[self.sendingMessages objectForKey:[array objectAtIndex:s]]];
-    }
 }
 
 //获取视频第一帧
