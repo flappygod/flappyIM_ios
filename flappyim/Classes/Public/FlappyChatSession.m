@@ -182,11 +182,7 @@
 -(ChatMessage*)sendImage:(ChatImage*)image
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
-    
-    
-        //消息
-        ChatMessage* message=[[FlappySender shareInstance].sendingMessages
-                              objectForKey:chatMsg.messageId];
+    //消息
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
