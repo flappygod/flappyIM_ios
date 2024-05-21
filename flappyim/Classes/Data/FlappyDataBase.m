@@ -821,24 +821,24 @@
 
 //插入消息列表
 -(void)insertMessages:(NSMutableArray*)array {
-    // 如果为空
+    //如果为空
     if(array==nil || array.count==0){
         return;
     }
     
-    // 获取user
+    //获取user
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
         return;
     }
     
-    // 获取db
+    //获取db
     [self openDB];
     
-    // 开始事务
+    //开始事务
     [database beginTransaction];
     
-    // 遍历
+    //遍历
     for(ChatMessage* msg in array){
         // 插入或替换数据
         BOOL result = [database executeUpdate:@"INSERT OR REPLACE INTO message("

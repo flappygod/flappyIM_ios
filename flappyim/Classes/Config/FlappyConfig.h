@@ -8,12 +8,12 @@
 #ifndef FlappyConfig_h
 #define FlappyConfig_h
 
-
 //当前的设备类型
 #define  DEVICE_TYPE   @"Ios"
 
 //线上服务器
 #define FLAPPY_BASE @"http://139.224.204.128"
+
 
 //请求出错
 #define  RESULT_FAILURE    0
@@ -33,8 +33,6 @@
 #define  RESULT_NO_DATA   7
 
 
-
-
 //登录消息
 #define REQ_LOGIN  1
 //请求消息
@@ -45,7 +43,6 @@
 #define REQ_RECEIPT  4
 //更新消息
 #define REQ_UPDATE  5
-
 
 //消息接收回执
 #define RECEIPT_MSG_ARRIVE 1
@@ -63,27 +60,24 @@
 #define RES_UPDATE  5
 
 
-
 //系统消息动作
 #define SYSTEM_MSG_NOTHING 0
+//更新会话
 #define SYSTEM_MSG_UPDATE_SESSION 1
+//更新用户
 #define SYSTEM_MSG_UPDATE_MEMBER 2
+//删除用户
 #define SYSTEM_MSG_DELETE_MEMBER 3
+//添加用户
 #define SYSTEM_MSG_ADD_MEMBER 4
-
 
 
 //更新信息
 #define UPDATE_SESSION_ALL 1
 
 
-
-
-
-
-
+//全局
 #define GlobalKey @"Global"
-
 
 
 #endif /* FlappyConfig_h */

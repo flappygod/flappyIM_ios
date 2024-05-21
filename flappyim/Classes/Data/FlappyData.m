@@ -36,7 +36,6 @@
     return _sharedSingleton;
 }
 
-
 //保存用户
 -(void)saveUser:(ChatUser*)user{
     _cachedUser=user;
@@ -98,7 +97,6 @@
     return nil;
 }
 
-
 //RSA秘钥
 -(void)saveRsaKey:(NSString*)key{
     UNSaveObject(key, KEY_RSA_KEY);
@@ -108,7 +106,5 @@
 -(NSString*)getRsaKey{
     return UNGetObject(KEY_RSA_KEY);
 }
-
-
 
 @end
