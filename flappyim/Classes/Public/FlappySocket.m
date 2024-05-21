@@ -575,7 +575,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             //会话更新了
             [self notifySession:data];
             //消息列表
-            NSMutableArray* messages=[[FlappyDataBase shareInstance] getNotActionSystemMessageWithSession:data.sessionId];
+            NSMutableArray* messages=[[FlappyDataBase shareInstance] getNotActionSystemMessageBySessionId:data.sessionId];
             //遍历更新
             for(int w=0;w<messages.count;w++){
                 //消息

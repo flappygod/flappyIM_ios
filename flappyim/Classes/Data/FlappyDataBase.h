@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(ChatMessage*)getSessionLatestMessage:(NSString*)sessionID;
 
 //获取没有处理的系统消息
--(NSMutableArray*)getNotActionSystemMessageWithSession:(NSString*)sessionID;
+-(NSMutableArray*)getNotActionSystemMessageBySessionId:(NSString*)sessionID;
 
 //获取没有处理的系统消息
 -(NSMutableArray*)getNotActionSystemMessage;

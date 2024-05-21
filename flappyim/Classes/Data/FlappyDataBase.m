@@ -157,14 +157,6 @@
 }
 
 
-//设置之前没有发送成功的消息
--(void)clearSendingMessage{
-    //打开数据库
-    [self openDB];
-    [database executeUpdate:@"update message set messageSendState = 9 where messageSendState = 0"];
-    [self closeDB];
-}
-
 // 插入多条会话，如果存在就更新
 -(Boolean)insertSessions:(NSMutableArray*)array {
     // 没有的情况下就是成功
@@ -657,6 +649,80 @@
 }
 
 
+//更新最近已读的消息
+-(void)updateSessionMemberLatestRead:userId
+                        andSessionId:sessionId
+                         andTableSeq:tableOffset{
+    //打开数据库
+    [self openDB];
+    
+    //获取这个用户数据
+    SessionDataMember* data = [self getSessionMember:sessionId andMemberId:userId];
+    
+    //如果不为空就更新
+    if(data!=nil){
+        data.sessionMemberLatestRead=tableOffset;
+        [self insertSessionMember:data];
+    }
+    
+    //关闭数据库
+    [self closeDB];
+}
+
+
+
+//处理动作消息插入
+-(void)handleActionMessageUpdate:(ChatMessage*)msg{
+    //未登录状态
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return;
+    }
+    //不是动作类型不处理
+    if(msg.messageType != MSG_TYPE_ACTION){
+        return;
+    }
+    //获取
+    ChatAction* action =[msg getChatAction];
+    switch(action.actionType){
+            //更新消息已读
+        case ACTION_TYPE_READ:{
+            NSString* userId = action.actionIds[0];
+            NSString* sessionId = action.actionIds[1];
+            NSString* tableOffset = action.actionIds[2];
+            //更新消息状态
+            [self updateMessageRead:userId
+                       andSessionId:sessionId
+                        andTableSeq:tableOffset];
+            //更新最近消息状态
+            [self updateSessionMemberLatestRead:userId
+                                   andSessionId:sessionId
+                                    andTableSeq:tableOffset];
+            break;
+        }
+            //更新消息删除
+        case ACTION_TYPE_DELETE:{
+            NSString* userId = action.actionIds[0];
+            NSString* sessionId = action.actionIds[1];
+            NSString* messageId = action.actionIds[2];
+            [self updateMessageDelete:userId
+                         andSessionId:sessionId
+                         andMessageId:messageId];
+            break;
+        }
+    }
+}
+
+
+//设置之前没有发送成功的消息
+-(void)clearSendingMessage{
+    //打开数据库
+    [self openDB];
+    [database executeUpdate:@"update message set messageSendState = 9 where messageSendState = 0"];
+    [self closeDB];
+}
+
+
 //插入消息
 -(void)insertMessage:(ChatMessage*)msg {
     
@@ -721,48 +787,6 @@
 }
 
 
-//处理动作消息插入
--(void)handleActionMessageUpdate:(ChatMessage*)msg{
-    //未登录状态
-    ChatUser* user = [[FlappyData shareInstance] getUser];
-    if(user==nil){
-        return;
-    }
-    //不是动作类型不处理
-    if(msg.messageType != MSG_TYPE_ACTION){
-        return;
-    }
-    //获取
-    ChatAction* action =[msg getChatAction];
-    switch(action.actionType){
-            //更新消息已读
-        case ACTION_TYPE_READ:{
-            NSString* userId = action.actionIds[0];
-            NSString* sessionId = action.actionIds[1];
-            NSString* tableOffset = action.actionIds[2];
-            //更新消息状态
-            [self updateMessageRead:userId
-                       andSessionId:sessionId
-                        andTableSeq:tableOffset];
-            //更新最近消息状态
-            [self updateSessionMemberLatestRead:userId
-                                   andSessionId:sessionId
-                                    andTableSeq:tableOffset];
-            break;
-        }
-            //更新消息删除
-        case ACTION_TYPE_DELETE:{
-            NSString* userId = action.actionIds[0];
-            NSString* sessionId = action.actionIds[1];
-            NSString* messageId = action.actionIds[2];
-            [self updateMessageDelete:userId
-                         andSessionId:sessionId
-                         andMessageId:messageId];
-            break;
-        }
-    }
-}
-
 //更新消息已读
 -(void)updateMessageRead:userId
             andSessionId:sessionId
@@ -799,25 +823,6 @@
     [self closeDB];
 }
 
-//更新最近已读的消息
--(void)updateSessionMemberLatestRead:userId
-                        andSessionId:sessionId
-                         andTableSeq:tableOffset{
-    //打开数据库
-    [self openDB];
-    
-    //获取这个用户数据
-    SessionDataMember* data = [self getSessionMember:sessionId andMemberId:userId];
-    
-    //如果不为空就更新
-    if(data!=nil){
-        data.sessionMemberLatestRead=tableOffset;
-        [self insertSessionMember:data];
-    }
-    
-    //关闭数据库
-    [self closeDB];
-}
 
 //插入消息列表
 -(void)insertMessages:(NSMutableArray*)array {
@@ -1049,7 +1054,8 @@
 
 //获取消息
 -(NSMutableArray*)getSessionSequeceMessage:(NSString*)sessionID
-                                withOffset:(NSString*)tabSequece{
+                                 andOffset:(NSString*)tabSequece
+                                  andStamp:(NSString*)stamp{
     //获取user
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
@@ -1059,8 +1065,8 @@
     [self openDB];
     
     //获取消息
-    FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageTableOffset=? and messageType!=8 and messageInsertUser = ? order by messageStamp  desc"
-                            withArgumentsInArray:@[sessionID,tabSequece,user.userExtendId]];
+    FMResultSet *result = [database executeQuery:@"select * from message where messageSession=? and messageTableOffset=? and messageType!=8 and messageStamp<? and messageInsertUser=?  order by messageStamp  desc"
+                            withArgumentsInArray:@[sessionID,tabSequece,stamp,user.userExtendId]];
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
@@ -1109,13 +1115,8 @@
     //当前的
     NSMutableArray* retArray=[[NSMutableArray alloc] init];
     NSMutableArray* sequeceArray=[self getSessionSequeceMessage:sessionID
-                                                     withOffset:[NSString stringWithFormat:@"%ld",(long)msg.messageTableOffset]];
-    for(int s=0;s<sequeceArray.count;s++){
-        ChatMessage* mem=[sequeceArray objectAtIndex:s];
-        if(mem.messageStamp<msg.messageStamp){
-            [retArray addObject:mem];
-        }
-    }
+                                                      andOffset:[NSString stringWithFormat:@"%ld",(long)msg.messageTableOffset]
+                                                       andStamp:[NSString stringWithFormat:@"%ld",(long)msg.messageStamp]];
     //获取消息
     FMResultSet *result = [database executeQuery:@"select * from message where messageSession = ? and messageTableOffset<? and messageType!=8 and messageInsertUser = ? order by messageTableOffset desc,messageStamp desc limit ?"
                             withArgumentsInArray:@[sessionID,[NSNumber numberWithInteger:msg.messageTableOffset],user.userExtendId,[NSNumber numberWithInteger:size]]];
@@ -1160,10 +1161,8 @@
 }
 
 
-
-
 //获取没有处理的系统消息
--(NSMutableArray*)getNotActionSystemMessageWithSession:(NSString*)sessionID{
+-(NSMutableArray*)getNotActionSystemMessageBySessionId:(NSString*)sessionID{
     //获取user
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
