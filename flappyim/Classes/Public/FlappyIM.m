@@ -92,11 +92,11 @@
             //判断当前是在后台还是在前台
             //[safeSelf sendLocalNotification:message];
         }
+    } andDelete:^(ChatMessage * _Nullable message) {
+        
     } andReadOther:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
         
     } andReadSelf:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
-        
-    } andDelete:^(NSString * _Nullable messageId) {
         
     }]];
 }

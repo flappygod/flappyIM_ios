@@ -468,9 +468,9 @@
 }
 
 //删除已经发送的消息
--(ChatMessage*)deleteSessionMessage:(NSString*)messageId
-                         andSuccess:(FlappySendSuccess)success
-                         andFailure:(FlappySendFailure)failure{
+-(ChatMessage*)recallMessageById:(NSString*)messageId
+                      andSuccess:(FlappySendSuccess)success
+                      andFailure:(FlappySendFailure)failure{
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
@@ -501,11 +501,28 @@
     return chatmsg;
 }
 
+//通过消息ID删除消息
+-(void)deleteMessageById:(NSString*)messageId
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure{
+    ChatMessage* message = [[FlappyDataBase shareInstance] getMessageById:messageId];
+    message.isDelete = 1;
+    bool flag = [[FlappyDataBase shareInstance] updateMessage:message];
+    if(flag){
+        success(message);
+    }else{
+        failure(message,
+                [NSError errorWithDomain:@"更新数据库失败" code:0 userInfo:nil],
+                RESULT_DATABASE_ERROR
+                );
+    }
+}
+
 //重新发送
 -(void)resendMessageById:(NSString*)messageId
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
-    ChatMessage* message = [[FlappyDataBase shareInstance] getMessageByID:messageId];
+    ChatMessage* message = [[FlappyDataBase shareInstance] getMessageById:messageId];
     [self resendMessage:message andSuccess:success andFailure:failure];
 }
 

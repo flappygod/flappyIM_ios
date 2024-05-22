@@ -555,6 +555,18 @@
     [self notifyMessageFailure:msg];
 }
 
+
+//发送失败
+-(void)updateMsgDelete:(ChatMessage*)msg{
+    //更新失败消息
+    msg.isDelete=1;
+    [[FlappyDataBase shareInstance] updateMessage:msg];
+    
+    //发送失败通知
+    [self notifyMessageDelete:msg];
+}
+
+
 //发送消息
 -(void)sendMessage:(ChatMessage*)chatMsg
         andSuccess:(FlappySendSuccess)success
@@ -659,8 +671,8 @@
                 break;
             }
             case ACTION_TYPE_DELETE:{
-                [self notifyMessageDelete:chatAction.actionIds[1]
-                         andTableSequecne:chatAction.actionIds[2]];
+                ChatMessage* message = [[FlappyDataBase shareInstance] getMessageById:chatAction.actionIds[2]];
+                [self notifyMessageDelete:message];
                 break;
             }
         }
@@ -716,28 +728,6 @@
                 }
             }
             
-        }
-    });
-}
-
-//通知有新的消息
--(void)notifyMessageDelete:(NSString*)sessionId
-          andTableSequecne:(NSString*)messageId{
-    if(sessionId==nil || messageId==nil){
-        return;
-    }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
-        for(int s=0;s<array.count;s++){
-            NSString* str=[array objectAtIndex:s];
-            //当前会话或者全局
-            if([str isEqualToString:GlobalKey] || [str isEqualToString:sessionId]){
-                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
-                for(int w=0;w<listeners.count;w++){
-                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                    [listener onDelete:messageId];
-                }
-            }
         }
     });
 }
@@ -799,6 +789,26 @@
                 for(int w=0;w<listeners.count;w++){
                     FlappyMessageListener* listener=[listeners objectAtIndex:w];
                     [listener onFailure:msg];
+                }
+            }
+        }
+    });
+}
+
+//通知有新的消息
+-(void)notifyMessageDelete:(ChatMessage*)msg{
+    if(msg==nil){
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
+        for(int s=0;s<array.count;s++){
+            NSString* str=[array objectAtIndex:s];
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSession]){
+                NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
+                for(int w=0;w<listeners.count;w++){
+                    FlappyMessageListener* listener=[listeners objectAtIndex:w];
+                    [listener onDelete:msg];
                 }
             }
         }

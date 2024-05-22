@@ -130,7 +130,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //删除会话消息
--(ChatMessage*)deleteSessionMessage:(NSString*)messageId
+-(ChatMessage*)recallMessageById:(NSString*)messageId
                          andSuccess:(FlappySendSuccess)success
                          andFailure:(FlappySendFailure)failure;
 

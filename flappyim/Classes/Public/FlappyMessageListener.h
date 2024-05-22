@@ -17,9 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
                  andFailure:(MessageListener)failureListener
                   andUpdate:(MessageListener)updateListener
                  andReceive:(MessageListener)receiveListener
+                  andDelete:(MessageListener)deleteListener
                andReadOther:(MessageReadListener)otherReadListener
-                andReadSelf:(MessageReadListener)readListener
-                  andDelete:(MessageDeleteListener)deleteListener;
+                andReadSelf:(MessageReadListener)readListener;
 
 -(void)onSend:(ChatMessage*) msg;
 
@@ -29,6 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)onFailure:(ChatMessage*) msg;
 
+-(void)onDelete:(ChatMessage*) message;
+
+
 -(void)onOtherRead:(NSString*)sessionId
        andReaderId:(NSString*)readerId
         andSequece:(NSString*)tableSequece;
@@ -37,7 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
       andReaderId:(NSString*)readerId
        andSequece:(NSString*)tableSequece;
 
--(void)onDelete:(NSString*) message;
 
 @end
 

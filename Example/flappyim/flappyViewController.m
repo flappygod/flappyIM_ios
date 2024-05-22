@@ -67,13 +67,13 @@
         
     } andReceive:^(ChatMessage * _Nullable message) {
         
-    } andReadOther:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
+    } andDelete:^(ChatMessage * _Nullable message) {
+        
+    }andReadOther:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
         
     } andReadSelf:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
         
-    } andDelete:^(NSString * _Nullable messageId) {
-        
-    }]];
+    } ]];
     
     //会话更新
     [[FlappyIM shareInstance]  addSessionListener:^(FlappyChatSession*  _Nullable chatsession) {
@@ -156,13 +156,13 @@
         
     } andReceive:^(ChatMessage * _Nullable message) {
         safeSelf.lable.text=[message getChatText];
-    } andReadOther:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
+    } andDelete:^(ChatMessage * _Nullable message) {
+        
+    }andReadOther:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
         
     } andReadSelf:^(NSString * _Nullable sessionId, NSString * _Nullable readerId, NSString * _Nullable tableSeqence) {
         
-    } andDelete:^(NSString * _Nullable messageId) {
-        
-    }]];
+    } ]];
 }
 
 

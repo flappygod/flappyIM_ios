@@ -30,7 +30,7 @@
 //上传失败
 #define  RESULT_PARSE_ERROR   6
 //没有数据
-#define  RESULT_NO_DATA   7
+#define  RESULT_DATABASE_ERROR   7
 
 
 //登录消息

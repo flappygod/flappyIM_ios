@@ -733,7 +733,7 @@
     //获取db
     [self openDB];
     //获取之前的消息
-    ChatMessage* fomerMsg = [self getMessageByID:msg.messageId];
+    ChatMessage* fomerMsg = [self getMessageById:msg.messageId];
     //插入或替换数据
     BOOL result = [database executeUpdate:@"INSERT OR REPLACE INTO message("
                    "messageId,"
@@ -802,7 +802,7 @@
     //遍历
     for(ChatMessage* msg in array){
         //获取之前的消息
-        ChatMessage* fomerMsg = [self getMessageByID:msg.messageId];
+        ChatMessage* fomerMsg = [self getMessageById:msg.messageId];
         // 插入或替换数据
         BOOL result = [database executeUpdate:@"INSERT OR REPLACE INTO message("
                        "messageId,"
@@ -954,7 +954,7 @@
 }
 
 //通过ID获取消息
--(ChatMessage*)getMessageByID:(NSString*)messageID{
+-(ChatMessage*)getMessageById:(NSString*)messageID{
     //获取user
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
@@ -1096,7 +1096,7 @@
     [self openDB];
     
     //获取当前的消息ID
-    ChatMessage* msg=[self getMessageByID:messageId];
+    ChatMessage* msg=[self getMessageById:messageId];
     
     //当前的
     NSMutableArray* retArray=[[NSMutableArray alloc] init];
