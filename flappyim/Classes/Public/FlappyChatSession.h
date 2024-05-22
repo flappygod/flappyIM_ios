@@ -112,6 +112,22 @@ NS_ASSUME_NONNULL_BEGIN
                andFailure:(FlappySendFailure)failure;
 
 
+//消息发送已读
+-(ChatMessage*)readSessionMessage:(FlappySendSuccess)success
+                       andFailure:(FlappySendFailure)failure;
+
+
+//删除会话消息
+-(ChatMessage*)recallMessageById:(NSString*)messageId
+                      andSuccess:(FlappySendSuccess)success
+                      andFailure:(FlappySendFailure)failure;
+
+
+//通过消息ID删除消息
+-(void)deleteMessageById:(NSString*)messageId
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure;
+
 //重新发送
 -(void)resendMessageById:(NSString*)messageId
               andSuccess:(FlappySendSuccess)success
@@ -123,16 +139,6 @@ NS_ASSUME_NONNULL_BEGIN
           andSuccess:(FlappySendSuccess)success
           andFailure:(FlappySendFailure)failure;
 
-
-//消息发送已读
--(ChatMessage*)readSessionMessage:(FlappySendSuccess)success
-                       andFailure:(FlappySendFailure)failure;
-
-
-//删除会话消息
--(ChatMessage*)recallMessageById:(NSString*)messageId
-                         andSuccess:(FlappySendSuccess)success
-                         andFailure:(FlappySendFailure)failure;
 
 //获取未读消息数量
 -(NSInteger)getUnReadMessageCount;
