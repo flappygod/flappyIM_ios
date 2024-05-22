@@ -505,12 +505,20 @@
 -(void)deleteMessageById:(NSString*)messageId
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
+    //更新消息设置删除
     ChatMessage* message = [[FlappyDataBase shareInstance] getMessageById:messageId];
     message.isDelete = 1;
     bool flag = [[FlappyDataBase shareInstance] updateMessage:message];
+    
+    //成功和失败
     if(flag){
+        //通知消息被删除
+        [[FlappySender shareInstance] notifyMessageDelete:message];
+        
+        //成功
         success(message);
     }else{
+        //失败了
         failure(message,
                 [NSError errorWithDomain:@"更新数据库失败" code:0 userInfo:nil],
                 RESULT_DATABASE_ERROR

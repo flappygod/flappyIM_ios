@@ -52,6 +52,10 @@
         andSuccess:(FlappySendSuccess)success
         andFailure:(FlappySendFailure)failure;
 
+
+//update message delete
+-(void)updateMsgDelete:(ChatMessage*)msg;
+
 //成功
 -(void)handleSendSuccessCallback:(ChatMessage*)messageid;
 
@@ -75,6 +79,11 @@
 
 //通知消息失败
 -(void)notifyMessageFailure:(ChatMessage*)msg;
+
+
+//通知有新的消息
+-(void)notifyMessageDelete:(ChatMessage*)msg;
+
 
 //会话
 -(void)notifySession:(SessionData*)session;

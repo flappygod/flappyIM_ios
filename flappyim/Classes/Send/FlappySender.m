@@ -560,6 +560,8 @@
 -(void)updateMsgDelete:(ChatMessage*)msg{
     //更新失败消息
     msg.isDelete=1;
+    
+    //更新消息
     [[FlappyDataBase shareInstance] updateMessage:msg];
     
     //发送失败通知
