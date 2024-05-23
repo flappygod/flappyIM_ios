@@ -68,12 +68,12 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSMutableArray*)getNotActionSystemMessage;
 
 //通过sessionID，获取之前的
--(NSMutableArray*)getSessionFormerMessage:(NSString*)sessionID
+-(NSMutableArray*)getSessionFormerMessages:(NSString*)sessionID
                             withMessageID:(NSString*)messageId
                                  withSize:(NSInteger)size;
 
 //获取未读消息的数量
--(int)getSessionUnReadMessageCount:(NSString*)sessionId;
+-(int)getUnReadSessionMessageCountBySessionId:(NSString*)sessionId;
 
 @end
 

@@ -112,7 +112,7 @@
 -(NSMutableArray*)getFormerMessages:(NSString*)messageID
                            withSize:(NSInteger)size{
     NSMutableArray* arr=[[FlappyDataBase shareInstance]
-                         getSessionFormerMessage:self.session.sessionId
+                         getSessionFormerMessages:self.session.sessionId
                          withMessageID:messageID
                          withSize:size];
     return arr;
@@ -586,7 +586,7 @@
 
 //获取未读消息数量
 -(NSInteger)getUnReadMessageCount{
-    return  [[FlappyDataBase shareInstance] getSessionUnReadMessageCount:self.session.sessionId];
+    return  [[FlappyDataBase shareInstance] getUnReadSessionMessageCountBySessionId:self.session.sessionId];
 }
 
 
