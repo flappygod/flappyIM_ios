@@ -64,6 +64,12 @@
     }
 }
 
+-(void)onDelete:(ChatMessage*) message{
+    if(_deleteListener!=nil){
+        _deleteListener(message);
+    }
+}
+
 -(void)onOtherRead:(NSString*)sessionId
        andReaderId:(NSString*)readerId
         andSequece:(NSString*)tableSequece{
@@ -80,11 +86,7 @@
     }
 }
 
--(void)onDelete:(ChatMessage*) message{
-    if(_deleteListener!=nil){
-        _deleteListener(message);
-    }
-}
+
 
 
 @end
