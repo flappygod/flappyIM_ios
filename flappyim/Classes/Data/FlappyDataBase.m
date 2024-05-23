@@ -345,7 +345,7 @@
         return;
     }
     [self openDB];
-    [database executeUpdate:@"update message set isDelete=1 where messageInsertUser=? and messageId=?"
+    [database executeUpdate:@"update message set isDelete=1,messageReadState=1 where messageInsertUser=? and messageId=?"
        withArgumentsInArray:@[
         user.userExtendId,
         messageId

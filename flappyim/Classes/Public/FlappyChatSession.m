@@ -508,6 +508,7 @@
     //更新消息设置删除
     ChatMessage* message = [[FlappyDataBase shareInstance] getMessageById:messageId];
     message.isDelete = 1;
+    message.messageReadState = 1;
     bool flag = [[FlappyDataBase shareInstance] updateMessage:message];
     
     //成功和失败
