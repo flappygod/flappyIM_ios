@@ -686,7 +686,7 @@
 -(void)notifyMessageOtherRead:(NSString*)sessionId
                   andReaderId:(NSString*)readerId
              andTableSequecne:(NSString*)tableOffset{
-    if(sessionId==nil || tableOffset==nil){
+    if(sessionId==nil ||readerId==nil|| tableOffset==nil){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -712,7 +712,7 @@
 -(void)notifyMessageSelfRead:(NSString*)sessionId
                  andReaderId:(NSString*)readerId
             andTableSequecne:(NSString*)tableOffset{
-    if(sessionId==nil || tableOffset==nil){
+    if(sessionId==nil ||readerId==nil|| tableOffset==nil){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
