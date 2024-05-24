@@ -91,7 +91,7 @@
         NSLog(@"%@", [NSString stringWithFormat:@"收到点击推送的消息:::::::%@",[message getChatText]]);
     }];
     
-    [[FlappyIM shareInstance]  getUserSessions:^(id _Nullable data) {
+    [[FlappyIM shareInstance]  getUserSessionList:^(id _Nullable data) {
         NSLog(@"data");
     } andFailure:^(NSError * _Nullable err, NSInteger code) {
         NSLog(@"data");
@@ -115,7 +115,7 @@
 -(void)createSession{
     //创建session
     __weak typeof(self) safeSelf=self;
-    [[FlappyIM shareInstance] createSingleSession:@"100"
+    [[FlappyIM shareInstance] createSingleSessionByPeer:@"100"
                                        andSuccess:^(id _Nullable data) {
         NSLog(@"会话创建成功");
         safeSelf.session=data;

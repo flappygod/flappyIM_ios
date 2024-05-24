@@ -124,15 +124,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //创建单聊会话
--(void)createSingleSession:(NSString*)userTwo
-                andSuccess:(FlappySuccess)success
-                andFailure:(FlappyFailure)failure;
+-(void)createSingleSessionByPeer:(NSString*)peerExtendId
+                      andSuccess:(FlappySuccess)success
+                      andFailure:(FlappyFailure)failure;
 
 
 //获取单聊会话
--(void)getSingleSession:(NSString*)userTwo
-             andSuccess:(FlappySuccess)success
-             andFailure:(FlappyFailure)failure;
+-(void)getSingleSessionByPeer:(NSString*)peerExtendId
+                   andSuccess:(FlappySuccess)success
+                   andFailure:(FlappyFailure)failure;
 
 
 //创建群组会话
@@ -142,30 +142,36 @@ NS_ASSUME_NONNULL_BEGIN
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure;
 
+
+//通过sessionID获取
+-(void)getSessionById:(NSString*)sessionId
+           andSuccess:(FlappySuccess)success
+           andFailure:(FlappyFailure)failure;
+
+
 //获取群组会话
--(void)getSessionByExtendID:(NSString*)extendID
+-(void)getSessionByExtendId:(NSString*)sessionExtendId
                  andSuccess:(FlappySuccess)success
                  andFailure:(FlappyFailure)failure;
 
 
 //获取用户的所有会话列表
--(void)getUserSessions:(FlappySuccess)success
-            andFailure:(FlappyFailure)failure;
+-(void)getUserSessionList:(FlappySuccess)success
+               andFailure:(FlappyFailure)failure;
 
 
 //添加用户到群组
--(void)addUserToSession:(NSString*)userID
-            withGroupID:(NSString*)groupID
+-(void)addUserToSession:(NSString*)userId
+            withGroupID:(NSString*)groupId
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure;
 
 
 //删除群组中的某个用户
--(void)delUserInSession:(NSString*)userID
-            withGroupID:(NSString*)groupID
+-(void)delUserInSession:(NSString*)userId
+            withGroupID:(NSString*)groupId
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure;
-
 
 
 //增加所有消息的监听
@@ -199,7 +205,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 //移除会话监听
 -(void)removeSessionListener:(SessionListener)listener;
-
 
 
 @end

@@ -50,9 +50,11 @@ NS_ASSUME_NONNULL_BEGIN
 //创建群聊
 @property(nonatomic,copy) NSString* URL_createGroupSession;
 //获取会话
-@property(nonatomic,copy) NSString* URL_getSessionByExtendID;
+@property(nonatomic,copy) NSString* URL_getSessionByExtendId;
+//获取会话
+@property(nonatomic,copy) NSString* URL_getSessionById;
 //获取所有会话
-@property(nonatomic,copy) NSString* URL_getUserSessions;
+@property(nonatomic,copy) NSString* URL_getUserSessionList;
 //添加用户到会话
 @property(nonatomic,copy) NSString* URL_addUserToSession;
 //删除会话中的用户

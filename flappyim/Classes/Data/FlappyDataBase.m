@@ -686,7 +686,7 @@
 
 
 //获取用户的会话
--(SessionData*)getUserSessionByExtendID:(NSString*)sessionExtendId{
+-(SessionData*)getUserSessionByExtendId:(NSString*)sessionExtendId{
     //获取user
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){

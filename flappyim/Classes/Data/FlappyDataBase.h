@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSMutableArray*)getUserSessions:(NSString*)userExtendID;
 
 //获取用户的指定会话
--(SessionData*)getUserSessionByExtendID:(NSString*)sessionExtendId;
+-(SessionData*)getUserSessionByExtendId:(NSString*)sessionExtendId;
 
 //获取用户的指定会话
 -(SessionData*)getUserSessionByID:(NSString*)sessionId;
