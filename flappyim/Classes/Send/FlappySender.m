@@ -736,6 +736,9 @@
 
 //通知消息发送
 -(void)notifyMessageSendInsert:(ChatMessage*)msg{
+    if(msg==nil){
+        return;
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
         for(int s=0;s<array.count;s++){
@@ -819,6 +822,9 @@
 
 //会话
 -(void)notifySession:(SessionData*)session{
+    if(session==nil){
+        return;
+    }
     //在主线程之中执行
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray* array=[FlappyIM shareInstance].sessionListeners;
