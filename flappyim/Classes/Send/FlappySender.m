@@ -532,6 +532,9 @@
     //最近的一条消息
     msg.messageSendState=SEND_STATE_SENDING;
     
+    //设置message stamp
+    msg.messageStamp = (NSInteger)([NSDate date].timeIntervalSince1970*1000);
+    
     //添加一个
     NSInteger value=(user.latest!=nil? user.latest.integerValue:0)+1;
     
