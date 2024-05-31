@@ -746,7 +746,7 @@
         NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
         for(int s=0;s<array.count;s++){
             NSString* str=[array objectAtIndex:s];
-            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSession]){
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSessionId]){
                 NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
                 for(int w=0;w<listeners.count;w++){
                     FlappyMessageListener* listener=[listeners objectAtIndex:w];
@@ -767,7 +767,7 @@
         NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
         for(int s=0;s<array.count;s++){
             NSString* str=[array objectAtIndex:s];
-            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSession]){
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSessionId]){
                 NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
                 for(int w=0;w<listeners.count;w++){
                     FlappyMessageListener* listener=[listeners objectAtIndex:w];
@@ -792,7 +792,7 @@
         NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
         for(int s=0;s<array.count;s++){
             NSString* str=[array objectAtIndex:s];
-            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSession]){
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSessionId]){
                 NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
                 for(int w=0;w<listeners.count;w++){
                     FlappyMessageListener* listener=[listeners objectAtIndex:w];
@@ -812,7 +812,7 @@
         NSArray* array=[FlappyIM shareInstance].messageListeners.allKeys;
         for(int s=0;s<array.count;s++){
             NSString* str=[array objectAtIndex:s];
-            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSession]){
+            if([str isEqualToString:GlobalKey] || [str isEqualToString:msg.messageSessionId]){
                 NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
                 for(int w=0;w<listeners.count;w++){
                     FlappyMessageListener* listener=[listeners objectAtIndex:w];

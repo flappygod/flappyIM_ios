@@ -61,7 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString* messageId;
 
-@property(nonatomic,copy) NSString* messageSession;
+@property(nonatomic,copy) NSString* messageSessionId;
 
 @property(nonatomic,assign) NSInteger messageSessionType;
 
@@ -92,6 +92,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) NSInteger messageStamp;
 
 @property(nonatomic,assign) NSInteger isDelete;
+
+@property(nonatomic,copy)NSString* messageDeleteOperation;
 
 @property(nonatomic,copy)NSString* deleteDate;
 

@@ -23,7 +23,7 @@
     
     msg.messageId=chatmsg.messageId;
     
-    msg.messageSession=[chatmsg.messageSession longLongValue];
+    msg.messageSessionId=[chatmsg.messageSessionId longLongValue];
     
     msg.messageSessionType=(int32_t)chatmsg.messageSessionType;
     

@@ -699,7 +699,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     //开始写数据了
     for(ChatMessage* msg in array){
         //UpdateID
-        NSString* updateId = msg.messageSession;
+        NSString* updateId = msg.messageSessionId;
         if([self.updatingArray containsObject:updateId]){
             continue;;
         }
@@ -742,7 +742,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         [[FlappyDataBase shareInstance] updateMessage:msg];
         
         //发送会话更新通知
-        [[FlappySender shareInstance] notifySession:[[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSession]];
+        [[FlappySender shareInstance] notifySession:[[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSessionId]];
     }
 }
 
@@ -753,7 +753,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     for(ChatMessage* msg in array){
         
         //获取会话信息
-        SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSession];
+        SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSessionId];
         session.isDelete = 1;
         
         //设置消息已读，不再继续处理
@@ -761,7 +761,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         [[FlappyDataBase shareInstance] updateMessage:msg];
         
         //删除用户会话
-        [[FlappyDataBase shareInstance] deleteUserSession:msg.messageSession];
+        [[FlappyDataBase shareInstance] deleteUserSession:msg.messageSessionId];
         
         //发送会话更新通知
         [[FlappySender shareInstance] notifySession:session];

@@ -56,7 +56,7 @@
     //消息表
     NSString *sql = @"create table if not exists message ("
     "messageId TEXT,"
-    "messageSession TEXT,"
+    "messageSessionId TEXT,"
     "messageSessionType INTEGER,"
     "messageSessionOffset INTEGER,"
     "messageTableOffset INTEGER,"
@@ -70,6 +70,7 @@
     "messageReadState INTEGER,"
     "messageSecret TEXT,"
     "isDelete INTEGER,"
+    "messageDeleteOperation TEXT,"
     "messageDate TEXT,"
     "messageStamp INTEGER,"
     "deleteDate TEXT,"
@@ -105,7 +106,8 @@
     "sessionId TEXT,"
     "sessionMemberLatestRead TEXT,"
     "sessionMemberMarkName TEXT,"
-    "sessionMemberNoDisturb INTEGER,"
+    "sessionMemberMute INTEGER,"
+    "sessionMemberPinned INTEGER,"
     "sessionJoinDate TEXT,"
     "sessionLeaveDate TEXT,"
     "isLeave INTEGER,"
@@ -188,7 +190,7 @@
         // 插入或替换数据
         BOOL result = [database executeUpdate:@"INSERT OR REPLACE INTO message("
                        "messageId,"
-                       "messageSession,"
+                       "messageSessionId,"
                        "messageSessionType,"
                        "messageSessionOffset,"
                        "messageTableOffset,"
@@ -205,10 +207,11 @@
                        "deleteDate,"
                        "messageStamp,"
                        "isDelete,"
-                       "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                       "messageDeleteOperation,"
+                       "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                          withArgumentsInArray:@[
             [FlappyStringTool toUnNullStr:msg.messageId],
-            [FlappyStringTool toUnNullStr:msg.messageSession],
+            [FlappyStringTool toUnNullStr:msg.messageSessionId],
             [NSNumber numberWithInteger:msg.messageSessionType],
             [NSNumber numberWithInteger:msg.messageSessionOffset],
             [NSNumber numberWithInteger:msg.messageTableOffset],
@@ -225,6 +228,7 @@
             [FlappyStringTool toUnNullStr:msg.deleteDate],
             (fomerMsg!=nil ? [NSNumber numberWithInteger:fomerMsg.messageStamp]:[NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)]),
             (fomerMsg!=nil ? [NSNumber numberWithInteger:fomerMsg.isDelete]:[NSNumber numberWithInteger:msg.isDelete]),
+            (fomerMsg!=nil ? [FlappyStringTool toUnNullStr:fomerMsg.messageDeleteOperation]:[FlappyStringTool toUnNullStr:msg.messageDeleteOperation]),
             user.userExtendId
         ]];
         
@@ -256,7 +260,7 @@
     //插入或替换数据
     BOOL result = [database executeUpdate:@"INSERT OR REPLACE INTO message("
                    "messageId,"
-                   "messageSession,"
+                   "messageSessionId,"
                    "messageSessionType,"
                    "messageSessionOffset,"
                    "messageTableOffset,"
@@ -273,10 +277,11 @@
                    "deleteDate,"
                    "messageStamp,"
                    "isDelete,"
-                   "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                   "messageDeleteOperation,"
+                   "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                      withArgumentsInArray:@[
         [FlappyStringTool toUnNullStr:msg.messageId],
-        [FlappyStringTool toUnNullStr:msg.messageSession],
+        [FlappyStringTool toUnNullStr:msg.messageSessionId],
         [NSNumber numberWithInteger:msg.messageSessionType],
         [NSNumber numberWithInteger:msg.messageSessionOffset],
         [NSNumber numberWithInteger:msg.messageTableOffset],
@@ -293,6 +298,7 @@
         [FlappyStringTool toUnNullStr:msg.deleteDate],
         (fomerMsg!=nil ? [NSNumber numberWithInteger:fomerMsg.messageStamp]:[NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970*1000)]),
         [NSNumber numberWithInteger:msg.isDelete],
+        [FlappyStringTool toUnNullStr:msg.messageDeleteOperation],
         user.userExtendId
     ]];
     if (!result) {
@@ -328,7 +334,7 @@
         return;
     }
     [self openDB];
-    [database executeUpdate:@"update message set messageReadState=1 where messageInsertUser=? and messageSendId!=? and messageSession=? and messageTableOffset<=?"
+    [database executeUpdate:@"update message set messageReadState=1 where messageInsertUser=? and messageSendId!=? and messageSessionId=? and messageTableOffset<=?"
        withArgumentsInArray:@[
         user.userExtendId,
         userId,
@@ -402,7 +408,7 @@
     }
     
     [self openDB];
-    FMResultSet *results = [database executeQuery:@"SELECT COUNT(*) FROM message  WHERE messageInsertUser=? and messageSession=? and messageSendId!=? and messageReadState=0 and messageType!=? and messageType!=?"
+    FMResultSet *results = [database executeQuery:@"SELECT COUNT(*) FROM message  WHERE messageInsertUser=? and messageSessionId=? and messageSendId!=? and messageReadState=0 and messageType!=? and messageType!=?"
                              withArgumentsInArray:@[
         user.userExtendId,
         sessionId,
@@ -738,7 +744,7 @@
     [self openDB];
     
     //删除消息
-    Boolean flagOne  =  [database executeUpdate:@"DELETE FROM message where messageSession=? and messageInsertUser=?"
+    Boolean flagOne  =  [database executeUpdate:@"DELETE FROM message where messageSessionId=? and messageInsertUser=?"
                            withArgumentsInArray:@[sessionId,user.userExtendId]];
     
     //删除会话
@@ -776,11 +782,12 @@
                      "sessionId,"
                      "sessionMemberLatestRead,"
                      "sessionMemberMarkName,"
-                     "sessionMemberNoDisturb,"
+                     "sessionMemberMute,"
+                     "sessionMemberPinned,"
                      "sessionJoinDate,"
                      "sessionLeaveDate,"
                      "isLeave,"
-                     "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                     "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                        withArgumentsInArray:@[
         [FlappyStringTool toUnNullStr:member.userId],
         [FlappyStringTool toUnNullStr:member.userExtendId],
@@ -792,7 +799,8 @@
         [FlappyStringTool toUnNullStr:member.sessionId],
         [FlappyStringTool toUnNullStr:member.sessionMemberLatestRead],
         [FlappyStringTool toUnNullStr:member.sessionMemberMarkName],
-        [NSNumber numberWithInteger:member.sessionMemberNoDisturb],
+        [NSNumber numberWithInteger:member.sessionMemberMute],
+        [NSNumber numberWithInteger:member.sessionMemberPinned],
         [FlappyStringTool toUnNullStr:member.sessionJoinDate],
         [FlappyStringTool toUnNullStr:member.sessionLeaveDate],
         [NSNumber numberWithInteger:member.isLeave],
@@ -835,7 +843,8 @@
         member.sessionId = [result stringForColumn:@"sessionId"];
         member.sessionMemberLatestRead = [result stringForColumn:@"sessionMemberLatestRead"];
         member.sessionMemberMarkName = [result stringForColumn:@"sessionMemberMarkName"];
-        member.sessionMemberNoDisturb = [result intForColumn:@"sessionMemberNoDisturb"];
+        member.sessionMemberMute = [result intForColumn:@"sessionMemberMute"];
+        member.sessionMemberPinned = [result intForColumn:@"sessionMemberPinned"];
         member.sessionJoinDate = [result stringForColumn:@"sessionJoinDate"];
         member.sessionLeaveDate = [result stringForColumn:@"sessionLeaveDate"];
         member.isLeave = [result intForColumn:@"isLeave"];
@@ -880,7 +889,8 @@
         member.sessionId = [result stringForColumn:@"sessionId"];
         member.sessionMemberLatestRead = [result stringForColumn:@"sessionMemberLatestRead"];
         member.sessionMemberMarkName = [result stringForColumn:@"sessionMemberMarkName"];
-        member.sessionMemberNoDisturb = [result intForColumn:@"sessionMemberNoDisturb"];
+        member.sessionMemberMute = [result intForColumn:@"sessionMemberMute"];
+        member.sessionMemberPinned = [result intForColumn:@"sessionMemberPinned"];
         member.sessionJoinDate = [result stringForColumn:@"sessionJoinDate"];
         member.sessionLeaveDate = [result stringForColumn:@"sessionLeaveDate"];
         member.isLeave = [result intForColumn:@"isLeave"];
@@ -925,7 +935,7 @@
     [self openDB];
     //更新消息
     BOOL result = [database executeUpdate:@"update message set "
-                   "messageSession=?,"
+                   "messageSessionId=?,"
                    "messageSessionType=?,"
                    "messageSessionOffset=?,"
                    "messageTableOffset=?,"
@@ -941,12 +951,13 @@
                    "messageDate=?,"
                    "deleteDate=?,"
                    "isDelete=?"
+                   "messageDeleteOperation=?"
                    " where "
                    "messageId = ?"
                    " and "
                    "messageInsertUser = ?"
                      withArgumentsInArray:@[
-        [FlappyStringTool toUnNullStr:msg.messageSession],
+        [FlappyStringTool toUnNullStr:msg.messageSessionId],
         [NSNumber numberWithInteger:msg.messageSessionType],
         [NSNumber numberWithInteger:msg.messageSessionOffset],
         [NSNumber numberWithInteger:msg.messageTableOffset],
@@ -962,6 +973,7 @@
         [FlappyStringTool toUnNullStr:msg.messageDate],
         [FlappyStringTool toUnNullStr:msg.deleteDate],
         [NSNumber numberWithInteger:msg.isDelete],
+        [FlappyStringTool toUnNullStr:msg.messageDeleteOperation],
         msg.messageId,
         user.userExtendId]];
     [self closeDB];
@@ -988,7 +1000,7 @@
     if ([result next]) {
         ChatMessage *msg = [ChatMessage new];
         msg.messageId = [result stringForColumn:@"messageId"];
-        msg.messageSession = [result stringForColumn:@"messageSession"];
+        msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
         msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
@@ -1003,6 +1015,7 @@
         msg.messageSecret = [result stringForColumn:@"messageSecret"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.isDelete = [result intForColumn:@"isDelete"];
+        msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
         msg.deleteDate = [result stringForColumn:@"deleteDate"];
         [result close];
@@ -1026,7 +1039,7 @@
     [self openDB];
     
     //返回消息
-    FMResultSet *result = [database executeQuery:@"select * from message where messageSession=? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit 1"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit 1"
                             withArgumentsInArray:@[
         sessionID,
         user.userExtendId,
@@ -1035,7 +1048,7 @@
     if ([result next]) {
         ChatMessage *msg = [ChatMessage new];
         msg.messageId = [result stringForColumn:@"messageId"];
-        msg.messageSession = [result stringForColumn:@"messageSession"];
+        msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
         msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
@@ -1050,6 +1063,7 @@
         msg.messageSecret = [result stringForColumn:@"messageSecret"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.isDelete = [result intForColumn:@"isDelete"];
+        msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
         msg.deleteDate = [result stringForColumn:@"deleteDate"];
         [result close];
@@ -1074,13 +1088,13 @@
     [self openDB];
     
     //获取消息
-    FMResultSet *result = [database executeQuery:@"select * from message where messageSession=? and messageTableOffset=? and messageStamp<? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageStamp  desc"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageSessionId=? and messageTableOffset=? and messageStamp<? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageStamp  desc"
                             withArgumentsInArray:@[sessionID,tabOffset,stamp,user.userExtendId,@(MSG_TYPE_ACTION)]];
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
         msg.messageId = [result stringForColumn:@"messageId"];
-        msg.messageSession = [result stringForColumn:@"messageSession"];
+        msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
         msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
@@ -1095,6 +1109,7 @@
         msg.messageSecret = [result stringForColumn:@"messageSecret"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.isDelete = [result intForColumn:@"isDelete"];
+        msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
         msg.deleteDate = [result stringForColumn:@"deleteDate"];
         [retArray addObject:msg];
@@ -1128,7 +1143,7 @@
                                                        andStamp:[NSString stringWithFormat:@"%ld",(long)msg.messageStamp]];
     [retArray addObjectsFromArray:sequeceArray];
     //获取消息
-    FMResultSet *result = [database executeQuery:@"select * from message where messageSession=? and messageTableOffset<? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit ?"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageSessionId=? and messageTableOffset<? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit ?"
                             withArgumentsInArray:@[
         sessionID,
         [NSNumber numberWithInteger:msg.messageTableOffset],
@@ -1140,7 +1155,7 @@
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
         msg.messageId = [result stringForColumn:@"messageId"];
-        msg.messageSession = [result stringForColumn:@"messageSession"];
+        msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
         msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
@@ -1156,6 +1171,7 @@
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
         msg.isDelete = [result intForColumn:@"isDelete"];
+        msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
         msg.deleteDate = [result stringForColumn:@"deleteDate"];
         [listArray addObject:msg];
     }
@@ -1182,13 +1198,13 @@
     }
     //获取消息
     [self openDB];
-    FMResultSet *result = [database executeQuery:@"select * from message where messageType=0 and messageReadState=0 and messageSession=? and messageInsertUser=? order by messageTableOffset  desc"
+    FMResultSet *result = [database executeQuery:@"select * from message where messageType=0 and messageReadState=0 and messageSessionId=? and messageInsertUser=? order by messageTableOffset  desc"
                             withArgumentsInArray:@[sessionID,user.userExtendId]];
     NSMutableArray* retArray=[[NSMutableArray alloc]init];
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
         msg.messageId = [result stringForColumn:@"messageId"];
-        msg.messageSession = [result stringForColumn:@"messageSession"];
+        msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
         msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
@@ -1203,6 +1219,7 @@
         msg.messageSecret = [result stringForColumn:@"messageSecret"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.isDelete = [result intForColumn:@"isDelete"];
+        msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
         msg.deleteDate = [result stringForColumn:@"deleteDate"];
         [retArray addObject:msg];
@@ -1231,7 +1248,7 @@
     while ([result next]) {
         ChatMessage *msg = [ChatMessage new];
         msg.messageId = [result stringForColumn:@"messageId"];
-        msg.messageSession = [result stringForColumn:@"messageSession"];
+        msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
         msg.messageSessionType = [result intForColumn:@"messageSessionType"];
         msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
         msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
@@ -1246,6 +1263,7 @@
         msg.messageSecret = [result stringForColumn:@"messageSecret"];
         msg.messageDate = [result stringForColumn:@"messageDate"];
         msg.isDelete = [result intForColumn:@"isDelete"];
+        msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
         msg.messageStamp = [result longForColumn:@"messageStamp"];
         msg.deleteDate = [result stringForColumn:@"deleteDate"];
         [retArray addObject:msg];

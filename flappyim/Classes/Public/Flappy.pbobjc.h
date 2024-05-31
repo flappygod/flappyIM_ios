@@ -247,7 +247,7 @@ GPB_FINAL @interface Session : GPBMessage
 
 typedef GPB_ENUM(Message_FieldNumber) {
   Message_FieldNumber_MessageId = 1,
-  Message_FieldNumber_MessageSession = 2,
+  Message_FieldNumber_MessageSessionId = 2,
   Message_FieldNumber_MessageSessionType = 3,
   Message_FieldNumber_MessageSessionOffset = 4,
   Message_FieldNumber_MessageTableOffset = 5,
@@ -261,8 +261,9 @@ typedef GPB_ENUM(Message_FieldNumber) {
   Message_FieldNumber_MessageReadState = 13,
   Message_FieldNumber_MessageSecret = 14,
   Message_FieldNumber_MessageDate = 15,
-  Message_FieldNumber_IsDelete = 16,
-  Message_FieldNumber_DeleteDate = 17,
+  Message_FieldNumber_MessageDeleteOperation = 16,
+  Message_FieldNumber_IsDelete = 17,
+  Message_FieldNumber_DeleteDate = 18,
 };
 
 GPB_FINAL @interface Message : GPBMessage
@@ -271,7 +272,7 @@ GPB_FINAL @interface Message : GPBMessage
 @property(nonatomic, readwrite, copy, null_resettable) NSString *messageId;
 
 /** 消息会话 */
-@property(nonatomic, readwrite) int64_t messageSession;
+@property(nonatomic, readwrite) int64_t messageSessionId;
 
 /** 消息会话类型 */
 @property(nonatomic, readwrite) int32_t messageSessionType;
@@ -311,6 +312,9 @@ GPB_FINAL @interface Message : GPBMessage
 
 /** 消息时间 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *messageDate;
+
+/** 消息删除原因 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageDeleteOperation;
 
 /** 消息是否被删除 */
 @property(nonatomic, readwrite) int32_t isDelete;

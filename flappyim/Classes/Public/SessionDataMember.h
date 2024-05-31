@@ -19,7 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 //标记名称
 @property(nonatomic,copy) NSString* sessionMemberMarkName;
 //会话免打扰
-@property(nonatomic,assign) NSInteger sessionMemberNoDisturb;
+@property(nonatomic,assign) NSInteger sessionMemberMute;
+//会话置顶
+@property(nonatomic,assign) NSInteger sessionMemberPinned;
 //用户加入时间
 @property(nonatomic,copy) NSString* sessionJoinDate;
 //用户离开时间

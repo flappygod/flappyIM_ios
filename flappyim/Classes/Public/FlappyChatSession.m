@@ -127,7 +127,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -156,7 +156,7 @@
     
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -186,7 +186,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -213,7 +213,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -244,7 +244,7 @@
     
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -270,7 +270,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -295,7 +295,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -325,7 +325,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -355,7 +355,7 @@
     file.fileName=name;
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -380,7 +380,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -406,7 +406,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -440,7 +440,7 @@
     //创建阅读的消息
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -474,7 +474,7 @@
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSession=self.session.sessionId;
+    chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
     chatmsg.messageSendId=[self getMine].userId;
     chatmsg.messageSendExtendId=[self getMine].userExtendId;
@@ -508,6 +508,7 @@
     //更新消息设置删除
     ChatMessage* message = [[FlappyDataBase shareInstance] getMessageById:messageId];
     message.isDelete = 1;
+    message.messageDeleteOperation = @"delete";
     message.messageReadState = 1;
     bool flag = [[FlappyDataBase shareInstance] updateMessage:message];
     
