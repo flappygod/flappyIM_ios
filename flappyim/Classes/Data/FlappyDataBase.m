@@ -950,7 +950,7 @@
                    "messageSecret=?,"
                    "messageDate=?,"
                    "deleteDate=?,"
-                   "isDelete=?"
+                   "isDelete=?,"
                    "messageDeleteOperation=?"
                    " where "
                    "messageId = ?"
