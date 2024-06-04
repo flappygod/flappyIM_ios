@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString* sessionId;
 //最近阅读
 @property(nonatomic,copy) NSString* sessionMemberLatestRead;
+//最近删除
+@property(nonatomic,copy) NSString* sessionMemberLatestDelete;
 //标记名称
 @property(nonatomic,copy) NSString* sessionMemberMarkName;
 //会话免打扰

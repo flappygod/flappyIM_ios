@@ -105,6 +105,7 @@
     "userLoginDate TEXT,"
     "sessionId TEXT,"
     "sessionMemberLatestRead TEXT,"
+    "sessionMemberLatestDelete TEXT,"
     "sessionMemberMarkName TEXT,"
     "sessionMemberMute INTEGER,"
     "sessionMemberPinned INTEGER,"
@@ -781,13 +782,14 @@
                      "userLoginDate,"
                      "sessionId,"
                      "sessionMemberLatestRead,"
+                     "sessionMemberLatestDelete,"
                      "sessionMemberMarkName,"
                      "sessionMemberMute,"
                      "sessionMemberPinned,"
                      "sessionJoinDate,"
                      "sessionLeaveDate,"
                      "isLeave,"
-                     "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                     "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                        withArgumentsInArray:@[
         [FlappyStringTool toUnNullStr:member.userId],
         [FlappyStringTool toUnNullStr:member.userExtendId],
@@ -798,6 +800,7 @@
         [FlappyStringTool toUnNullStr:member.userLoginDate],
         [FlappyStringTool toUnNullStr:member.sessionId],
         [FlappyStringTool toUnNullStr:member.sessionMemberLatestRead],
+        [FlappyStringTool toUnNullStr:member.sessionMemberLatestDelete],
         [FlappyStringTool toUnNullStr:member.sessionMemberMarkName],
         [NSNumber numberWithInteger:member.sessionMemberMute],
         [NSNumber numberWithInteger:member.sessionMemberPinned],
@@ -842,6 +845,7 @@
         member.userLoginDate = [result stringForColumn:@"userLoginDate"];
         member.sessionId = [result stringForColumn:@"sessionId"];
         member.sessionMemberLatestRead = [result stringForColumn:@"sessionMemberLatestRead"];
+        member.sessionMemberLatestDelete = [result stringForColumn:@"sessionMemberLatestDelete"];
         member.sessionMemberMarkName = [result stringForColumn:@"sessionMemberMarkName"];
         member.sessionMemberMute = [result intForColumn:@"sessionMemberMute"];
         member.sessionMemberPinned = [result intForColumn:@"sessionMemberPinned"];
@@ -885,9 +889,9 @@
         member.userData = [result stringForColumn:@"userData"];
         member.userCreateDate = [result stringForColumn:@"userCreateDate"];
         member.userLoginDate = [result stringForColumn:@"userLoginDate"];
-        
         member.sessionId = [result stringForColumn:@"sessionId"];
         member.sessionMemberLatestRead = [result stringForColumn:@"sessionMemberLatestRead"];
+        member.sessionMemberLatestDelete = [result stringForColumn:@"sessionMemberLatestDelete"];
         member.sessionMemberMarkName = [result stringForColumn:@"sessionMemberMarkName"];
         member.sessionMemberMute = [result intForColumn:@"sessionMemberMute"];
         member.sessionMemberPinned = [result intForColumn:@"sessionMemberPinned"];
