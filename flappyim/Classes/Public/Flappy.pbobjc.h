@@ -262,8 +262,9 @@ typedef GPB_ENUM(Message_FieldNumber) {
   Message_FieldNumber_MessageSecret = 14,
   Message_FieldNumber_MessageDate = 15,
   Message_FieldNumber_MessageDeleteOperation = 16,
-  Message_FieldNumber_IsDelete = 17,
-  Message_FieldNumber_DeleteDate = 18,
+  Message_FieldNumber_MessageDeleteUserList = 17,
+  Message_FieldNumber_IsDelete = 18,
+  Message_FieldNumber_DeleteDate = 19,
 };
 
 GPB_FINAL @interface Message : GPBMessage
@@ -316,6 +317,9 @@ GPB_FINAL @interface Message : GPBMessage
 /** 消息删除原因 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *messageDeleteOperation;
 
+/** 消息删除原因 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageDeleteUserList;
+
 /** 消息是否被删除 */
 @property(nonatomic, readwrite) int32_t isDelete;
 
@@ -359,7 +363,7 @@ typedef GPB_ENUM(Route_FieldNumber) {
   Route_FieldNumber_PushPlat = 5,
   Route_FieldNumber_PushLanguage = 6,
   Route_FieldNumber_PushPrivacy = 7,
-  Route_FieldNumber_PushNoDisturb = 8,
+  Route_FieldNumber_PushMute = 8,
   Route_FieldNumber_Time = 9,
 };
 
@@ -387,7 +391,7 @@ GPB_FINAL @interface Route : GPBMessage
 @property(nonatomic, readwrite) int32_t pushPrivacy;
 
 /** 推送平台免打扰 */
-@property(nonatomic, readwrite) int32_t pushNoDisturb;
+@property(nonatomic, readwrite) int32_t pushMute;
 
 /** 时间 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *time;

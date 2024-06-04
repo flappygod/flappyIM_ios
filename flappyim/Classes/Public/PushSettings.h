@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString* routePushPrivacy;
 
 //推送免打扰
-@property(nonatomic,copy) NSString* routePushNoDisturb;
+@property(nonatomic,copy) NSString* routePushMute;
 
 @end
 

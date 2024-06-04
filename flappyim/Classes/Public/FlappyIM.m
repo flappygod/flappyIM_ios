@@ -258,7 +258,7 @@
 -(void)changePushType:(NSString*)pushType
           andLanguage:(NSString*)pushLanguage
            andPrivacy:(NSString*)pushPrivacy
-         andNoDisturb:(NSString*)pushNoDisturb
+              andMute:(NSString*)pushMute
            andSuccess:(FlappySuccess)success
            andFailure:(FlappyFailure)failure{
     
@@ -266,7 +266,7 @@
     PushSettings* settings=[[PushSettings alloc] init];
     settings.routePushPrivacy = pushPrivacy;
     settings.routePushLanguage = pushLanguage;
-    settings.routePushNoDisturb = pushNoDisturb;
+    settings.routePushMute = pushMute;
     settings.routePushType = pushType;
     
     //没有登录的状态
@@ -284,7 +284,7 @@
                                  @"pushType":pushType,
                                  @"pushLanguage":pushLanguage,
                                  @"pushPrivacy":pushPrivacy,
-                                 @"pushNoDisturb":pushNoDisturb,
+                                 @"pushMute":pushMute,
     };
     //注册地址
     NSString *urlString = [FlappyApiConfig shareInstance].URL_changePush;

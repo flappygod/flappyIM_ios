@@ -77,7 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)changePushType:(NSString*)pushType
           andLanguage:(NSString*)pushLanguage
            andPrivacy:(NSString*)pushPrivacy
-         andNoDisturb:(NSString*)pushNoDisturb
+         andMute:(NSString*)pushMute
            andSuccess:(FlappySuccess)success
            andFailure:(FlappyFailure)failure;
 

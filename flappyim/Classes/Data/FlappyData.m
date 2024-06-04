@@ -80,7 +80,7 @@
     update = (update==nil ? [[PushSettings alloc] init]:update);
     update.routePushPrivacy = (setting.routePushPrivacy == nil ? update.routePushPrivacy:setting.routePushPrivacy);
     update.routePushLanguage = (setting.routePushLanguage == nil ? update.routePushLanguage:setting.routePushLanguage);
-    update.routePushNoDisturb = (setting.routePushNoDisturb == nil ? update.routePushNoDisturb:setting.routePushNoDisturb);
+    update.routePushMute = (setting.routePushMute == nil ? update.routePushMute:setting.routePushMute);
     update.routePushType = (setting.routePushType == nil ? update.routePushType:setting.routePushType);
     NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[update mj_keyValues]];
     UNSaveObject(str, KEY_PUSHSETTING);
