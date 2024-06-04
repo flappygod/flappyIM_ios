@@ -95,6 +95,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy)NSString* messageDeleteOperation;
 
+@property(nonatomic,copy)NSString* messageDeleteUserList;
+
 @property(nonatomic,copy)NSString* deleteDate;
 
 
