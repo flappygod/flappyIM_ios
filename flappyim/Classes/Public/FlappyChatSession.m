@@ -12,8 +12,9 @@
 #import "FlappyConfig.h"
 #import "FlappyJsonTool.h"
 #import "FlappyStringTool.h"
-#import "FlappyData.h"
 #import "FlappyImageTool.h"
+#import "FlappyApiConfig.h"
+#import "FlappyData.h"
 #import "MJExtension.h"
 
 @implementation FlappyChatSession
@@ -28,42 +29,6 @@
         _messageListeners=[[NSMutableArray alloc]init];
     }
     return self;
-}
-
-
-//获取当前的用户
--(ChatUser*)getMine{
-    return [[FlappyData shareInstance]getUser];
-}
-
-//获取对方的ID
--(NSString*)getPeerID{
-    if(self.session.sessionType==TYPE_SINGLE){
-        for(int s=0;s<self.session.users.count;s++){
-            ChatUser* user=[self.session.users objectAtIndex:s];
-            if(![user.userId isEqualToString:[self getMine].userId]){
-                return user.userId;
-            }
-        }
-    }else if(self.session.sessionType==TYPE_GROUP){
-        return self.session.sessionId;
-    }
-    return nil;
-}
-
-//对方的ID
--(NSString*)getPeerExtendID{
-    if(self.session.sessionType==TYPE_SINGLE){
-        for(int s=0;s<self.session.users.count;s++){
-            ChatUser* user=[self.session.users objectAtIndex:s];
-            if(![user.userId isEqualToString:[self getMine].userId]){
-                return user.userExtendId;
-            }
-        }
-    }else if(self.session.sessionType==TYPE_GROUP){
-        return self.session.sessionExtendId;
-    }
-    return nil;
 }
 
 
@@ -99,38 +64,19 @@
     }
 }
 
-//获取最近的一条消息
--(ChatMessage*)getLatestMessage{
-    //获取消息
-    ChatMessage* message=[[FlappyDataBase shareInstance]getSessionLatestMessage:self.session.sessionId];
-    //返回
-    return message;
-}
-
-
-//获取某条信息之前的消息
--(NSMutableArray*)getFormerMessages:(NSString*)messageID
-                           withSize:(NSInteger)size{
-    NSMutableArray* arr=[[FlappyDataBase shareInstance]
-                         getSessionFormerMessages:self.session.sessionId
-                         withMessageID:messageID
-                         withSize:size];
-    return arr;
-}
-
 
 //发送文本
 -(ChatMessage*)sendText:(NSString*)text
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure{
     
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_TEXT;
@@ -152,14 +98,13 @@
                    andFailure:(FlappySendFailure)failure{
     
     
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    
-    
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
@@ -182,14 +127,15 @@
 -(ChatMessage*)sendImage:(ChatImage*)image
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
-    //消息
-    ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
+    //消息
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_IMG;
@@ -209,14 +155,13 @@
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure{
     
-    
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VOICE;
@@ -238,16 +183,13 @@
 -(ChatMessage*)sendVoice:(ChatVoice*)voice
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
-    
-    
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    
-    
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VOICE;
@@ -267,13 +209,13 @@
                  andSuccess:(FlappySendSuccess)success
                  andFailure:(FlappySendFailure)failure{
     
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_LOCATE;
@@ -292,13 +234,15 @@
 -(ChatMessage*)sendLocalVideo:(NSString*)path
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure{
-    ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
+    
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VIDEO;
@@ -322,13 +266,13 @@
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
     
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_VIDEO;
@@ -348,8 +292,12 @@
                      andName:(NSString*)name
                   andSuccess:(FlappySendSuccess)success
                   andFailure:(FlappySendFailure)failure{
-    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    
+    
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
+    
     //创建发送地址
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
     ChatFile* file=[[ChatFile alloc]init];
     file.sendPath=path;
     file.fileName=name;
@@ -357,8 +305,8 @@
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_FILE;
@@ -377,13 +325,15 @@
 -(ChatMessage*)sendFile:(ChatFile*)file
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure{
-    ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
+    
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_FILE;
@@ -403,13 +353,13 @@
                andSuccess:(FlappySendSuccess)success
                andFailure:(FlappySendFailure)failure{
     
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_CUSTOM;
@@ -437,13 +387,15 @@
         return  nil;
     }
     
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
+    
     //创建阅读的消息
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_ACTION;
@@ -451,7 +403,7 @@
     ChatAction* action=[[ChatAction alloc]init];
     action.actionType=ACTION_TYPE_READ;
     action.actionIds=@[
-        [self getMine].userId,
+        mine.userId,
         self.session.sessionId,
         [NSString stringWithFormat:@"%ld",[self getLatestMessage].messageTableOffset]
     ];
@@ -471,13 +423,17 @@
 -(ChatMessage*)recallMessageById:(NSString*)messageId
                       andSuccess:(FlappySendSuccess)success
                       andFailure:(FlappySendFailure)failure{
+    
+    
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
+    
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
     chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=[self getMine].userId;
-    chatmsg.messageSendExtendId=[self getMine].userExtendId;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_ACTION;
@@ -485,7 +441,7 @@
     ChatAction* action=[[ChatAction alloc]init];
     action.actionType=ACTION_TYPE_DELETE;
     action.actionIds=@[
-        [self getMine].userId,
+        mine.userId,
         self.session.sessionId,
         messageId
     ];
@@ -585,6 +541,108 @@
     }
     
 }
+
+
+//修改mute
+-(void)changeMute:(NSInteger)mute
+       andSuccess:(FlappySuccess)success
+       andFailure:(FlappyFailure)failure{
+    //创建群组会话
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_updateUserInSession;
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{
+        @"sessionExtendId":self.session.sessionExtendId,
+        @"userId":mine.userId,
+        @"isMute":[NSString stringWithFormat:@"%ld", mute]
+    };
+    //请求数据
+    [FlappyApiRequest postRequest:urlString
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+        success(data);
+    } withFailure:^(NSError * error, NSInteger code) {
+        failure(error,code);
+    }];
+}
+
+
+//修改Pinned
+-(void)changePinned:(NSInteger)pinned
+         andSuccess:(FlappySuccess)success
+         andFailure:(FlappyFailure)failure{
+    //创建群组会话
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_updateUserInSession;
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{
+        @"sessionExtendId":self.session.sessionExtendId,
+        @"userId":mine.userId,
+        @"isPinned":[NSString stringWithFormat:@"%ld", pinned]
+    };
+    //请求数据
+    [FlappyApiRequest postRequest:urlString
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+        success(data);
+    } withFailure:^(NSError * error, NSInteger code) {
+        failure(error,code);
+    }];
+}
+
+
+
+//获取对方的ID
+-(NSString*)getPeerID{
+    if(self.session.sessionType==TYPE_SINGLE){
+        ChatUser* mine = [[FlappyData shareInstance] getUser];
+        for(int s=0;s<self.session.users.count;s++){
+            ChatUser* user=[self.session.users objectAtIndex:s];
+            if(![user.userId isEqualToString:mine.userId]){
+                return user.userId;
+            }
+        }
+    }else if(self.session.sessionType==TYPE_GROUP){
+        return self.session.sessionId;
+    }
+    return nil;
+}
+
+//对方的ID
+-(NSString*)getPeerExtendID{
+    if(self.session.sessionType==TYPE_SINGLE){
+        ChatUser* mine = [[FlappyData shareInstance] getUser];
+        for(int s=0;s<self.session.users.count;s++){
+            ChatUser* user=[self.session.users objectAtIndex:s];
+            if(![user.userId isEqualToString:mine.userId]){
+                return user.userExtendId;
+            }
+        }
+    }else if(self.session.sessionType==TYPE_GROUP){
+        return self.session.sessionExtendId;
+    }
+    return nil;
+}
+
+//获取最近的一条消息
+-(ChatMessage*)getLatestMessage{
+    //获取消息
+    ChatMessage* message=[[FlappyDataBase shareInstance]getSessionLatestMessage:self.session.sessionId];
+    //返回
+    return message;
+}
+
+
+//获取某条信息之前的消息
+-(NSMutableArray*)getFormerMessages:(NSString*)messageID
+                           withSize:(NSInteger)size{
+    NSMutableArray* arr=[[FlappyDataBase shareInstance]
+                         getSessionFormerMessages:self.session.sessionId
+                         withMessageID:messageID
+                         withSize:size];
+    return arr;
+}
+
 
 //获取未读消息数量
 -(NSInteger)getUnReadMessageCount{

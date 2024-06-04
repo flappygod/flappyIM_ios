@@ -112,6 +112,9 @@
     //删除会话中的用户
     self.URL_delUserInSession= [NSString stringWithFormat:@"%@/api/delUserInSession",self.BaseUrl];
     
+    //更新会话中的用户
+    self.URL_updateUserInSession= [NSString stringWithFormat:@"%@/api/updateUserInSession",self.BaseUrl];
+    
 }
 
 

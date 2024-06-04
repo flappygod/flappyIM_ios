@@ -37,15 +37,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)clearListeners;
 
 
-//获取当前最近的一条消息
--(ChatMessage*)getLatestMessage;
-
-
-//获取某条信息之前的消息
--(NSMutableArray*)getFormerMessages:(NSString*)messageID
-                           withSize:(NSInteger)size;
-
-
 //发送文本
 -(ChatMessage*)sendText:(NSString*)text
              andSuccess:(FlappySendSuccess)success
@@ -138,6 +129,27 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)resendMessage:(ChatMessage*)chatmsg
           andSuccess:(FlappySendSuccess)success
           andFailure:(FlappySendFailure)failure;
+
+
+//获取当前最近的一条消息
+-(ChatMessage*)getLatestMessage;
+
+
+//获取某条信息之前的消息
+-(NSMutableArray*)getFormerMessages:(NSString*)messageID
+                           withSize:(NSInteger)size;
+
+
+//修改mute
+-(void)changeMute:(NSInteger)mute
+       andSuccess:(FlappySuccess)success
+       andFailure:(FlappyFailure)failure;
+
+
+//修改Pinned
+-(void)changePinned:(NSInteger)pinned
+         andSuccess:(FlappySuccess)success
+         andFailure:(FlappyFailure)failure;
 
 
 //获取未读消息数量
