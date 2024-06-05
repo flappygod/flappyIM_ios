@@ -59,8 +59,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString* URL_addUserToSession;
 //删除会话中的用户
 @property(nonatomic,copy) NSString* URL_delUserInSession;
-//更新会话中的用户
-@property(nonatomic,copy) NSString* URL_updateUserInSession;
 
 
 

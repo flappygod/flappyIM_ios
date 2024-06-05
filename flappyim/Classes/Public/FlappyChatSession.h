@@ -107,6 +107,16 @@ NS_ASSUME_NONNULL_BEGIN
 -(ChatMessage*)readSessionMessage:(FlappySendSuccess)success
                        andFailure:(FlappySendFailure)failure;
 
+//修改mute
+-(ChatMessage*)changeMute:(NSInteger)mute
+               andSuccess:(FlappySendSuccess)success
+               andFailure:(FlappySendFailure)failure;
+
+
+//修改Pinned
+-(ChatMessage*)changePinned:(NSInteger)pinned
+                 andSuccess:(FlappySendSuccess)success
+                 andFailure:(FlappySendFailure)failure;
 
 //删除会话消息
 -(ChatMessage*)recallMessageById:(NSString*)messageId
@@ -115,9 +125,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //通过消息ID删除消息
--(void)deleteMessageById:(NSString*)messageId
-              andSuccess:(FlappySendSuccess)success
-              andFailure:(FlappySendFailure)failure;
+-(ChatMessage*)deleteMessageById:(NSString*)messageId
+                      andSuccess:(FlappySendSuccess)success
+                      andFailure:(FlappySendFailure)failure;
+
 
 //重新发送
 -(void)resendMessageById:(NSString*)messageId
@@ -140,16 +151,6 @@ NS_ASSUME_NONNULL_BEGIN
                            withSize:(NSInteger)size;
 
 
-//修改mute
--(void)changeMute:(NSInteger)mute
-       andSuccess:(FlappySuccess)success
-       andFailure:(FlappyFailure)failure;
-
-
-//修改Pinned
--(void)changePinned:(NSInteger)pinned
-         andSuccess:(FlappySuccess)success
-         andFailure:(FlappyFailure)failure;
 
 
 //获取未读消息数量

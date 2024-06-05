@@ -6,6 +6,7 @@
 //
 
 #import "ChatMessage.h"
+#import "SessionData.h"
 
 #ifndef FlappyBlocks_h
 #define FlappyBlocks_h
@@ -41,6 +42,6 @@ typedef void(^MessageReadListener) (NSString* _Nullable  sessionId,NSString* _Nu
 typedef void(^MessageDeleteListener) (NSString* _Nullable  messageId);
 
 //会话
-typedef void(^SessionListener)(id _Nullable chatsession);
+typedef void(^SessionListener)(SessionData* _Nullable chatsession);
 
 #endif /* FlappyBlocks_h */

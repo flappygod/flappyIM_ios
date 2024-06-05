@@ -351,20 +351,56 @@
 
 
 //更新消息已读
--(void)updateMessageDelete:messageId{
+-(void)updateMessageRecall:(NSString*)userId
+              andMessageId:(NSString*)messageId{
     ChatUser* user = [[FlappyData shareInstance] getUser];
     if(user==nil){
         return;
     }
     [self openDB];
-    [database executeUpdate:@"update message set isDelete=1,messageReadState=1 where messageInsertUser=? and messageId=?"
+    [database executeUpdate:@"update message set isDelete=1,messageDeleteOperation=?,messageDeleteUserList=?,messageReadState=1 where messageInsertUser=? and messageId=?"
        withArgumentsInArray:@[
+        @"recall",
+        userId,
         user.userExtendId,
         messageId
     ]];
     [self closeDB];
 }
 
+//更新消息被删除
+-(void)updateMessageDelete:(NSString*)userId
+              andMessageId:(NSString*)messageId{
+    
+    //检查用户
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return;
+    }
+    
+    //消息更新
+    ChatMessage* message = [self getMessageById:messageId];
+    if(message==nil||message.isDelete==1){
+        return;
+    }
+    
+    //设置删除
+    message.isDelete=0;
+    
+    //删除
+    message.messageDeleteOperation=@"delete";
+    
+    //更新删除的用户
+    NSMutableArray* arrayAdd = [FlappyStringTool splitStr:message.messageDeleteUserList withSeprate:@","];
+    [arrayAdd addObject:userId];
+    message.messageDeleteUserList = [FlappyStringTool joinStr:arrayAdd withSeprate:@","];
+    
+    //状态已读
+    message.messageReadState = 1;
+    
+    [self insertMessage:message];
+    
+}
 
 
 //处理动作消息插入
@@ -381,8 +417,22 @@
     //获取
     ChatAction* action =[msg getChatAction];
     switch(action.actionType){
+            //更新消息撤回
+        case ACTION_TYPE_RECALL_MSG:{
+            NSString* userId = action.actionIds[0];
+            NSString* messageId = action.actionIds[2];
+            [self updateMessageRecall:userId andMessageId:messageId];
+            break;
+        }
+            //更新消息撤回
+        case ACTION_TYPE_DELETE_MSG:{
+            NSString* userId = action.actionIds[0];
+            NSString* messageId = action.actionIds[2];
+            [self updateMessageDelete:userId andMessageId:messageId];
+            break;
+        }
             //更新消息已读
-        case ACTION_TYPE_READ:{
+        case ACTION_TYPE_READ_SESSION:{
             NSString* userId = action.actionIds[0];
             NSString* sessionId = action.actionIds[1];
             NSString* tableOffset = action.actionIds[2];
@@ -396,10 +446,24 @@
                                     andTableSeq:tableOffset];
             break;
         }
-            //更新消息删除
-        case ACTION_TYPE_DELETE:{
-            NSString* messageId = action.actionIds[2];
-            [self updateMessageDelete:messageId];
+            //会话静音
+        case ACTION_TYPE_MUTE_SESSION:{
+            NSString* userId = action.actionIds[0];
+            NSString* sessionId = action.actionIds[1];
+            NSString* mute = action.actionIds[2];
+            [self updateSessionMemberMute:userId
+                             andSessionId:sessionId
+                                  andMute:mute];
+            break;
+        }
+            //更撤回
+        case ACTION_TYPE_PINNED_SESSION:{
+            NSString* userId = action.actionIds[0];
+            NSString* sessionId = action.actionIds[1];
+            NSString* pinned = action.actionIds[2];
+            [self updateSessionMemberPinned:userId
+                               andSessionId:sessionId
+                                  andPinned:pinned];
             break;
         }
     }
@@ -913,9 +977,9 @@
 
 
 //更新最近已读的消息
--(void)updateSessionMemberLatestRead:userId
-                        andSessionId:sessionId
-                         andTableSeq:tableOffset{
+-(void)updateSessionMemberLatestRead:(NSString*)userId
+                        andSessionId:(NSString*)sessionId
+                         andTableSeq:(NSString*)tableOffset{
     //打开数据库
     [self openDB];
     
@@ -931,6 +995,49 @@
     //关闭数据库
     [self closeDB];
 }
+
+
+//更新mute
+-(void)updateSessionMemberMute:(NSString*)userId
+                  andSessionId:(NSString*)sessionId
+                       andMute:(NSString*)mute{
+    //打开数据库
+    [self openDB];
+    
+    //获取这个用户数据
+    SessionDataMember* data = [self getSessionMember:sessionId andMemberId:userId];
+    
+    //如果不为空就更新
+    if(data!=nil){
+        data.sessionMemberMute=[mute integerValue];
+        [self insertSessionMember:data];
+    }
+    
+    //关闭数据库
+    [self closeDB];
+    
+}
+
+//更新pinned
+-(void)updateSessionMemberPinned:(NSString*)userId
+                    andSessionId:(NSString*)sessionId
+                       andPinned:(NSString*)pinned{
+    //打开数据库
+    [self openDB];
+    
+    //获取这个用户数据
+    SessionDataMember* data = [self getSessionMember:sessionId andMemberId:userId];
+    
+    //如果不为空就更新
+    if(data!=nil){
+        data.sessionMemberPinned=[pinned integerValue];
+        [self insertSessionMember:data];
+    }
+    
+    //关闭数据库
+    [self closeDB];
+}
+
 
 
 //更新数据

@@ -189,6 +189,22 @@
 
 
 
++ (NSMutableArray *)splitStr:(NSString *)str 
+                 withSeprate:(NSString *)seperate {
+    if (str == nil || seperate == nil) {
+        return [[NSMutableArray alloc] init];
+    }
+    NSArray *components = [str componentsSeparatedByString:seperate];
+    return [components mutableCopy];
+}
+
++ (NSString *)joinStr:(NSArray *)str 
+          withSeprate:(NSString *)seperate {
+    if (str == nil || seperate == nil) {
+        return @"";
+    }
+    return [str componentsJoinedByString:seperate];
+}
 
 
 

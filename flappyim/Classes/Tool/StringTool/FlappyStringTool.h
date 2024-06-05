@@ -47,5 +47,12 @@
 //url解码
 +(NSString *)URLDecodedString:(NSString *)str;
 
+// 分割字符串
++ (NSMutableArray *)splitStr:(NSString *)str 
+                 withSeprate:(NSString *)seperate;
+
+// 合并字符串
++ (NSString *)joinStr:(NSArray *)str 
+          withSeprate:(NSString *)seperate;
 
 @end

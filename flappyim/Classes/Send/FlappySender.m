@@ -659,7 +659,8 @@
         [[FlappyDataBase shareInstance] handleActionMessageUpdate:message];
         ChatAction* chatAction = [message getChatAction];
         switch(chatAction.actionType){
-            case ACTION_TYPE_READ:{
+                //会话阅读
+            case ACTION_TYPE_READ_SESSION:{
                 ChatUser* user=[[FlappyData shareInstance] getUser];
                 //自己读的
                 if([user.userId isEqualToString:chatAction.actionIds[0]]){
@@ -675,11 +676,21 @@
                 }
                 break;
             }
-            case ACTION_TYPE_DELETE:{
+                //会话更新
+            case ACTION_TYPE_MUTE_SESSION:
+            case ACTION_TYPE_PINNED_SESSION:{
+                SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:chatAction.actionIds[1]];
+                [self notifySession:session];
+                break;
+            }
+                //消息被删除
+            case ACTION_TYPE_DELETE_MSG:
+            case ACTION_TYPE_RECALL_MSG:{
                 ChatMessage* message = [[FlappyDataBase shareInstance] getMessageById:chatAction.actionIds[2]];
                 [self notifyMessageDelete:message];
                 break;
             }
+                
         }
     }
 }

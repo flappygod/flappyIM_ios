@@ -49,10 +49,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-//读取消息
-#define ACTION_TYPE_READ   1
+
+//撤回消息
+#define ACTION_TYPE_RECALL_MSG  1
+
 //删除消息
-#define ACTION_TYPE_DELETE 2
+#define ACTION_TYPE_DELETE_MSG  2
+
+//会话已读
+#define ACTION_TYPE_READ_SESSION  3
+
+//会话静音
+#define ACTION_TYPE_MUTE_SESSION  4
+
+//会话置顶
+#define ACTION_TYPE_PINNED_SESSION  5
+
 
 
 //会话的消息
