@@ -406,9 +406,27 @@ static  GCDAsyncSocket*  _instanceSocket;
     //登录成功后保存推送类型，保存用户所有的会话列表
     @try {
         
-        if(self.loginData[@"sessions"]!=nil && self.loginData[@"sessions"]!=[NSNull null]){
-            //修改
-            NSArray* array=self.loginData[@"sessions"];
+        
+        //转换
+        NSMutableArray* array=respones.msgArray;
+        NSMutableArray* messageList=[[NSMutableArray alloc]init];
+        for(long s=0;s<array.count;s++){
+            //获取消息
+            Message* message=[array objectAtIndex:s];
+            //转换消息
+            ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
+            //解密秘钥
+            if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0){
+                chatMsg.messageSecret = [Aes128 AES128Decrypt:chatMsg.messageSecret
+                                                      withKey:self.secret];
+            }
+            //进行添加
+            [messageList addObject:chatMsg];
+        }
+        
+        //修改
+        NSArray* sessionsArray=self.loginData[@"sessions"];
+        if(sessionsArray!=nil && sessionsArray.count!=0){
             //修改session
             NSMutableArray* sessions=[[NSMutableArray alloc]init];
             //遍历
@@ -424,29 +442,17 @@ static  GCDAsyncSocket*  _instanceSocket;
             }
             //插入会话数据
             [[FlappyDataBase shareInstance] insertSessions:sessions];
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"FlappyIM:%@",exception.description);
-    }
-    
-    //消息信息
-    @try {
-        NSMutableArray* array=respones.msgArray;
-        //转换
-        NSMutableArray* messageList=[[NSMutableArray alloc]init];
-        for(long s=0;s<array.count;s++){
-            //获取消息
-            Message* message=[array objectAtIndex:s];
-            //转换消息
-            ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
-            //解密秘钥
-            if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0){
-                chatMsg.messageSecret = [Aes128 AES128Decrypt:chatMsg.messageSecret
-                                                      withKey:self.secret];
+            
+            for(long s=0;s<messageList.count;s++){
+                ChatMessage* chatMsg=[messageList objectAtIndex:s];
+                if(chatMsg.messageType == MSG_TYPE_SYSTEM){
+                    chatMsg.messageReadState=1;
+                }
             }
-            //进行添加
-            [messageList addObject:chatMsg];
         }
+        
+        
+        
         //进行排序
         [messageList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             ChatMessage* one=obj1;
