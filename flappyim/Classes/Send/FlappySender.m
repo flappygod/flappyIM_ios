@@ -655,7 +655,7 @@
     if(message==nil){
         return;
     }
-    if(message.messageType == MSG_TYPE_ACTION){
+    if(message.messageType == MSG_TYPE_ACTION && message.messageReadState == 0){
         [[FlappyDataBase shareInstance] handleActionMessageUpdate:message];
         ChatAction* chatAction = [message getChatAction];
         switch(chatAction.actionType){

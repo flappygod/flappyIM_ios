@@ -445,7 +445,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             
             for(long s=0;s<messageList.count;s++){
                 ChatMessage* chatMsg=[messageList objectAtIndex:s];
-                if(chatMsg.messageType == MSG_TYPE_SYSTEM){
+                if(chatMsg.messageType == MSG_TYPE_SYSTEM || chatMsg.messageType == MSG_TYPE_ACTION){
                     chatMsg.messageReadState=1;
                 }
             }
@@ -496,7 +496,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     self.loginData=nil;
     
     //检查session 是否需要更新
-    [self checkSessionNeedUpdate];
+    [self checkSystemMessageFunction];
     
     //检查之前是否有消息再消息栈中而且没有发送成功
     [self checkFormerMessagesToSend];
@@ -530,7 +530,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         //消息接收到
         [self messageArrivedReceipt:chatMsg andFormer:former];
     }
-    [self checkSessionNeedUpdate];
+    [self checkSystemMessageFunction];
 }
 
 //接收更新
@@ -634,7 +634,7 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 
 //检查是否有会话需要更新
--(void)checkSessionNeedUpdate{
+-(void)checkSystemMessageFunction{
     
     //用户数据
     ChatUser* user = [[FlappyData shareInstance] getUser];
