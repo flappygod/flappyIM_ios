@@ -117,11 +117,11 @@ static  GCDAsyncSocket*  _instanceSocket;
         //组装登录数据
         ReqLogin* info=[[ReqLogin alloc]init];
         //类型
-        info.device=DEVICE_TYPE;
+        info.device=DEVICE_PLAT;
         //用户ID
         info.userId=self.user.userId;
         //推送ID
-        info.pushId=[[FlappyData shareInstance] getPush];
+        info.pushId=[[FlappyData shareInstance] getPushId];
         //设置秘钥
         NSString* rsaKey = [[FlappyData shareInstance] getRsaKey];
         if(rsaKey!=nil && rsaKey.length!=0){

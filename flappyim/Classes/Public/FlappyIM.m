@@ -103,12 +103,7 @@
 
 //获取唯一的ID
 +(NSString*)getPushId{
-    NSString* former=[[FlappyData shareInstance]getPush];
-    if([FlappyStringTool isStringEmpty:former]){
-        NSString* UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        [[FlappyData shareInstance]savePush:UUID];
-    }
-    return [[FlappyData shareInstance]getPush];
+    return [[FlappyData shareInstance] getPushId];
 }
 
 
@@ -207,7 +202,7 @@
     }
     
     //保存推送ID
-    [[FlappyData shareInstance]savePush: deviceTokenStr];
+    [[FlappyData shareInstance]savePushId: deviceTokenStr];
     
     //更新字符串
     [self updateDeviceToken:deviceTokenStr];
@@ -222,24 +217,28 @@
     }
     
     //设置的推送ID相等
-    if([[FlappyData shareInstance] getPush]!=nil&&[[[FlappyData shareInstance] getPush] isEqualToString:deviceTokenStr]){
+    if([[FlappyData shareInstance] getPushId]!=nil&&[[[FlappyData shareInstance] getPushId] isEqualToString:deviceTokenStr]){
         return;
     }
     
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
-                                 @"device":DEVICE_TYPE,
+                                 @"devicePlat":DEVICE_PLAT,
+                                 @"deviceId":[[FlappyData shareInstance] getDeviceId],
+                                 @"pushPlat":[FlappyApiConfig shareInstance].pushPlat,
                                  @"pushId":deviceTokenStr
     };
+    
     //注册地址
     NSString *urlString = [FlappyApiConfig shareInstance].URL_changePush;
+    
     //循环引用
     __weak typeof(self) safeSelf=self;
+    
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
-        //保存推送设置
         PushSettings* settings=[PushSettings mj_objectWithKeyValues:data];
         [[FlappyData shareInstance]savePushSetting:settings];
         
@@ -280,7 +279,8 @@
     
     //已经登录的状态
     NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
-                                 @"device":DEVICE_TYPE,
+                                 @"devicePlat":DEVICE_PLAT,
+                                 @"deviceId":[[FlappyData shareInstance] getDeviceId],
                                  @"pushType":pushType,
                                  @"pushLanguage":pushLanguage,
                                  @"pushPrivacy":pushPrivacy,
@@ -584,6 +584,8 @@
     
 }
 
+
+
 //创建账号
 -(void)updateAccount:(NSString*)userID
          andUserName:(NSString*)userName
@@ -630,11 +632,12 @@
         
         //构建注册请求参数
         NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
-        NSDictionary *parameters = @{@"userID":@"",
-                                     @"userExtendID":userExtendID,
-                                     @"device":DEVICE_TYPE,
-                                     @"pushId":[FlappyIM getPushId],
-                                     @"pushPlat":[FlappyApiConfig shareInstance].pushPlat
+        NSDictionary *parameters = @{
+            @"userExtendID":userExtendID,
+            @"devicePlat":DEVICE_PLAT,
+            @"deviceId":[[FlappyData shareInstance] getDeviceId],
+            @"pushId":[FlappyIM getPushId],
+            @"pushPlat":[FlappyApiConfig shareInstance].pushPlat
         };
         
         //http做登录处理
@@ -654,6 +657,9 @@
         }];
     }
 }
+
+
+
 
 //登录netty
 -(void)loginNetty:(id)data
@@ -746,9 +752,10 @@
         //自动登录
         NSString *urlString = [FlappyApiConfig shareInstance].URL_autoLogin;
         NSDictionary *parameters = @{@"userID":[[FlappyData shareInstance] getUser].userId,
-                                     @"device":DEVICE_TYPE,
+                                     @"devicePlat":DEVICE_PLAT,
+                                     @"deviceId":[[FlappyData shareInstance] getDeviceId],
+                                     @"pushPlat":[FlappyApiConfig shareInstance].pushPlat,
                                      @"pushId":[FlappyIM getPushId],
-                                     @"pushPlat":[FlappyApiConfig shareInstance].pushPlat
         };
         __weak typeof(self) safeSelf=self;
         [FlappyApiRequest postRequest:urlString
@@ -885,11 +892,11 @@
         //注册地址
         //请求体，参数（NSDictionary 类型）
         NSString *urlString = [FlappyApiConfig shareInstance].URL_logout;
-        NSDictionary *parameters = @{@"userID":@"",
-                                     @"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
-                                     @"device":DEVICE_TYPE,
+        NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
+                                     @"devicePlat":DEVICE_PLAT,
+                                     @"deviceId":[[FlappyData shareInstance] getDeviceId],
+                                     @"pushPlat":[FlappyApiConfig shareInstance].pushPlat,
                                      @"pushId":[FlappyIM getPushId],
-                                     @"pushPlat":[FlappyApiConfig shareInstance].pushPlat
         };
         //请求数据
         [FlappyApiRequest postRequest:urlString

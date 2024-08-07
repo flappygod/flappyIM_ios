@@ -23,7 +23,7 @@
         //默认6秒
         _sharedSingleton.autoLoginInterval=6;
         //默认正式环境
-        _sharedSingleton.pushPlat=@"release";
+        _sharedSingleton.pushPlat=@"Apple";
         //地址
         [_sharedSingleton  resetServer:FLAPPY_BASE andUploadUrl:FLAPPY_BASE];
         

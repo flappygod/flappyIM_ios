@@ -29,10 +29,13 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)clearUser;
 
 //保存
--(void)savePush:(NSString*)pushID;
+-(void)savePushId:(NSString*)pushID;
 
 //获取推送ID
--(NSString*)getPush;
+-(NSString*)getPushId;
+
+//获取设备ID
+-(NSString*)getDeviceId;
 
 //保存推送设置
 -(void)savePushSetting:(PushSettings*)setting;

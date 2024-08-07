@@ -13,6 +13,7 @@
 
 #define  KEY_USER  @"KEY_USER"
 #define  KEY_PUSHID  @"KEY_PUSHID"
+#define  KEY_DEVICE_ID  @"KEY_DEVICE_ID"
 #define  KEY_RSA_KEY  @"KEY_RSA_KEY"
 #define  KEY_PUSHSETTING  @"KEY_PUSHSETTING"
 
@@ -64,14 +65,26 @@
 }
 
 //保存
--(void)savePush:(NSString*)pushID{
+-(void)savePushId:(NSString*)pushID{
     UNSaveObject(pushID, KEY_PUSHID);
 }
 
 //获取推送ID
--(NSString*)getPush{
-    return UNGetObject(KEY_PUSHID);
+-(NSString*)getPushId{
+    NSString* pushId = UNGetObject(KEY_PUSHID);
+    return  (pushId==nil) ? @"":pushId;
 }
+
+//获取推送ID
+-(NSString*)getDeviceId{
+    NSString* deviceId = UNGetObject(KEY_DEVICE_ID);
+    if(deviceId==nil){
+        deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        UNSaveObject(deviceId, KEY_DEVICE_ID);
+    }
+    return deviceId;
+}
+
 
 //保存推送设置
 -(void)savePushSetting:(PushSettings*)setting{
