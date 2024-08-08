@@ -270,7 +270,7 @@
     
     //已经登录的状态
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    [parameters setObject:[[FlappyData shareInstance]getUser].userExtendId forKey:@"userExtendID"];
+    [parameters setObject:[[FlappyData shareInstance]getUser].userExtendId forKey:@"userExtendId"];
     [parameters setObject:DEVICE_PLAT forKey:@"devicePlat"];
     [parameters setObject:[[FlappyData shareInstance] getDeviceId] forKey:@"deviceId"];
     if (pushType) [parameters setObject:pushType forKey:@"pushType"];
@@ -558,7 +558,7 @@
 
 
 //创建账号
--(void)createAccount:(NSString*)userID
+-(void)createAccount:(NSString*)userExtendId
          andUserName:(NSString*)userName
        andUserAvatar:(NSString*)userAvatar
          andUserData:(NSString*)userData
@@ -568,7 +568,7 @@
     //注册地址
     NSString *urlString = [FlappyApiConfig shareInstance].URL_register;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"userExtendID":userID,
+    NSDictionary *parameters = @{@"userExtendId":userExtendId,
                                  @"userName":userName,
                                  @"userData":userData,
                                  @"userAvatar":userAvatar
@@ -584,7 +584,7 @@
 
 
 //创建账号
--(void)updateAccount:(NSString*)userID
+-(void)updateAccount:(NSString*)userExtendId
          andUserName:(NSString*)userName
        andUserAvatar:(NSString*)userAvatar
          andUserData:(NSString*)userData
@@ -594,7 +594,7 @@
     //注册地址
     NSString *urlString = [FlappyApiConfig shareInstance].URL_update;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"userExtendID":userID,
+    NSDictionary *parameters = @{@"userExtendId":userExtendId,
                                  @"userName":userName,
                                  @"userData":userData,
                                  @"userAvatar":userAvatar
@@ -610,7 +610,7 @@
 
 
 //登录账号
--(void)login:(NSString*)userExtendID
+-(void)login:(NSString*)userExtendId
   andSuccess:(FlappySuccess)success
   andFailure:(FlappyFailure)failure{
     
@@ -630,7 +630,7 @@
         //构建注册请求参数
         NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
         NSDictionary *parameters = @{
-            @"userExtendID":userExtendID,
+            @"userExtendId":userExtendId,
             @"devicePlat":DEVICE_PLAT,
             @"deviceId":[[FlappyData shareInstance] getDeviceId],
             @"pushType":[[FlappyData shareInstance] getPushType],
@@ -749,7 +749,7 @@
         
         //自动登录
         NSString *urlString = [FlappyApiConfig shareInstance].URL_autoLogin;
-        NSDictionary *parameters = @{@"userID":[[FlappyData shareInstance] getUser].userId,
+        NSDictionary *parameters = @{@"userId":[[FlappyData shareInstance] getUser].userId,
                                      @"devicePlat":DEVICE_PLAT,
                                      @"deviceId":[[FlappyData shareInstance] getDeviceId],
                                      @"pushType":[[FlappyData shareInstance] getPushType],
@@ -892,7 +892,7 @@
         //注册地址
         //请求体，参数（NSDictionary 类型）
         NSString *urlString = [FlappyApiConfig shareInstance].URL_logout;
-        NSDictionary *parameters = @{@"userExtendID":[[FlappyData shareInstance]getUser].userExtendId,
+        NSDictionary *parameters = @{@"userExtendId":[[FlappyData shareInstance]getUser].userExtendId,
                                      @"devicePlat":DEVICE_PLAT,
                                      @"deviceId":[[FlappyData shareInstance] getDeviceId]
         };
@@ -1038,9 +1038,9 @@
 
 
 //创建群组会话
--(void)createGroupSession:(NSArray*)users
-              withGroupID:(NSString*)groupID
-            withGroupName:(NSString*)groupName
+-(void)createGroupSession:(NSArray*)userExtendIds
+      withSessionExtendID:(NSString*)sessionExtendId
+          withSessionName:(NSString*)sessionName
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure{
     
@@ -1051,7 +1051,7 @@
         return ;
     }
     //转换为data
-    NSData *usersData=[NSJSONSerialization dataWithJSONObject:users
+    NSData *usersData=[NSJSONSerialization dataWithJSONObject:userExtendIds
                                                       options:NSJSONWritingPrettyPrinted
                                                         error:nil];
     //转换为字符串
@@ -1061,10 +1061,10 @@
     NSString *urlString = [FlappyApiConfig shareInstance].URL_createGroupSession;
     
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"users":jsonStr,
-                                 @"createUser":[[FlappyData shareInstance]getUser].userId,
-                                 @"extendID":groupID,
-                                 @"sessionName":groupName
+    NSDictionary *parameters = @{@"userExtendIds":jsonStr,
+                                 @"createUserId":[[FlappyData shareInstance]getUser].userId,
+                                 @"sessionExtendId":sessionExtendId,
+                                 @"sessionName":sessionName
     };
     //请求数据
     [FlappyApiRequest postRequest:urlString
@@ -1072,7 +1072,6 @@
                       withSuccess:^(id data) {
         //获取model
         SessionData* model=[SessionData mj_objectWithKeyValues:data];
-        //创建session
         FlappyChatSession* session=[[FlappyChatSession alloc] init];
         session.session=model;
         success(session);
@@ -1325,8 +1324,8 @@
 
 
 //添加用户到群组
--(void)addUserToSession:(NSString*)userId
-            withGroupID:(NSString*)groupId
+-(void)addUserToSession:(NSString*)userExtendId
+            withGroupID:(NSString*)sessionExtendId
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -1339,7 +1338,8 @@
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_addUserToSession;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"sessionExtendId":groupId,@"userId":userId};
+    NSDictionary *parameters = @{@"sessionExtendId":sessionExtendId,
+                                 @"userExtendId":userExtendId};
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
@@ -1359,8 +1359,8 @@
 }
 
 //删除会话
--(void)delUserInSession:(NSString*)userId
-            withGroupID:(NSString*)groupId
+-(void)delUserInSession:(NSString*)userExtendId
+            withGroupID:(NSString*)sessionExtendId
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -1373,7 +1373,8 @@
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_delUserInSession;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"sessionExtendId":groupId,@"userId":userId};
+    NSDictionary *parameters = @{@"sessionExtendId":sessionExtendId,
+                                 @"userExtendId":userExtendId};
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
