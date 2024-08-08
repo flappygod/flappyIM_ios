@@ -124,7 +124,7 @@ GPB_FINAL @interface FlappyResponse : GPBMessage
 typedef GPB_ENUM(ReqLogin_FieldNumber) {
   ReqLogin_FieldNumber_UserId = 1,
   ReqLogin_FieldNumber_Device = 2,
-  ReqLogin_FieldNumber_PushId = 3,
+  ReqLogin_FieldNumber_DeviceId = 3,
   ReqLogin_FieldNumber_Latest = 4,
   ReqLogin_FieldNumber_Secret = 5,
 };
@@ -138,7 +138,7 @@ GPB_FINAL @interface ReqLogin : GPBMessage
 @property(nonatomic, readwrite, copy, null_resettable) NSString *device;
 
 /** 推送ID */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *pushId;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *deviceId;
 
 /** 最后的消息序号 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *latest;
@@ -357,14 +357,15 @@ GPB_FINAL @interface FlappyKafka : GPBMessage
 
 typedef GPB_ENUM(Route_FieldNumber) {
   Route_FieldNumber_UserId = 1,
-  Route_FieldNumber_Device = 2,
-  Route_FieldNumber_PushId = 3,
+  Route_FieldNumber_DevicePlat = 2,
+  Route_FieldNumber_DeviceId = 3,
   Route_FieldNumber_PushType = 4,
   Route_FieldNumber_PushPlat = 5,
-  Route_FieldNumber_PushLanguage = 6,
-  Route_FieldNumber_PushPrivacy = 7,
-  Route_FieldNumber_PushMute = 8,
-  Route_FieldNumber_Time = 9,
+  Route_FieldNumber_PushId = 6,
+  Route_FieldNumber_PushLanguage = 7,
+  Route_FieldNumber_PushPrivacy = 8,
+  Route_FieldNumber_PushMute = 9,
+  Route_FieldNumber_Time = 10,
 };
 
 GPB_FINAL @interface Route : GPBMessage
@@ -373,16 +374,19 @@ GPB_FINAL @interface Route : GPBMessage
 @property(nonatomic, readwrite) int64_t userId;
 
 /** 用户设备 */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *device;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *devicePlat;
 
-/** 推送ID */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *pushId;
+/** 用户设备 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *deviceId;
 
 /** 推送类型 */
 @property(nonatomic, readwrite) int32_t pushType;
 
 /** 推送平台类型 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *pushPlat;
+
+/** 推送ID */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *pushId;
 
 /** 推送平台语言 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *pushLanguage;

@@ -121,7 +121,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         //用户ID
         info.userId=self.user.userId;
         //推送ID
-        info.pushId=[[FlappyData shareInstance] getPushId];
+        info.deviceId=[[FlappyData shareInstance] getDeviceId];
         //设置秘钥
         NSString* rsaKey = [[FlappyData shareInstance] getRsaKey];
         if(rsaKey!=nil && rsaKey.length!=0){

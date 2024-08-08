@@ -227,7 +227,7 @@ typedef struct FlappyResponse__storage_ {
 
 @dynamic userId;
 @dynamic device;
-@dynamic pushId;
+@dynamic deviceId;
 @dynamic latest;
 @dynamic secret;
 
@@ -235,7 +235,7 @@ typedef struct ReqLogin__storage_ {
   uint32_t _has_storage_[1];
   NSString *userId;
   NSString *device;
-  NSString *pushId;
+  NSString *deviceId;
   NSString *latest;
   NSString *secret;
 } ReqLogin__storage_;
@@ -265,11 +265,11 @@ typedef struct ReqLogin__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "pushId",
+        .name = "deviceId",
         .dataTypeSpecific.clazz = Nil,
-        .number = ReqLogin_FieldNumber_PushId,
+        .number = ReqLogin_FieldNumber_DeviceId,
         .hasIndex = 2,
-        .offset = (uint32_t)offsetof(ReqLogin__storage_, pushId),
+        .offset = (uint32_t)offsetof(ReqLogin__storage_, deviceId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
@@ -302,7 +302,7 @@ typedef struct ReqLogin__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\002\001\005A\000\003\006\000";
+        "\002\001\005A\000\003\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG
@@ -940,10 +940,11 @@ typedef struct FlappyKafka__storage_ {
 @implementation Route
 
 @dynamic userId;
-@dynamic device;
-@dynamic pushId;
+@dynamic devicePlat;
+@dynamic deviceId;
 @dynamic pushType;
 @dynamic pushPlat;
+@dynamic pushId;
 @dynamic pushLanguage;
 @dynamic pushPrivacy;
 @dynamic pushMute;
@@ -954,9 +955,10 @@ typedef struct Route__storage_ {
   int32_t pushType;
   int32_t pushPrivacy;
   int32_t pushMute;
-  NSString *device;
-  NSString *pushId;
+  NSString *devicePlat;
+  NSString *deviceId;
   NSString *pushPlat;
+  NSString *pushId;
   NSString *pushLanguage;
   NSString *time;
   int64_t userId;
@@ -978,20 +980,20 @@ typedef struct Route__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
-        .name = "device",
+        .name = "devicePlat",
         .dataTypeSpecific.clazz = Nil,
-        .number = Route_FieldNumber_Device,
+        .number = Route_FieldNumber_DevicePlat,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(Route__storage_, device),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .offset = (uint32_t)offsetof(Route__storage_, devicePlat),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "pushId",
+        .name = "deviceId",
         .dataTypeSpecific.clazz = Nil,
-        .number = Route_FieldNumber_PushId,
+        .number = Route_FieldNumber_DeviceId,
         .hasIndex = 2,
-        .offset = (uint32_t)offsetof(Route__storage_, pushId),
+        .offset = (uint32_t)offsetof(Route__storage_, deviceId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
@@ -1014,10 +1016,19 @@ typedef struct Route__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
+        .name = "pushId",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Route_FieldNumber_PushId,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(Route__storage_, pushId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "pushLanguage",
         .dataTypeSpecific.clazz = Nil,
         .number = Route_FieldNumber_PushLanguage,
-        .hasIndex = 5,
+        .hasIndex = 6,
         .offset = (uint32_t)offsetof(Route__storage_, pushLanguage),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -1026,7 +1037,7 @@ typedef struct Route__storage_ {
         .name = "pushPrivacy",
         .dataTypeSpecific.clazz = Nil,
         .number = Route_FieldNumber_PushPrivacy,
-        .hasIndex = 6,
+        .hasIndex = 7,
         .offset = (uint32_t)offsetof(Route__storage_, pushPrivacy),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt32,
@@ -1035,7 +1046,7 @@ typedef struct Route__storage_ {
         .name = "pushMute",
         .dataTypeSpecific.clazz = Nil,
         .number = Route_FieldNumber_PushMute,
-        .hasIndex = 7,
+        .hasIndex = 8,
         .offset = (uint32_t)offsetof(Route__storage_, pushMute),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt32,
@@ -1044,7 +1055,7 @@ typedef struct Route__storage_ {
         .name = "time",
         .dataTypeSpecific.clazz = Nil,
         .number = Route_FieldNumber_Time,
-        .hasIndex = 8,
+        .hasIndex = 9,
         .offset = (uint32_t)offsetof(Route__storage_, time),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -1060,7 +1071,7 @@ typedef struct Route__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\007\001\005A\000\003\006\000\004\010\000\005\010\000\006\014\000\007\013\000\010\010\000";
+        "\t\001\005A\000\002\n\000\003\010\000\004\010\000\005\010\000\006\006\000\007\014\000\010\013\000\t\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG
