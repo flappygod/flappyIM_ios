@@ -25,7 +25,7 @@
     [super viewDidLoad];
     
 
-    [[FlappyIM shareInstance] setPushPlatfrom:@"Apple"];
+    [[FlappyIM shareInstance] setPushPlat:@"Apple"];
     
     //初始化
     [[FlappyIM shareInstance] setup:@"http://116.205.139.93" withUploadUrl:@"http://116.205.139.93"];

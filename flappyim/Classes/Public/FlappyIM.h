@@ -64,8 +64,11 @@ NS_ASSUME_NONNULL_BEGIN
 //注册设备信息
 -(void)registerDeviceToken:(NSData *)deviceToken;
 
+//设置推送类型
+-(void)setPushType:(NSString*)pushType;
+
 //设置当前的平台
--(void)setPushPlatfrom:(NSString*)platform;
+-(void)setPushPlat:(NSString*)pushPlat;
 
 //设置RsaPublicKey
 -(void)setRsaPublicKey:(NSString*)key;
@@ -74,12 +77,14 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSString*)getRsaPublicKey;
 
 //设置当前的推送信息
--(void)changePushType:(NSString*)pushType
-          andLanguage:(NSString*)pushLanguage
-           andPrivacy:(NSString*)pushPrivacy
-         andMute:(NSString*)pushMute
-           andSuccess:(FlappySuccess)success
-           andFailure:(FlappyFailure)failure;
+-(void)changePushType:(nullable NSString*)pushType
+          andPushPlat:(nullable NSString*)pushPlat
+            andPushId:(nullable NSString*)pushId
+          andLanguage:(nullable NSString*)pushLanguage
+           andPrivacy:(nullable NSString*)pushPrivacy
+              andMute:(nullable NSString*)pushMute
+           andSuccess:(nullable FlappySuccess)success
+           andFailure:(nullable FlappyFailure)failure;
 
 
 //设置当前的推送信息

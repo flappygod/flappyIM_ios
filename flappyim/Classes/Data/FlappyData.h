@@ -28,6 +28,18 @@ NS_ASSUME_NONNULL_BEGIN
 //清空用户
 -(void)clearUser;
 
+//保存推送类型
+-(void)savePushType:(NSString*)pushType;
+
+//获取推送类型
+-(NSString*)getPushType;
+
+//保存推送类型
+-(void)savePushPlat:(NSString*)pushPlat;
+
+//获取推送类型
+-(NSString*)getPushPlat;
+
 //保存
 -(void)savePushId:(NSString*)pushID;
 

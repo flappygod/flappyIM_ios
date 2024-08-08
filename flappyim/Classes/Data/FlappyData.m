@@ -12,9 +12,17 @@
 
 
 #define  KEY_USER  @"KEY_USER"
+
+#define  KEY_PUSH_TYPE  @"KEY_PUSH_TYPE"
+
+#define  KEY_PUSH_PLAT  @"KEY_PUSH_PLAT"
+
 #define  KEY_PUSHID  @"KEY_PUSHID"
+
 #define  KEY_DEVICE_ID  @"KEY_DEVICE_ID"
+
 #define  KEY_RSA_KEY  @"KEY_RSA_KEY"
+
 #define  KEY_PUSHSETTING  @"KEY_PUSHSETTING"
 
 
@@ -64,6 +72,28 @@
     UNSaveObject(@"", KEY_USER);
 }
 
+//保存推送类型
+-(void)savePushType:(NSString*)pushType{
+    UNSaveObject(pushType, KEY_PUSH_TYPE);
+}
+
+//获取推送类型
+-(NSString*)getPushType{
+    NSString* pushType = UNGetObject(KEY_PUSH_TYPE);
+    return  (pushType==nil) ? @"0" : pushType;
+}
+
+//保存推送类型
+-(void)savePushPlat:(NSString*)pushPlat{
+    UNSaveObject(pushPlat, KEY_PUSH_PLAT);
+}
+
+//获取推送类型
+-(NSString*)getPushPlat{
+    NSString* pushPlat = UNGetObject(KEY_PUSH_PLAT);
+    return  (pushPlat==nil) ? @"Apple" : pushPlat;
+}
+
 //保存
 -(void)savePushId:(NSString*)pushID{
     UNSaveObject(pushID, KEY_PUSHID);
@@ -95,6 +125,8 @@
     update.routePushLanguage = (setting.routePushLanguage == nil ? update.routePushLanguage:setting.routePushLanguage);
     update.routePushMute = (setting.routePushMute == nil ? update.routePushMute:setting.routePushMute);
     update.routePushType = (setting.routePushType == nil ? update.routePushType:setting.routePushType);
+    update.routePushPlat = (setting.routePushPlat == nil ? update.routePushPlat:setting.routePushPlat);
+    update.routePushId = (setting.routePushId == nil ? update.routePushId:setting.routePushId);
     NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[update mj_keyValues]];
     UNSaveObject(str, KEY_PUSHSETTING);
 }

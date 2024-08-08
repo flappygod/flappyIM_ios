@@ -14,9 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shareInstance;
 
-
-//设备
-@property (nonatomic,copy) NSString*  pushPlat;
 //心跳间隔
 @property (nonatomic,assign) NSInteger  heartInterval;
 //自动登录间隔
