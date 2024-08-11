@@ -425,8 +425,9 @@ static  GCDAsyncSocket*  _instanceSocket;
         }
         
         //修改
-        NSArray* sessionsArray=self.loginData[@"sessions"];
-        if(sessionsArray!=nil && sessionsArray.count!=0){
+        id sessionsData=self.loginData[@"sessions"];
+        if(sessionsData!=nil && [sessionsData isKindOfClass:[NSArray class]]){
+            NSArray* sessionsArray = sessionsData;
             //修改session
             NSMutableArray* sessions=[[NSMutableArray alloc]init];
             //遍历
