@@ -750,7 +750,7 @@
 
 //通知消息发送
 -(void)notifyMessageSendInsert:(ChatMessage*)msg{
-    if(msg==nil){
+    if(msg==nil || msg.messageType == MSG_TYPE_ACTION){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -771,7 +771,7 @@
 //通知消息接收
 -(void)notifyMessageReceive:(ChatMessage*)msg
                   andFormer:(ChatMessage*)former{
-    if(msg==nil){
+    if(msg==nil || msg.messageType == MSG_TYPE_ACTION){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -796,7 +796,7 @@
 
 //通知消息失败
 -(void)notifyMessageFailure:(ChatMessage*)msg{
-    if(msg==nil){
+    if(msg==nil || msg.messageType == MSG_TYPE_ACTION){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -816,7 +816,7 @@
 
 //通知有新的消息
 -(void)notifyMessageDelete:(ChatMessage*)msg{
-    if(msg==nil){
+    if(msg==nil || msg.messageType == MSG_TYPE_ACTION){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
