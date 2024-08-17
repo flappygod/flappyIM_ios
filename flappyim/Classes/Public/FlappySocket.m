@@ -652,20 +652,22 @@ static  GCDAsyncSocket*  _instanceSocket;
         //全量更新
         ChatMessage* message=[array objectAtIndex:s];
         //消息
-        if([message getChatSystem].sysAction ==SYSTEM_MSG_NOTHING ){
+        ChatSystem* chatSystem=[message getChatSystem];
+        //消息
+        if(chatSystem.sysAction ==SYSTEM_MSG_NOTHING ){
             message.messageReadState = 1;
             [[FlappyDataBase shareInstance] insertMessage:message];
         }
         //会话
-        if([message getChatSystem].sysAction ==SYSTEM_MSG_UPDATE_SESSION ){
+        if(chatSystem.sysAction ==SYSTEM_MSG_UPDATE_SESSION ){
             [actionUpdateSessionAll addObject:message];
         }
         //更新用户信息
-        if([message getChatSystem].sysAction ==SYSTEM_MSG_UPDATE_MEMBER ){
+        if(chatSystem.sysAction ==SYSTEM_MSG_UPDATE_MEMBER ){
             [actionUpdateSessionMember addObject:message];
         }
         //用户加入是自己也全量更新
-        if([message getChatSystem].sysAction ==SYSTEM_MSG_ADD_MEMBER ){
+        if(chatSystem.sysAction ==SYSTEM_MSG_ADD_MEMBER ){
             NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[message getChatSystem].sysData];
             SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
             if([member.userId isEqualToString: user.userId]){
@@ -675,7 +677,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             }
         }
         //用户删除是自己删除会话
-        if([message getChatSystem].sysAction ==SYSTEM_MSG_DELETE_MEMBER ){
+        if(chatSystem.sysAction ==SYSTEM_MSG_DELETE_MEMBER ){
             NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[message getChatSystem].sysData];
             SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
             if([member.userId isEqualToString: user.userId]){
