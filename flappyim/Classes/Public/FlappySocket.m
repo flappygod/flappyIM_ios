@@ -13,7 +13,6 @@
 #import "FlappySender.h"
 #import "FlappySocket.h"
 #import "FlappyConfig.h"
-#import "FlappySender.h"
 #import "MJExtension.h"
 #import "FlappyData.h"
 #import "FlappyIM.h"
@@ -25,6 +24,8 @@
 #import <arpa/inet.h>
 #import <unistd.h>
 
+
+
 @interface FlappySocket()
 
 //读取的数据
@@ -32,7 +33,7 @@
 //读取的数据
 @property (nonatomic,strong) NSMutableArray*  updatingArray;
 //心跳计时
-@property (nonatomic,strong) NSTimer*  connectTimer;
+@property (nonatomic, strong) dispatch_source_t heartBeatTimer;
 //当前socket的秘钥
 @property (nonatomic,copy) NSString*  secret;
 
@@ -152,14 +153,8 @@ static  GCDAsyncSocket*  _instanceSocket;
         NSLog(@"FlappyIM:%@",exception.description);
     }
     
-    //停止之前的
-    [NSObject cancelPreviousPerformRequestsWithTarget:self
-                                             selector:@selector(startHeart:)
-                                               object:nil];
     //开启心跳线程
-    [self performSelectorOnMainThread:@selector(startHeart:)
-                           withObject:nil
-                        waitUntilDone:false];
+    [self startHeartBeat];
     
 }
 
@@ -223,7 +218,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         if (!error){
             //保存解析正确的模型对象
             if (obj){
-                [self msgRecieved:obj];
+                [self handleReceivedMessage:obj];
             }
             //移除已经解析过的data
             [self.receiveData replaceBytesInRange:range
@@ -326,7 +321,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             }
             
             //心跳停止
-            [self stopHeart];
+            [self stopHeartBeat];
             
             //正常退出，非正常退出的回调不执行
             if(self.dead!=nil){
@@ -375,7 +370,7 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 
 //处理解析出来的信息,新消息过来了
-- (void)msgRecieved:(FlappyResponse *)respones{
+- (void)handleReceivedMessage:(FlappyResponse *)respones{
     //返回登录消息
     if(respones.type==RES_LOGIN)
     {
@@ -797,47 +792,40 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 
 #pragma heart beat  心跳
-//开启心跳
--(void)startHeart:(id)sender{
-    // 开启心跳
-    // 每隔12s像服务器发送心跳包
-    // 在longConnectToSocket方法中进行长连接需要向服务器发送的讯息
-    self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:[FlappyApiConfig shareInstance].heartInterval
-                                                         target:self
-                                                       selector:@selector(heartBeat:)
-                                                       userInfo:nil
-                                                        repeats:YES];
-}
-
-//关闭心跳
--(void)stopHeart{
-    //停止
-    if(self.connectTimer!=nil){
-        [self.connectTimer invalidate];
-        self.connectTimer=nil;
+- (void)startHeartBeat {
+    if (self.heartBeatTimer) {
+        dispatch_source_cancel(self.heartBeatTimer);
     }
+
+    self.heartBeatTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+    dispatch_source_set_timer(self.heartBeatTimer, DISPATCH_TIME_NOW, [FlappyApiConfig shareInstance].heartInterval * NSEC_PER_SEC, 0);
+    dispatch_source_set_event_handler(self.heartBeatTimer, ^{
+        [self sendHeartBeat];
+    });
+    dispatch_resume(self.heartBeatTimer);
 }
 
-//长连接的心跳
--(void)heartBeat:(id)sender{
-    //心跳消息写入
-    if(self.socket!=nil){
-        //写入请求数据
+- (void)sendHeartBeat {
+    if (self.socket) {
         @try {
-            //连接到服务器开始请求登录
-            FlappyRequest* request=[[FlappyRequest alloc]init];
-            //登录请求
-            request.type=REQ_PING;
-            //请求数据，已经GPBComputeRawVarint32SizeForInteger
-            NSData* reqData=[request delimitedData];
-            //写入数据
-            [self.socket  writeData:reqData withTimeout:-1 tag:0];
+            FlappyRequest *request = [[FlappyRequest alloc] init];
+            request.type = REQ_PING;
+            NSData *reqData = [request delimitedData];
+            [self.socket writeData:reqData withTimeout:-1 tag:0];
         } @catch (NSException *exception) {
-            NSLog(@"%@",exception.description);
+            NSLog(@"%@", exception.description);
         }
         NSLog(@"heart beat");
     }
 }
+
+- (void)stopHeartBeat {
+    if (self.heartBeatTimer) {
+        dispatch_source_cancel(self.heartBeatTimer);
+        self.heartBeatTimer = nil;
+    }
+}
+
 
 
 @end
