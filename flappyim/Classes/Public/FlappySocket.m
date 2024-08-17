@@ -604,31 +604,26 @@ static  GCDAsyncSocket*  _instanceSocket;
         user.latest  = [NSString stringWithFormat:@"%ld",(formerL>newerL ? formerL:newerL )];
     }
     [[FlappyData shareInstance]saveUser:user];
-    //如果再后台
-    if([FlappyIM shareInstance].isForground){
-        NSLog(@"当前处于UNMutableNotificationContent,收到信息");
-        //存活状态才返回信息
-        ChatUser* user=[[FlappyData shareInstance]getUser];
-        //如果不为空
-        if(user!=nil&&![user.userId isEqualToString:message.messageSendId] && former == nil){
-            
-            //连接到服务器开始请求登录
-            FlappyRequest* request=[[FlappyRequest alloc]init];
-            
-            //创建回执请求
-            request.type=REQ_RECEIPT;
-            ReqReceipt* reciept=[[ReqReceipt alloc]init];
-            reciept.receiptType=RECEIPT_MSG_ARRIVE;
-            reciept.receiptId=[NSString stringWithFormat:@"%ld",(long)message.messageTableOffset];
-            
-            @try {
-                //设置请求的回执数据
-                request.receipt=reciept;
-                NSData* reqData=[request delimitedData];
-                [self.socket writeData:reqData withTimeout:-1 tag:0];
-            } @catch (NSException *exception) {
-                NSLog(@"%@",exception.description);
-            }
+    
+    //如果不为空
+    if(user!=nil&&![user.userId isEqualToString:message.messageSendId] && former == nil){
+        
+        //连接到服务器开始请求登录
+        FlappyRequest* request=[[FlappyRequest alloc]init];
+        
+        //创建回执请求
+        request.type=REQ_RECEIPT;
+        ReqReceipt* reciept=[[ReqReceipt alloc]init];
+        reciept.receiptType=RECEIPT_MSG_ARRIVE;
+        reciept.receiptId=[NSString stringWithFormat:@"%ld",(long)message.messageTableOffset];
+        
+        @try {
+            //设置请求的回执数据
+            request.receipt=reciept;
+            NSData* reqData=[request delimitedData];
+            [self.socket writeData:reqData withTimeout:-1 tag:0];
+        } @catch (NSException *exception) {
+            NSLog(@"%@",exception.description);
         }
     }
 }
