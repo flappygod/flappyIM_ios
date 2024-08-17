@@ -849,6 +849,17 @@
     });
 }
 
+//会话
+-(void)notifySessionList:(NSArray*)sessionList{
+    if(sessionList==nil || sessionList.count==0){
+        return;
+    }
+    for(int s=0;s<sessionList.count;s++){
+        [self notifySession:[sessionList objectAtIndex:s]];
+    }
+}
+
+
 //获取视频第一帧
 #pragma mark ---- 获取图片第一帧
 

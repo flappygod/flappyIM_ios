@@ -88,5 +88,8 @@
 //会话
 -(void)notifySession:(SessionData*)session;
 
+//会话
+-(void)notifySessionList:(NSArray*)sessionList;
+
 
 @end

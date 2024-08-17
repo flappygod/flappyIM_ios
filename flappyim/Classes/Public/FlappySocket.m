@@ -438,12 +438,14 @@ static  GCDAsyncSocket*  _instanceSocket;
                 SessionData* data=[SessionData  mj_objectWithKeyValues:dic];
                 //添加
                 [sessions addObject:data];
-                //会话更新了
-                [[FlappySender shareInstance] notifySession:data];
             }
             //插入会话数据
             [[FlappyDataBase shareInstance] insertSessions:sessions];
             
+            //通知会话来了
+            [[FlappySender shareInstance] notifySessionList:sessions];
+            
+            //系统消息、用户动作 消息设置为已处理
             for(long s=0;s<messageList.count;s++){
                 ChatMessage* chatMsg=[messageList objectAtIndex:s];
                 if(chatMsg.messageType == MSG_TYPE_SYSTEM || chatMsg.messageType == MSG_TYPE_ACTION){
@@ -451,8 +453,6 @@ static  GCDAsyncSocket*  _instanceSocket;
                 }
             }
         }
-        
-        
         
         //进行排序
         [messageList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
@@ -463,6 +463,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             }
             return NSOrderedAscending;
         }];
+        
         //转换
         for(long s=0;s<messageList.count;s++){
             //获取消息
