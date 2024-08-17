@@ -897,11 +897,13 @@
                                      @"deviceId":[[FlappyData shareInstance] getDeviceId]
         };
         //请求数据
+        __weak typeof(self) safeSelf = self;
         [FlappyApiRequest postRequest:urlString
                        withParameters:parameters
                           withSuccess:^(id data) {
             //退出登录成功
             success(data);
+            [safeSelf logoutNetty];
         } withFailure:^(NSError * error, NSInteger code) {
             //登录失败，清空回调
             failure(error,code);
