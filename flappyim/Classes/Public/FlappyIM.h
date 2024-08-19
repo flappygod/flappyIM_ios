@@ -142,7 +142,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //创建群组会话
 -(void)createGroupSession:(NSArray*)users
-              withSessionExtendID:(NSString*)groupID
+              withSessionExtendId:(NSString*)groupID
             withSessionName:(NSString*)groupName
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure;

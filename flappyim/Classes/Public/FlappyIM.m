@@ -941,8 +941,7 @@
                       andFailure:(FlappyFailure)failure{
     
     //为空直接出错
-    if([[FlappyData shareInstance]getUser]==nil){
-        //返回没有登录
+    if([[FlappyData shareInstance] getUser]==nil){
         failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
@@ -975,8 +974,7 @@
                    andFailure:(FlappyFailure)failure{
     
     //为空直接出错
-    if([[FlappyData shareInstance]getUser]==nil){
-        //返回没有登录
+    if([[FlappyData shareInstance] getUser]==nil){
         failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
@@ -1008,7 +1006,6 @@
                        andFailure:(FlappyFailure)failure{
     //为空直接出错
     if([[FlappyData shareInstance]getUser]==nil){
-        //返回没有登录
         failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
@@ -1041,14 +1038,13 @@
 
 //创建群组会话
 -(void)createGroupSession:(NSArray*)userExtendIds
-      withSessionExtendID:(NSString*)sessionExtendId
+      withSessionExtendId:(NSString*)sessionExtendId
           withSessionName:(NSString*)sessionName
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure{
     
     //为空直接出错
     if([[FlappyData shareInstance]getUser]==nil){
-        //返回没有登录
         failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
@@ -1207,8 +1203,7 @@
 -(void)getUserSessionList:(FlappySuccess)success
                andFailure:(FlappyFailure)failure{
     //为空直接出错
-    if([[FlappyData shareInstance]getUser]==nil){
-        //返回没有登录
+    if([[FlappyData shareInstance] getUser]==nil){
         failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
@@ -1248,7 +1243,6 @@
         }
     }];
     ret = [[NSMutableArray alloc] initWithArray:sortArray];
-    
     //成功
     if(ret!=nil && ret.count!= 0){
         success(ret);
@@ -1266,7 +1260,6 @@
     
     //为空直接出错
     if([[FlappyData shareInstance]getUser]==nil){
-        //返回没有登录
         failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
