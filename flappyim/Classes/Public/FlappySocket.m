@@ -468,17 +468,16 @@ static  GCDAsyncSocket*  _instanceSocket;
 //接收完成登录消息
 -(void)receiveLogin:(FlappyResponse *)respones{
     
-    //当前在线了
-    self.isActive=true;
-    
-    //用户已经登录过了
-    self.user.login=true;
-    
-    //保存用户登录数据
-    [[FlappyData shareInstance] saveUser:self.user];
-    
     //登录成功后保存推送类型，保存用户所有的会话列表
     @try {
+        //当前在线了
+        self.isActive=true;
+        
+        //用户已经登录过了
+        self.user.login=true;
+        
+        //保存用户登录数据
+        [[FlappyData shareInstance] saveUser:self.user];
         
         //转换
         NSMutableArray* array=respones.msgArray;
@@ -558,23 +557,24 @@ static  GCDAsyncSocket*  _instanceSocket;
                 [self messageArrivedReceipt:chatMsg andFormer:former];
             }
         }
+        
+        //登录成功
+        if(self.loginSuccess!=nil){
+            self.loginSuccess(self.loginData);
+        }
+        self.loginSuccess=nil;
+        self.loginFailure=nil;
+        self.loginData=nil;
+        
+        //检查session 是否需要更新
+        [self checkSystemMessageFunction];
+        
+        //检查之前是否有消息再消息栈中而且没有发送成功
+        [self checkFormerMessagesToSend];
+        
     } @catch (NSException *exception) {
         NSLog(@"FlappyIM:%@",exception.description);
     }
-    
-    //登录成功
-    if(self.loginSuccess!=nil){
-        self.loginSuccess(self.loginData);
-    }
-    self.loginSuccess=nil;
-    self.loginFailure=nil;
-    self.loginData=nil;
-    
-    //检查session 是否需要更新
-    [self checkSystemMessageFunction];
-    
-    //检查之前是否有消息再消息栈中而且没有发送成功
-    [self checkFormerMessagesToSend];
 }
 
 
