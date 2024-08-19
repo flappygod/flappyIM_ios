@@ -378,7 +378,7 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 
 //登录成功后发送已经被缓存的消息数据
--(void)checkFormerMessagesToSend{
+-(void)checkCachedMessagesToSend{
     __weak typeof(self) safeSelf=self;
     dispatch_async(dispatch_get_main_queue(), ^{
         NSMutableDictionary* dic=[FlappySender shareInstance].sendingMessages;
@@ -570,7 +570,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         [self checkSystemMessageFunction];
         
         //检查之前是否有消息再消息栈中而且没有发送成功
-        [self checkFormerMessagesToSend];
+        [self checkCachedMessagesToSend];
         
     } @catch (NSException *exception) {
         NSLog(@"FlappyIM:%@",exception.description);
