@@ -594,7 +594,7 @@
 -(NSMutableArray*)getUserSessions:(NSString*)userExtendID{
     //获取db
     [self openDB];
-    FMResultSet *result = [database executeQuery:@"select * from session where sessionInsertUser=? and sessionDeleted != 1"
+    FMResultSet *result = [database executeQuery:@"select * from session where sessionInsertUser=?"
                             withArgumentsInArray:@[userExtendID]];
     NSMutableArray* retSessions=[[NSMutableArray alloc] init];
     while ([result next]) {
@@ -723,7 +723,7 @@
     [self openDB];
     
     //会话
-    FMResultSet *result = [database executeQuery:@"select * from session where sessionInsertUser=? and sessionId=? and sessionDeleted != 1"
+    FMResultSet *result = [database executeQuery:@"select * from session where sessionInsertUser=? and sessionId=?"
                             withArgumentsInArray:@[
         user.userExtendId,
         sessionId
@@ -773,7 +773,7 @@
     [self openDB];
     
     //返回消息
-    FMResultSet *result = [database executeQuery:@"select * from session where sessionInsertUser=? and sessionExtendId=? and sessionDeleted != 1"
+    FMResultSet *result = [database executeQuery:@"select * from session where sessionInsertUser=? and sessionExtendId=?"
                             withArgumentsInArray:@[user.userExtendId,sessionExtendId]];
     if ([result next]) {
         SessionData *msg = [SessionData new];
