@@ -72,18 +72,17 @@
 //通知消息插入
 -(void)notifyMessageSendInsert:(ChatMessage*)msg;
 
+//通知消息接收
+-(void)notifyMessageReceiveList:(NSArray*)msgList;
 
 //通知消息接收
--(void)notifyMessageReceive:(ChatMessage*)msg
-                  andFormer:(ChatMessage*)former;
+-(void)notifyMessageReceive:(ChatMessage*)msg;
 
 //通知消息失败
 -(void)notifyMessageFailure:(ChatMessage*)msg;
 
-
 //通知有新的消息
 -(void)notifyMessageDelete:(ChatMessage*)msg;
-
 
 //会话
 -(void)notifySession:(SessionData*)session;

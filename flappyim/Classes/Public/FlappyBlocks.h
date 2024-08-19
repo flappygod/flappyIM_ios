@@ -33,6 +33,9 @@ typedef void(^FlappySendSuccess) (ChatMessage* _Nullable message);
 typedef void(^FlappySendFailure) (ChatMessage* _Nullable,NSError *_Nullable,NSInteger);
 
 //消息监听
+typedef void(^MessageListListener) (NSArray* _Nullable messageList);
+
+//消息监听
 typedef void(^MessageListener) (ChatMessage* _Nullable message);
 
 //消息读取监听

@@ -82,7 +82,7 @@
         
     } andFailure:^(ChatMessage * _Nullable message) {
         
-    } andUpdate:^(ChatMessage * _Nullable message) {
+    } andReceiveList:^(NSArray * _Nullable messageList) {
         
     } andReceive:^(ChatMessage * _Nullable message) {
         //判断当前是在后台还是前台，如果是在后台，那么

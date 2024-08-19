@@ -533,19 +533,19 @@ static  GCDAsyncSocket*  _instanceSocket;
         for(long s=0;s<receiveMessageList.count;s++){
             //获取消息
             ChatMessage* chatMsg=[receiveMessageList objectAtIndex:s];
-            //获取之前的消息ID
-            ChatMessage* former=[[FlappyDataBase shareInstance]getMessageById:chatMsg.messageId];
             //修改消息状态
-            [self handleMessageSendArriveState:chatMsg andFormer:former];
+            [self handleMessageSendArriveState:chatMsg];
             //保存消息
             [[FlappyDataBase shareInstance] insertMessage:chatMsg];
             //发送成功
             [[FlappySender shareInstance] handleSendSuccessCallback:chatMsg];
             //通知事件消息
             [[FlappySender shareInstance] handleMessageAction:chatMsg];
-            //通知接收到消息
-            [[FlappySender shareInstance] notifyMessageReceive:chatMsg andFormer:former];
         }
+        
+        //消息列表被接收到
+        [[FlappySender shareInstance] notifyMessageReceiveList:receiveMessageList];
+        
         
         //消息送达的回执消息
         if(receiveMessageList.count>0){
@@ -588,10 +588,8 @@ static  GCDAsyncSocket*  _instanceSocket;
             chatMsg.messageSecret = [Aes128 AES128Decrypt:chatMsg.messageSecret
                                                   withKey:self.secret];
         }
-        //获取之前的消息ID
-        ChatMessage* former=[[FlappyDataBase shareInstance]getMessageById:chatMsg.messageId];
         //修改消息状态
-        [self handleMessageSendArriveState:chatMsg andFormer:former];
+        [self handleMessageSendArriveState:chatMsg];
         //添加数据
         [[FlappyDataBase shareInstance] insertMessage:chatMsg];
         //消息发送成功
@@ -599,7 +597,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         //通知事件消息
         [[FlappySender shareInstance] handleMessageAction:chatMsg];
         //通知接收到消息
-        [[FlappySender shareInstance] notifyMessageReceive:chatMsg andFormer:former];
+        [[FlappySender shareInstance] notifyMessageReceive:chatMsg];
         //消息接收到
         [receiveMessageList addObject:chatMsg];
     }
@@ -652,7 +650,10 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 
 //消息收到状态
--(void)handleMessageSendArriveState:(ChatMessage*)message andFormer:(ChatMessage*)former{
+-(void)handleMessageSendArriveState:(ChatMessage*)message{
+    //获取之前的消息ID
+    ChatMessage* former=[[FlappyDataBase shareInstance] getMessageById:message.messageId];
+    
     //更新发送或者接收的状态
     ChatUser* user=[[FlappyData shareInstance]getUser];
     if([user.userId isEqualToString:message.messageSendId]){

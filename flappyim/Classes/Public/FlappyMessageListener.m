@@ -11,7 +11,7 @@
 @implementation FlappyMessageListener
 {
     MessageListener _sendListener;
-    MessageListener _updateListener;
+    MessageListListener _receiveListListener;
     MessageListener _receiveListener;
     MessageListener _failureListener;
     MessageListener _deleteListener;
@@ -22,7 +22,7 @@
 ///init with blocks
 -(instancetype)initWithSend:(MessageListener)sendListener
                  andFailure:(MessageListener)failureListener
-                  andUpdate:(MessageListener)updateListener
+             andReceiveList:(MessageListListener)receiveListListener
                  andReceive:(MessageListener)receiveListener
                   andDelete:(MessageListener)deleteListener
                andReadOther:(MessageReadListener)otherReadListener
@@ -31,7 +31,7 @@
     if(self){
         _sendListener=sendListener;
         _failureListener=failureListener;
-        _updateListener=updateListener;
+        _receiveListListener=receiveListListener;
         _receiveListener=receiveListener;
         _deleteListener=deleteListener;
         _otherReadListener=otherReadListener;
@@ -46,9 +46,9 @@
     }
 }
 
--(void)onUpdate:(ChatMessage*) msg{
-    if(_updateListener!=nil){
-        _updateListener(msg);
+-(void)onReceiveList:(NSArray*) msgList{
+    if(_receiveListListener!=nil){
+        _receiveListListener(msgList);
     }
 }
 

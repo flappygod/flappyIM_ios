@@ -768,9 +768,55 @@
     });
 }
 
+
 //通知消息接收
--(void)notifyMessageReceive:(ChatMessage*)msg
-                  andFormer:(ChatMessage*)former{
+-(void)notifyMessageReceiveList:(NSArray*)msgList{
+    if (msgList == nil || msgList.count == 0) {
+        return;
+    }
+    
+    //使用谓词过滤数组
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(ChatMessage *msg, NSDictionary *bindings) {
+        return msg.messageType != MSG_TYPE_ACTION;
+    }];
+    NSArray *chatMessageList = [msgList filteredArrayUsingPredicate:predicate];
+    if (chatMessageList.count == 0) {
+        return;
+    }
+    
+    //通知列表到了
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *messageListeners = [FlappyIM shareInstance].messageListeners;
+        NSArray *keyArray = messageListeners.allKeys;
+        for (NSString *key in keyArray) {
+            NSMutableArray *listeners = messageListeners[key];
+            if(listeners ==nil){
+                continue;
+            }
+            if ([key isEqualToString:GlobalKey]) {
+                for (FlappyMessageListener *listener in listeners) {
+                    [listener onReceiveList:chatMessageList];
+                }
+            } else {
+                NSMutableArray *sessionMsgArray = [NSMutableArray array];
+                for (ChatMessage *msg in chatMessageList) {
+                    if ([key isEqualToString:msg.messageSessionId]) {
+                        [sessionMsgArray addObject:msg];
+                    }
+                }
+                if (sessionMsgArray.count > 0) {
+                    for (FlappyMessageListener *listener in listeners) {
+                        [listener onReceiveList:sessionMsgArray];
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+//通知消息接收
+-(void)notifyMessageReceive:(ChatMessage*)msg{
     if(msg==nil || msg.messageType == MSG_TYPE_ACTION){
         return;
     }
@@ -782,11 +828,7 @@
                 NSMutableArray* listeners=[[FlappyIM shareInstance].messageListeners objectForKey:str];
                 for(int w=0;w<listeners.count;w++){
                     FlappyMessageListener* listener=[listeners objectAtIndex:w];
-                    if(former==nil){
-                        [listener onReceive:msg];
-                    }else{
-                        [listener onUpdate:msg];
-                    }
+                    [listener onReceive:msg];
                 }
             }
         }
