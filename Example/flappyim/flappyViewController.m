@@ -76,9 +76,13 @@
     }]];
     
     //会话更新
-    [[FlappyIM shareInstance]  addSessionListener:^(SessionData*  _Nullable chatsession) {
+    [[FlappyIM shareInstance]  addSessionListener:[[FlappySessionListener alloc] initWithReceiveList:^(NSArray * _Nullable sessionList) {
         NSLog(@"会话有更新");
-    }];
+    } andReceive:^(SessionData * _Nullable session) {
+        NSLog(@"会话有更新");
+    } andDelete:^(SessionData * _Nullable session) {
+        
+    }]];
     
     //踢下线
     [[FlappyIM shareInstance] setKnickedListener:^{

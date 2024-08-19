@@ -680,7 +680,7 @@
             case ACTION_TYPE_MUTE_SESSION:
             case ACTION_TYPE_PINNED_SESSION:{
                 SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:chatAction.actionIds[1]];
-                [self notifySession:session];
+                [self notifySessionReceive:session];
                 break;
             }
                 //消息被删除
@@ -876,8 +876,23 @@
     });
 }
 
-//会话
--(void)notifySession:(SessionData*)session{
+//会话列表接收
+-(void)notifySessionReceiveList:(NSArray*)sessionList{
+    if(sessionList==nil || sessionList.count==0){
+        return;
+    }
+    //在主线程之中执行
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].sessionListeners;
+        for(int s=0;s<array.count;s++){
+            FlappySessionListener* listener=[array objectAtIndex:s];
+            [listener onReceiveList:sessionList];
+        }
+    });
+}
+
+//会话被接收
+-(void)notifySessionReceive:(SessionData*)session{
     if(session==nil){
         return;
     }
@@ -885,20 +900,25 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray* array=[FlappyIM shareInstance].sessionListeners;
         for(int s=0;s<array.count;s++){
-            SessionListener listener=[array objectAtIndex:s];
-            listener(session);
+            FlappySessionListener* listener=[array objectAtIndex:s];
+            [listener onReceive:session];
         }
     });
 }
 
-//会话
--(void)notifySessionList:(NSArray*)sessionList{
-    if(sessionList==nil || sessionList.count==0){
+//会话被删除(用户被删除)
+-(void)notifySessionDelete:(SessionData*)session{
+    if(session==nil){
         return;
     }
-    for(int s=0;s<sessionList.count;s++){
-        [self notifySession:[sessionList objectAtIndex:s]];
-    }
+    //在主线程之中执行
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].sessionListeners;
+        for(int s=0;s<array.count;s++){
+            FlappySessionListener* listener=[array objectAtIndex:s];
+            [listener onDelete:session];
+        }
+    });
 }
 
 

@@ -452,12 +452,12 @@
 }
 
 //新增会话监听
--(void)addSessionListener:(SessionListener)listener{
+-(void)addSessionListener:(FlappySessionListener*)listener{
     [self.sessionListeners addObject:listener];
 }
 
 //移除会话监听
--(void)removeSessionListener:(SessionListener)listener{
+-(void)removeSessionListener:(FlappySessionListener*)listener{
     [self.sessionListeners removeObject:listener];
 }
 

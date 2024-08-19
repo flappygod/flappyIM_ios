@@ -812,19 +812,15 @@
     
     //打开数据库
     [self openDB];
-    
-    //删除消息
-    Boolean flagOne  =  [database executeUpdate:@"DELETE FROM message where messageSessionId=? and messageInsertUser=?"
-                           withArgumentsInArray:@[sessionId,user.userExtendId]];
-    
+
     //删除会话
-    Boolean flagTwo  =  [database executeUpdate:@"DELETE FROM session where sessionId=? and sessionInsertUser=?"
-                           withArgumentsInArray:@[sessionId,user.userExtendId]];
+    Boolean flag  =  [database executeUpdate:@"update session set sessionDeleted = 1  where sessionId=? and sessionInsertUser=?"
+                        withArgumentsInArray:@[sessionId,user.userExtendId]];
     
     //关闭数据库
     [self closeDB];
     
-    return flagOne&&flagTwo;
+    return flag;
     
 }
 

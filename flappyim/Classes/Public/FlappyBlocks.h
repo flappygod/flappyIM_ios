@@ -44,7 +44,10 @@ typedef void(^MessageReadListener) (NSString* _Nullable  sessionId,NSString* _Nu
 //消息删除监听
 typedef void(^MessageDeleteListener) (NSString* _Nullable  messageId);
 
+//会话列表
+typedef void(^SessionListListener)(NSArray* _Nullable sessionList);
+
 //会话
-typedef void(^SessionListener)(SessionData* _Nullable chatsession);
+typedef void(^SessionListener)(SessionData* _Nullable session);
 
 #endif /* FlappyBlocks_h */

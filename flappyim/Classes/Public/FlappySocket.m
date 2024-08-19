@@ -441,7 +441,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         [self updateSessionMemberUpdate:actionUpdateSessionMember];
     }
     if(actionUpdateSessionMemberDel.count>0){
-        [self updateSessionMemberDelete:actionUpdateSessionMemberDel];
+        [self updateSessionDeleteSelf:actionUpdateSessionMemberDel];
     }
 }
 
@@ -508,7 +508,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             [[FlappyDataBase shareInstance] insertSessions:sessions];
             
             //通知会话来了
-            [[FlappySender shareInstance] notifySessionList:sessions];
+            [[FlappySender shareInstance] notifySessionReceiveList:sessions];
             
             //如果sessions不为空代表是登录，如果是登录的情况下，所有会话是已经同步的，所以不需要过多的处理
             for(long s=0;s<receiveMessageList.count;s++){
@@ -629,7 +629,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             //插入消息
             [[FlappyDataBase shareInstance] insertSession:data];
             //会话更新了
-            [[FlappySender shareInstance] notifySession:data];
+            [[FlappySender shareInstance] notifySessionReceive:data];
             //消息列表
             NSMutableArray* messages=[[FlappyDataBase shareInstance] getNotActionSystemMessageBySessionId:data.sessionId];
             //遍历更新
@@ -741,9 +741,9 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 //会话更新用户数据
 -(void)updateSessionMemberUpdate:(NSMutableArray*)array{
+    
     //开始写数据了
     for(ChatMessage* msg in array){
-        
         //获取更新的数据
         NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[msg getChatSystem].sysData];
         SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
@@ -753,30 +753,33 @@ static  GCDAsyncSocket*  _instanceSocket;
         msg.messageReadState = 1;
         [[FlappyDataBase shareInstance] updateMessage:msg];
         
-        //发送会话更新通知
-        [[FlappySender shareInstance] notifySession:[[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSessionId]];
+        //会话用户更新
+        SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSessionId];
+        [[FlappySender shareInstance] notifySessionReceive:session];
     }
 }
 
 //会话更新用户删除
--(void)updateSessionMemberDelete:(NSMutableArray*)array{
+-(void)updateSessionDeleteSelf:(NSMutableArray*)array{
     
     //开始写数据了
     for(ChatMessage* msg in array){
-        
-        //获取会话信息
-        SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSessionId];
-        session.isDelete = 1;
+        //获取更新的数据
+        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[msg getChatSystem].sysData];
+        SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
+        [[FlappyDataBase shareInstance] insertSessionMember:member];
         
         //设置消息已读，不再继续处理
         msg.messageReadState = 1;
         [[FlappyDataBase shareInstance] updateMessage:msg];
         
+        //获取会话信息
+        SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSessionId];
+        session.isDelete = 1;
+        
         //删除用户会话
         [[FlappyDataBase shareInstance] deleteUserSession:msg.messageSessionId];
-        
-        //发送会话更新通知
-        [[FlappySender shareInstance] notifySession:session];
+        [[FlappySender shareInstance] notifySessionDelete:session];
     }
 }
 

@@ -29,6 +29,7 @@
 #import "FlappyIM.h"
 #import "FlappyMessageListener.h"
 #import "FlappyReachability.h"
+#import "FlappySessionListener.h"
 #import "FlappySocket.h"
 #import "PushSettings.h"
 #import "SessionData.h"

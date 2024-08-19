@@ -25,6 +25,8 @@
 #import <AFNetworking/AFNetworking-umbrella.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import "FlappyMessageListener.h"
+#import "FlappySessionListener.h"
+
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -205,11 +207,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //新增会话监听
--(void)addSessionListener:(SessionListener)listener;
+-(void)addSessionListener:(FlappySessionListener*)listener;
 
 
 //移除会话监听
--(void)removeSessionListener:(SessionListener)listener;
+-(void)removeSessionListener:(FlappySessionListener*)listener;
 
 
 @end

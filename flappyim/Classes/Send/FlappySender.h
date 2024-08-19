@@ -85,10 +85,13 @@
 -(void)notifyMessageDelete:(ChatMessage*)msg;
 
 //会话
--(void)notifySession:(SessionData*)session;
+-(void)notifySessionReceiveList:(NSArray*)sessionList;
 
 //会话
--(void)notifySessionList:(NSArray*)sessionList;
+-(void)notifySessionReceive:(SessionData*)session;
+
+//删除
+-(void)notifySessionDelete:(SessionData*)session;
 
 
 @end
