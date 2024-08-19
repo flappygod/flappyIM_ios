@@ -123,7 +123,7 @@ GPB_FINAL @interface FlappyResponse : GPBMessage
 
 typedef GPB_ENUM(ReqLogin_FieldNumber) {
   ReqLogin_FieldNumber_UserId = 1,
-  ReqLogin_FieldNumber_Device = 2,
+  ReqLogin_FieldNumber_DevicePlat = 2,
   ReqLogin_FieldNumber_DeviceId = 3,
   ReqLogin_FieldNumber_Latest = 4,
   ReqLogin_FieldNumber_Secret = 5,
@@ -135,7 +135,7 @@ GPB_FINAL @interface ReqLogin : GPBMessage
 @property(nonatomic, readwrite, copy, null_resettable) NSString *userId;
 
 /** 设备信息 */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *device;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *devicePlat;
 
 /** 推送ID */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *deviceId;
