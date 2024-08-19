@@ -65,7 +65,7 @@ static  GCDAsyncSocket*  _instanceSocket;
 }
 
 
-//建立长连接
+//socket上线
 -(void)connectSocket:(NSString*)serverAddress
             withPort:(NSString*)serverPort
             withUser:(ChatUser*)user{
@@ -105,7 +105,46 @@ static  GCDAsyncSocket*  _instanceSocket;
     }
 }
 
-
+//socket下线
+-(void)offline:(Boolean)regular{
+    //加上锁，处理下线
+    @synchronized (FlappySocket.class) {
+        @try {
+            //非active状态
+            self.isActive=false;
+            
+            //主动断开连接
+            if(self.socket!=nil){
+                [self.socket disconnect];
+                self.socket.delegate= nil;
+                self.socket=nil;
+            }
+            
+            //登录失败
+            if(self.loginFailure!=nil){
+                [self.loginFailure completeBlock:[NSError errorWithDomain:@"Socket closed by a new login thread"
+                                                                     code:0
+                                                                 userInfo:nil] andCode:RESULT_NETERROR];
+                self.loginFailure=nil;
+                self.loginSuccess=nil;
+            }
+            
+            //心跳停止
+            [self stopHeartBeat];
+            
+            //正常退出，非正常退出的回调不执行
+            if(self.dead!=nil){
+                if(!regular){
+                    self.dead();
+                }else{
+                    self.dead=nil;
+                }
+            }
+        } @catch (NSException *exception) {
+            NSLog(@"%@",exception.description);
+        }
+    }
+}
 
 
 #pragma GCDAsyncSocketDelegate
@@ -245,46 +284,7 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 
 #pragma mark - private methods  辅助方法
-//主动下线
--(void)offline:(Boolean)regular{
-    //加上锁，处理下线
-    @synchronized (FlappySocket.class) {
-        @try {
-            //非active状态
-            self.isActive=false;
-            
-            //主动断开连接
-            if(self.socket!=nil){
-                [self.socket disconnect];
-                self.socket.delegate= nil;
-                self.socket=nil;
-            }
-            
-            //登录失败
-            if(self.loginFailure!=nil){
-                [self.loginFailure completeBlock:[NSError errorWithDomain:@"Socket closed by a new login thread"
-                                                                     code:0
-                                                                 userInfo:nil] andCode:RESULT_NETERROR];
-                self.loginFailure=nil;
-                self.loginSuccess=nil;
-            }
-            
-            //心跳停止
-            [self stopHeartBeat];
-            
-            //正常退出，非正常退出的回调不执行
-            if(self.dead!=nil){
-                if(!regular){
-                    self.dead();
-                }else{
-                    self.dead=nil;
-                }
-            }
-        } @catch (NSException *exception) {
-            NSLog(@"%@",exception.description);
-        }
-    }
-}
+
 
 //发送登录信息
 -(void)sendLoginReq{
