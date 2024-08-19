@@ -112,50 +112,42 @@ static  GCDAsyncSocket*  _instanceSocket;
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket{
     
 }
+- (void)socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
+    
+}
+- (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
+    
+}
+- (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
+    
+}
+- (void)socketDidCloseReadStream:(GCDAsyncSocket *)sock{
+    
+}
+- (void)socketDidSecure:(GCDAsyncSocket *)sock{
+    
+}
+- (void)socket:(GCDAsyncSocket *)sock didReceiveTrust:(SecTrustRef)trust completionHandler:(void (^)(BOOL shouldTrustPeer))completionHandler{
+    
+}
+- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
+                 elapsed:(NSTimeInterval)elapsed
+               bytesDone:(NSUInteger)length{
+    return 3;
+}
+- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutWriteWithTag:(long)tag
+                 elapsed:(NSTimeInterval)elapsed
+               bytesDone:(NSUInteger)length{
+    
+    return 3;
+}
 
+///连接成功
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
-    @try {
-        //组装登录数据
-        ReqLogin* info=[[ReqLogin alloc]init];
-        //类型
-        info.devicePlat=DEVICE_PLAT;
-        //用户ID
-        info.userId=self.user.userId;
-        //推送ID
-        info.deviceId=[[FlappyData shareInstance] getDeviceId];
-        //设置秘钥
-        NSString* rsaKey = [[FlappyData shareInstance] getRsaKey];
-        if(rsaKey!=nil && rsaKey.length!=0){
-            info.secret = [RSATool encryptWithPublicKey:rsaKey
-                                               withData:self.secret];
-        }
-        //没有设置就用当前的
-        else{
-            info.secret = self.secret;
-        }
-        //登录信息
-        if([[FlappyData shareInstance] getUser]!=nil){
-            info.latest=[[FlappyData shareInstance] getUser].latest;
-        }
-        //连接到服务器开始请求登录
-        FlappyRequest* request=[[FlappyRequest alloc]init];
-        //登录请求
-        request.type=REQ_LOGIN;
-        //登录信息
-        request.login=info;
-        //请求数据，已经GPBComputeRawVarint32SizeForInteger
-        NSData* reqData=[request delimitedData];
-        //写入请求数据
-        [self.socket writeData:reqData withTimeout:-1 tag:0];
-        //开启数据读取
-        [self.socket readDataWithTimeout:-1 tag:0];
-    } @catch (NSException *exception) {
-        NSLog(@"FlappyIM:%@",exception.description);
-    }
-    
-    //开启心跳线程
+    //发送登录信息
+    [self sendLoginReq];
+    //开启心跳
     [self startHeartBeat];
-    
 }
 
 
@@ -228,8 +220,6 @@ static  GCDAsyncSocket*  _instanceSocket;
         //且没有更多数据
         if (self.receiveData.length < 1)
             return;
-        
-        
         //实际包不足解析，继续接收下一个包
         headL = 0;
         contentL = [FlappyApiRequest getContentLength:self.receiveData
@@ -237,8 +227,6 @@ static  GCDAsyncSocket*  _instanceSocket;
         if (headL + contentL > self.receiveData.length) {
             return;
         }
-        
-        
         //对于粘包情况下被合并的多条消息，循环递归直至解析完所有消息
         [self parseContentDataWithHeadLength:headL
                            withContentLength:contentL];
@@ -246,56 +234,17 @@ static  GCDAsyncSocket*  _instanceSocket;
         
         NSLog(@"%@",exception.description);
     }
-    
 }
 
-
-- (void)socket:(GCDAsyncSocket *)sock didReadPartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
-    
-}
-
-- (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
-    
-}
-
-- (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
-    
-}
-
-- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
-                 elapsed:(NSTimeInterval)elapsed
-               bytesDone:(NSUInteger)length{
-    return 3;
-}
-
-- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutWriteWithTag:(long)tag
-                 elapsed:(NSTimeInterval)elapsed
-               bytesDone:(NSUInteger)length{
-    
-    return 3;
-}
-
-- (void)socketDidCloseReadStream:(GCDAsyncSocket *)sock{
-    
-}
-
+//断开连接
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err{
     //非正常d退出
     [self offline:false];
     [[FlappySender shareInstance] handleSendFailureAllCallback];
 }
 
-- (void)socketDidSecure:(GCDAsyncSocket *)sock{
-    
-}
 
-- (void)socket:(GCDAsyncSocket *)sock didReceiveTrust:(SecTrustRef)trust completionHandler:(void (^)(BOOL shouldTrustPeer))completionHandler{
-    
-}
-
-#pragma readData
 #pragma mark - private methods  辅助方法
-
 //主动下线
 -(void)offline:(Boolean)regular{
     //加上锁，处理下线
@@ -337,6 +286,48 @@ static  GCDAsyncSocket*  _instanceSocket;
     }
 }
 
+//发送登录信息
+-(void)sendLoginReq{
+    @try {
+        //组装登录数据
+        ReqLogin* info=[[ReqLogin alloc]init];
+        //类型
+        info.devicePlat=DEVICE_PLAT;
+        //用户ID
+        info.userId=self.user.userId;
+        //推送ID
+        info.deviceId=[[FlappyData shareInstance] getDeviceId];
+        //设置秘钥
+        NSString* rsaKey = [[FlappyData shareInstance] getRsaKey];
+        if(rsaKey!=nil && rsaKey.length!=0){
+            info.secret = [RSATool encryptWithPublicKey:rsaKey
+                                               withData:self.secret];
+        }
+        //没有设置就用当前的
+        else{
+            info.secret = self.secret;
+        }
+        //登录信息
+        if([[FlappyData shareInstance] getUser]!=nil){
+            info.latest=[[FlappyData shareInstance] getUser].latest;
+        }
+        //连接到服务器开始请求登录
+        FlappyRequest* request=[[FlappyRequest alloc]init];
+        //登录请求
+        request.type=REQ_LOGIN;
+        //登录信息
+        request.login=info;
+        //请求数据，已经GPBComputeRawVarint32SizeForInteger
+        NSData* reqData=[request delimitedData];
+        //写入请求数据
+        [self.socket writeData:reqData withTimeout:-1 tag:0];
+        //开启数据读取
+        [self.socket readDataWithTimeout:-1 tag:0];
+    } @catch (NSException *exception) {
+        NSLog(@"FlappyIM:%@",exception.description);
+    }
+}
+
 
 //发送消息
 -(void)sendMessage:(ChatMessage*) chatMsg{
@@ -355,7 +346,6 @@ static  GCDAsyncSocket*  _instanceSocket;
             request.msg.messageSecret = [Aes128 AES128Encrypt:chatMsg.messageSecret
                                                       withKey:self.secret];
         }
-        
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
         NSData* reqData=[request delimitedData];
         //写入时间
@@ -386,6 +376,95 @@ static  GCDAsyncSocket*  _instanceSocket;
     }
 }
 
+
+//登录成功后发送已经被缓存的消息数据
+-(void)checkFormerMessagesToSend{
+    __weak typeof(self) safeSelf=self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableDictionary* dic=[FlappySender shareInstance].sendingMessages;
+        NSMutableArray* messageList=[[NSMutableArray alloc]init];
+        NSArray* array=dic.allKeys;
+        for(int s=0;s<array.count;s++){
+            ChatMessage* msg=[dic objectForKey:array[s]];
+            if(msg!=nil){
+                [messageList addObject: msg];
+            }
+        }
+        for(int s=0;s<messageList.count;s++){
+            [safeSelf sendMessage:messageList[s]];
+        }
+    });
+}
+
+//检查是否有会话需要更新
+-(void)checkSystemMessageFunction{
+    
+    //用户数据
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if(user==nil){
+        return;
+    }
+    
+    //获取未处理的系统消息
+    NSMutableArray* array= [[FlappyDataBase shareInstance] getNotActionSystemMessage];
+    
+    //数据信息拆分
+    NSMutableArray* actionUpdateSessionAll = [[NSMutableArray alloc] init];
+    NSMutableArray* actionUpdateSessionMember = [[NSMutableArray alloc] init];
+    NSMutableArray* actionUpdateSessionMemberDel = [[NSMutableArray alloc] init];
+    
+    //获取需要更新的会话
+    for(int s=0;s<array.count;s++){
+        //全量更新
+        ChatMessage* message=[array objectAtIndex:s];
+        //消息
+        ChatSystem* chatSystem=[message getChatSystem];
+        //消息
+        if(chatSystem.sysAction ==SYSTEM_MSG_NOTHING ){
+            message.messageReadState = 1;
+            [[FlappyDataBase shareInstance] insertMessage:message];
+        }
+        //会话
+        if(chatSystem.sysAction ==SYSTEM_MSG_UPDATE_SESSION ){
+            [actionUpdateSessionAll addObject:message];
+        }
+        //更新用户信息
+        if(chatSystem.sysAction ==SYSTEM_MSG_UPDATE_MEMBER ){
+            [actionUpdateSessionMember addObject:message];
+        }
+        //用户加入是自己也全量更新
+        if(chatSystem.sysAction ==SYSTEM_MSG_ADD_MEMBER ){
+            NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[message getChatSystem].sysData];
+            SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
+            if([member.userId isEqualToString: user.userId]){
+                [actionUpdateSessionAll addObject:message];
+            }else{
+                [actionUpdateSessionMember addObject:message];
+            }
+        }
+        //用户删除是自己删除会话
+        if(chatSystem.sysAction ==SYSTEM_MSG_DELETE_MEMBER ){
+            NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[message getChatSystem].sysData];
+            SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
+            if([member.userId isEqualToString: user.userId]){
+                [actionUpdateSessionMemberDel addObject:message];
+            }else{
+                [actionUpdateSessionMember addObject:message];
+            }
+        }
+    }
+    if(actionUpdateSessionAll.count>0){
+        [self updateSessionAll:actionUpdateSessionAll];
+    }
+    if(actionUpdateSessionMember.count>0){
+        [self updateSessionMemberUpdate:actionUpdateSessionMember];
+    }
+    if(actionUpdateSessionMemberDel.count>0){
+        [self updateSessionMemberDelete:actionUpdateSessionMemberDel];
+    }
+}
+
+
 //接收完成登录消息
 -(void)receiveLogin:(FlappyResponse *)respones{
     
@@ -400,7 +479,6 @@ static  GCDAsyncSocket*  _instanceSocket;
     
     //登录成功后保存推送类型，保存用户所有的会话列表
     @try {
-        
         
         //转换
         NSMutableArray* array=respones.msgArray;
@@ -498,6 +576,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     //检查之前是否有消息再消息栈中而且没有发送成功
     [self checkFormerMessagesToSend];
 }
+
 
 //接收到消息
 -(void)receiveMessage:(FlappyResponse *)respones{
@@ -624,76 +703,6 @@ static  GCDAsyncSocket*  _instanceSocket;
 }
 
 
-
-//检查是否有会话需要更新
--(void)checkSystemMessageFunction{
-    
-    //用户数据
-    ChatUser* user = [[FlappyData shareInstance] getUser];
-    if(user==nil){
-        return;
-    }
-    
-    //获取未处理的系统消息
-    NSMutableArray* array= [[FlappyDataBase shareInstance] getNotActionSystemMessage];
-    
-    //数据信息拆分
-    NSMutableArray* actionUpdateSessionAll = [[NSMutableArray alloc] init];
-    NSMutableArray* actionUpdateSessionMember = [[NSMutableArray alloc] init];
-    NSMutableArray* actionUpdateSessionMemberDel = [[NSMutableArray alloc] init];
-    
-    //获取需要更新的会话
-    for(int s=0;s<array.count;s++){
-        //全量更新
-        ChatMessage* message=[array objectAtIndex:s];
-        //消息
-        ChatSystem* chatSystem=[message getChatSystem];
-        //消息
-        if(chatSystem.sysAction ==SYSTEM_MSG_NOTHING ){
-            message.messageReadState = 1;
-            [[FlappyDataBase shareInstance] insertMessage:message];
-        }
-        //会话
-        if(chatSystem.sysAction ==SYSTEM_MSG_UPDATE_SESSION ){
-            [actionUpdateSessionAll addObject:message];
-        }
-        //更新用户信息
-        if(chatSystem.sysAction ==SYSTEM_MSG_UPDATE_MEMBER ){
-            [actionUpdateSessionMember addObject:message];
-        }
-        //用户加入是自己也全量更新
-        if(chatSystem.sysAction ==SYSTEM_MSG_ADD_MEMBER ){
-            NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[message getChatSystem].sysData];
-            SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
-            if([member.userId isEqualToString: user.userId]){
-                [actionUpdateSessionAll addObject:message];
-            }else{
-                [actionUpdateSessionMember addObject:message];
-            }
-        }
-        //用户删除是自己删除会话
-        if(chatSystem.sysAction ==SYSTEM_MSG_DELETE_MEMBER ){
-            NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[message getChatSystem].sysData];
-            SessionDataMember* member = [SessionDataMember mj_objectWithKeyValues:dic];
-            if([member.userId isEqualToString: user.userId]){
-                [actionUpdateSessionMemberDel addObject:message];
-            }else{
-                [actionUpdateSessionMember addObject:message];
-            }
-        }
-    }
-    if(actionUpdateSessionAll.count>0){
-        [self updateSessionAll:actionUpdateSessionAll];
-    }
-    if(actionUpdateSessionMember.count>0){
-        [self updateSessionMemberUpdate:actionUpdateSessionMember];
-    }
-    if(actionUpdateSessionMemberDel.count>0){
-        [self updateSessionMemberDelete:actionUpdateSessionMemberDel];
-    }
-}
-
-
 //会话所有数据更新
 -(void)updateSessionAll:(NSMutableArray*)array{
     //开始写数据了
@@ -766,37 +775,19 @@ static  GCDAsyncSocket*  _instanceSocket;
         //发送会话更新通知
         [[FlappySender shareInstance] notifySession:session];
     }
-    
-}
-
-
-//登录成功后发送已经被缓存的消息数据
--(void)checkFormerMessagesToSend{
-    __weak typeof(self) safeSelf=self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSMutableDictionary* dic=[FlappySender shareInstance].sendingMessages;
-        NSMutableArray* messageList=[[NSMutableArray alloc]init];
-        NSArray* array=dic.allKeys;
-        for(int s=0;s<array.count;s++){
-            ChatMessage* msg=[dic objectForKey:array[s]];
-            if(msg!=nil){
-                [messageList addObject: msg];
-            }
-        }
-        for(int s=0;s<messageList.count;s++){
-            [safeSelf sendMessage:messageList[s]];
-        }
-    });
 }
 
 
 
 #pragma heart beat  心跳
+#pragma heart beat  心跳
+
+//开启心跳
 - (void)startHeartBeat {
     if (self.heartBeatTimer) {
         dispatch_source_cancel(self.heartBeatTimer);
     }
-
+    
     self.heartBeatTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
     dispatch_source_set_timer(self.heartBeatTimer, DISPATCH_TIME_NOW, [FlappyApiConfig shareInstance].heartInterval * NSEC_PER_SEC, 0);
     dispatch_source_set_event_handler(self.heartBeatTimer, ^{
@@ -805,6 +796,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     dispatch_resume(self.heartBeatTimer);
 }
 
+//发送心跳
 - (void)sendHeartBeat {
     if (self.socket) {
         @try {
@@ -812,13 +804,14 @@ static  GCDAsyncSocket*  _instanceSocket;
             request.type = REQ_PING;
             NSData *reqData = [request delimitedData];
             [self.socket writeData:reqData withTimeout:-1 tag:0];
+            NSLog(@"heart beat");
         } @catch (NSException *exception) {
             NSLog(@"%@", exception.description);
         }
-        NSLog(@"heart beat");
     }
 }
 
+//停止心跳
 - (void)stopHeartBeat {
     if (self.heartBeatTimer) {
         dispatch_source_cancel(self.heartBeatTimer);
