@@ -184,7 +184,7 @@ static  GCDAsyncSocket*  _instanceSocket;
 ///连接成功
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
     //发送登录信息
-    [self sendLoginReq];
+    [self sendLoginRequest];
     //开启心跳
     [self startHeartBeat];
 }
@@ -287,7 +287,7 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 
 //发送登录信息
--(void)sendLoginReq{
+-(void)sendLoginRequest{
     @try {
         //组装登录数据
         ReqLogin* info=[[ReqLogin alloc]init];
