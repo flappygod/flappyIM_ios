@@ -377,25 +377,6 @@ static  GCDAsyncSocket*  _instanceSocket;
 }
 
 
-//登录成功后发送已经被缓存的消息数据
--(void)checkCachedMessagesToSend{
-    __weak typeof(self) safeSelf=self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSMutableDictionary* dic=[FlappySender shareInstance].sendingMessages;
-        NSMutableArray* messageList=[[NSMutableArray alloc]init];
-        NSArray* array=dic.allKeys;
-        for(int s=0;s<array.count;s++){
-            ChatMessage* msg=[dic objectForKey:array[s]];
-            if(msg!=nil){
-                [messageList addObject: msg];
-            }
-        }
-        for(int s=0;s<messageList.count;s++){
-            [safeSelf sendMessage:messageList[s]];
-        }
-    });
-}
-
 //检查是否有会话需要更新
 -(void)checkSystemMessageFunction{
     
@@ -462,6 +443,25 @@ static  GCDAsyncSocket*  _instanceSocket;
     if(actionUpdateSessionMemberDel.count>0){
         [self updateSessionMemberDelete:actionUpdateSessionMemberDel];
     }
+}
+
+//登录成功后发送已经被缓存的消息数据
+-(void)checkCachedMessagesToSend{
+    __weak typeof(self) safeSelf=self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableDictionary* dic=[FlappySender shareInstance].sendingMessages;
+        NSMutableArray* messageList=[[NSMutableArray alloc]init];
+        NSArray* array=dic.allKeys;
+        for(int s=0;s<array.count;s++){
+            ChatMessage* msg=[dic objectForKey:array[s]];
+            if(msg!=nil){
+                [messageList addObject: msg];
+            }
+        }
+        for(int s=0;s<messageList.count;s++){
+            [safeSelf sendMessage:messageList[s]];
+        }
+    });
 }
 
 
