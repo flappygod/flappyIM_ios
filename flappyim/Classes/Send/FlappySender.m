@@ -392,7 +392,7 @@
         FlappyVideoInfo* info=[self videoInfoForUrl:url
                                                size:CGSizeMake(512, 512)];
         //返回数据
-        if(info==nil||info.overPath==nil||info.duration==nil||info.vwidth==nil||info.vheight==nil){
+        if(info==nil||info.coverPath==nil||info.duration==nil||info.vwidth==nil||info.vheight==nil){
             @throw [[NSException alloc]initWithName:@"视频解析失败"
                                              reason:@"视频解析失败"
                                            userInfo:nil];
@@ -400,12 +400,12 @@
         chatVideo.width=info.vwidth;
         chatVideo.height=info.vheight;
         chatVideo.duration=info.duration;
-        chatVideo.coverSendPath = info.overPath;
+        chatVideo.coverSendPath = info.coverPath;
         [chatMsg setChatVideo:chatVideo];
         
         //上传文件
         FlappyUploadModel* uploadReq=[[FlappyUploadModel alloc]init];
-        uploadReq.path=info.overPath;
+        uploadReq.path=info.coverPath;
         uploadReq.name=@"cover";
         uploadReq.type=@"image";
         [uplaods addObject:uploadReq];
@@ -659,7 +659,14 @@
         [[FlappyDataBase shareInstance] handleActionMessageUpdate:message];
         ChatAction* chatAction = [message getChatAction];
         switch(chatAction.actionType){
-                //会话阅读
+            //消息被删除
+            case ACTION_TYPE_MSG_DELETE:
+            case ACTION_TYPE_MSG_RECALL:{
+                ChatMessage* message = [[FlappyDataBase shareInstance] getMessageById:chatAction.actionIds[2]];
+                [self notifyMessageDelete:message];
+                break;
+            }
+            //会话阅读
             case ACTION_TYPE_SESSION_READ:{
                 ChatUser* user=[[FlappyData shareInstance] getUser];
                 //自己读的
@@ -676,18 +683,18 @@
                 }
                 break;
             }
-                //会话更新
+            //会话更新
             case ACTION_TYPE_SESSION_MUTE:
             case ACTION_TYPE_SESSION_PIN:{
                 SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:chatAction.actionIds[1]];
                 [self notifySessionReceive:session];
                 break;
             }
-                //消息被删除
-            case ACTION_TYPE_MSG_DELETE:
-            case ACTION_TYPE_MSG_RECALL:{
-                ChatMessage* message = [[FlappyDataBase shareInstance] getMessageById:chatAction.actionIds[2]];
-                [self notifyMessageDelete:message];
+            //会话更新
+            case ACTION_TYPE_SESSION_DELETE_TEMP:
+            case ACTION_TYPE_SESSION_DELETE_PERMANENT:{
+                SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:chatAction.actionIds[1]];
+                [self notifySessionDelete:session];
                 break;
             }
                 
@@ -926,84 +933,103 @@
 #pragma mark ---- 获取图片第一帧
 
 //生成一个临时的图片地址用于保存封面图片
--(NSString*)generateSaveImagePath{
+- (NSString *)generateSaveImagePath {
     /*
      项目中的应用场景是，本地视频在显示的时候需要显示缩略图，通过AVURLAsset等部分代码获取之后，将图片保存到本地做一下缓存，下次搜索是否有图片，有就直接加载
      */
-    //获取路径也是一样的
-    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    /*
-     拼接最后完整的路径，这块做的时候遇到个坑，记录如下
-     拿到上述路径之后，下面部分代码在于将最后文件的路径补全，首先要加上‘/'这个分隔符,然后后面的是文件的名字,最后的效果如下,
-     /var/mobile/Containers/Data/Application/400BC47D-FBC5-412F-8F55-163E5FBB8264/Documents/thumImage2017_0818_101305_0028_F.jpg
-     -----之前这个没有加'/’这个分隔符，导致怎么保存之后都拿不到图片
-     */
-    NSString* str=[NSString stringWithFormat:@"%ld",(long)[NSDate date].timeIntervalSince1970*1000];
-    //拼接地址
-    NSString *imagePath = [path stringByAppendingString:[NSString stringWithFormat:@"/%@.jpg",str]];
+    
+    //获取文档目录路径
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    
+    //生成唯一的文件名
+    NSString *timestamp = [NSString stringWithFormat:@"%ld", (long)([NSDate date].timeIntervalSince1970 * 1000)];
+    NSString *fileName = [NSString stringWithFormat:@"%@.jpg", timestamp];
+    
+    //拼接完整的文件路径
+    NSString *imagePath = [documentsPath stringByAppendingPathComponent:fileName];
+    
     //返回地址
     return imagePath;
 }
 
 //获取网络url的video信息
-- (FlappyVideoInfo*)videoInfoForUrl:(NSURL *)url size:(CGSize)size
-{
-    FlappyVideoInfo* info=[[FlappyVideoInfo alloc] init];
-    // 获取视频第一帧
-    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
-                                                     forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
-    //获取
+- (FlappyVideoInfo *)videoInfoForUrl:(NSURL *)url size:(CGSize)size {
+    FlappyVideoInfo *info = [[FlappyVideoInfo alloc] init];
+    
+    //获取视频第一帧
+    NSDictionary *opts = @{AVURLAssetPreferPreciseDurationAndTimingKey: @NO};
     AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:url options:opts];
-    //获取到文件的时长
+    
+    // 获取到文件的时长
     CMTime audioDuration = urlAsset.duration;
-    //seconds
     float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
-    //长度
-    info.duration=[NSString stringWithFormat:@"%ld",(long)audioDurationSeconds*1000];
-    //获取到图片
-    AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlAsset];
-    generator.appliesPreferredTrackTransform = YES;
-    generator.maximumSize = CGSizeMake(size.width, size.height);
-    NSError *error = nil;
-    CGImageRef img = [generator copyCGImageAtTime:CMTimeMake(0, 10) actualTime:NULL error:&error];
-    UIImage *videoImage = [[UIImage alloc] initWithCGImage:img];
-    info.vwidth=[NSString stringWithFormat:@"%ld",(long)videoImage.size.width];
-    info.vheight=[NSString stringWithFormat:@"%ld",(long)videoImage.size.height];
-    CGImageRelease(img);
-    NSString* savePath=[self generateSaveImagePath];
-    [self saveToDocument:videoImage withFilePath:savePath];
-    info.overPath=savePath;
+    info.duration = [NSString stringWithFormat:@"%ld", (long)(audioDurationSeconds * 1000)];
+    
+    // 获取到图片
+    UIImage *videoImage = [self generateThumbnailImageForAsset:urlAsset size:size];
+    if (videoImage) {
+        info.vwidth = [NSString stringWithFormat:@"%ld", (long)videoImage.size.width];
+        info.vheight = [NSString stringWithFormat:@"%ld", (long)videoImage.size.height];
+        NSString *savePath = [self generateSaveImagePath];
+        [self saveToDocument:videoImage withFilePath:savePath];
+        info.coverPath = savePath;
+    } else {
+        NSLog(@"获取视频缩略图失败");
+    }
     return info;
 }
 
+//辅助方法：生成视频的缩略图
+-(UIImage*)generateThumbnailImageForAsset:(AVURLAsset *)asset size:(CGSize)size {
+    AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:asset];
+    generator.appliesPreferredTrackTransform = YES;
+    generator.maximumSize = size;
+    
+    NSError *error = nil;
+    CGImageRef img = [generator copyCGImageAtTime:CMTimeMake(0, 10) actualTime:NULL error:&error];
+    if (error) {
+        NSLog(@"生成视频缩略图失败: %@", error.localizedDescription);
+        return nil;
+    }
+    UIImage *videoImage = [[UIImage alloc] initWithCGImage:img];
+    CGImageRelease(img);
+    return videoImage;
+}
+
+
 //将选取的图片保存到目录文件夹下
--(BOOL)saveToDocument:(UIImage *) image withFilePath:(NSString *) filePath
-{
-    if ((image == nil) || (filePath == nil) || [filePath isEqualToString:@""]) {
+- (BOOL)saveToDocument:(UIImage *)image withFilePath:(NSString *)filePath {
+    if (!image || !filePath || [filePath isEqualToString:@""]) {
         return NO;
     }
     @try {
-        NSData *imageData = nil;
-        //获取文件扩展名
-        NSString *extention = [filePath pathExtension];
-        if ([extention isEqualToString:@"png"]) {
-            //返回PNG格式的图片数据
-            imageData = UIImagePNGRepresentation(image);
-        }else{
-            //返回JPG格式的图片数据，第二个参数为压缩质量：0:best 1:lost
-            imageData = UIImageJPEGRepresentation(image, 0);
-        }
-        if (imageData == nil || [imageData length] <= 0) {
+        NSData *imageData = [self imageDataForImage:image withFilePath:filePath];
+        if (!imageData || [imageData length] == 0) {
             return NO;
         }
         //将图片写入指定路径
-        [imageData writeToFile:filePath atomically:YES];
-        return  YES;
+        BOOL success = [imageData writeToFile:filePath atomically:YES];
+        if (!success) {
+            NSLog(@"保存图片失败：无法写入文件");
+        }
+        return success;
     }
     @catch (NSException *exception) {
-        NSLog(@"保存图片失败");
+        NSLog(@"保存图片失败：%@", exception.reason);
     }
     return NO;
+}
+
+//辅助方法：根据文件扩展名获取图片数据
+- (NSData *)imageDataForImage:(UIImage *)image withFilePath:(NSString *)filePath {
+    NSString *extension = [filePath pathExtension].lowercaseString;
+    if ([extension isEqualToString:@"png"]) {
+        //返回PNG格式的图片数据
+        return UIImagePNGRepresentation(image);
+    } else {
+        //返回JPG格式的图片数据，第二个参数为压缩质量：0:best 1:lost
+        return UIImageJPEGRepresentation(image, 0);
+    }
 }
 
 @end

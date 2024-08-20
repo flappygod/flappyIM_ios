@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString* vwidth;
 @property(nonatomic,copy) NSString* vheight;
-@property(nonatomic,copy) NSString* overPath;
+@property(nonatomic,copy) NSString* coverPath;
 @property(nonatomic,copy) NSString* duration;
 
 

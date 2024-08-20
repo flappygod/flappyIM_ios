@@ -6,15 +6,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SessionData.h"
-#import "FlappyIM.h"
+#import "FlappyMessageListener.h"
 #import "FlappyApiRequest.h"
 #import "ChatLocation.h"
+#import "SessionData.h"
 #import "ChatImage.h"
 #import "ChatVoice.h"
-#import "ChatFile.h"
 #import "ChatVideo.h"
-#import "FlappyMessageListener.h"
+#import "ChatFile.h"
+#import "FlappyIM.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -103,21 +103,6 @@ NS_ASSUME_NONNULL_BEGIN
                andFailure:(FlappySendFailure)failure;
 
 
-//消息发送已读
--(ChatMessage*)readSessionMessage:(FlappySendSuccess)success
-                       andFailure:(FlappySendFailure)failure;
-
-//修改mute
--(ChatMessage*)changeMute:(NSInteger)mute
-               andSuccess:(FlappySendSuccess)success
-               andFailure:(FlappySendFailure)failure;
-
-
-//修改Pinned
--(ChatMessage*)changePinned:(NSInteger)pinned
-                 andSuccess:(FlappySendSuccess)success
-                 andFailure:(FlappySendFailure)failure;
-
 //删除会话消息
 -(ChatMessage*)recallMessageById:(NSString*)messageId
                       andSuccess:(FlappySendSuccess)success
@@ -140,6 +125,28 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)resendMessage:(ChatMessage*)chatmsg
           andSuccess:(FlappySendSuccess)success
           andFailure:(FlappySendFailure)failure;
+
+
+//消息发送已读
+-(ChatMessage*)sessionMessageRead:(FlappySendSuccess)success
+                       andFailure:(FlappySendFailure)failure;
+
+
+//修改mute
+-(ChatMessage*)sessionChangeMute:(NSInteger)mute
+                      andSuccess:(FlappySendSuccess)success
+                      andFailure:(FlappySendFailure)failure;
+
+
+//修改Pinned
+-(ChatMessage*)sessionChangePinned:(NSInteger)pinned
+                        andSuccess:(FlappySendSuccess)success
+                        andFailure:(FlappySendFailure)failure;
+
+//删除会话
+-(ChatMessage*)sessionDelete:(Boolean)permanent
+                  andSuccess:(FlappySendSuccess)success
+                  andFailure:(FlappySendFailure)failure;
 
 
 //获取当前最近的一条消息
