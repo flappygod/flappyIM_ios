@@ -418,21 +418,21 @@
     ChatAction* action =[msg getChatAction];
     switch(action.actionType){
             //更新消息撤回
-        case ACTION_TYPE_RECALL_MSG:{
+        case ACTION_TYPE_MSG_RECALL:{
             NSString* userId = action.actionIds[0];
             NSString* messageId = action.actionIds[2];
             [self updateMessageRecall:userId andMessageId:messageId];
             break;
         }
             //更新消息撤回
-        case ACTION_TYPE_DELETE_MSG:{
+        case ACTION_TYPE_MSG_DELETE:{
             NSString* userId = action.actionIds[0];
             NSString* messageId = action.actionIds[2];
             [self updateMessageDelete:userId andMessageId:messageId];
             break;
         }
             //更新消息已读
-        case ACTION_TYPE_READ_SESSION:{
+        case ACTION_TYPE_SESSION_READ:{
             NSString* userId = action.actionIds[0];
             NSString* sessionId = action.actionIds[1];
             NSString* tableOffset = action.actionIds[2];
@@ -447,7 +447,7 @@
             break;
         }
             //会话静音
-        case ACTION_TYPE_MUTE_SESSION:{
+        case ACTION_TYPE_SESSION_MUTE:{
             NSString* userId = action.actionIds[0];
             NSString* sessionId = action.actionIds[1];
             NSString* mute = action.actionIds[2];
@@ -457,7 +457,7 @@
             break;
         }
             //更撤回
-        case ACTION_TYPE_PINNED_SESSION:{
+        case ACTION_TYPE_SESSION_PIN:{
             NSString* userId = action.actionIds[0];
             NSString* sessionId = action.actionIds[1];
             NSString* pinned = action.actionIds[2];

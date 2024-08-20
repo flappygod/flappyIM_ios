@@ -434,7 +434,7 @@
     chatmsg.messageType=MSG_TYPE_ACTION;
     
     ChatAction* action=[[ChatAction alloc]init];
-    action.actionType=ACTION_TYPE_READ_SESSION;
+    action.actionType=ACTION_TYPE_SESSION_READ;
     action.actionIds=@[
         mine.userId,
         self.session.sessionId,
@@ -471,7 +471,7 @@
     chatmsg.messageType=MSG_TYPE_ACTION;
     
     ChatAction* action=[[ChatAction alloc]init];
-    action.actionType=ACTION_TYPE_MUTE_SESSION;
+    action.actionType=ACTION_TYPE_SESSION_MUTE;
     action.actionIds=@[
         mine.userId,
         self.session.sessionId,
@@ -508,7 +508,7 @@
     chatmsg.messageType=MSG_TYPE_ACTION;
     
     ChatAction* action=[[ChatAction alloc]init];
-    action.actionType=ACTION_TYPE_PINNED_SESSION;
+    action.actionType=ACTION_TYPE_SESSION_PIN;
     action.actionIds=@[
         mine.userId,
         self.session.sessionId,
@@ -547,7 +547,7 @@
     chatmsg.messageType=MSG_TYPE_ACTION;
     
     ChatAction* action=[[ChatAction alloc]init];
-    action.actionType=ACTION_TYPE_DELETE_MSG;
+    action.actionType=ACTION_TYPE_MSG_DELETE;
     action.actionIds=@[
         mine.userId,
         self.session.sessionId,
@@ -586,7 +586,7 @@
     chatmsg.messageType=MSG_TYPE_ACTION;
     
     ChatAction* action=[[ChatAction alloc]init];
-    action.actionType=ACTION_TYPE_RECALL_MSG;
+    action.actionType=ACTION_TYPE_MSG_RECALL;
     action.actionIds=@[
         mine.userId,
         self.session.sessionId,
