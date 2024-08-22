@@ -1198,122 +1198,138 @@
     }];
 }
 
-
-//获取用户的sessions
+//获取用户会话列表
 -(void)getUserSessionList:(FlappySuccess)success
-               andFailure:(FlappyFailure)failure{
+               andFailure:(FlappyFailure)failure {
     //为空直接出错
-    if([[FlappyData shareInstance] getUser]==nil){
-        failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
-        return ;
+    if ([[FlappyData shareInstance] getUser] == nil) {
+        failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil], RESULT_NOTLOGIN);
+        return;
     }
+    
     //创建返回
-    NSMutableArray* ret=[[NSMutableArray alloc]init];
+    NSMutableArray *ret = [[NSMutableArray alloc] init];
     //获取当前用户的所有
-    NSMutableArray* array=[[FlappyDataBase shareInstance] getUserSessions:[FlappyData shareInstance].getUser.userExtendId];
-    for(int s=0;s<array.count;s++){
+    NSMutableArray *array = [[FlappyDataBase shareInstance] getUserSessions:[FlappyData shareInstance].getUser.userExtendId];
+    
+    // 创建一个字典来缓存每个会话的最新消息
+    NSMutableDictionary *latestMessagesCache = [NSMutableDictionary dictionary];
+    
+    for (int s = 0; s < array.count; s++) {
         //获取model
-        SessionData* model=[SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
-        FlappyChatSession* session=[[FlappyChatSession alloc] init];
-        session.session=model;
+        SessionData *model = [SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
+        FlappyChatSession *session = [[FlappyChatSession alloc] init];
+        session.session = model;
         [ret addObject:session];
+        
+        //获取最新消息并缓存
+        ChatMessage *latestMessage = [session getLatestMessage];
+        if (latestMessage) {
+            latestMessagesCache[session.session.sessionId] = latestMessage;
+        }
     }
     
     //进行一个排序
-    NSArray* sortArray = [ret sortedArrayUsingComparator:^NSComparisonResult(FlappyChatSession* _Nonnull one,
-                                                                             FlappyChatSession* _Nonnull two) {
-        if(one.session.sessionType==TYPE_SYSTEM ){
+    NSArray *sortArray = [ret sortedArrayUsingComparator:^NSComparisonResult(FlappyChatSession *_Nonnull one,
+                                                                             FlappyChatSession *_Nonnull two) {
+        if (one.session.sessionType == TYPE_SYSTEM) {
             return NSOrderedAscending;
         }
-        if(two.session.sessionType==TYPE_SYSTEM){
+        if (two.session.sessionType == TYPE_SYSTEM) {
             return NSOrderedDescending;
         }
-        ChatMessage* msgOne=[one getLatestMessage];
-        ChatMessage* msgTwo=[two getLatestMessage];
-        if(msgOne==nil){
+        //从缓存中获取最新消息
+        ChatMessage *msgOne = latestMessagesCache[one.session.sessionId];
+        ChatMessage *msgTwo = latestMessagesCache[two.session.sessionId];
+        if (msgOne == nil) {
             return NSOrderedDescending;
         }
-        if(msgTwo==nil){
+        if (msgTwo == nil) {
             return NSOrderedAscending;
         }
-        if(msgOne.messageTableOffset>msgTwo.messageTableOffset){
+        if (msgOne.messageTableOffset > msgTwo.messageTableOffset) {
             return NSOrderedAscending;
-        }else{
+        } else {
             return NSOrderedDescending;
         }
     }];
+    
     ret = [[NSMutableArray alloc] initWithArray:sortArray];
+    
     //成功
-    if(ret!=nil && ret.count!= 0){
+    if (ret != nil && ret.count != 0) {
         success(ret);
-    }else{
+    } else {
         //没有拿到就联网去拿
-        [self getUserSessionListHttp:success
-                          andFailure:failure];
+        [self getUserSessionListHttp:success andFailure:failure];
     }
 }
 
-
-//获取用户的sessions
+//获取用户会话列表
 -(void)getUserSessionListHttp:(FlappySuccess)success
-                   andFailure:(FlappyFailure)failure{
+                   andFailure:(FlappyFailure)failure {
     
     //为空直接出错
-    if([[FlappyData shareInstance]getUser]==nil){
-        failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
-        return ;
+    if ([[FlappyData shareInstance] getUser] == nil) {
+        failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil], RESULT_NOTLOGIN);
+        return;
     }
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_getUserSessionList;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"userExtendId":[[FlappyData shareInstance]getUser].userExtendId};
+    NSDictionary *parameters = @{@"userExtendId": [[FlappyData shareInstance] getUser].userExtendId};
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
                       withSuccess:^(id data) {
+        NSMutableArray *array = data;
+        NSMutableArray *ret = [[NSMutableArray alloc] init];
+        // 创建一个字典来缓存每个会话的最新消息
+        NSMutableDictionary *latestMessagesCache = [NSMutableDictionary dictionary];
         
-        NSMutableArray* array=data;
-        NSMutableArray* ret=[[NSMutableArray alloc]init];
-        
-        for(int s=0;s<array.count;s++){
+        for (int s = 0; s < array.count; s++) {
             //获取model
-            SessionData* model=[SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
-            FlappyChatSession* session=[[FlappyChatSession alloc] init];
-            session.session=model;
+            SessionData *model = [SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
+            FlappyChatSession *session = [[FlappyChatSession alloc] init];
+            session.session = model;
             [ret addObject:session];
+            
+            // 获取最新消息并缓存
+            ChatMessage *latestMessage = [session getLatestMessage];
+            if (latestMessage) {
+                latestMessagesCache[session.session.sessionId] = latestMessage;
+            }
         }
-        
         //进行一个排序
-        NSArray* sortArray = [ret sortedArrayUsingComparator:^NSComparisonResult(FlappyChatSession* _Nonnull one,
-                                                                                 FlappyChatSession* _Nonnull two) {
-            if(one.session.sessionType==TYPE_SYSTEM ){
+        NSArray *sortArray = [ret sortedArrayUsingComparator:^NSComparisonResult(FlappyChatSession *_Nonnull one,
+                                                                                 FlappyChatSession *_Nonnull two) {
+            if (one.session.sessionType == TYPE_SYSTEM) {
                 return NSOrderedAscending;
             }
-            if(two.session.sessionType==TYPE_SYSTEM){
+            if (two.session.sessionType == TYPE_SYSTEM) {
                 return NSOrderedDescending;
             }
-            ChatMessage* msgOne=[one getLatestMessage];
-            ChatMessage* msgTwo=[two getLatestMessage];
-            if(msgOne==nil){
+            // 从缓存中获取最新消息
+            ChatMessage *msgOne = latestMessagesCache[one.session.sessionId];
+            ChatMessage *msgTwo = latestMessagesCache[two.session.sessionId];
+            if (msgOne == nil) {
                 return NSOrderedDescending;
             }
-            if(msgTwo==nil){
+            if (msgTwo == nil) {
                 return NSOrderedAscending;
             }
-            if(msgOne.messageTableOffset>msgTwo.messageTableOffset){
+            if (msgOne.messageTableOffset > msgTwo.messageTableOffset) {
                 return NSOrderedAscending;
-            }else{
+            } else {
                 return NSOrderedDescending;
             }
         }];
         ret = [[NSMutableArray alloc] initWithArray:sortArray];
-        
         //成功
         success(ret);
-        
-    } withFailure:^(NSError * error, NSInteger code) {
+    } withFailure:^(NSError *error, NSInteger code) {
         //登录失败，清空回调
-        failure(error,code);
+        failure(error, code);
     }];
 }
 
