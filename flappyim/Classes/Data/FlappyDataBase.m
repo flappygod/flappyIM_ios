@@ -13,6 +13,7 @@
 #import "MJExtension.h"
 #import "FlappyData.h"
 #import "FMDatabase.h"
+#import <math.h>
 
 //数据库
 @implementation FlappyDataBase{
@@ -187,6 +188,11 @@
     [database beginTransaction];
     //遍历
     for(ChatMessage* msg in array){
+        
+        //更新最新
+        [self updateSessionOffset:msg.messageSessionId
+                 andSessionOffset:msg.messageSessionOffset];
+        
         //获取之前的消息
         ChatMessage* fomerMsg = [self getMessageById:msg.messageId];
         // 插入或替换数据
@@ -257,6 +263,11 @@
     if(user==nil){
         return;
     }
+    
+    //更新最新
+    [self updateSessionOffset:msg.messageSessionId
+             andSessionOffset:msg.messageSessionOffset];
+    
     //获取db
     [self openDB];
     //获取之前的消息
@@ -1353,6 +1364,30 @@
         sessionId,
         tableOffset]];
     [self closeDB];
+}
+
+
+//更新最近已读的消息
+-(void)updateSessionOffset:(NSString*)sessionId
+          andSessionOffset:(NSInteger)sessionOffset {
+    //获取当前用户
+    ChatUser* user = [[FlappyData shareInstance] getUser];
+    if (user == nil) {
+        return;
+    }
+
+    //直接使用 database 实例进行更新
+    BOOL result = [database executeUpdate:@"UPDATE session SET sessionOffset = ? WHERE sessionId = ? AND sessionInsertUser = ? AND sessionOffset < ?"
+                       withArgumentsInArray:@[
+        [NSString stringWithFormat:@"%ld", (long)sessionOffset],
+        sessionId,
+        user.userExtendId,
+        [NSString stringWithFormat:@"%ld", (long)sessionOffset]
+    ]];
+
+    if (!result) {
+        NSLog(@"更新会话失败: %@", [database lastErrorMessage]);
+    }
 }
 
 //更新最近已读的消息
