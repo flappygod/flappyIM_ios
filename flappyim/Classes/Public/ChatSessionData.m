@@ -5,9 +5,9 @@
 //  Created by lijunlin on 2019/8/13.
 //
 
-#import "SessionData.h"
+#import "ChatSessionData.h"
 
-@implementation SessionData
+@implementation ChatSessionData
 
 
 + (NSDictionary *)mj_objectClassInArray {

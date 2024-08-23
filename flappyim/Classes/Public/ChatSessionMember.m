@@ -5,8 +5,8 @@
 //  Created by li lin on 2024/4/18.
 //
 
-#import "SessionDataMember.h"
+#import "ChatSessionMember.h"
 
-@implementation SessionDataMember
+@implementation ChatSessionMember
 
 @end

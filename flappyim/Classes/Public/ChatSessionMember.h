@@ -10,14 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SessionDataMember : ChatUser
+@interface ChatSessionMember : ChatUser
 
 //会话ID
 @property(nonatomic,copy) NSString* sessionId;
 //最近阅读
-@property(nonatomic,copy) NSString* sessionMemberLatestRead;
+@property(nonatomic,assign) NSInteger sessionMemberLatestRead;
 //最近删除
-@property(nonatomic,copy) NSString* sessionMemberLatestDelete;
+@property(nonatomic,assign) NSInteger sessionMemberLatestDelete;
 //标记名称
 @property(nonatomic,copy) NSString* sessionMemberMarkName;
 //会话免打扰

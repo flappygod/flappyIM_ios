@@ -12,9 +12,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SessionData : ChatSession
+@interface ChatSessionData : ChatSession
 
 @property(nonatomic,strong) NSMutableArray<SessionDataMember*>*  users;
+
+@property(nonatomic,assign) NSInteger unReadMessageCount;
+
+@property(nonatomic,assign) Boolean isDeleteTemp;
 
 @end
 
