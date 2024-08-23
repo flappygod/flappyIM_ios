@@ -309,7 +309,7 @@
 //获取未读消息的数量
 -(int)getUnReadSessionMessageCountBySessionId:(NSString *)sessionId {
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        FMResultSet *results = [db executeQuery:@"SELECT COUNT(*) FROM message WHERE messageInsertUser=? and messageSessionId=? and messageSendId!=? and messageReadState=0 and messageType!=? and messageType!=?"
+        FMResultSet *results = [db executeQuery:@"SELECT COUNT(*) FROM message WHERE messageInsertUser=? and messageSessionId=? and messageSendId!=? and messageReadState=0 and (messageDeleteOperation is null or messageDeleteOperation == '') and messageType!=? and messageType!=?"
                            withArgumentsInArray:@[
             user.userExtendId,
             sessionId,
