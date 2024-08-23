@@ -32,8 +32,8 @@
 #import "FlappySessionListener.h"
 #import "FlappySocket.h"
 #import "PushSettings.h"
-#import "SessionData.h"
-#import "SessionDataMember.h"
+#import "ChatSessionData.h"
+#import "ChatSessionMember.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
 FOUNDATION_EXPORT const unsigned char flappyimVersionString[];

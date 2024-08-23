@@ -686,14 +686,14 @@
                 //会话更新
             case ACTION_TYPE_SESSION_MUTE:
             case ACTION_TYPE_SESSION_PIN:{
-                SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:chatAction.actionIds[1]];
+                ChatSessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:chatAction.actionIds[1]];
                 [self notifySessionReceive:session];
                 break;
             }
                 //会话更新
             case ACTION_TYPE_SESSION_DELETE_TEMP:
             case ACTION_TYPE_SESSION_DELETE_PERMANENT:{
-                SessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:chatAction.actionIds[1]];
+                ChatSessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:chatAction.actionIds[1]];
                 [self notifySessionDelete:session];
                 break;
             }
@@ -883,7 +883,7 @@
 }
 
 //会话被接收
--(void)notifySessionReceive:(SessionData*)session{
+-(void)notifySessionReceive:(ChatSessionData*)session{
     if(session==nil){
         return;
     }
@@ -898,7 +898,7 @@
 }
 
 //会话被删除(用户被删除)
--(void)notifySessionDelete:(SessionData*)session{
+-(void)notifySessionDelete:(ChatSessionData*)session{
     if(session==nil){
         return;
     }

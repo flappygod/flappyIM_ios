@@ -78,9 +78,9 @@
     //会话更新
     [[FlappyIM shareInstance]  addSessionListener:[[FlappySessionListener alloc] initWithReceiveList:^(NSArray * _Nullable sessionList) {
         NSLog(@"会话有更新");
-    } andReceive:^(SessionData * _Nullable session) {
+    } andReceive:^(ChatSessionData * _Nullable session) {
         NSLog(@"会话有更新");
-    } andDelete:^(SessionData * _Nullable session) {
+    } andDelete:^(ChatSessionData * _Nullable session) {
         
     }]];
     

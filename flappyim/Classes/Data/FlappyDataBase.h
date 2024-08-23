@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ChatMessage.h"
-#import "SessionData.h"
+#import "ChatSessionData.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,22 +23,22 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)clearSendingMessage;
 
 //插入单条会话
--(Boolean)insertSession:(SessionData*)data;
+-(Boolean)insertSession:(ChatSessionData*)data;
 
 //插入多条会话
 -(Boolean)insertSessions:(NSMutableArray*)array;
 
 //插入会话的用户
--(Boolean)insertSessionMember:(SessionDataMember*) member;
+-(Boolean)insertSessionMember:(ChatSessionMember*) member;
 
 //获取当前用户的所有会话
 -(NSMutableArray*)getUserSessions:(NSString*)userExtendID;
 
 //获取用户的指定会话
--(SessionData*)getUserSessionByExtendId:(NSString*)sessionExtendId;
+-(ChatSessionData*)getUserSessionByExtendId:(NSString*)sessionExtendId;
 
 //获取用户的指定会话
--(SessionData*)getUserSessionByID:(NSString*)sessionId;
+-(ChatSessionData*)getUserSessionByID:(NSString*)sessionId;
 
 //删除用户的会话
 -(Boolean)deleteUserSession:(NSString*)sessionId;

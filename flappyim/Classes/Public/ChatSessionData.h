@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SessionDataMember.h"
+#import "ChatSessionMember.h"
 #import "ChatSession.h"
 
 
@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ChatSessionData : ChatSession
 
-@property(nonatomic,strong) NSMutableArray<SessionDataMember*>*  users;
+@property(nonatomic,strong) NSMutableArray<ChatSessionMember*>*  users;
 
 @property(nonatomic,assign) NSInteger unReadMessageCount;
 

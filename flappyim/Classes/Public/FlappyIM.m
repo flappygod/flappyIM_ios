@@ -957,7 +957,7 @@
                    withParameters:parameters
                       withSuccess:^(id data) {
         //获取model
-        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        ChatSessionData* model=[ChatSessionData mj_objectWithKeyValues:data];
         //创建session
         FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
         session.session=model;
@@ -988,7 +988,7 @@
     //拼接
     NSString* sessionExtendId=[NSString stringWithFormat:@"%@-%@",newArray[0],newArray[1]];
     //获取当前用户下，当前的会话
-    SessionData* data=[[FlappyDataBase shareInstance] getUserSessionByExtendId:sessionExtendId];
+    ChatSessionData* data=[[FlappyDataBase shareInstance] getUserSessionByExtendId:sessionExtendId];
     if(data!=nil){
         FlappyChatSession* session=[[FlappyChatSession alloc] init];
         session.session=data;
@@ -1022,7 +1022,7 @@
                    withParameters:parameters
                       withSuccess:^(id data) {
         //获取model
-        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        ChatSessionData* model=[ChatSessionData mj_objectWithKeyValues:data];
         //创建session
         FlappyChatSession* session=[[FlappyChatSession alloc] init];
         session.session=model;
@@ -1069,7 +1069,7 @@
                    withParameters:parameters
                       withSuccess:^(id data) {
         //获取model
-        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        ChatSessionData* model=[ChatSessionData mj_objectWithKeyValues:data];
         FlappyChatSession* session=[[FlappyChatSession alloc] init];
         session.session=model;
         success(session);
@@ -1092,7 +1092,7 @@
         return ;
     }
     //获取当前用户下，当前的会话
-    SessionData* data=[[FlappyDataBase shareInstance] getUserSessionByID:sessionId];
+    ChatSessionData* data=[[FlappyDataBase shareInstance] getUserSessionByID:sessionId];
     //成功
     if(data!=nil){
         FlappyChatSession* session=[[FlappyChatSession alloc] init];
@@ -1127,7 +1127,7 @@
                    withParameters:parameters
                       withSuccess:^(id data) {
         //获取model
-        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        ChatSessionData* model=[ChatSessionData mj_objectWithKeyValues:data];
         //创建session
         FlappyChatSession* session=[[FlappyChatSession alloc] init];
         //数据
@@ -1151,7 +1151,7 @@
         return ;
     }
     //获取当前用户下，当前的会话
-    SessionData* data=[[FlappyDataBase shareInstance] getUserSessionByExtendId:sessionExtendId];
+    ChatSessionData* data=[[FlappyDataBase shareInstance] getUserSessionByExtendId:sessionExtendId];
     //成功
     if(data!=nil){
         FlappyChatSession* session=[[FlappyChatSession alloc] init];
@@ -1185,7 +1185,7 @@
                    withParameters:parameters
                       withSuccess:^(id data) {
         //获取model
-        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        ChatSessionData* model=[ChatSessionData mj_objectWithKeyValues:data];
         //创建session
         FlappyChatSession* session=[[FlappyChatSession alloc] init];
         //数据
@@ -1217,7 +1217,7 @@
     
     for (int s = 0; s < array.count; s++) {
         //获取model
-        SessionData *model = [SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
+        ChatSessionData *model = [ChatSessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
         FlappyChatSession *session = [[FlappyChatSession alloc] init];
         session.session = model;
         [ret addObject:session];
@@ -1289,7 +1289,7 @@
         
         for (int s = 0; s < array.count; s++) {
             //获取model
-            SessionData *model = [SessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
+            ChatSessionData *model = [ChatSessionData mj_objectWithKeyValues:[array objectAtIndex:s]];
             FlappyChatSession *session = [[FlappyChatSession alloc] init];
             session.session = model;
             [ret addObject:session];
@@ -1356,7 +1356,7 @@
                    withParameters:parameters
                       withSuccess:^(id data) {
         //获取model
-        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        ChatSessionData* model=[ChatSessionData mj_objectWithKeyValues:data];
         //创建session
         FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
         //数据
@@ -1391,7 +1391,7 @@
                    withParameters:parameters
                       withSuccess:^(id data) {
         //获取model
-        SessionData* model=[SessionData mj_objectWithKeyValues:data];
+        ChatSessionData* model=[ChatSessionData mj_objectWithKeyValues:data];
         //创建session
         FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
         //数据

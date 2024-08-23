@@ -88,10 +88,10 @@
 -(void)notifySessionReceiveList:(NSArray*)sessionList;
 
 //会话
--(void)notifySessionReceive:(SessionData*)session;
+-(void)notifySessionReceive:(ChatSessionData*)session;
 
 //删除
--(void)notifySessionDelete:(SessionData*)session;
+-(void)notifySessionDelete:(ChatSessionData*)session;
 
 
 @end

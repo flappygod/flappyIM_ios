@@ -2,7 +2,7 @@
 #import "FMDatabaseQueue.h"
 #import "FlappyStringTool.h"
 #import "FlappyJsonTool.h"
-#import "SessionData.h"
+#import "ChatSessionData.h"
 #import "MJExtension.h"
 #import "FlappyData.h"
 #import "FMDatabase.h"
@@ -92,8 +92,8 @@
     "userCreateDate TEXT,"
     "userLoginDate TEXT,"
     "sessionId TEXT,"
-    "sessionMemberLatestRead TEXT,"
-    "sessionMemberLatestDelete TEXT,"
+    "sessionMemberLatestRead INTEGER,"
+    "sessionMemberLatestDelete INTEGER,"
     "sessionMemberMarkName TEXT,"
     "sessionMemberMute INTEGER,"
     "sessionMemberPinned INTEGER,"
@@ -326,6 +326,43 @@
     }] intValue];
 }
 
+//获取是否最近删除
+-(Boolean)getIsDeleteTemp:(NSString *)sessionId {
+    return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        
+        long latestSessionOffset = 0;
+        long latestSessionOffsetDelete = 0;
+        
+        //获取最近消息
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit 1"
+                          withArgumentsInArray:@[
+            sessionId,
+            user.userExtendId,
+            @(MSG_TYPE_ACTION)
+        ]];
+        if ([result next]) {
+            latestSessionOffset = [result intForColumn:@"messageSessionOffset"];
+        }
+        [result close];
+        
+        //获取最近删除
+        result = [db executeQuery:@"select * from session_member where sessionInsertUser=? and sessionId=? and userId=?"
+                          withArgumentsInArray:@[user.userExtendId, sessionId, user.userId]];
+        if ([result next]) {
+            latestSessionOffsetDelete= [result longForColumn:@"sessionMemberLatestDelete"];
+        }
+        [result close];
+        
+        
+        
+        
+        Boolean flag = (latestSessionOffsetDelete >= latestSessionOffset && latestSessionOffset != 0);
+        return @(flag);
+        
+    } ] boolValue];
+}
+
+
 // 插入多条会话，如果存在就更新
 -(Boolean)insertSessions:(NSMutableArray *)array {
     if (array == nil || array.count == 0) {
@@ -334,7 +371,7 @@
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         [db beginTransaction];
         Boolean totalSuccess = true;
-        for (SessionData *data in array) {
+        for (ChatSessionData *data in array) {
             BOOL result = [db executeUpdate:@"INSERT OR REPLACE INTO session("
                            "sessionId,"
                            "sessionExtendId,"
@@ -366,7 +403,7 @@
             ]];
             
             if (data.users != nil) {
-                for (SessionDataMember *member in data.users) {
+                for (ChatSessionMember *member in data.users) {
                     BOOL memberResult = [self insertSessionMember:member];
                     if (!memberResult) {
                         totalSuccess = false;
@@ -397,7 +434,7 @@
                           withArgumentsInArray:@[userExtendID]];
         NSMutableArray *retSessions = [[NSMutableArray alloc] init];
         while ([result next]) {
-            SessionData *msg = [SessionData new];
+            ChatSessionData *msg = [ChatSessionData new];
             msg.sessionId = [result stringForColumn:@"sessionId"];
             msg.sessionExtendId = [result stringForColumn:@"sessionExtendId"];
             msg.sessionType = [result intForColumn:@"sessionType"];
@@ -410,8 +447,9 @@
             msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
             msg.isDelete = [result intForColumn:@"sessionDeleted"];
             msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
-            msg.users = [self getSessionMemberList:msg.sessionId];
             msg.unReadMessageCount = [self getUnReadSessionMessageCountBySessionId:msg.sessionId];
+            msg.isDeleteTemp = [self getIsDeleteTemp:msg.sessionId];
+            msg.users = [self getSessionMemberList:msg.sessionId];
             [retSessions addObject:msg];
         }
         [result close];
@@ -420,7 +458,7 @@
 }
 
 //插入单条会话,如果存在就更新
--(Boolean)insertSession:(SessionData *)data {
+-(Boolean)insertSession:(ChatSessionData *)data {
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         [db beginTransaction];
         BOOL result = [db executeUpdate:@"INSERT OR REPLACE INTO session("
@@ -456,7 +494,7 @@
         Boolean totalSuccess = result;
         
         if (data.users != nil) {
-            for (SessionDataMember *member in data.users) {
+            for (ChatSessionMember *member in data.users) {
                 BOOL memberResult = [self insertSessionMember:member];
                 if (!memberResult) {
                     totalSuccess = false;
@@ -475,7 +513,7 @@
 }
 
 //获取用户的会话
--(SessionData *)getUserSessionByID:(NSString *)sessionId {
+-(ChatSessionData *)getUserSessionByID:(NSString *)sessionId {
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         FMResultSet *result = [db executeQuery:@"select * from session where sessionInsertUser=? and sessionId=?"
                           withArgumentsInArray:@[
@@ -483,9 +521,9 @@
             sessionId
         ]];
         
-        SessionData *msg = nil;
+        ChatSessionData *msg = nil;
         if ([result next]) {
-            msg = [SessionData new];
+            msg = [ChatSessionData new];
             msg.sessionId = [result stringForColumn:@"sessionId"];
             msg.sessionExtendId = [result stringForColumn:@"sessionExtendId"];
             msg.sessionType = [result intForColumn:@"sessionType"];
@@ -498,8 +536,9 @@
             msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
             msg.isDelete = [result intForColumn:@"sessionDeleted"];
             msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
-            msg.users = [self getSessionMemberList:msg.sessionId];
             msg.unReadMessageCount = [self getUnReadSessionMessageCountBySessionId:msg.sessionId];
+            msg.isDeleteTemp = [self getIsDeleteTemp:msg.sessionId];
+            msg.users = [self getSessionMemberList:msg.sessionId];
         }
         [result close];
         return msg;
@@ -507,14 +546,14 @@
 }
 
 //获取用户的会话
--(SessionData *)getUserSessionByExtendId:(NSString *)sessionExtendId {
+-(ChatSessionData *)getUserSessionByExtendId:(NSString *)sessionExtendId {
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         FMResultSet *result = [db executeQuery:@"select * from session where sessionInsertUser=? and sessionExtendId=?"
                           withArgumentsInArray:@[user.userExtendId, sessionExtendId]];
         
-        SessionData *msg = nil;
+        ChatSessionData *msg = nil;
         if ([result next]) {
-            msg = [SessionData new];
+            msg = [ChatSessionData new];
             msg.sessionId = [result stringForColumn:@"sessionId"];
             msg.sessionExtendId = [result stringForColumn:@"sessionExtendId"];
             msg.sessionType = [result intForColumn:@"sessionType"];
@@ -527,8 +566,9 @@
             msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
             msg.isDelete = [result intForColumn:@"sessionDeleted"];
             msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
-            msg.users = [self getSessionMemberList:msg.sessionId];
             msg.unReadMessageCount = [self getUnReadSessionMessageCountBySessionId:msg.sessionId];
+            msg.isDeleteTemp = [self getIsDeleteTemp:msg.sessionId];
+            msg.users = [self getSessionMemberList:msg.sessionId];
         }
         [result close];
         return msg;
@@ -545,7 +585,7 @@
 }
 
 //插入会话的用户
--(Boolean)insertSessionMember:(SessionDataMember *)member {
+-(Boolean)insertSessionMember:(ChatSessionMember *)member {
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         BOOL flag = [db executeUpdate:@"INSERT OR REPLACE INTO session_member("
                      "userId,"
@@ -574,8 +614,8 @@
             [FlappyStringTool toUnNullStr:member.userCreateDate],
             [FlappyStringTool toUnNullStr:member.userLoginDate],
             [FlappyStringTool toUnNullStr:member.sessionId],
-            [FlappyStringTool toUnNullStr:member.sessionMemberLatestRead],
-            [FlappyStringTool toUnNullStr:member.sessionMemberLatestDelete],
+            [NSNumber numberWithInteger:member.sessionMemberLatestRead],
+            [NSNumber numberWithInteger:member.sessionMemberLatestDelete],
             [FlappyStringTool toUnNullStr:member.sessionMemberMarkName],
             [NSNumber numberWithInteger:member.sessionMemberMute],
             [NSNumber numberWithInteger:member.sessionMemberPinned],
@@ -589,14 +629,14 @@
 }
 
 //获取会话ID的用户列表
--(SessionDataMember *)getSessionMember:(NSString *)sessionId andMemberId:(NSString *)userId {
+-(ChatSessionMember *)getSessionMember:(NSString *)sessionId andMemberId:(NSString *)userId {
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         FMResultSet *result = [db executeQuery:@"select * from session_member where sessionInsertUser=? and sessionId=? and userId=?"
                           withArgumentsInArray:@[user.userExtendId, sessionId, userId]];
         
-        SessionDataMember *member = nil;
+        ChatSessionMember *member = nil;
         if ([result next]) {
-            member = [SessionDataMember new];
+            member = [ChatSessionMember new];
             member.userId = [result stringForColumn:@"userId"];
             member.userExtendId = [result stringForColumn:@"userExtendId"];
             member.userName = [result stringForColumn:@"userName"];
@@ -605,8 +645,8 @@
             member.userCreateDate = [result stringForColumn:@"userCreateDate"];
             member.userLoginDate = [result stringForColumn:@"userLoginDate"];
             member.sessionId = [result stringForColumn:@"sessionId"];
-            member.sessionMemberLatestRead = [result stringForColumn:@"sessionMemberLatestRead"];
-            member.sessionMemberLatestDelete = [result stringForColumn:@"sessionMemberLatestDelete"];
+            member.sessionMemberLatestRead = [result longForColumn:@"sessionMemberLatestRead"];
+            member.sessionMemberLatestDelete = [result longForColumn:@"sessionMemberLatestDelete"];
             member.sessionMemberMarkName = [result stringForColumn:@"sessionMemberMarkName"];
             member.sessionMemberMute = [result intForColumn:@"sessionMemberMute"];
             member.sessionMemberPinned = [result intForColumn:@"sessionMemberPinned"];
@@ -626,7 +666,7 @@
                           withArgumentsInArray:@[user.userExtendId, sessionId]];
         NSMutableArray *memberList = [[NSMutableArray alloc] init];
         while ([result next]) {
-            SessionDataMember *member = [SessionDataMember new];
+            ChatSessionMember *member = [ChatSessionMember new];
             member.userId = [result stringForColumn:@"userId"];
             member.userExtendId = [result stringForColumn:@"userExtendId"];
             member.userName = [result stringForColumn:@"userName"];
@@ -635,8 +675,8 @@
             member.userCreateDate = [result stringForColumn:@"userCreateDate"];
             member.userLoginDate = [result stringForColumn:@"userLoginDate"];
             member.sessionId = [result stringForColumn:@"sessionId"];
-            member.sessionMemberLatestRead = [result stringForColumn:@"sessionMemberLatestRead"];
-            member.sessionMemberLatestDelete = [result stringForColumn:@"sessionMemberLatestDelete"];
+            member.sessionMemberLatestRead = [result longForColumn:@"sessionMemberLatestRead"];
+            member.sessionMemberLatestDelete = [result longForColumn:@"sessionMemberLatestDelete"];
             member.sessionMemberMarkName = [result stringForColumn:@"sessionMemberMarkName"];
             member.sessionMemberMute = [result intForColumn:@"sessionMemberMute"];
             member.sessionMemberPinned = [result intForColumn:@"sessionMemberPinned"];
@@ -1058,16 +1098,16 @@
 
 //更新最近已读的消息
 -(void)updateSessionMemberLatestRead:(NSString *)userId andSessionId:(NSString *)sessionId andTableSeq:(NSString *)tableOffset {
-    SessionDataMember *data = [self getSessionMember:sessionId andMemberId:userId];
+    ChatSessionMember *data = [self getSessionMember:sessionId andMemberId:userId];
     if (data != nil) {
-        data.sessionMemberLatestRead = tableOffset;
+        data.sessionMemberLatestRead = [tableOffset longLongValue];
         [self insertSessionMember:data];
     }
 }
 
 //更新mute
 -(void)updateSessionMemberMute:(NSString *)userId andSessionId:(NSString *)sessionId andMute:(NSString *)mute {
-    SessionDataMember *data = [self getSessionMember:sessionId andMemberId:userId];
+    ChatSessionMember *data = [self getSessionMember:sessionId andMemberId:userId];
     if (data != nil) {
         data.sessionMemberMute = [mute integerValue];
         [self insertSessionMember:data];
@@ -1076,7 +1116,7 @@
 
 //更新pinned
 -(void)updateSessionMemberPinned:(NSString *)userId andSessionId:(NSString *)sessionId andPinned:(NSString *)pinned {
-    SessionDataMember *data = [self getSessionMember:sessionId andMemberId:userId];
+    ChatSessionMember *data = [self getSessionMember:sessionId andMemberId:userId];
     if (data != nil) {
         data.sessionMemberPinned = [pinned integerValue];
         [self insertSessionMember:data];
@@ -1085,16 +1125,16 @@
 
 //更新删除
 -(void)updateSessionDeleteTemp:(NSString *)userId andSessionId:(NSString *)sessionId andSessionOffset:(NSString *)sessionOffset {
-    SessionDataMember *data = [self getSessionMember:sessionId andMemberId:userId];
+    ChatSessionMember *data = [self getSessionMember:sessionId andMemberId:userId];
     if (data != nil) {
-        data.sessionMemberLatestDelete = sessionOffset;
+        data.sessionMemberLatestDelete = [sessionOffset longLongValue];
         [self insertSessionMember:data];
     }
 }
 
 //更新删除
 -(void)updateSessionDeletePermanent:(NSString *)userId andSessionId:(NSString *)sessionId andSessionOffset:(NSString *)sessionOffset {
-    SessionData *session = [self getUserSessionByID:sessionId];
+    ChatSessionData *session = [self getUserSessionByID:sessionId];
     if (session != nil) {
         session.isDelete = 1;
         [self insertSession:session];

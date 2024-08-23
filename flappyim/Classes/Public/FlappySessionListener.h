@@ -20,9 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)onReceiveList:(NSArray*) sessionList;
 
--(void)onReceive:(SessionData*) session;
+-(void)onReceive:(ChatSessionData*) session;
 
--(void)onDelete:(SessionData*) session;
+-(void)onDelete:(ChatSessionData*) session;
 
 
 

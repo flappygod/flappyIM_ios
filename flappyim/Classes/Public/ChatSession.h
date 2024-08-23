@@ -45,7 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString* deleteDate;
 
-@property(nonatomic,assign) NSInteger unReadMessageCount;
 
 
 @end

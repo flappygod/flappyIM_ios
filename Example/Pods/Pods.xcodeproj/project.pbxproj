@@ -46,11 +46,11 @@
 		27AC706D132A6D728DB1D5F463701751 /* LXHttpRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 30E2201C09AE0019A25C3E53100F616F /* LXHttpRequest.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		29166D12B029F45C481D854AA787787B /* FlappyConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = CB04B0A930534DB36A980872F4497994 /* FlappyConfig.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		291F6776BC8E6F659F612716EE82DEAE /* FlappyChatSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 1640DBA18DE682B9C9F61A5CFEEDE803 /* FlappyChatSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		292BC534D699F459C2D2CB557977A95C /* SessionData.h in Headers */ = {isa = PBXBuildFile; fileRef = 2570CAF2B90E5BA667EAF2E8173DA8B4 /* SessionData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		292BC534D699F459C2D2CB557977A95C /* ChatSessionData.h in Headers */ = {isa = PBXBuildFile; fileRef = 2570CAF2B90E5BA667EAF2E8173DA8B4 /* ChatSessionData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D4990FEA866D7D8DFF7DDE0CB975E38 /* GPBWireFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = CFACE6CBF1A65F00BEA60EF61D651E17 /* GPBWireFormat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2DD8B55CDC9F8CC58379E1800CDAB536 /* flappyim-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D768A60E2FADC177EDF6502E7D7DDE6 /* flappyim-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2DFDD7B0DF72125520BFA29CBC4B2C2B /* FlappyImageTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DD5A91484A428CA05BAA7ED3ACD3851 /* FlappyImageTool.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		2F587A349492A356352ACA28E6E36B5E /* SessionDataMember.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DA1B525D4B2805A28DA91CCFEDFEDB7 /* SessionDataMember.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2F587A349492A356352ACA28E6E36B5E /* ChatSessionMember.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DA1B525D4B2805A28DA91CCFEDFEDB7 /* ChatSessionMember.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F79FAD4C71B0BB9D4A74EEB671A0EBF /* GPBDescriptor_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 7168E04D38CE86A9A53055BA13F4C9CC /* GPBDescriptor_PackagePrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		30403DA3AE3DAEDC802A17AC4DF7B72C /* GPBUnknownFieldSet_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CE1F39F7C262C51B3F5C1E433A90A02 /* GPBUnknownFieldSet_PackagePrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		30DCE7D7C6C2777241BB82241C110EC0 /* FMResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAADDC1C27E569C0857C602BD0D5A4AD /* FMResultSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -162,7 +162,7 @@
 		9E3F4BD7B1027EF79D2B05F46508CBD5 /* GPBApi.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = BD412591236EBE3392EB19F42097B47E /* GPBApi.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9F5D472E0B58C95613C76C43148FC8B5 /* UIButton+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = A9402F444B85C41367A1C8F7C189CBA9 /* UIButton+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9F87F4C8F8504C5D2ED082C15184F0B3 /* ChatSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A575113DED0355C8ACA8517E15A06A1 /* ChatSession.m */; };
-		A043747C5B20E5095C7338976B221D54 /* SessionDataMember.m in Sources */ = {isa = PBXBuildFile; fileRef = E877892A163EFE555F016013B98D430B /* SessionDataMember.m */; };
+		A043747C5B20E5095C7338976B221D54 /* ChatSessionMember.m in Sources */ = {isa = PBXBuildFile; fileRef = E877892A163EFE555F016013B98D430B /* ChatSessionMember.m */; };
 		A1EDEE552A5B874DE618121E779BF7F5 /* GPBType.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 36FD00A36FC8C3DBB443B617C840DAFB /* GPBType.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A2519161A4775DF04E9CC6E3323966E8 /* GPBProtocolBuffers_RuntimeSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = AAC20969473034C6BC6F91D17DFDAB6A /* GPBProtocolBuffers_RuntimeSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A25F62E4A3470A062B07CF39926BD7BD /* GPBMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = FC7DACF5C7240ECF7D890D7F5B71947E /* GPBMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -232,7 +232,7 @@
 		E944E236811C39A070EBA4588FE5119A /* FlappyFailureWrap.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD3D82259936A9D5C41FEE5644B07EC /* FlappyFailureWrap.m */; };
 		E9E65C9EAE6263A1291195D463819DA5 /* GPBRootObject.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFF629D18EB3671E2D729C80903896A /* GPBRootObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		EB054BBE0B44EFEFBD3CF9F6FCAC450C /* GPBWellKnownTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C5940F29E84EE4AFE195BD7236A5CFC /* GPBWellKnownTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		ECE1AB1ABED10E047D5316977E2AFFE6 /* SessionData.m in Sources */ = {isa = PBXBuildFile; fileRef = 66C2E8234F9650B87CC53B4E773CFC30 /* SessionData.m */; };
+		ECE1AB1ABED10E047D5316977E2AFFE6 /* ChatSessionData.m in Sources */ = {isa = PBXBuildFile; fileRef = 66C2E8234F9650B87CC53B4E773CFC30 /* ChatSessionData.m */; };
 		ED0B81FF1DEC0B138947EA93D22E5A4E /* AFNetworkActivityIndicatorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 92542A64E9A12439D87F1D25C06862B6 /* AFNetworkActivityIndicatorManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ED28DFAB32E9A69B1B611B45D5438652 /* LXHttpsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 27B34DF2491576F5A06905CB09CB3092 /* LXHttpsRequest.m */; };
 		ED52833D5EE917686CE0CA68B9800D07 /* GPBExtensionRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 47969FD99B35544784AB4CFCCD9FBE80 /* GPBExtensionRegistry.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -378,7 +378,7 @@
 		07959A4193F8C906496CE40F1766399D /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIRefreshControl+AFNetworking.m"; path = "UIKit+AFNetworking/UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		07BAD1EC999956223A4C5D97F37DE59F /* FlappyIM.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = FlappyIM.m; sourceTree = "<group>"; };
 		07F7B294155F91D0F04E07C061645A69 /* Base64.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
-		091C8933D5481AFBD92105160539924D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		091C8933D5481AFBD92105160539924D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		0B188624829A4C51391302AF73EC9042 /* MJProperty.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJProperty.m; path = MJExtension/MJProperty.m; sourceTree = "<group>"; };
 		0C3B51388A21FF7AA12C3AC75A157BA0 /* ChatVideo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChatVideo.m; sourceTree = "<group>"; };
 		0CB5326238454C06CDCF05158B98802D /* Protobuf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Protobuf.release.xcconfig; sourceTree = "<group>"; };
@@ -389,7 +389,7 @@
 		0F92C976FDABE0D30D707976662C8CC8 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Source/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
 		10AE689A7C807D91C648FEE820FB6FE1 /* GPBProtocolBuffers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBProtocolBuffers.h; path = objectivec/GPBProtocolBuffers.h; sourceTree = "<group>"; };
 		1115936E8013D55D39A71FFCE66C8239 /* Aes256.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = Aes256.m; sourceTree = "<group>"; };
-		117D39EB37C79F09963D3EA8E088174B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		117D39EB37C79F09963D3EA8E088174B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		11B0CBA88E33D743D4200F9C73F76B1F /* ChatImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChatImage.h; sourceTree = "<group>"; };
 		133342E122AD2B781BD545C8602BB417 /* GPBDescriptor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBDescriptor.h; path = objectivec/GPBDescriptor.h; sourceTree = "<group>"; };
 		13879278BD83A5140E0819264A6C35C6 /* MJPropertyType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MJPropertyType.h; path = MJExtension/MJPropertyType.h; sourceTree = "<group>"; };
@@ -408,14 +408,14 @@
 		1FDC2D92DA2A475891B9889C92F6AE84 /* FlappySocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappySocket.h; sourceTree = "<group>"; };
 		2350CA13F6E5FD9C646040A27BD8501A /* Pods-flappyim_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-flappyim_Example.release.xcconfig"; sourceTree = "<group>"; };
 		2493CBD49148C940FCB665ED5C6E8409 /* AFCompatibilityMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFCompatibilityMacros.h; path = AFNetworking/AFCompatibilityMacros.h; sourceTree = "<group>"; };
-		2570CAF2B90E5BA667EAF2E8173DA8B4 /* SessionData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SessionData.h; sourceTree = "<group>"; };
+		2570CAF2B90E5BA667EAF2E8173DA8B4 /* ChatSessionData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChatSessionData.h; sourceTree = "<group>"; };
 		2734F03BBCD39C9604916147B5E2BDDE /* Aes128.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = Aes128.m; sourceTree = "<group>"; };
 		27B34DF2491576F5A06905CB09CB3092 /* LXHttpsRequest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LXHttpsRequest.m; sourceTree = "<group>"; };
 		2A116289555032346FF86F7ADED8A520 /* Pods-flappyim_Tests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-flappyim_Tests"; path = Pods_flappyim_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B276B0A79173A1D6E83C9B4FB9A4A57 /* MJExtension */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MJExtension; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C25B686495D635808D5E8B584FBFF43 /* MJPropertyKey.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJPropertyKey.m; path = MJExtension/MJPropertyKey.m; sourceTree = "<group>"; };
 		2D7D7FD3DAFB63A233C201FBB1653350 /* FlappyApiConfig.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = FlappyApiConfig.m; sourceTree = "<group>"; };
-		2DA1B525D4B2805A28DA91CCFEDFEDB7 /* SessionDataMember.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SessionDataMember.h; sourceTree = "<group>"; };
+		2DA1B525D4B2805A28DA91CCFEDFEDB7 /* ChatSessionMember.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChatSessionMember.h; sourceTree = "<group>"; };
 		2DFD682F36A895743AFB54107BAA1D9D /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/AVKit.framework; sourceTree = DEVELOPER_DIR; };
 		2E1DDFDB392FFD5160533020F79E9265 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		2E320645F712D385C67A2C9D7B18F62A /* CocoaAsyncSocket-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "CocoaAsyncSocket-Info.plist"; sourceTree = "<group>"; };
@@ -476,13 +476,13 @@
 		61BD3178E6F924944F9F1525AEBA56B8 /* GPBDuration.pbobjc.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBDuration.pbobjc.m; path = objectivec/GPBDuration.pbobjc.m; sourceTree = "<group>"; };
 		6581E9B3AA584B98ADC1EBF99B69756B /* ChatLocation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChatLocation.m; sourceTree = "<group>"; };
 		65B6DAF9612DF3DE127F8CFA05E02D45 /* GPBArray_PackagePrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBArray_PackagePrivate.h; path = objectivec/GPBArray_PackagePrivate.h; sourceTree = "<group>"; };
-		66C2E8234F9650B87CC53B4E773CFC30 /* SessionData.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SessionData.m; sourceTree = "<group>"; };
+		66C2E8234F9650B87CC53B4E773CFC30 /* ChatSessionData.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChatSessionData.m; sourceTree = "<group>"; };
 		674D8F569D464BC8C5B8070FFC8B703A /* FlappyIM.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyIM.h; sourceTree = "<group>"; };
 		67F4663202943ECE7C9A9EC621139750 /* Pods-flappyim_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-flappyim_Example.modulemap"; sourceTree = "<group>"; };
 		692B30C55880130772FABC985D6BC991 /* UIButton+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIButton+AFNetworking.m"; path = "UIKit+AFNetworking/UIButton+AFNetworking.m"; sourceTree = "<group>"; };
 		6A05E9F098B50DAD781B543A95459196 /* ChatVoice.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChatVoice.h; sourceTree = "<group>"; };
 		6BBC0AC9E9B91FA14504F80F44CA2901 /* FMDB-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FMDB-umbrella.h"; sourceTree = "<group>"; };
-		6C2396288455F2D24AA17C20CEF5BDE1 /* flappyim.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = flappyim.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		6C2396288455F2D24AA17C20CEF5BDE1 /* flappyim.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = flappyim.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		6CBEFE4F9E22AFDC6347A739BB35FF8C /* CocoaAsyncSocket */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CocoaAsyncSocket; path = CocoaAsyncSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CE1F39F7C262C51B3F5C1E433A90A02 /* GPBUnknownFieldSet_PackagePrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBUnknownFieldSet_PackagePrivate.h; path = objectivec/GPBUnknownFieldSet_PackagePrivate.h; sourceTree = "<group>"; };
 		6D49CEB5A64C792F444114C0F7FBC154 /* GPBBootstrap.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBBootstrap.h; path = objectivec/GPBBootstrap.h; sourceTree = "<group>"; };
@@ -540,7 +540,7 @@
 		99D1425DA17E89A6CDB79EC0BDC8C4C9 /* GPBEmpty.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBEmpty.pbobjc.h; path = objectivec/GPBEmpty.pbobjc.h; sourceTree = "<group>"; };
 		9C841C1B86954DF7C68C80EE8FC41723 /* FlappyFailureWrap.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyFailureWrap.h; sourceTree = "<group>"; };
 		9D838220F33521EDD0FA835C8C7DB8E0 /* FlappyImageTool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = FlappyImageTool.m; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A037046E3FF805634FC971C2E1A5725E /* FlappyApiConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyApiConfig.h; sourceTree = "<group>"; };
 		A05A86D9A76A5365A4773D25B597F1B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		A0EA5DF8CC7D5EB9A4798F67AE2D1657 /* ChatAction.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChatAction.h; sourceTree = "<group>"; };
@@ -636,13 +636,13 @@
 		E1BC833B0C9AF539F0F8034F915C05A4 /* GPBUnknownField.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBUnknownField.h; path = objectivec/GPBUnknownField.h; sourceTree = "<group>"; };
 		E34CA6FF3E75E85FCE7F36809C3C425F /* FlappyDef.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyDef.h; sourceTree = "<group>"; };
 		E52560E06967D1E8DCFE88928AB81FFE /* RSATool.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RSATool.h; sourceTree = "<group>"; };
-		E534CCAFA025A9990AD21CE77456D8ED /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = privacy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		E534CCAFA025A9990AD21CE77456D8ED /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = privacy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		E629EA9099A40684B58420E612BE4959 /* ChatFile.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ChatFile.h; sourceTree = "<group>"; };
 		E66E1EBE5D754BC0B85C4CDE603BA35E /* FlappyApiRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FlappyApiRequest.h; sourceTree = "<group>"; };
 		E67ED3976957317051BBEAEF538BA64F /* AFSecurityPolicy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFSecurityPolicy.m; path = AFNetworking/AFSecurityPolicy.m; sourceTree = "<group>"; };
 		E7B4B232127906EE3E4B8639018785C0 /* Struct.pbobjc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Struct.pbobjc.h; path = objectivec/google/protobuf/Struct.pbobjc.h; sourceTree = "<group>"; };
 		E854E109442CF83A4C1BFA95B3DAF670 /* FMDB-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FMDB-dummy.m"; sourceTree = "<group>"; };
-		E877892A163EFE555F016013B98D430B /* SessionDataMember.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SessionDataMember.m; sourceTree = "<group>"; };
+		E877892A163EFE555F016013B98D430B /* ChatSessionMember.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ChatSessionMember.m; sourceTree = "<group>"; };
 		E95EDDDC210FADC7E0A9E1B0FD595CFD /* Pods-flappyim_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-flappyim_Tests-dummy.m"; sourceTree = "<group>"; };
 		EAADDC1C27E569C0857C602BD0D5A4AD /* FMResultSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = src/fmdb/FMResultSet.h; sourceTree = "<group>"; };
 		ECC9A8222444962D920573405BBD48E8 /* Pods-flappyim_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-flappyim_Tests.modulemap"; sourceTree = "<group>"; };
@@ -886,7 +886,6 @@
 				05496734C64BFB5A2F1ADD94C611AE11 /* Wrappers.pbobjc.h */,
 				56129ABE5EEF5D1D34B767090D4AAB26 /* Support Files */,
 			);
-			name = Protobuf;
 			path = Protobuf;
 			sourceTree = "<group>";
 		};
@@ -913,7 +912,6 @@
 				401E453CAD7CC521E6C66888DDBADF22 /* FlappyStringTool.h */,
 				CBE0FAA58BF6A09229B56A16BF4A71DD /* FlappyStringTool.m */,
 			);
-			name = StringTool;
 			path = StringTool;
 			sourceTree = "<group>";
 		};
@@ -977,7 +975,6 @@
 				924265A43979EA6999E27002DA11AF01 /* NSString+MJExtension.m */,
 				02F3768EA89A780091AB3C97B4D47F68 /* Support Files */,
 			);
-			name = MJExtension;
 			path = MJExtension;
 			sourceTree = "<group>";
 		};
@@ -1001,7 +998,6 @@
 				F62E727FCB21E740A2702529EE51BADC /* Support Files */,
 				BA29337A84BD03F79A587ABEE88D9F8D /* UIKit */,
 			);
-			name = AFNetworking;
 			path = AFNetworking;
 			sourceTree = "<group>";
 		};
@@ -1112,7 +1108,6 @@
 				A3790F4B40342FE7E3419EDB43938B4C /* GCDAsyncUdpSocket.m */,
 				AED593E9C309581D1D3F691C54BF48F3 /* Support Files */,
 			);
-			name = CocoaAsyncSocket;
 			path = CocoaAsyncSocket;
 			sourceTree = "<group>";
 		};
@@ -1137,7 +1132,6 @@
 				7850A7D378578F2EAE6553C83EE53678 /* FlappyDateTool.h */,
 				014DDDDC2B784B3DFD1618CEAEE57319 /* FlappyDateTool.m */,
 			);
-			name = DateTool;
 			path = DateTool;
 			sourceTree = "<group>";
 		};
@@ -1156,7 +1150,6 @@
 				BBA816597A10D7CFAF62BDF62CB5E581 /* FlappyJsonTool.h */,
 				5254DDCF931D12CB799F2C9F60FDF0C7 /* FlappyJsonTool.m */,
 			);
-			name = JsonTool;
 			path = JsonTool;
 			sourceTree = "<group>";
 		};
@@ -1190,7 +1183,6 @@
 				CBA06863796A0CEE2BD6383CE2BDDB25 /* standard */,
 				4800674AF016190759FD713BA48AEEB2 /* Support Files */,
 			);
-			name = FMDB;
 			path = FMDB;
 			sourceTree = "<group>";
 		};
@@ -1219,7 +1211,6 @@
 				D2DF6B31B557F6A8B63B0B39D843AF13 /* FlappyUploadTool.h */,
 				CA4C39160F2C84864C1753E0A9DC3915 /* FlappyUploadTool.m */,
 			);
-			name = UploadImage;
 			path = UploadImage;
 			sourceTree = "<group>";
 		};
@@ -1274,7 +1265,6 @@
 				E52560E06967D1E8DCFE88928AB81FFE /* RSATool.h */,
 				70C534140ECDB0906A3FA289C3E638CE /* RSATool.m */,
 			);
-			name = Encrypt;
 			path = Encrypt;
 			sourceTree = "<group>";
 		};
@@ -1314,7 +1304,6 @@
 				BA84425DD37395FEA751F9604A462EE8 /* FlappyNetTool.h */,
 				F5FC6E07129BA04A9CA3B86FC0479A51 /* FlappyNetTool.m */,
 			);
-			name = NetTool;
 			path = NetTool;
 			sourceTree = "<group>";
 		};
@@ -1397,10 +1386,10 @@
 				B62675395DC7973E8E8BC722BCB2F0BC /* FlappySocket.m */,
 				FE60AF71A134524CD7C83D5C9D9E2D99 /* PushSettings.h */,
 				54A29C0B7CBE255B1D492E18F6A6588C /* PushSettings.m */,
-				2570CAF2B90E5BA667EAF2E8173DA8B4 /* SessionData.h */,
-				66C2E8234F9650B87CC53B4E773CFC30 /* SessionData.m */,
-				2DA1B525D4B2805A28DA91CCFEDFEDB7 /* SessionDataMember.h */,
-				E877892A163EFE555F016013B98D430B /* SessionDataMember.m */,
+				2570CAF2B90E5BA667EAF2E8173DA8B4 /* ChatSessionData.h */,
+				66C2E8234F9650B87CC53B4E773CFC30 /* ChatSessionData.m */,
+				2DA1B525D4B2805A28DA91CCFEDFEDB7 /* ChatSessionMember.h */,
+				E877892A163EFE555F016013B98D430B /* ChatSessionMember.m */,
 			);
 			name = Public;
 			path = flappyim/Classes/Public;
@@ -1472,8 +1461,8 @@
 				B16C67DF6E8821F648FF644964D1ABC1 /* NSData+CommonCrypto.h in Headers */,
 				537A8CB3D724DF1BE8D823ACE715A14D /* PushSettings.h in Headers */,
 				F9D5F5905658E30DA1C8C2D066593848 /* RSATool.h in Headers */,
-				292BC534D699F459C2D2CB557977A95C /* SessionData.h in Headers */,
-				2F587A349492A356352ACA28E6E36B5E /* SessionDataMember.h in Headers */,
+				292BC534D699F459C2D2CB557977A95C /* ChatSessionData.h in Headers */,
+				2F587A349492A356352ACA28E6E36B5E /* ChatSessionMember.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1944,8 +1933,8 @@
 				6EBF3F07963EF1CD7DC3D1ABF961F6BE /* NSData+CommonCrypto.m in Sources */,
 				43FEC53807DCC9E35FBF7D910387BAFC /* PushSettings.m in Sources */,
 				31D86416244B9FCEDD33844ABEFAE7DB /* RSATool.m in Sources */,
-				ECE1AB1ABED10E047D5316977E2AFFE6 /* SessionData.m in Sources */,
-				A043747C5B20E5095C7338976B221D54 /* SessionDataMember.m in Sources */,
+				ECE1AB1ABED10E047D5316977E2AFFE6 /* ChatSessionData.m in Sources */,
+				A043747C5B20E5095C7338976B221D54 /* ChatSessionMember.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2550,8 +2539,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};

@@ -22,7 +22,7 @@
     if(self){
         _receiveListListener=receiveListListener;
         _receiveListener=receiveListener;
-        _deleteListener=_deleteListener;
+        _deleteListener=deleteListener;
     }
     return self;
 }
@@ -33,13 +33,13 @@
     }
 }
 
--(void)onReceive:(SessionData*) session{
+-(void)onReceive:(ChatSessionData*) session{
     if(_receiveListener!=nil){
         _receiveListener(session);
     }
 }
 
--(void)onDelete:(SessionData*) session{
+-(void)onDelete:(ChatSessionData*) session{
     if(_deleteListener!=nil){
         _deleteListener(session);
     }

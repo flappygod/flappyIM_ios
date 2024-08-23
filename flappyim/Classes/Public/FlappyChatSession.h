@@ -8,8 +8,8 @@
 #import <Foundation/Foundation.h>
 #import "FlappyMessageListener.h"
 #import "FlappyApiRequest.h"
+#import "ChatSessionData.h"
 #import "ChatLocation.h"
-#import "SessionData.h"
 #import "ChatImage.h"
 #import "ChatVoice.h"
 #import "ChatVideo.h"
@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //session
-@property(nonatomic,strong) SessionData*  session;
+@property(nonatomic,strong) ChatSessionData*  session;
 
 
 //设置消息的监听
@@ -137,7 +137,6 @@ NS_ASSUME_NONNULL_BEGIN
                       andSuccess:(FlappySendSuccess)success
                       andFailure:(FlappySendFailure)failure;
 
-
 //修改Pinned
 -(ChatMessage*)sessionChangePinned:(NSInteger)pinned
                         andSuccess:(FlappySendSuccess)success
@@ -148,7 +147,6 @@ NS_ASSUME_NONNULL_BEGIN
                   andSuccess:(FlappySendSuccess)success
                   andFailure:(FlappySendFailure)failure;
 
-
 //获取当前最近的一条消息
 -(ChatMessage*)getLatestMessage;
 
@@ -156,8 +154,6 @@ NS_ASSUME_NONNULL_BEGIN
 //获取某条信息之前的消息
 -(NSMutableArray*)getFormerMessages:(NSString*)messageID
                            withSize:(NSInteger)size;
-
-
 
 
 //获取未读消息数量
