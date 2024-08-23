@@ -529,6 +529,8 @@ static  GCDAsyncSocket*  _instanceSocket;
             return NSOrderedAscending;
         }];
         
+        
+        NSMutableSet *sessionIdSet = [[NSMutableSet alloc] init];
         //登录的时候插入的消息必然是新收到的消息
         for(long s=0;s<receiveMessageList.count;s++){
             //获取消息
@@ -537,11 +539,27 @@ static  GCDAsyncSocket*  _instanceSocket;
             [self handleMessageSendArriveState:chatMsg];
             //保存消息
             [[FlappyDataBase shareInstance] insertMessage:chatMsg];
-            //发送成功
-            [[FlappySender shareInstance] handleSendSuccessCallback:chatMsg];
             //通知事件消息
             [[FlappySender shareInstance] handleMessageAction:chatMsg];
+            //发送成功
+            [[FlappySender shareInstance] handleSendSuccessCallback:chatMsg];
+            //会话ID
+            [sessionIdSet addObject:chatMsg.messageSessionId];
         }
+        
+        //session array
+        NSMutableArray* sessionArray = [[NSMutableArray alloc] init];
+        for(NSString *sessionId in sessionIdSet){
+            ChatSessionData* sessionData = [[FlappyDataBase shareInstance] getUserSessionByID:sessionId];
+            if(sessionData!=nil){
+                [sessionArray addObject:sessionData];
+            }
+        }
+        
+        
+        //消息列表被接收到
+        [[FlappySender shareInstance] notifySessionUpdateList:receiveMessageList];
+        
         
         //消息列表被接收到
         [[FlappySender shareInstance] notifyMessageReceiveList:receiveMessageList];
@@ -592,12 +610,16 @@ static  GCDAsyncSocket*  _instanceSocket;
         [self handleMessageSendArriveState:chatMsg];
         //添加数据
         [[FlappyDataBase shareInstance] insertMessage:chatMsg];
-        //消息发送成功
-        [[FlappySender shareInstance] handleSendSuccessCallback:chatMsg];
         //通知事件消息
         [[FlappySender shareInstance] handleMessageAction:chatMsg];
+        //消息发送成功
+        [[FlappySender shareInstance] handleSendSuccessCallback:chatMsg];
         //通知接收到消息
         [[FlappySender shareInstance] notifyMessageReceive:chatMsg];
+        //会话更新
+        ChatSessionData* sessionData = [[FlappyDataBase shareInstance] getUserSessionByID:chatMsg.messageSessionId];
+        //通知接收到消息
+        [[FlappySender shareInstance] notifySessionUpdate:sessionData];
         //消息接收到
         [receiveMessageList addObject:chatMsg];
     }

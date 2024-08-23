@@ -897,6 +897,36 @@
     });
 }
 
+//会话列表更新
+-(void)notifySessionUpdateList:(NSArray*)sessionList{
+    if(sessionList==nil || sessionList.count==0){
+        return;
+    }
+    //在主线程之中执行
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].sessionListeners;
+        for(int s=0;s<array.count;s++){
+            FlappySessionListener* listener=[array objectAtIndex:s];
+            [listener onUpdateList:sessionList];
+        }
+    });
+}
+
+//会话被更新
+-(void)notifySessionUpdate:(ChatSessionData*)session{
+    if(session==nil){
+        return;
+    }
+    //在主线程之中执行
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* array=[FlappyIM shareInstance].sessionListeners;
+        for(int s=0;s<array.count;s++){
+            FlappySessionListener* listener=[array objectAtIndex:s];
+            [listener onUpdate:session];
+        }
+    });
+}
+
 //会话被删除(用户被删除)
 -(void)notifySessionDelete:(ChatSessionData*)session{
     if(session==nil){

@@ -90,6 +90,12 @@
 //会话
 -(void)notifySessionReceive:(ChatSessionData*)session;
 
+//会话列表更新
+-(void)notifySessionUpdateList:(NSArray*)sessionList;
+
+//会话被更新
+-(void)notifySessionUpdate:(ChatSessionData*)session;
+
 //删除
 -(void)notifySessionDelete:(ChatSessionData*)session;
 

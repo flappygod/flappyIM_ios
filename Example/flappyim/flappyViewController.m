@@ -80,8 +80,12 @@
         NSLog(@"会话有更新");
     } andReceive:^(ChatSessionData * _Nullable session) {
         NSLog(@"会话有更新");
+    } andUpdateList:^(NSArray * _Nullable sessionList) {
+        NSLog(@"会话有更新");
+    } andUpdate:^(ChatSessionData * _Nullable session) {
+        NSLog(@"会话有更新");
     } andDelete:^(ChatSessionData * _Nullable session) {
-        
+        NSLog(@"会话有更新");
     }]];
     
     //踢下线
