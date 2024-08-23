@@ -558,7 +558,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         
         
         //消息列表被接收到
-        [[FlappySender shareInstance] notifySessionUpdateList:receiveMessageList];
+        [[FlappySender shareInstance] notifySessionUpdateList:sessionArray];
         
         
         //消息列表被接收到
