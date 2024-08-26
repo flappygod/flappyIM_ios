@@ -1032,6 +1032,7 @@
                 break;
             }
         }
+        [self updateMessageReadByMsgId:msg.messageId];
         return nil;
     }];
 }
@@ -1078,6 +1079,19 @@
         return nil;
     }];
 }
+
+//更新消息已读
+-(void)updateMessageReadByMsgId:(NSString *)messageId{
+    [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        [db executeUpdate:@"update message set messageReadState=1 where messageInsertUser=? and messageId!=?"
+     withArgumentsInArray:@[
+            user.userExtendId,
+            messageId,
+        ]];
+        return nil;
+    }];
+}
+
 
 //更新最近已读的消息
 -(void)updateSessionOffset:(NSString *)sessionId andSessionOffset:(NSInteger)sessionOffset {
