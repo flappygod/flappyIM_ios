@@ -14,6 +14,17 @@
 @implementation ChatMessage
 
 
+- (instancetype)init {
+    //调用父类的初始化方法
+    self = [super init];
+    if (self) {
+        _messageSecret = [FlappyStringTool RandomString:16];
+    }
+    //返回实例
+    return self;
+}
+
+
 //设置|获取系统消息
 -(void)setChatSystem:(ChatSystem*)chatSystem{
     if(chatSystem!=nil){

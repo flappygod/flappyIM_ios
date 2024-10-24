@@ -341,15 +341,13 @@ static  GCDAsyncSocket*  _instanceSocket;
         //消息内容
         request.msg=[FlappyBaseSession changeToMessage:chatMsg];
         
-        //生成随机字符串
-        NSString* msgSecret = [FlappyStringTool RandomString:16];
         
         //秘钥加密
         request.msg.messageContent = [Aes128 AES128Encrypt:chatMsg.messageContent
-                                                   withKey:msgSecret];
+                                                   withKey:chatMsg.messageSecret];
         
         //渠道Channel秘钥加密消息秘钥
-        request.msg.messageSecret = [Aes128 AES128Encrypt:msgSecret
+        request.msg.messageSecret = [Aes128 AES128Encrypt:chatMsg.messageSecret
                                                   withKey:_channelSecret];
         
         
