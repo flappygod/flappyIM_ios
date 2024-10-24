@@ -35,7 +35,7 @@
 //心跳计时
 @property (nonatomic, strong) dispatch_source_t heartBeatTimer;
 //当前socket的秘钥
-@property (nonatomic,copy) NSString*  secret;
+@property (nonatomic,copy) NSString*  channelSecret;
 
 @end
 
@@ -56,7 +56,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         self.isActive=false;
         self.receiveData=[[NSMutableData alloc]init];
         self.updatingArray =[[NSMutableArray alloc]init];
-        self.secret = [FlappyStringTool RandomString:16];
+        self.channelSecret = [FlappyStringTool RandomString:16];
         self.loginSuccess=success;
         self.loginFailure=failure;
         self.dead=dead;
@@ -301,11 +301,11 @@ static  GCDAsyncSocket*  _instanceSocket;
         NSString* rsaKey = [[FlappyData shareInstance] getRsaKey];
         if(rsaKey!=nil && rsaKey.length!=0){
             info.secret = [RSATool encryptWithPublicKey:rsaKey
-                                               withData:self.secret];
+                                               withData:self.channelSecret];
         }
         //没有设置就用当前的
         else{
-            info.secret = self.secret;
+            info.secret = self.channelSecret;
         }
         //登录信息
         if([[FlappyData shareInstance] getUser]!=nil){
@@ -341,11 +341,18 @@ static  GCDAsyncSocket*  _instanceSocket;
         //消息内容
         request.msg=[FlappyBaseSession changeToMessage:chatMsg];
         
+        //生成随机字符串
+        NSString* msgSecret = [FlappyStringTool RandomString:16];
+        
         //秘钥加密
-        if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0){
-            request.msg.messageSecret = [Aes128 AES128Encrypt:chatMsg.messageSecret
-                                                      withKey:self.secret];
-        }
+        request.msg.messageContent = [Aes128 AES128Encrypt:chatMsg.messageContent
+                                                   withKey:msgSecret];
+        
+        //渠道Channel秘钥加密消息秘钥
+        request.msg.messageSecret = [Aes128 AES128Encrypt:msgSecret
+                                                  withKey:_channelSecret];
+        
+        
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
         NSData* reqData=[request delimitedData];
         //写入时间
@@ -484,11 +491,24 @@ static  GCDAsyncSocket*  _instanceSocket;
         NSMutableArray* receiveMessageList=[[NSMutableArray alloc]init];
         for(long s=0;s<array.count;s++){
             Message* message=[array objectAtIndex:s];
+            
+            //消息解析
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
+            
+            //秘钥解析
             if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0){
                 chatMsg.messageSecret = [Aes128 AES128Decrypt:chatMsg.messageSecret
-                                                      withKey:self.secret];
+                                                      withKey:self.channelSecret];
             }
+            
+            //内容解析
+            if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0 &&
+               chatMsg.messageContent!=nil && chatMsg.messageContent.length!=0){
+                chatMsg.messageContent = [Aes128 AES128Decrypt:chatMsg.messageContent
+                                                       withKey:chatMsg.messageSecret];
+            }
+            
+            
             [receiveMessageList addObject:chatMsg];
         }
         
@@ -601,11 +621,20 @@ static  GCDAsyncSocket*  _instanceSocket;
         Message* message=[array objectAtIndex:s];
         //转换一下
         ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
-        //解密秘钥
+        
+        //秘钥解析
         if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0){
             chatMsg.messageSecret = [Aes128 AES128Decrypt:chatMsg.messageSecret
-                                                  withKey:self.secret];
+                                                  withKey:self.channelSecret];
         }
+        
+        //内容解析
+        if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0 &&
+           chatMsg.messageContent!=nil && chatMsg.messageContent.length!=0){
+            chatMsg.messageContent = [Aes128 AES128Decrypt:chatMsg.messageContent
+                                                   withKey:chatMsg.messageSecret];
+        }
+        
         //修改消息状态
         [self handleMessageSendArriveState:chatMsg];
         //添加数据
