@@ -261,10 +261,16 @@ typedef GPB_ENUM(Message_FieldNumber) {
   Message_FieldNumber_MessageReadState = 13,
   Message_FieldNumber_MessageSecret = 14,
   Message_FieldNumber_MessageDate = 15,
-  Message_FieldNumber_MessageDeleteOperation = 16,
-  Message_FieldNumber_MessageDeleteUserList = 17,
-  Message_FieldNumber_IsDelete = 18,
-  Message_FieldNumber_DeleteDate = 19,
+  Message_FieldNumber_MessageReplyMsgId = 16,
+  Message_FieldNumber_MessageReplyMsgType = 17,
+  Message_FieldNumber_MessageReplyMsgContent = 18,
+  Message_FieldNumber_MessageReplyUserId = 19,
+  Message_FieldNumber_MessageRecallUserId = 20,
+  Message_FieldNumber_MessageAtUserIds = 21,
+  Message_FieldNumber_MessageReadUserIds = 22,
+  Message_FieldNumber_MessageDeleteUserIds = 23,
+  Message_FieldNumber_IsDelete = 24,
+  Message_FieldNumber_DeleteDate = 25,
 };
 
 GPB_FINAL @interface Message : GPBMessage
@@ -314,11 +320,29 @@ GPB_FINAL @interface Message : GPBMessage
 /** 消息时间 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *messageDate;
 
-/** 消息删除原因 */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *messageDeleteOperation;
+/** 回复的消息ID */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageReplyMsgId;
 
-/** 消息删除原因 */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *messageDeleteUserList;
+/** 回复的消息类型 */
+@property(nonatomic, readwrite) int32_t messageReplyMsgType;
+
+/** 回复的消息内容 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageReplyMsgContent;
+
+/** 回复的用户ID */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageReplyUserId;
+
+/** 撤回的用户ID */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageRecallUserId;
+
+/** AT的用户ID */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageAtUserIds;
+
+/** 已读的用户ID */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageReadUserIds;
+
+/** 删除的用户ID */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *messageDeleteUserIds;
 
 /** 消息是否被删除 */
 @property(nonatomic, readwrite) int32_t isDelete;

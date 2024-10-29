@@ -59,8 +59,16 @@
     "messageReadState INTEGER,"
     "messageSecret TEXT,"
     "isDelete INTEGER,"
-    "messageDeleteOperation TEXT,"
-    "messageDeleteUserList TEXT,"
+    
+    "messageReplyMsgId TEXT,"
+    "messageReplyMsgType INTEGER,"
+    "messageReplyMsgContent TEXT,"
+    "messageReplyUserId TEXT,"
+    "messageRecallUserId TEXT,"
+    "messageAtUserIds TEXT,"
+    "messageReadUserIds TEXT,"
+    "messageDeleteUserIds TEXT,"
+    
     "messageDate TEXT,"
     "messageStamp INTEGER,"
     "deleteDate TEXT,"
@@ -197,9 +205,15 @@
                            "deleteDate,"
                            "messageStamp,"
                            "isDelete,"
-                           "messageDeleteOperation,"
-                           "messageDeleteUserList,"
-                           "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                           "messageReplyMsgId,"
+                           "messageReplyMsgType,"
+                           "messageReplyMsgContent,"
+                           "messageReplyUserId,"
+                           "messageRecallUserId,"
+                           "messageAtUserIds,"
+                           "messageReadUserIds,"
+                           "messageDeleteUserIds,"
+                           "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                        withArgumentsInArray:@[
                 [FlappyStringTool toUnNullStr:msg.messageId],
                 [FlappyStringTool toUnNullStr:msg.messageSessionId],
@@ -218,9 +232,17 @@
                 [FlappyStringTool toUnNullStr:msg.messageDate],
                 [FlappyStringTool toUnNullStr:msg.deleteDate],
                 (fomerMsg != nil ? [NSNumber numberWithInteger:fomerMsg.messageStamp] : [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970 * 1000)]),
-                (fomerMsg != nil ? [NSNumber numberWithInteger:fomerMsg.isDelete] : [NSNumber numberWithInteger:msg.isDelete]),
-                (fomerMsg != nil ? [FlappyStringTool toUnNullStr:fomerMsg.messageDeleteOperation] : [FlappyStringTool toUnNullStr:msg.messageDeleteOperation]),
-                (fomerMsg != nil ? [FlappyStringTool toUnNullStr:fomerMsg.messageDeleteUserList] : [FlappyStringTool toUnNullStr:msg.messageDeleteUserList]),
+                [NSNumber numberWithInteger:msg.isDelete],
+            
+                [FlappyStringTool toUnNullStr:msg.messageReplyMsgId],
+                [NSNumber numberWithInteger:msg.messageReplyMsgType],
+                [FlappyStringTool toUnNullStr:msg.messageReplyMsgContent],
+                [FlappyStringTool toUnNullStr:msg.messageReplyUserId],
+                [FlappyStringTool toUnNullStr:msg.messageRecallUserId],
+                [FlappyStringTool toUnNullStr:msg.messageAtUserIds],
+                [FlappyStringTool toUnNullStr:msg.messageReadUserIds],
+                [FlappyStringTool toUnNullStr:msg.messageDeleteUserIds],
+
                 user.userExtendId
             ]];
             
@@ -260,9 +282,15 @@
                        "deleteDate,"
                        "messageStamp,"
                        "isDelete,"
-                       "messageDeleteOperation,"
-                       "messageDeleteUserList,"
-                       "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                       "messageReplyMsgId,"
+                       "messageReplyMsgType,"
+                       "messageReplyMsgContent,"
+                       "messageReplyUserId,"
+                       "messageRecallUserId,"
+                       "messageAtUserIds,"
+                       "messageReadUserIds,"
+                       "messageDeleteUserIds,"
+                       "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                    withArgumentsInArray:@[
             [FlappyStringTool toUnNullStr:msg.messageId],
             [FlappyStringTool toUnNullStr:msg.messageSessionId],
@@ -282,8 +310,16 @@
             [FlappyStringTool toUnNullStr:msg.deleteDate],
             (fomerMsg != nil ? [NSNumber numberWithInteger:fomerMsg.messageStamp] : [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970 * 1000)]),
             [NSNumber numberWithInteger:msg.isDelete],
-            [FlappyStringTool toUnNullStr:msg.messageDeleteOperation],
-            [FlappyStringTool toUnNullStr:msg.messageDeleteUserList],
+            
+            [FlappyStringTool toUnNullStr:msg.messageReplyMsgId],
+            [NSNumber numberWithInteger:msg.messageReplyMsgType],
+            [FlappyStringTool toUnNullStr:msg.messageReplyMsgContent],
+            [FlappyStringTool toUnNullStr:msg.messageReplyUserId],
+            [FlappyStringTool toUnNullStr:msg.messageRecallUserId],
+            [FlappyStringTool toUnNullStr:msg.messageAtUserIds],
+            [FlappyStringTool toUnNullStr:msg.messageReadUserIds],
+            [FlappyStringTool toUnNullStr:msg.messageDeleteUserIds],
+            
             user.userExtendId
         ]];
         if (!result) {
@@ -309,11 +345,12 @@
 //获取未读消息的数量
 -(int)getUnReadSessionMessageCountBySessionId:(NSString *)sessionId {
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        FMResultSet *results = [db executeQuery:@"SELECT COUNT(*) FROM message WHERE messageInsertUser=? and messageSessionId=? and messageSendId!=? and messageReadState=0 and (messageDeleteOperation is null or messageDeleteOperation == '') and messageType!=? and messageType!=?"
+        FMResultSet *results = [db executeQuery:@"SELECT COUNT(*) FROM message WHERE messageInsertUser=? and messageSessionId=? and messageSendId!=? and messageReadState=0 and (messageRecallUserId is null or messageRecallUserId == '') and (messageDeleteUserIds not like ?) and messageType!=? and messageType!=?"
                            withArgumentsInArray:@[
             user.userExtendId,
             sessionId,
             user.userId,
+            [NSString stringWithFormat:@"%%%@%%",user.userId],
             @(MSG_TYPE_SYSTEM),
             @(MSG_TYPE_ACTION),
         ]];
@@ -710,8 +747,16 @@
                        "messageDate=?,"
                        "deleteDate=?,"
                        "isDelete=?,"
-                       "messageDeleteOperation=?,"
-                       "messageDeleteUserList=?"
+                
+                       "messageReplyMsgId=?,"
+                       "messageReplyMsgType=?,"
+                       "messageReplyMsgContent=?,"
+                       "messageReplyUserId=?,"
+                       "messageRecallUserId=?,"
+                       "messageAtUserIds=?,"
+                       "messageReadUserIds=?,"
+                       "messageDeleteUserIds=?"
+                       
                        " where "
                        "messageId = ?"
                        " and "
@@ -733,8 +778,16 @@
             [FlappyStringTool toUnNullStr:msg.messageDate],
             [FlappyStringTool toUnNullStr:msg.deleteDate],
             [NSNumber numberWithInteger:msg.isDelete],
-            [FlappyStringTool toUnNullStr:msg.messageDeleteOperation],
-            [FlappyStringTool toUnNullStr:msg.messageDeleteUserList],
+            
+            [FlappyStringTool toUnNullStr:msg.messageReplyMsgId],
+            [NSNumber numberWithInteger:msg.messageReplyMsgType],
+            [FlappyStringTool toUnNullStr:msg.messageReplyMsgContent],
+            [FlappyStringTool toUnNullStr:msg.messageReplyUserId],
+            [FlappyStringTool toUnNullStr:msg.messageRecallUserId],
+            [FlappyStringTool toUnNullStr:msg.messageAtUserIds],
+            [FlappyStringTool toUnNullStr:msg.messageReadUserIds],
+            [FlappyStringTool toUnNullStr:msg.messageDeleteUserIds],
+            
             msg.messageId,
             user.userExtendId
         ]];
@@ -767,8 +820,17 @@
             msg.messageSecret = [result stringForColumn:@"messageSecret"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
             msg.isDelete = [result intForColumn:@"isDelete"];
-            msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
-            msg.messageDeleteUserList = [result stringForColumn:@"messageDeleteUserList"];
+            
+            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
+            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
+            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
+            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
+            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
+            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
+            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
+            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
+            
+            
             msg.messageStamp = [result longForColumn:@"messageStamp"];
             msg.deleteDate = [result stringForColumn:@"deleteDate"];
         }
@@ -806,8 +868,16 @@
             msg.messageSecret = [result stringForColumn:@"messageSecret"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
             msg.isDelete = [result intForColumn:@"isDelete"];
-            msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
-            msg.messageDeleteUserList = [result stringForColumn:@"messageDeleteUserList"];
+            
+            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
+            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
+            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
+            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
+            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
+            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
+            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
+            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
+            
             msg.messageStamp = [result longForColumn:@"messageStamp"];
             msg.deleteDate = [result stringForColumn:@"deleteDate"];
         }
@@ -840,8 +910,16 @@
             msg.messageSecret = [result stringForColumn:@"messageSecret"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
             msg.isDelete = [result intForColumn:@"isDelete"];
-            msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
-            msg.messageDeleteUserList = [result stringForColumn:@"messageDeleteUserList"];
+           
+            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
+            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
+            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
+            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
+            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
+            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
+            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
+            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
+            
             msg.messageStamp = [result longForColumn:@"messageStamp"];
             msg.deleteDate = [result stringForColumn:@"deleteDate"];
             [retArray addObject:msg];
@@ -886,8 +964,16 @@
             msg.messageDate = [result stringForColumn:@"messageDate"];
             msg.messageStamp = [result longForColumn:@"messageStamp"];
             msg.isDelete = [result intForColumn:@"isDelete"];
-            msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
-            msg.messageDeleteUserList = [result stringForColumn:@"messageDeleteUserList"];
+            
+            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
+            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
+            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
+            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
+            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
+            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
+            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
+            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
+            
             msg.deleteDate = [result stringForColumn:@"deleteDate"];
             [listArray addObject:msg];
         }
@@ -926,8 +1012,16 @@
             msg.messageSecret = [result stringForColumn:@"messageSecret"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
             msg.isDelete = [result intForColumn:@"isDelete"];
-            msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
-            msg.messageDeleteUserList = [result stringForColumn:@"messageDeleteUserList"];
+            
+            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
+            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
+            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
+            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
+            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
+            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
+            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
+            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
+            
             msg.messageStamp = [result longForColumn:@"messageStamp"];
             msg.deleteDate = [result stringForColumn:@"deleteDate"];
             [retArray addObject:msg];
@@ -964,8 +1058,17 @@
             msg.messageSecret = [result stringForColumn:@"messageSecret"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
             msg.isDelete = [result intForColumn:@"isDelete"];
-            msg.messageDeleteOperation = [result stringForColumn:@"messageDeleteOperation"];
-            msg.messageDeleteUserList = [result stringForColumn:@"messageDeleteUserList"];
+            
+            
+            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
+            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
+            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
+            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
+            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
+            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
+            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
+            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
+            
             msg.messageStamp = [result longForColumn:@"messageStamp"];
             msg.deleteDate = [result stringForColumn:@"deleteDate"];
             [retArray addObject:msg];
@@ -1040,9 +1143,8 @@
 //更新消息已读
 -(void)updateMessageRecall:(NSString *)userId andMessageId:(NSString *)messageId {
     [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        [db executeUpdate:@"update message set isDelete=1,messageDeleteOperation=?,messageDeleteUserList=?,messageReadState=1 where messageInsertUser=? and messageId=?"
+        [db executeUpdate:@"update message set isDelete=1,messageRecallUserId=?,messageReadState=1 where messageInsertUser=? and messageId=?"
      withArgumentsInArray:@[
-            @"recall",
             userId,
             user.userExtendId,
             messageId
@@ -1058,10 +1160,12 @@
         return;
     }
     message.isDelete = 0;
-    message.messageDeleteOperation = @"delete";
-    NSMutableArray *arrayAdd = [FlappyStringTool splitStr:message.messageDeleteUserList withSeprate:@","];
+    
+    //添加
+    NSMutableArray *arrayAdd = [FlappyStringTool splitStr:message.messageDeleteUserIds withSeprate:@","];
     [arrayAdd addObject:userId];
-    message.messageDeleteUserList = [FlappyStringTool joinStr:arrayAdd withSeprate:@","];
+    message.messageDeleteUserIds = [FlappyStringTool joinStr:arrayAdd withSeprate:@","];
+    
     message.messageReadState = 1;
     [self insertMessage:message];
 }

@@ -104,9 +104,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) NSInteger isDelete;
 
-@property(nonatomic,copy)NSString* messageDeleteOperation;
+@property(nonatomic,copy)NSString* messageReplyMsgId;
 
-@property(nonatomic,copy)NSString* messageDeleteUserList;
+@property(nonatomic,assign) NSInteger messageReplyMsgType;
+
+@property(nonatomic,copy)NSString* messageReplyMsgContent;
+
+@property(nonatomic,copy)NSString* messageReplyUserId;
+
+@property(nonatomic,copy)NSString* messageRecallUserId;
+
+@property(nonatomic,copy)NSString* messageAtUserIds;
+
+@property(nonatomic,copy)NSString* messageReadUserIds;
+
+@property(nonatomic,copy)NSString* messageDeleteUserIds;
 
 @property(nonatomic,copy)NSString* deleteDate;
 

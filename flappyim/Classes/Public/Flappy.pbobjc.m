@@ -638,8 +638,14 @@ typedef struct Session__storage_ {
 @dynamic messageReadState;
 @dynamic messageSecret;
 @dynamic messageDate;
-@dynamic messageDeleteOperation;
-@dynamic messageDeleteUserList;
+@dynamic messageReplyMsgId;
+@dynamic messageReplyMsgType;
+@dynamic messageReplyMsgContent;
+@dynamic messageReplyUserId;
+@dynamic messageRecallUserId;
+@dynamic messageAtUserIds;
+@dynamic messageReadUserIds;
+@dynamic messageDeleteUserIds;
 @dynamic isDelete;
 @dynamic deleteDate;
 
@@ -649,6 +655,7 @@ typedef struct Message__storage_ {
   int32_t messageType;
   int32_t messageSendState;
   int32_t messageReadState;
+  int32_t messageReplyMsgType;
   int32_t isDelete;
   NSString *messageId;
   NSString *messageSendExtendId;
@@ -656,8 +663,13 @@ typedef struct Message__storage_ {
   NSString *messageContent;
   NSString *messageSecret;
   NSString *messageDate;
-  NSString *messageDeleteOperation;
-  NSString *messageDeleteUserList;
+  NSString *messageReplyMsgId;
+  NSString *messageReplyMsgContent;
+  NSString *messageReplyUserId;
+  NSString *messageRecallUserId;
+  NSString *messageAtUserIds;
+  NSString *messageReadUserIds;
+  NSString *messageDeleteUserIds;
   NSString *deleteDate;
   int64_t messageSessionId;
   int64_t messageSessionOffset;
@@ -808,20 +820,74 @@ typedef struct Message__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "messageDeleteOperation",
+        .name = "messageReplyMsgId",
         .dataTypeSpecific.clazz = Nil,
-        .number = Message_FieldNumber_MessageDeleteOperation,
+        .number = Message_FieldNumber_MessageReplyMsgId,
         .hasIndex = 15,
-        .offset = (uint32_t)offsetof(Message__storage_, messageDeleteOperation),
+        .offset = (uint32_t)offsetof(Message__storage_, messageReplyMsgId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "messageDeleteUserList",
+        .name = "messageReplyMsgType",
         .dataTypeSpecific.clazz = Nil,
-        .number = Message_FieldNumber_MessageDeleteUserList,
+        .number = Message_FieldNumber_MessageReplyMsgType,
         .hasIndex = 16,
-        .offset = (uint32_t)offsetof(Message__storage_, messageDeleteUserList),
+        .offset = (uint32_t)offsetof(Message__storage_, messageReplyMsgType),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt32,
+      },
+      {
+        .name = "messageReplyMsgContent",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Message_FieldNumber_MessageReplyMsgContent,
+        .hasIndex = 17,
+        .offset = (uint32_t)offsetof(Message__storage_, messageReplyMsgContent),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "messageReplyUserId",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Message_FieldNumber_MessageReplyUserId,
+        .hasIndex = 18,
+        .offset = (uint32_t)offsetof(Message__storage_, messageReplyUserId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "messageRecallUserId",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Message_FieldNumber_MessageRecallUserId,
+        .hasIndex = 19,
+        .offset = (uint32_t)offsetof(Message__storage_, messageRecallUserId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "messageAtUserIds",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Message_FieldNumber_MessageAtUserIds,
+        .hasIndex = 20,
+        .offset = (uint32_t)offsetof(Message__storage_, messageAtUserIds),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "messageReadUserIds",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Message_FieldNumber_MessageReadUserIds,
+        .hasIndex = 21,
+        .offset = (uint32_t)offsetof(Message__storage_, messageReadUserIds),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "messageDeleteUserIds",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Message_FieldNumber_MessageDeleteUserIds,
+        .hasIndex = 22,
+        .offset = (uint32_t)offsetof(Message__storage_, messageDeleteUserIds),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
@@ -829,7 +895,7 @@ typedef struct Message__storage_ {
         .name = "isDelete",
         .dataTypeSpecific.clazz = Nil,
         .number = Message_FieldNumber_IsDelete,
-        .hasIndex = 17,
+        .hasIndex = 23,
         .offset = (uint32_t)offsetof(Message__storage_, isDelete),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt32,
@@ -838,7 +904,7 @@ typedef struct Message__storage_ {
         .name = "deleteDate",
         .dataTypeSpecific.clazz = Nil,
         .number = Message_FieldNumber_DeleteDate,
-        .hasIndex = 18,
+        .hasIndex = 24,
         .offset = (uint32_t)offsetof(Message__storage_, deleteDate),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -854,8 +920,8 @@ typedef struct Message__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\023\001\t\000\002\020\000\003\022\000\004\024\000\005\022\000\006\013\000\007\r\000\010\023\000\t\020\000\n\026\000\013\016\000\014\020\000\r\020\000"
-        "\016\r\000\017\013\000\020\026\000\021\025\000\022\010\000\023\n\000";
+        "\031\001\t\000\002\020\000\003\022\000\004\024\000\005\022\000\006\013\000\007\r\000\010\023\000\t\020\000\n\026\000\013\016\000\014\020\000\r\020\000"
+        "\016\r\000\017\013\000\020\021\000\021\023\000\022\026\000\023\022\000\024\023\000\025\020\000\026\022\000\027\024\000\030\010\000\031\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG
