@@ -58,6 +58,9 @@ NS_ASSUME_NONNULL_BEGIN
 //更新数据
 -(Boolean)updateMessage:(ChatMessage*)msg;
 
+//获取当前最近的一条发送成功的消息的offset
+-(NSInteger)getSessionOffsetLatest:(NSString *)sessionID;
+
 //通过会话ID获取最近的一次会话
 -(ChatMessage*)getSessionLatestMessage:(NSString*)sessionID;
 
@@ -71,6 +74,10 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSMutableArray*)getSessionFormerMessages:(NSString*)sessionID
                             withMessageID:(NSString*)messageId
                                  withSize:(NSInteger)size;
+//通过sessionID，获取之后的
+-(NSMutableArray *)getSessionNewerMessages:(NSString *)sessionID
+                             withMessageID:(NSString *)messageId
+                                  withSize:(NSInteger)size;
 
 //获取未读消息的数量
 -(int)getUnReadSessionMessageCountBySessionId:(NSString*)sessionId;

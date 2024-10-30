@@ -526,20 +526,24 @@
 
 //插入数据库
 -(void)insertMessage:(ChatMessage*)msg{
-    //我们先姑且认为它是最后一条
-    ChatUser* user=[[FlappyData shareInstance]getUser];
     
-    //最近的一条消息
-    msg.messageSendState=SEND_STATE_SENDING;
+    
+    //表offset,这里使用当前的最近offset + 1
+    NSInteger tableOffsetValue=[[[FlappyData shareInstance]getUser].latest intValue] + 1;
+    
+    //会话offset
+    NSInteger sessionOffsetValue=[[FlappyDataBase shareInstance]getSessionOffsetLatest:msg.messageSessionId] + 1;
+    
+    
+    //设置offset，仅用于排序，最终以服务器端返回为准
+    msg.messageTableOffset   = tableOffsetValue;
+    msg.messageSessionOffset = sessionOffsetValue;
     
     //设置message stamp
     msg.messageStamp = (NSInteger)([NSDate date].timeIntervalSince1970*1000);
     
-    //添加一个
-    NSInteger value=(user.latest!=nil? user.latest.integerValue:0)+1;
-    
-    //设置offset，仅用于排序，最终以服务器端返回为准
-    msg.messageTableOffset=value;
+    //最近的一条消息
+    msg.messageSendState=SEND_STATE_SENDING;
     
     //插入消息数据
     [[FlappyDataBase shareInstance] insertMessage:msg];

@@ -840,6 +840,26 @@
 }
 
 //通过会话ID获取最近的一次会话
+-(NSInteger)getSessionOffsetLatest:(NSString *)sessionID {
+    return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageType!=? and isDelete!=1 and messageSendState in (1,2,3,4) order by messageTableOffset desc,messageStamp desc limit 1"
+                          withArgumentsInArray:@[
+            sessionID,
+            user.userExtendId,
+            @(MSG_TYPE_ACTION)
+        ]];
+        
+        NSInteger offset = 0;
+        if ([result next]) {
+            offset = [result intForColumn:@"messageSessionOffset"];
+        }
+        [result close];
+        return @(offset);
+    }] integerValue];
+}
+
+
+//通过会话ID获取最近的一次会话
 -(ChatMessage *)getSessionLatestMessage:(NSString *)sessionID {
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit 1"
@@ -887,10 +907,18 @@
 }
 
 //获取消息
--(NSMutableArray *)getSessionOffsetMessages:(NSString *)sessionID andOffset:(NSString *)tabOffset andStamp:(NSString *)stamp {
+-(NSMutableArray *)getSessionOffsetMessages:(NSString *)sessionID
+                                  andOffset:(NSString *)tabOffset
+                        andSmallerThanStamp:(NSString *)stamp {
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageTableOffset=? and messageStamp<? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageStamp desc"
-                          withArgumentsInArray:@[sessionID, tabOffset, stamp, user.userExtendId, @(MSG_TYPE_ACTION)]];
+                          withArgumentsInArray:@[
+            sessionID,
+            tabOffset,
+            stamp,
+            user.userExtendId,
+            @(MSG_TYPE_ACTION)
+        ]];
         NSMutableArray *retArray = [[NSMutableArray alloc] init];
         while ([result next]) {
             ChatMessage *msg = [ChatMessage new];
@@ -910,7 +938,7 @@
             msg.messageSecret = [result stringForColumn:@"messageSecret"];
             msg.messageDate = [result stringForColumn:@"messageDate"];
             msg.isDelete = [result intForColumn:@"isDelete"];
-           
+            
             msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
             msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
             msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
@@ -929,14 +957,144 @@
     } defaultValue: [[NSMutableArray alloc] init]];
 }
 
+
+//获取消息
+-(NSMutableArray *)getSessionOffsetMessages:(NSString *)sessionID
+                                  andOffset:(NSString *)tabOffset
+                         andLargerThanStamp:(NSString *)stamp {
+    return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageTableOffset=? and messageStamp>? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageStamp desc"
+                          withArgumentsInArray:@[
+            sessionID,
+            tabOffset,
+            stamp,
+            user.userExtendId,
+            @(MSG_TYPE_ACTION)
+        ]];
+        NSMutableArray *retArray = [[NSMutableArray alloc] init];
+        while ([result next]) {
+            ChatMessage *msg = [ChatMessage new];
+            msg.messageId = [result stringForColumn:@"messageId"];
+            msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
+            msg.messageSessionType = [result intForColumn:@"messageSessionType"];
+            msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
+            msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
+            msg.messageType = [result intForColumn:@"messageType"];
+            msg.messageSendId = [result stringForColumn:@"messageSendId"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
+            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
+            msg.messageContent = [result stringForColumn:@"messageContent"];
+            msg.messageSendState = [result intForColumn:@"messageSendState"];
+            msg.messageReadState = [result intForColumn:@"messageReadState"];
+            msg.messageSecret = [result stringForColumn:@"messageSecret"];
+            msg.messageDate = [result stringForColumn:@"messageDate"];
+            msg.isDelete = [result intForColumn:@"isDelete"];
+            
+            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
+            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
+            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
+            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
+            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
+            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
+            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
+            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
+            
+            msg.messageStamp = [result longForColumn:@"messageStamp"];
+            msg.deleteDate = [result stringForColumn:@"deleteDate"];
+            [retArray addObject:msg];
+        }
+        [result close];
+        return retArray;
+    } defaultValue: [[NSMutableArray alloc] init]];
+}
+
+
+
 //通过sessionID，获取之前的
 -(NSMutableArray *)getSessionFormerMessages:(NSString *)sessionID withMessageID:(NSString *)messageId withSize:(NSInteger)size {
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        ChatMessage *msg = [self getMessageById:messageId];
-        NSMutableArray *sequeceArray = [self getSessionOffsetMessages:sessionID andOffset:[NSString stringWithFormat:@"%ld", (long)msg.messageTableOffset] andStamp:[NSString stringWithFormat:@"%ld", (long)msg.messageStamp]];
-        NSMutableArray *retArray = [[NSMutableArray alloc] initWithArray:sequeceArray];
         
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageTableOffset<? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit ?"
+        //当前用户
+        ChatSessionMember* sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
+        
+        //查询比当前消息小的stamp的消息而且messageTableOffset相等的
+        ChatMessage *msg = [self getMessageById:messageId];
+        NSMutableArray *sequeceArray = [self getSessionOffsetMessages:sessionID 
+                                                            andOffset:[NSString stringWithFormat:@"%ld", (long)msg.messageTableOffset]
+                                                  andSmallerThanStamp:[NSString stringWithFormat:@"%ld", (long)msg.messageStamp]];
+        
+        
+        //获取消息
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageTableOffset<? and messageSessionOffset>? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit ?"
+                          withArgumentsInArray:@[
+            sessionID,
+            [NSNumber numberWithInteger:msg.messageTableOffset],
+            [NSNumber numberWithInteger:sessionMember.sessionMemberLatestDelete],
+            user.userExtendId,
+            @(MSG_TYPE_ACTION),
+            [NSNumber numberWithInteger:size]
+        ]];
+        NSMutableArray *listArray = [[NSMutableArray alloc] init];
+        while ([result next]) {
+            ChatMessage *msg = [ChatMessage new];
+            msg.messageId = [result stringForColumn:@"messageId"];
+            msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
+            msg.messageSessionType = [result intForColumn:@"messageSessionType"];
+            msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
+            msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
+            msg.messageType = [result intForColumn:@"messageType"];
+            msg.messageSendId = [result stringForColumn:@"messageSendId"];
+            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
+            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
+            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
+            msg.messageContent = [result stringForColumn:@"messageContent"];
+            msg.messageSendState = [result intForColumn:@"messageSendState"];
+            msg.messageReadState = [result intForColumn:@"messageReadState"];
+            msg.messageSecret = [result stringForColumn:@"messageSecret"];
+            msg.messageDate = [result stringForColumn:@"messageDate"];
+            msg.messageStamp = [result longForColumn:@"messageStamp"];
+            msg.isDelete = [result intForColumn:@"isDelete"];
+            
+            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
+            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
+            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
+            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
+            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
+            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
+            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
+            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
+            
+            msg.deleteDate = [result stringForColumn:@"deleteDate"];
+            [listArray addObject:msg];
+        }
+        [result close];
+        
+        //返回值拼装，先放sequeceArray
+        NSMutableArray *retArray = [[NSMutableArray alloc] initWithArray:sequeceArray];
+        [retArray addObjectsFromArray:listArray];
+        
+        if (retArray.count > size) {
+            NSRange range = NSMakeRange(0, size);
+            retArray = [[NSMutableArray alloc] initWithArray:[retArray subarrayWithRange:range]];
+        }
+        return retArray;
+    } defaultValue: [[NSMutableArray alloc] init]];
+}
+
+
+//通过sessionID，获取之后的
+-(NSMutableArray *)getSessionNewerMessages:(NSString *)sessionID withMessageID:(NSString *)messageId withSize:(NSInteger)size {
+    return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        
+        //查询比当前消息大的stamp的消息而且messageTableOffset相等的
+        ChatMessage *msg = [self getMessageById:messageId];
+        NSMutableArray *sequeceArray = [self getSessionOffsetMessages:sessionID 
+                                                            andOffset:[NSString stringWithFormat:@"%ld", (long)msg.messageTableOffset]
+                                                   andLargerThanStamp:[NSString stringWithFormat:@"%ld", (long)msg.messageStamp]];
+        
+        //获取消息
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageTableOffset>? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit ?"
                           withArgumentsInArray:@[
             sessionID,
             [NSNumber numberWithInteger:msg.messageTableOffset],
@@ -978,15 +1136,20 @@
             [listArray addObject:msg];
         }
         [result close];
-        [retArray addObjectsFromArray:listArray];
+        
+        
+        //返回值拼装，先放listArray
+        NSMutableArray *retArray = [[NSMutableArray alloc] initWithArray:listArray];
+        [retArray addObjectsFromArray:sequeceArray];
         
         if (retArray.count > size) {
-            NSRange range = NSMakeRange(0, size);
+            NSRange range = NSMakeRange(retArray.count-size, size);
             retArray = [[NSMutableArray alloc] initWithArray:[retArray subarrayWithRange:range]];
         }
         return retArray;
     } defaultValue: [[NSMutableArray alloc] init]];
 }
+
 
 //获取没有处理的系统消息
 -(NSMutableArray *)getNotActionSystemMessageBySessionId:(NSString *)sessionID {
