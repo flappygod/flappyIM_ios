@@ -6,13 +6,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ChatLocation.h"
+#import "ChatAction.h"
+#import "ChatSystem.h"
 #import "ChatImage.h"
 #import "ChatVoice.h"
 #import "ChatVideo.h"
-#import "ChatLocation.h"
-#import "ChatSystem.h"
 #import "ChatFile.h"
-#import "ChatAction.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -121,6 +121,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy)NSString* messageDeleteUserIds;
 
 @property(nonatomic,copy)NSString* deleteDate;
+
+//初始化
+- (instancetype)init;
+
+//初始化
+- (instancetype)initWithResult:(id)result;
 
 
 //聊天文本

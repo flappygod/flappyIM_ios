@@ -9,6 +9,7 @@
 #import "FlappyJsonTool.h"
 #import "ChatMessage.h"
 #import "MJExtension.h"
+#import "FMDatabase.h"
 #import "Aes128.h"
 
 @implementation ChatMessage
@@ -21,6 +22,41 @@
         _messageSecret = [FlappyStringTool RandomString:16];
     }
     //返回实例
+    return self;
+}
+
+
+//通过result初始化
+- (instancetype)initWithResult:(FMResultSet *)result {
+    self = [super init];
+    if (self) {
+        _messageId = [result stringForColumn:@"messageId"];
+        _messageSessionId = [result stringForColumn:@"messageSessionId"];
+        _messageSessionType = [result intForColumn:@"messageSessionType"];
+        _messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
+        _messageTableOffset = [result intForColumn:@"messageTableOffset"];
+        _messageType = [result intForColumn:@"messageType"];
+        _messageSendId = [result stringForColumn:@"messageSendId"];
+        _messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
+        _messageReceiveId = [result stringForColumn:@"messageReceiveId"];
+        _messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
+        _messageContent = [result stringForColumn:@"messageContent"];
+        _messageSendState = [result intForColumn:@"messageSendState"];
+        _messageReadState = [result intForColumn:@"messageReadState"];
+        _messageSecret = [result stringForColumn:@"messageSecret"];
+        _messageDate = [result stringForColumn:@"messageDate"];
+        _messageStamp = [result longForColumn:@"messageStamp"];
+        _isDelete = [result intForColumn:@"isDelete"];
+        _messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
+        _messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
+        _messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
+        _messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
+        _messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
+        _messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
+        _messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
+        _messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
+        _deleteDate = [result stringForColumn:@"deleteDate"];
+    }
     return self;
 }
 

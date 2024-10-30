@@ -803,36 +803,7 @@
         
         ChatMessage *msg = nil;
         if ([result next]) {
-            msg = [ChatMessage new];
-            msg.messageId = [result stringForColumn:@"messageId"];
-            msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
-            msg.messageSessionType = [result intForColumn:@"messageSessionType"];
-            msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-            msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
-            msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSendId"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
-            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
-            msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSendState"];
-            msg.messageReadState = [result intForColumn:@"messageReadState"];
-            msg.messageSecret = [result stringForColumn:@"messageSecret"];
-            msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.isDelete = [result intForColumn:@"isDelete"];
-            
-            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
-            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
-            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
-            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
-            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
-            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
-            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
-            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
-            
-            
-            msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.deleteDate = [result stringForColumn:@"deleteDate"];
+            msg = [[ChatMessage alloc] initWithResult:result];
         }
         [result close];
         return msg;
@@ -842,7 +813,7 @@
 //通过会话ID获取最近的一次会话
 -(NSInteger)getSessionOffsetLatest:(NSString *)sessionID {
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageType!=? and isDelete!=1 and messageSendState in (1,2,3,4) order by messageTableOffset desc,messageStamp desc limit 1"
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageType!=? and messageSendState in (1,2,3,4) order by messageTableOffset desc,messageStamp desc limit 1"
                           withArgumentsInArray:@[
             sessionID,
             user.userExtendId,
@@ -871,35 +842,7 @@
         
         ChatMessage *msg = nil;
         if ([result next]) {
-            msg = [ChatMessage new];
-            msg.messageId = [result stringForColumn:@"messageId"];
-            msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
-            msg.messageSessionType = [result intForColumn:@"messageSessionType"];
-            msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-            msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
-            msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSendId"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
-            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
-            msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSendState"];
-            msg.messageReadState = [result intForColumn:@"messageReadState"];
-            msg.messageSecret = [result stringForColumn:@"messageSecret"];
-            msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.isDelete = [result intForColumn:@"isDelete"];
-            
-            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
-            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
-            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
-            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
-            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
-            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
-            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
-            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
-            
-            msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.deleteDate = [result stringForColumn:@"deleteDate"];
+            msg = [[ChatMessage alloc] initWithResult:result];
         }
         [result close];
         return msg;
@@ -921,35 +864,7 @@
         ]];
         NSMutableArray *retArray = [[NSMutableArray alloc] init];
         while ([result next]) {
-            ChatMessage *msg = [ChatMessage new];
-            msg.messageId = [result stringForColumn:@"messageId"];
-            msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
-            msg.messageSessionType = [result intForColumn:@"messageSessionType"];
-            msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-            msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
-            msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSendId"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
-            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
-            msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSendState"];
-            msg.messageReadState = [result intForColumn:@"messageReadState"];
-            msg.messageSecret = [result stringForColumn:@"messageSecret"];
-            msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.isDelete = [result intForColumn:@"isDelete"];
-            
-            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
-            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
-            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
-            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
-            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
-            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
-            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
-            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
-            
-            msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.deleteDate = [result stringForColumn:@"deleteDate"];
+            ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
             [retArray addObject:msg];
         }
         [result close];
@@ -973,35 +888,7 @@
         ]];
         NSMutableArray *retArray = [[NSMutableArray alloc] init];
         while ([result next]) {
-            ChatMessage *msg = [ChatMessage new];
-            msg.messageId = [result stringForColumn:@"messageId"];
-            msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
-            msg.messageSessionType = [result intForColumn:@"messageSessionType"];
-            msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-            msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
-            msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSendId"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
-            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
-            msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSendState"];
-            msg.messageReadState = [result intForColumn:@"messageReadState"];
-            msg.messageSecret = [result stringForColumn:@"messageSecret"];
-            msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.isDelete = [result intForColumn:@"isDelete"];
-            
-            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
-            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
-            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
-            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
-            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
-            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
-            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
-            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
-            
-            msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.deleteDate = [result stringForColumn:@"deleteDate"];
+            ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
             [retArray addObject:msg];
         }
         [result close];
@@ -1037,35 +924,7 @@
         ]];
         NSMutableArray *listArray = [[NSMutableArray alloc] init];
         while ([result next]) {
-            ChatMessage *msg = [ChatMessage new];
-            msg.messageId = [result stringForColumn:@"messageId"];
-            msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
-            msg.messageSessionType = [result intForColumn:@"messageSessionType"];
-            msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-            msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
-            msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSendId"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
-            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
-            msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSendState"];
-            msg.messageReadState = [result intForColumn:@"messageReadState"];
-            msg.messageSecret = [result stringForColumn:@"messageSecret"];
-            msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.isDelete = [result intForColumn:@"isDelete"];
-            
-            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
-            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
-            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
-            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
-            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
-            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
-            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
-            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
-            
-            msg.deleteDate = [result stringForColumn:@"deleteDate"];
+            ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
             [listArray addObject:msg];
         }
         [result close];
@@ -1104,35 +963,7 @@
         ]];
         NSMutableArray *listArray = [[NSMutableArray alloc] init];
         while ([result next]) {
-            ChatMessage *msg = [ChatMessage new];
-            msg.messageId = [result stringForColumn:@"messageId"];
-            msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
-            msg.messageSessionType = [result intForColumn:@"messageSessionType"];
-            msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-            msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
-            msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSendId"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
-            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
-            msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSendState"];
-            msg.messageReadState = [result intForColumn:@"messageReadState"];
-            msg.messageSecret = [result stringForColumn:@"messageSecret"];
-            msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.isDelete = [result intForColumn:@"isDelete"];
-            
-            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
-            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
-            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
-            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
-            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
-            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
-            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
-            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
-            
-            msg.deleteDate = [result stringForColumn:@"deleteDate"];
+            ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
             [listArray addObject:msg];
         }
         [result close];
@@ -1158,35 +989,7 @@
                           withArgumentsInArray:@[sessionID, user.userExtendId]];
         NSMutableArray *retArray = [[NSMutableArray alloc] init];
         while ([result next]) {
-            ChatMessage *msg = [ChatMessage new];
-            msg.messageId = [result stringForColumn:@"messageId"];
-            msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
-            msg.messageSessionType = [result intForColumn:@"messageSessionType"];
-            msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-            msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
-            msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSendId"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
-            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
-            msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSendState"];
-            msg.messageReadState = [result intForColumn:@"messageReadState"];
-            msg.messageSecret = [result stringForColumn:@"messageSecret"];
-            msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.isDelete = [result intForColumn:@"isDelete"];
-            
-            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
-            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
-            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
-            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
-            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
-            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
-            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
-            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
-            
-            msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.deleteDate = [result stringForColumn:@"deleteDate"];
+            ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
             [retArray addObject:msg];
         }
         [result close];
@@ -1204,36 +1007,7 @@
         ]];
         NSMutableArray *retArray = [[NSMutableArray alloc] init];
         while ([result next]) {
-            ChatMessage *msg = [ChatMessage new];
-            msg.messageId = [result stringForColumn:@"messageId"];
-            msg.messageSessionId = [result stringForColumn:@"messageSessionId"];
-            msg.messageSessionType = [result intForColumn:@"messageSessionType"];
-            msg.messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
-            msg.messageTableOffset = [result intForColumn:@"messageTableOffset"];
-            msg.messageType = [result intForColumn:@"messageType"];
-            msg.messageSendId = [result stringForColumn:@"messageSendId"];
-            msg.messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
-            msg.messageReceiveId = [result stringForColumn:@"messageReceiveId"];
-            msg.messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
-            msg.messageContent = [result stringForColumn:@"messageContent"];
-            msg.messageSendState = [result intForColumn:@"messageSendState"];
-            msg.messageReadState = [result intForColumn:@"messageReadState"];
-            msg.messageSecret = [result stringForColumn:@"messageSecret"];
-            msg.messageDate = [result stringForColumn:@"messageDate"];
-            msg.isDelete = [result intForColumn:@"isDelete"];
-            
-            
-            msg.messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
-            msg.messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
-            msg.messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
-            msg.messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
-            msg.messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
-            msg.messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
-            msg.messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
-            msg.messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
-            
-            msg.messageStamp = [result longForColumn:@"messageStamp"];
-            msg.deleteDate = [result stringForColumn:@"deleteDate"];
+            ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
             [retArray addObject:msg];
         }
         [result close];
