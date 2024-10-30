@@ -1173,12 +1173,15 @@
 //更新消息已读
 -(void)updateMessageRead:(NSString *)userId andSessionId:(NSString *)sessionId andTableSeq:(NSString *)tableOffset {
     [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        [db executeUpdate:@"update message set messageReadState=1 where messageInsertUser=? and messageSendId!=? and messageSessionId=? and messageTableOffset<=?"
+        [db executeUpdate:@"update message set messageReadState=1, messageReadUserIds = IFNULL(messageReadUserIds, '') || CASE WHEN messageReadUserIds IS NULL OR messageReadUserIds = '' THEN '' ELSE ',' END || ?  where messageInsertUser=? and messageSendId!=? and messageSessionId=? and messageTableOffset<=? and messageType NOT IN (?, ?)"
      withArgumentsInArray:@[
+            userId,
             user.userExtendId,
             userId,
             sessionId,
-            tableOffset
+            tableOffset,
+            @(MSG_TYPE_SYSTEM),
+            @(MSG_TYPE_ACTION),
         ]];
         return nil;
     }];
