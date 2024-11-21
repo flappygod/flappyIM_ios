@@ -711,11 +711,31 @@
     return message;
 }
 
+//通过消息ID获取消息
+-(ChatMessage*)getMessageById:(NSString*) messageId{
+    //获取消息
+    ChatMessage* message=[[FlappyDataBase shareInstance] getMessageById:messageId];
+    //返回
+    return message;
+}
+
+
 //获取某条信息之前的消息
 -(NSMutableArray*)getFormerMessages:(NSString*)messageID
                            withSize:(NSInteger)size{
     NSMutableArray* arr=[[FlappyDataBase shareInstance]
                          getSessionFormerMessages:self.session.sessionId
+                         withMessageID:messageID
+                         withSize:size];
+    return arr;
+}
+
+
+//获取某条信息之后的消息
+-(NSMutableArray*)getNewerMessages:(NSString*)messageID
+                           withSize:(NSInteger)size{
+    NSMutableArray* arr=[[FlappyDataBase shareInstance]
+                         getSessionNewerMessages:self.session.sessionId
                          withMessageID:messageID
                          withSize:size];
     return arr;

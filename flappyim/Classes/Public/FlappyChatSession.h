@@ -150,11 +150,16 @@ NS_ASSUME_NONNULL_BEGIN
 //获取当前最近的一条消息
 -(ChatMessage*)getLatestMessage;
 
+//通过消息ID获取消息
+-(ChatMessage*)getMessageById:(NSString*) messageId;
 
 //获取某条信息之前的消息
 -(NSMutableArray*)getFormerMessages:(NSString*)messageID
                            withSize:(NSInteger)size;
 
+//获取某条信息之后的消息
+-(NSMutableArray*)getNewerMessages:(NSString*)messageID
+                          withSize:(NSInteger)size;
 
 //获取未读消息数量
 -(NSInteger)getUnReadMessageCount;
