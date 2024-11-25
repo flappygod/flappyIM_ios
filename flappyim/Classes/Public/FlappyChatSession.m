@@ -733,13 +733,36 @@
 
 //获取某条信息之后的消息
 -(NSMutableArray*)getNewerMessages:(NSString*)messageID
-                           withSize:(NSInteger)size{
+                          withSize:(NSInteger)size{
     NSMutableArray* arr=[[FlappyDataBase shareInstance]
                          getSessionNewerMessages:self.session.sessionId
                          withMessageID:messageID
                          withSize:size];
     return arr;
 }
+
+//搜索消息之前的文本消息
+-(NSMutableArray *)searchTextMessage:(NSString*)text
+                        andMessageId:(NSString*)messageId
+                             andSize:(NSInteger)size{
+    NSMutableArray* arr=[[FlappyDataBase shareInstance]
+                         searchTextMessage:text
+                         andSessionId:self.session.sessionId
+                         andMessageId:messageId
+                         andSize:size];
+    return arr;
+}
+
+//搜索消息之前的图片消息
+-(NSMutableArray *)searchImageMessage:(NSString*)messageId
+                              andSize:(NSInteger)size{
+    NSMutableArray* arr=[[FlappyDataBase shareInstance]
+                         searchImageMessage:self.session.sessionId
+                         andMessageId:messageId
+                         andSize:size];
+    return arr;
+}
+
 
 //获取未读消息数量
 -(NSInteger)getUnReadMessageCount{

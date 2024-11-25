@@ -1404,6 +1404,29 @@
     }];
 }
 
+//搜索文本消息
+-(NSMutableArray *)searchTextMessage:(NSString*)text
+                        andSessionId:(NSString*)sessionId
+                        andMessageId:(NSString*)messageId
+                             andSize:(NSInteger)size{
+    return [[FlappyDataBase shareInstance] searchTextMessage:text
+                                                andSessionId:sessionId
+                                                andMessageId:messageId
+                                                     andSize:size];
+}
+
+
+//搜索图片消息
+-(NSMutableArray *)searchImageMessage:(NSString*)sessionId
+                         andMessageId:(NSString*)messageId
+                              andSize:(NSInteger)size{
+    
+return [[FlappyDataBase shareInstance] searchImageMessage:sessionId
+                                             andMessageId:messageId
+                                                  andSize:size];
+}
+
+
 //判断当前是否在线
 -(Boolean)isOnline{
     if(self.flappysocket!=nil&&self.flappysocket.isActive){

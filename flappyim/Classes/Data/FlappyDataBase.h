@@ -79,6 +79,18 @@ NS_ASSUME_NONNULL_BEGIN
                              withMessageID:(NSString *)messageId
                                   withSize:(NSInteger)size;
 
+
+//搜索文本消息
+-(NSMutableArray *)searchTextMessage:(NSString*)text
+                        andSessionId:(NSString*)sessionId
+                        andMessageId:(NSString*)messageId
+                             andSize:(NSInteger)size;
+
+//搜索图片消息
+-(NSMutableArray *)searchImageMessage:(NSString*)sessionId
+                         andMessageId:(NSString*)messageId
+                              andSize:(NSInteger)size;
+
 //获取未读消息的数量
 -(int)getUnReadSessionMessageCountBySessionId:(NSString*)sessionId;
 

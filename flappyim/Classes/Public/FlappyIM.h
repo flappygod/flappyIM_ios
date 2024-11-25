@@ -181,6 +181,18 @@ NS_ASSUME_NONNULL_BEGIN
              andFailure:(FlappyFailure)failure;
 
 
+//搜索文本消息
+-(NSMutableArray *)searchTextMessage:(NSString*)text
+                        andSessionId:(NSString*)sessionId
+                        andMessageId:(NSString*)messageId
+                             andSize:(NSInteger)size;
+
+//搜索图片消息
+-(NSMutableArray *)searchImageMessage:(NSString*)sessionId
+                         andMessageId:(NSString*)messageId
+                              andSize:(NSInteger)size;
+
+
 //增加所有消息的监听
 -(void)addGloableMsgListener:(FlappyMessageListener*)listener;
 
