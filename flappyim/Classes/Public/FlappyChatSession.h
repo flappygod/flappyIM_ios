@@ -170,6 +170,15 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSMutableArray *)searchImageMessage:(NSString*)messageId
                               andSize:(NSInteger)size;
 
+
+//搜索消息之前的视频消息
+-(NSMutableArray *)searchVideoMessage:(NSString*)messageId
+                              andSize:(NSInteger)size;
+
+//搜索消息之前的语音消息
+-(NSMutableArray *)searchVoiceMessage:(NSString*)messageId
+                              andSize:(NSInteger)size;
+
 //获取未读消息数量
 -(NSInteger)getUnReadMessageCount;
 

@@ -763,6 +763,27 @@
     return arr;
 }
 
+//搜索消息之前的视频消息
+-(NSMutableArray *)searchVideoMessage:(NSString*)messageId
+                              andSize:(NSInteger)size{
+    NSMutableArray* arr=[[FlappyDataBase shareInstance]
+                         searchVideoMessage:self.session.sessionId
+                         andMessageId:messageId
+                         andSize:size];
+    return arr;
+}
+
+
+//搜索消息之前的语音消息
+-(NSMutableArray *)searchVoiceMessage:(NSString*)messageId
+                              andSize:(NSInteger)size{
+    NSMutableArray* arr=[[FlappyDataBase shareInstance]
+                         searchVoiceMessage:self.session.sessionId
+                         andMessageId:messageId
+                         andSize:size];
+    return arr;
+}
+
 
 //获取未读消息数量
 -(NSInteger)getUnReadMessageCount{

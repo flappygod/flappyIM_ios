@@ -1421,11 +1421,30 @@
                          andMessageId:(NSString*)messageId
                               andSize:(NSInteger)size{
     
-return [[FlappyDataBase shareInstance] searchImageMessage:sessionId
-                                             andMessageId:messageId
-                                                  andSize:size];
+    return [[FlappyDataBase shareInstance] searchImageMessage:sessionId
+                                                 andMessageId:messageId
+                                                      andSize:size];
 }
 
+//搜索消息之前的视频消息
+-(NSMutableArray *)searchVideoMessage:(NSString*)sessionId
+                         andMessageId:(NSString*)messageId
+                              andSize:(NSInteger)size{
+    
+    return [[FlappyDataBase shareInstance] searchVideoMessage:sessionId
+                                                 andMessageId:messageId
+                                                      andSize:size];
+}
+
+//搜索消息之前的语音消息
+-(NSMutableArray *)searchVoiceMessage:(NSString*)sessionId
+                         andMessageId:(NSString*)messageId
+                              andSize:(NSInteger)size{
+    
+    return [[FlappyDataBase shareInstance] searchVoiceMessage:sessionId
+                                                 andMessageId:messageId
+                                                      andSize:size];
+}
 
 //判断当前是否在线
 -(Boolean)isOnline{

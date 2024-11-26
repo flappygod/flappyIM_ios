@@ -233,7 +233,7 @@
                 [FlappyStringTool toUnNullStr:msg.deleteDate],
                 (fomerMsg != nil ? [NSNumber numberWithInteger:fomerMsg.messageStamp] : [NSNumber numberWithInteger:(NSInteger)([NSDate date].timeIntervalSince1970 * 1000)]),
                 [NSNumber numberWithInteger:msg.isDelete],
-            
+                
                 [FlappyStringTool toUnNullStr:msg.messageReplyMsgId],
                 [NSNumber numberWithInteger:msg.messageReplyMsgType],
                 [FlappyStringTool toUnNullStr:msg.messageReplyMsgContent],
@@ -242,7 +242,7 @@
                 [FlappyStringTool toUnNullStr:msg.messageAtUserIds],
                 [FlappyStringTool toUnNullStr:msg.messageReadUserIds],
                 [FlappyStringTool toUnNullStr:msg.messageDeleteUserIds],
-
+                
                 user.userExtendId
             ]];
             
@@ -260,7 +260,7 @@
 //插入消息
 -(void)insertMessage:(ChatMessage *)msg {
     [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        [self updateSessionOffset:msg.messageSessionId 
+        [self updateSessionOffset:msg.messageSessionId
                  andSessionOffset:msg.messageSessionOffset];
         ChatMessage *fomerMsg = [self getMessageById:msg.messageId];
         BOOL result = [db executeUpdate:@"INSERT OR REPLACE INTO message("
@@ -384,7 +384,7 @@
         
         //获取最近删除
         result = [db executeQuery:@"select * from session_member where sessionInsertUser=? and sessionId=? and userId=?"
-                          withArgumentsInArray:@[user.userExtendId, sessionId, user.userId]];
+             withArgumentsInArray:@[user.userExtendId, sessionId, user.userId]];
         if ([result next]) {
             latestSessionOffsetDelete= [result longForColumn:@"sessionMemberLatestDelete"];
         }
@@ -747,7 +747,7 @@
                        "messageDate=?,"
                        "deleteDate=?,"
                        "isDelete=?,"
-                
+                       
                        "messageReplyMsgId=?,"
                        "messageReplyMsgType=?,"
                        "messageReplyMsgContent=?,"
@@ -1010,6 +1010,111 @@
         //消息类型
         queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageType = ? and isDelete != 1 "];
         [qureyParam addObject: @(MSG_TYPE_IMG)];
+        
+        //执行搜索
+        FMResultSet *result = [db executeQuery:queryStr withArgumentsInArray:qureyParam];
+        NSMutableArray *listArray = [[NSMutableArray alloc] init];
+        while ([result next]) {
+            ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
+            [listArray addObject:msg];
+        }
+        [result close];
+        
+        return listArray;
+    } defaultValue: [[NSMutableArray alloc] init]];
+    
+}
+
+
+
+//搜索图片消息
+-(NSMutableArray *)searchVideoMessage:(NSString*)sessionId
+                         andMessageId:(NSString*)messageId
+                              andSize:(NSInteger)size{
+    
+    return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        
+        //请求字符串与参数
+        NSString* queryStr = [NSString stringWithFormat:@"select * from message where 1=1 "];
+        NSMutableArray* qureyParam = [[NSMutableArray alloc] init];
+        
+        //有文本输入
+        if(sessionId!=nil&&sessionId.length!=0){
+            ChatSessionMember* sessionMember = [self getSessionMember:sessionId andMemberId:user.userId];
+            queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionId=? "];
+            queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionOffset > ? "];
+            [qureyParam addObject: sessionId];
+            [qureyParam addObject: [NSNumber numberWithInteger:sessionMember.sessionMemberLatestDelete]];
+        }
+        
+        //查询文本
+        if(messageId!=nil&&messageId.length!=0){
+            ChatMessage *msg = [self getMessageById:messageId];
+            queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and (messageTableOffset < ? or (messageTableOffset = ? and messageStamp < ?)) "];
+            [qureyParam addObject: [NSNumber numberWithInteger:msg.messageTableOffset]];
+            [qureyParam addObject: [NSNumber numberWithInteger:msg.messageTableOffset]];
+            [qureyParam addObject: [NSNumber numberWithInteger:msg.messageStamp]];
+        }
+        
+        //消息插入者
+        queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageInsertUser = ? "];
+        [qureyParam addObject: user.userExtendId];
+        
+        //消息类型
+        queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageType = ? and isDelete != 1 "];
+        [qureyParam addObject: @(MSG_TYPE_VIDEO)];
+        
+        //执行搜索
+        FMResultSet *result = [db executeQuery:queryStr withArgumentsInArray:qureyParam];
+        NSMutableArray *listArray = [[NSMutableArray alloc] init];
+        while ([result next]) {
+            ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
+            [listArray addObject:msg];
+        }
+        [result close];
+        
+        return listArray;
+    } defaultValue: [[NSMutableArray alloc] init]];
+    
+}
+
+
+//搜索图片消息
+-(NSMutableArray *)searchVoiceMessage:(NSString*)sessionId
+                         andMessageId:(NSString*)messageId
+                              andSize:(NSInteger)size{
+    
+    return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        
+        //请求字符串与参数
+        NSString* queryStr = [NSString stringWithFormat:@"select * from message where 1=1 "];
+        NSMutableArray* qureyParam = [[NSMutableArray alloc] init];
+        
+        //有文本输入
+        if(sessionId!=nil&&sessionId.length!=0){
+            ChatSessionMember* sessionMember = [self getSessionMember:sessionId andMemberId:user.userId];
+            queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionId=? "];
+            queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionOffset > ? "];
+            [qureyParam addObject: sessionId];
+            [qureyParam addObject: [NSNumber numberWithInteger:sessionMember.sessionMemberLatestDelete]];
+        }
+        
+        //查询文本
+        if(messageId!=nil&&messageId.length!=0){
+            ChatMessage *msg = [self getMessageById:messageId];
+            queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and (messageTableOffset < ? or (messageTableOffset = ? and messageStamp < ?)) "];
+            [qureyParam addObject: [NSNumber numberWithInteger:msg.messageTableOffset]];
+            [qureyParam addObject: [NSNumber numberWithInteger:msg.messageTableOffset]];
+            [qureyParam addObject: [NSNumber numberWithInteger:msg.messageStamp]];
+        }
+        
+        //消息插入者
+        queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageInsertUser = ? "];
+        [qureyParam addObject: user.userExtendId];
+        
+        //消息类型
+        queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageType = ? and isDelete != 1 "];
+        [qureyParam addObject: @(MSG_TYPE_VOICE)];
         
         //执行搜索
         FMResultSet *result = [db executeQuery:queryStr withArgumentsInArray:qureyParam];

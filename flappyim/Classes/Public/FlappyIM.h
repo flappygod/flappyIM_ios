@@ -192,6 +192,15 @@ NS_ASSUME_NONNULL_BEGIN
                          andMessageId:(NSString*)messageId
                               andSize:(NSInteger)size;
 
+//搜索消息之前的视频消息
+-(NSMutableArray *)searchVideoMessage:(NSString*)sessionId
+                         andMessageId:(NSString*)messageId
+                              andSize:(NSInteger)size;
+
+//搜索消息之前的语音消息
+-(NSMutableArray *)searchVoiceMessage:(NSString*)sessionId
+                         andMessageId:(NSString*)messageId
+                              andSize:(NSInteger)size;
 
 //增加所有消息的监听
 -(void)addGloableMsgListener:(FlappyMessageListener*)listener;
