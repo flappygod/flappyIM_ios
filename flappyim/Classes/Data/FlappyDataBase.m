@@ -833,10 +833,13 @@
 //通过会话ID获取最近的一次会话
 -(ChatMessage *)getSessionLatestMessage:(NSString *)sessionID {
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit 1"
+        //当前用户
+        ChatSessionMember* sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageSessionOffset>? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit 1"
                           withArgumentsInArray:@[
             sessionID,
             user.userExtendId,
+            [NSNumber numberWithInteger:sessionMember.sessionMemberLatestDelete],
             @(MSG_TYPE_ACTION)
         ]];
         
