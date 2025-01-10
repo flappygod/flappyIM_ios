@@ -8,93 +8,36 @@
 
 #import "LXHttpsRequest.h"
 #import "FlappyJsonTool.h"
+#import "FlappyData.h"
+#import "RSATool.h"
+#import "Aes128.h"
 
-
-// 当前版本
+//当前版本
 #define FSystemVersion          ([[[UIDevice currentDevice] systemVersion] floatValue])
 #define DSystemVersion          ([[[UIDevice currentDevice] systemVersion] doubleValue])
 #define SSystemVersion          ([[UIDevice currentDevice] systemVersion])
 
-
 @implementation LXHttpsRequest
-
-
-
-
-//因为苹果之后都是异步操作，所以之后的都只写异步的了，同步相当于已经废弃
-
-//直接get
--(void)get{
-    //空的不执行
-    if(self.url==nil){
-        return;
-    }
-    NSMutableURLRequest* request=[self getParamGetRequest];
-    //创建session
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
-                                                          delegate:self
-                                                     delegateQueue:[NSOperationQueue mainQueue]];
-    //执行get请求
-    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request
-                                                    completionHandler:^(NSData * _Nullable data,
-                                                                        NSURLResponse * _Nullable response,
-                                                                        NSError * _Nullable error) {
-        if(error==nil){
-            NSString* resultStr = [[NSString alloc]initWithData:data
-                                                       encoding:NSUTF8StringEncoding];
-            
-            [self performSelectorOnMainThread:@selector(dataSuccess:)
-                                   withObject:resultStr
-                                waitUntilDone:YES];
-            
-        }else{
-            [self performSelectorOnMainThread:@selector(dataError:)
-                                   withObject:error
-                                waitUntilDone:YES];
-        }
-    }];
-    [postDataTask resume];
-}
-
 
 //以json形式进行post
 -(void)postAsJson{
     //创建request
     NSMutableURLRequest* req=[self getJsonPostRequest];
-    //创建session
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-    //执行post请求
-    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:req 
+                                                    completionHandler:^(NSData * _Nullable data,
+                                                                        NSURLResponse * _Nullable response,
+                                                                        NSError * _Nullable error) {
         if(error==nil){
-            NSString* resultStr = [[NSString alloc]initWithData:data
-                                                       encoding:NSUTF8StringEncoding];
-            
+            NSString* resultStr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+            if(self.dataKey!=nil){
+                resultStr = [Aes128 AES128Encrypt:resultStr withKey:self.dataKey];
+            }
             [self performSelectorOnMainThread:@selector(dataSuccess:)
                                    withObject:resultStr
                                 waitUntilDone:YES];
         }else{
-            [self performSelectorOnMainThread:@selector(dataError:) withObject:error waitUntilDone:YES];
-        }
-    }];
-    [postDataTask resume];
-}
-
-//以param形式进行post
--(void)postAsParam{
-    //获取post
-    NSMutableURLRequest* req=[self getParamPostRequest];
-    //创建session
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-    //执行post请求
-    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if(error==nil){
-            NSString* resultStr = [[NSString alloc]initWithData:data
-                                                       encoding:NSUTF8StringEncoding];
-            [self performSelectorOnMainThread:@selector(dataSuccess:)
-                                   withObject:resultStr
-                                waitUntilDone:YES];
-        }else{
-            [self performSelectorOnMainThread:@selector(dataError:)
+            [self performSelectorOnMainThread:@selector(dataError:) 
                                    withObject:error
                                 waitUntilDone:YES];
         }
@@ -102,54 +45,15 @@
     [postDataTask resume];
 }
 
-//get请求的情况下获取request
--(NSMutableURLRequest*)getParamGetRequest{
-    //拼接支付穿
-    NSString *paramString;
-    if(self.params!=nil)
-    {
-        paramString=[NSString stringWithFormat:@"%@?%@",self.url,[self parseParams:_params]];
-    }else{
-        paramString=self.url;
-    }
-    NSString *urlString=paramString;
-    //特殊处理
-    if(DSystemVersion<9.0)
-    {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        urlString = [urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
-#pragma clang diagnostic pop
-    }
-    else{
-        urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-    }
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString: urlString]];
-    [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
-    //超时时间
-    [request setTimeoutInterval: self.timeOut ==0? 60:self.timeOut];
-    //是否启用cookie
-    [request setHTTPShouldHandleCookies:self.enableCookie];
-    //get
-    [request setHTTPMethod:@"GET"];
-    //添加header
-    if(self.headerProperty!=nil){
-        NSEnumerator *keyEnum = [self.headerProperty keyEnumerator];
-        id key;
-        while (key = [keyEnum nextObject]) {
-            [request setValue:[self.headerProperty valueForKey:key] forHTTPHeaderField:key];
-        }
-    }
-    return request;
-}
 
 //获取请求
 -(NSMutableURLRequest*)getJsonPostRequest{
     //第一步，创建url
     NSURL *url = [NSURL URLWithString:self.url];
     //第二步，创建请求
-    NSMutableURLRequest *req = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:self.timeOut];
+    NSMutableURLRequest *req = [[NSMutableURLRequest alloc]initWithURL:url 
+                                                           cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                                       timeoutInterval:self.timeOut];
     //超时时间
     [req setTimeoutInterval: self.timeOut ==0? 60:self.timeOut];
     //是否启用cookie
@@ -166,70 +70,25 @@
             [req setValue:[self.headerProperty valueForKey:key] forHTTPHeaderField:key];
         }
     }
-    //设置为post请求
-    if (self.params != nil )
-    {
-        NSString *parseParamsResult = [FlappyJsonTool JSONObjectToJSONString:self.params];
-        NSData *postData = [parseParamsResult dataUsingEncoding:NSUTF8StringEncoding];
-        [req setHTTPBody:postData];
-    }
-    return req;
-}
-
-//获取param形式的post
--(NSMutableURLRequest*)getParamPostRequest{
-    //第一步，创建url
-    NSURL *url = [NSURL URLWithString:self.url];
-    //第二步，创建请求
-    NSMutableURLRequest *req = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:self.timeOut];
-    //超时时间
-    [req setTimeoutInterval: self.timeOut ==0? 60:self.timeOut];
-    //是否启用cookie
-    [req setHTTPShouldHandleCookies:self.enableCookie];
-    //设置为post方式
-    [req setHTTPMethod:@"POST"];
-    
-    //添加header
-    if(self.headerProperty!=nil){
-        NSEnumerator *keyEnum = [self.headerProperty keyEnumerator];
-        id key;
-        while (key = [keyEnum nextObject]) {
-            [req setValue:[self.headerProperty valueForKey:key] forHTTPHeaderField:key];
-        }
+    //添加秘钥
+    NSString* rsaKey = [[FlappyData shareInstance] getRsaKey];
+    if(self.dataUuid!=nil && self.dataKey!=nil && rsaKey!=nil){
+        [req setValue:self.dataUuid forKey:@"dataUuid"];
+        [req setValue:[RSATool encryptWithPublicKey:rsaKey withData:self.dataKey] forKey:@"dataKey"];
     }
     //设置为post请求
-    if (self.params != nil )
-    {
-        NSString *parseParamsResult = [self parseParams:self.params];
-        NSData *postData = [parseParamsResult dataUsingEncoding:NSUTF8StringEncoding];
-        [req setHTTPBody:postData];
+    if(self.params==nil){
+        self.params = [[NSMutableDictionary alloc]init];
     }
+    NSString *requestBodyStr = [FlappyJsonTool JSONObjectToJSONString:self.params];
+    //加密
+    if(self.dataKey!=nil){
+        requestBodyStr = [Aes128 AES128Encrypt:requestBodyStr withKey:self.dataKey];
+    }
+    NSData *postData = [requestBodyStr dataUsingEncoding:NSUTF8StringEncoding];
+    [req setHTTPBody:postData];
     return req;
 }
-
-
-
-
-
-//把NSDictionary解析成post格式的NSString字符串
-- (NSString *)parseParams:(NSDictionary *)params{
-    NSString *keyValueFormat;
-    NSMutableString *result = [NSMutableString new];
-    //实例化一个key枚举器用来存放dictionary的key
-    NSEnumerator *keyEnum = [params keyEnumerator];
-    id key;
-    while (key = [keyEnum nextObject]) {
-        keyValueFormat = [NSString stringWithFormat:@"%@=%@&",key,[params valueForKey:key]];
-        [result appendString:keyValueFormat];
-    }
-    NSString* paramStr=@"";
-    if(result.length>1){
-        paramStr=[result substringWithRange:NSMakeRange(0, result.length-1)];
-        NSLog(@"post()方法参数解析结果：%@",paramStr);
-    }
-    return paramStr;
-}
-
 
 
 //请求完成

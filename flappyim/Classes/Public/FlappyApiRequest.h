@@ -16,6 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FlappyApiRequest : NSObject
 
+//生成UUID
++(NSString *)generateUUID;
+
+//生成随机字符串
++(NSString*)generateRandomStr:(NSInteger)length;
 
 //请求数据
 +(void)postRequest:(NSString*)url
