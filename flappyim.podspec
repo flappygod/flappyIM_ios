@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name             = 'flappyim'
-    s.version          = '3.12.12'
+    s.version          = '3.12.13'
     s.summary          = 'A im named flappyim'
     
     # This description is used to generate tags and improve search results.
@@ -44,7 +44,7 @@ Pod::Spec.new do |s|
     s.frameworks = 'UIKit','Foundation','AVFoundation','CoreMedia','UserNotifications','AVKit'
     s.dependency 'AFNetworking', '~> 4.0.1'
     s.dependency 'MJExtension', '~> 3.4.1'
-    s.dependency 'Protobuf', '~> 3.21.5'
+    s.dependency 'Protobuf', '~> 3.29.3'
     s.dependency 'CocoaAsyncSocket', '~> 7.6.5'
     s.dependency 'FMDB', '~> 2.7.5'
 end

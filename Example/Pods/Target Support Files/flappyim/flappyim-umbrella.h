@@ -16,6 +16,8 @@
 #import "ChatLocation.h"
 #import "ChatMessage.h"
 #import "ChatSession.h"
+#import "ChatSessionData.h"
+#import "ChatSessionMember.h"
 #import "ChatSystem.h"
 #import "ChatUser.h"
 #import "ChatVideo.h"
@@ -32,8 +34,6 @@
 #import "FlappySessionListener.h"
 #import "FlappySocket.h"
 #import "PushSettings.h"
-#import "ChatSessionData.h"
-#import "ChatSessionMember.h"
 
 FOUNDATION_EXPORT double flappyimVersionNumber;
 FOUNDATION_EXPORT const unsigned char flappyimVersionString[];
