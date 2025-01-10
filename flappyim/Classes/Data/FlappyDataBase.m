@@ -839,7 +839,7 @@
                           withArgumentsInArray:@[
             sessionID,
             user.userExtendId,
-            [NSNumber numberWithInteger:sessionMember.sessionMemberLatestDelete],
+            [NSNumber numberWithInteger:sessionMember!=nil ? sessionMember.sessionMemberLatestDelete : 0],
             @(MSG_TYPE_ACTION)
         ]];
         
@@ -871,7 +871,7 @@
             [NSNumber numberWithInteger:msg.messageTableOffset],
             [NSNumber numberWithInteger:msg.messageTableOffset],
             [NSNumber numberWithInteger:msg.messageStamp],
-            [NSNumber numberWithInteger:sessionMember.sessionMemberLatestDelete],
+            [NSNumber numberWithInteger:sessionMember!=nil ? sessionMember.sessionMemberLatestDelete : 0],
             user.userExtendId,
             @(MSG_TYPE_ACTION),
             [NSNumber numberWithInteger:size]
@@ -935,7 +935,7 @@
             queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionId=? "];
             queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionOffset > ? "];
             [qureyParam addObject: sessionId];
-            [qureyParam addObject: [NSNumber numberWithInteger:sessionMember.sessionMemberLatestDelete]];
+            [qureyParam addObject: [NSNumber numberWithInteger:sessionMember!=nil ? sessionMember.sessionMemberLatestDelete : 0]];
         }
         
         
@@ -994,7 +994,7 @@
             queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionId=? "];
             queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionOffset > ? "];
             [qureyParam addObject: sessionId];
-            [qureyParam addObject: [NSNumber numberWithInteger:sessionMember.sessionMemberLatestDelete]];
+            [qureyParam addObject: [NSNumber numberWithInteger:sessionMember!=nil ? sessionMember.sessionMemberLatestDelete : 0]];
         }
         
         //查询文本
@@ -1047,7 +1047,7 @@
             queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionId=? "];
             queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionOffset > ? "];
             [qureyParam addObject: sessionId];
-            [qureyParam addObject: [NSNumber numberWithInteger:sessionMember.sessionMemberLatestDelete]];
+            [qureyParam addObject: [NSNumber numberWithInteger:sessionMember!=nil ? sessionMember.sessionMemberLatestDelete : 0]];
         }
         
         //查询文本
@@ -1099,7 +1099,7 @@
             queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionId=? "];
             queryStr = [NSString stringWithFormat:@"%@%@",queryStr,@"and messageSessionOffset > ? "];
             [qureyParam addObject: sessionId];
-            [qureyParam addObject: [NSNumber numberWithInteger:sessionMember.sessionMemberLatestDelete]];
+            [qureyParam addObject: [NSNumber numberWithInteger:sessionMember!=nil ? sessionMember.sessionMemberLatestDelete : 0]];
         }
         
         //查询文本
