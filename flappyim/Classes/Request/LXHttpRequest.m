@@ -30,7 +30,7 @@
         if(error==nil){
             NSString* resultStr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
             if(self.dataKey!=nil){
-                resultStr = [Aes128 AES128Encrypt:resultStr withKey:self.dataKey];
+                resultStr = [Aes128 AES128Decrypt:resultStr withKey:self.dataKey];
             }
             [self performSelectorOnMainThread:@selector(dataSuccess:)
                                    withObject:resultStr
