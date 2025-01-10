@@ -11,7 +11,7 @@
 
 
 //错误请求数据
-typedef void(^ErrorBlock) (NSException *);
+typedef void(^ErrorBlock) (NSError *);
 
 //请求正确数据
 typedef void(^SuccessBlock) (NSString *);

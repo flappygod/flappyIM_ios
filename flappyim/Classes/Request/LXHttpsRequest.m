@@ -73,8 +73,8 @@
     //添加秘钥
     NSString* rsaKey = [[FlappyData shareInstance] getRsaKey];
     if(self.dataUuid!=nil && self.dataKey!=nil && rsaKey!=nil){
-        [req setValue:self.dataUuid forKey:@"dataUuid"];
-        [req setValue:[RSATool encryptWithPublicKey:rsaKey withData:self.dataKey] forKey:@"dataKey"];
+        [req setValue:self.dataUuid forHTTPHeaderField:@"dataUuid"];
+        [req setValue:[RSATool encryptWithPublicKey:rsaKey withData:self.dataKey] forHTTPHeaderField:@"dataKey"];
     }
     //设置为post请求
     if(self.params==nil){
@@ -103,11 +103,7 @@
 -(void)dataError:(id) data{
     if(_errorBlock!=nil)
     {
-        NSError* erro=data;
-        NSException* excep=[[NSException alloc]initWithName:@"neterror"
-                                                     reason:erro.description
-                                                   userInfo:erro.userInfo];
-        _errorBlock(excep);
+        _errorBlock(data);
     }
 }
 

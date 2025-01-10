@@ -103,13 +103,9 @@ static NSString *dataKey = nil;
                                           userInfo:nil],[resultCode integerValue]);
         }
     };
-    //失败
-    req.errorBlock=^(NSException*  exception){
+    req.errorBlock=^(NSError*  error){
         //网络错误请求失败
         if(failure!=nil){
-            NSError* error=[[NSError alloc]initWithDomain:[FlappyStringTool toUnNullStr:exception.description]
-                                                     code:RESULT_NETERROR
-                                                 userInfo:nil];
             failure(error,RESULT_NETERROR);
         }
     };
@@ -151,12 +147,9 @@ static NSString *dataKey = nil;
         }
     };
     //失败
-    req.errorBlock=^(NSException*  exception){
+    req.errorBlock=^(NSError*  error){
         //网络错误请求失败
         if(failure!=nil){
-            NSError* error=[[NSError alloc]initWithDomain:[FlappyStringTool toUnNullStr:exception.description]
-                                                     code:RESULT_NETERROR
-                                                 userInfo:nil];
             failure(error,RESULT_NETERROR);
         }
     };
