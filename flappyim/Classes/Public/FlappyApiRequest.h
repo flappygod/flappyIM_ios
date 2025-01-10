@@ -23,9 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
        withSuccess:(FlappySuccess)success
        withFailure:(FlappyFailure)failure;
 
-//获取data数据的内容长度和头部长度: index --> 头部占用长度 (头部占用长度1-4个字节)
-+ (int32_t)getContentLength:(NSData *)data
-             withHeadLength:(int32_t *)index;
 
 
 

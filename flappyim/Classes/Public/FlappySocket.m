@@ -201,8 +201,8 @@ static  GCDAsyncSocket*  _instanceSocket;
         
         //读取data的头部占用字节和从头部读取内容长度
         int32_t headL = 0;
-        int32_t contentL = [FlappyApiRequest getContentLength:self.receiveData
-                                               withHeadLength:&headL];
+        int32_t contentL = [self getContentLength:self.receiveData
+                                   withHeadLength:&headL];
         //数据获取并不完成的情况
         if (contentL < 1){
             [sock readDataWithTimeout:-1 tag:0];
@@ -261,8 +261,8 @@ static  GCDAsyncSocket*  _instanceSocket;
             return;
         //实际包不足解析，继续接收下一个包
         headL = 0;
-        contentL = [FlappyApiRequest getContentLength:self.receiveData
-                                       withHeadLength:&headL];
+        contentL = [self getContentLength:self.receiveData
+                           withHeadLength:&headL];
         if (headL + contentL > self.receiveData.length) {
             return;
         }
@@ -273,6 +273,30 @@ static  GCDAsyncSocket*  _instanceSocket;
         
         NSLog(@"%@",exception.description);
     }
+}
+
+/** 获取data数据的内容长度和头部长度: index --> 头部占用长度 (头部占用长度1-4个字节) */
+- (int32_t)getContentLength:(NSData *)data withHeadLength:(int32_t *)index {
+    int32_t result = 0;
+    int32_t shift = 0;
+    int8_t tmp;
+    do {
+        //数据不完整
+        if (*index >= data.length) {
+            return -1;
+        }
+        tmp = ((int8_t *)data.bytes)[*index];
+        result |= (tmp & 0x7f) << shift;
+        shift += 7;
+        
+        (*index)++;
+    } while (tmp < 0 && shift < 32);
+    // 继续读取下一个字节，直到找到一个正数或者读取了32位
+    if (tmp < 0) {
+        // 如果最后一个字节是负数，则表示数据格式错误
+        return -1;
+    }
+    return result;
 }
 
 //断开连接
