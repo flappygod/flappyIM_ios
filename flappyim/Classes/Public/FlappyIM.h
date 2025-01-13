@@ -227,7 +227,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //设置被踢下线的监听
--(void)setKickedListener:(__nullable FlappyKickedListener)knicked;
+-(void)setKickedListener:(__nullable FlappyKickedListener)kickedListener;
 
 
 //设置踢下线
