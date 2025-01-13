@@ -12,10 +12,10 @@
 #define FlappyBlocks_h
 
 //消息通知被点击
-typedef void(^NotifyClickListener) (ChatMessage*_Nullable message);
+typedef void(^NotificationClickListener) (ChatMessage*_Nullable message);
 
 //被踢下线了
-typedef void(^FlappyKnicked) (void);
+typedef void(^FlappyKickedListener) (void);
 
 //登录之后非正常关闭
 typedef void(^FlappyDead) (void);

@@ -9,6 +9,7 @@
 #import "LXHttpsRequest.h"
 #import "FlappyJsonTool.h"
 #import "FlappyData.h"
+#import "FlappyIM.h"
 #import "RSATool.h"
 #import "Aes128.h"
 
@@ -24,20 +25,42 @@
     //创建request
     NSMutableURLRequest* req=[self getJsonPostRequest];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:req 
+    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:req
                                                     completionHandler:^(NSData * _Nullable data,
                                                                         NSURLResponse * _Nullable response,
                                                                         NSError * _Nullable error) {
-        if(error==nil){
-            NSString* resultStr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-            if(self.dataKey!=nil){
-                resultStr = [Aes128 AES128Decrypt:resultStr withKey:self.dataKey];
+        //请求成功
+        if (error == nil) {
+            //检查HTTP响应状态码
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+            NSInteger statusCode = httpResponse.statusCode;
+            
+            if (statusCode == 200) {
+                // 请求成功，处理返回数据
+                NSString* resultStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                if (self.dataKey != nil) {
+                    resultStr = [Aes128 AES128Decrypt:resultStr withKey:self.dataKey];
+                }
+                [self performSelectorOnMainThread:@selector(dataSuccess:)
+                                       withObject:resultStr
+                                    waitUntilDone:YES];
+            }  else {
+                if (statusCode == 401){
+                    [[FlappyIM shareInstance] setKickedOut];
+                }
+                //处理其他HTTP错误
+                NSString *errorMessage = [NSString stringWithFormat:@"HTTP Error: %ld", (long)statusCode];
+                NSError *httpError = [NSError errorWithDomain:@"HTTPErrorDomain"
+                                                         code:statusCode
+                                                     userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
+                [self performSelectorOnMainThread:@selector(dataError:)
+                                       withObject:httpError
+                                    waitUntilDone:YES];
             }
-            [self performSelectorOnMainThread:@selector(dataSuccess:)
-                                   withObject:resultStr
-                                waitUntilDone:YES];
-        }else{
-            [self performSelectorOnMainThread:@selector(dataError:) 
+        }
+        //请求失败，处理错误
+        else {
+            [self performSelectorOnMainThread:@selector(dataError:)
                                    withObject:error
                                 waitUntilDone:YES];
         }
@@ -51,7 +74,7 @@
     //第一步，创建url
     NSURL *url = [NSURL URLWithString:self.url];
     //第二步，创建请求
-    NSMutableURLRequest *req = [[NSMutableURLRequest alloc]initWithURL:url 
+    NSMutableURLRequest *req = [[NSMutableURLRequest alloc]initWithURL:url
                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                        timeoutInterval:self.timeOut];
     //超时时间

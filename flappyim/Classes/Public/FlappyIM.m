@@ -31,9 +31,9 @@
 //用于联网的socket
 @property (nonatomic,strong) FlappySocket* flappysocket;
 //被踢下线了
-@property (nonatomic,strong) FlappyKnicked knicked;
+@property (nonatomic,strong) FlappyKickedListener kickedListener;
 //消息通知被点击了
-@property (nonatomic,strong) NotifyClickListener notifyClicked;
+@property (nonatomic,strong) NotificationClickListener notificationListener;
 //被踢下线了
 @property (nonatomic,assign) bool isSetup;
 //当前正在登录
@@ -166,11 +166,11 @@
 //监听到本地的通知
 -(void)didReceiveRemoteNotification:(NSDictionary *)userInfo{
     if(userInfo!=nil&&userInfo[@"message"]!=nil){
-        if(self.notifyClicked!=nil){
+        if(self.notificationListener!=nil){
             //获取消息
             NSString* msg=userInfo[@"message"];
             //转换为消息体
-            self.notifyClicked([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
+            self.notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
             //移除
             UNRemoveObject(@"flappy_message");
         }else{
@@ -321,29 +321,41 @@
 }
 
 //设置被踢下线的监听
--(void)setKnickedListener:(__nullable FlappyKnicked)knicked{
+-(void)setKickedListener:(__nullable FlappyKickedListener)kickedListener{
     //保留
-    _knicked=knicked;
+    _kickedListener=kickedListener;
     //查看当前的登录状态
     ChatUser* user=[[FlappyData shareInstance]getUser];
     //用户存在，但是登录状态不对，代表已经被踢下线了
     if(user!=nil&&user.login==false){
-        if(self.knicked!=nil){
-            self.knicked();
+        if(self.kickedListener!=nil){
+            self.kickedListener();
         }
     }
 }
 
+//设置被踢下线的监听
+-(void)setKickedOut{
+    ChatUser* uesr=[[FlappyData shareInstance]getUser];
+    uesr.login=false;
+    [[FlappyData shareInstance]saveUser:uesr];
+    if(self.kickedListener!=nil){
+        self.kickedListener();
+        self.kickedListener=nil;
+    }
+}
+
+
 //收到点击事件时候的通知
--(void)setNotifyClickListener:(__nullable NotifyClickListener)clicked{
+-(void)setNotificationClickListener:(__nullable NotificationClickListener)clicked{
     //保留
-    _notifyClicked=clicked;
+    _notificationListener=clicked;
     //消息
     NSString* message=UNGetObject(@"flappy_message");
     //消息
     if(message!=nil){
         //转换为消息体
-        _notifyClicked([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:message]]);
+        _notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:message]]);
         //移除
         UNRemoveObject(@"flappy_message");
     }
@@ -795,13 +807,7 @@
             
             safeSelf.isRunningAutoLogin=false;
             if(code==RESULT_KNICKED){
-                ChatUser* uesr=[[FlappyData shareInstance]getUser];
-                uesr.login=false;
-                [[FlappyData shareInstance]saveUser:uesr];
-                if(safeSelf.knicked!=nil){
-                    safeSelf.knicked();
-                    safeSelf.knicked=nil;
-                }
+                [safeSelf setKickedOut];
             }else{
                 [safeSelf performSelector:@selector(autoLogin)
                                withObject:nil

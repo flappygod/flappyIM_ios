@@ -92,12 +92,12 @@
     }]];
     
     //踢下线
-    [[FlappyIM shareInstance] setKnickedListener:^{
+    [[FlappyIM shareInstance] setKickedListener:^{
         NSLog(@"当前设备已经被踢下线了");
     }];
     
     //消息被点击
-    [[FlappyIM shareInstance] setNotifyClickListener:^(ChatMessage * _Nullable message) {
+    [[FlappyIM shareInstance] setNotificationClickListener:^(ChatMessage * _Nullable message) {
         //打印字符串
         NSLog(@"%@", [NSString stringWithFormat:@"收到点击推送的消息:::::::%@",[message getChatText]]);
     }];
