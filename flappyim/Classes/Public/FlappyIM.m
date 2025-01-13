@@ -336,9 +336,9 @@
 
 //设置被踢下线的监听
 -(void)setKickedOut{
-    ChatUser* uesr=[[FlappyData shareInstance]getUser];
-    uesr.login=false;
-    [[FlappyData shareInstance]saveUser:uesr];
+    ChatUser* user=[[FlappyData shareInstance]getUser];
+    user.login=false;
+    [[FlappyData shareInstance]saveUser:user];
     if(self.kickedListener!=nil){
         self.kickedListener();
         self.kickedListener=nil;
