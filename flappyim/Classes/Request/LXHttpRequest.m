@@ -36,7 +36,7 @@
                                    withObject:resultStr
                                 waitUntilDone:YES];
         }else{
-            [self performSelectorOnMainThread:@selector(dataError:) 
+            [self performSelectorOnMainThread:@selector(dataError:)
                                    withObject:error
                                 waitUntilDone:YES];
         }
@@ -69,12 +69,27 @@
             [req setValue:[self.headerProperty valueForKey:key] forHTTPHeaderField:key];
         }
     }
-    //添加秘钥
-    NSString* rsaKey = [[FlappyData shareInstance] getRsaKey];
-    if(self.dataUuid!=nil && self.dataKey!=nil && rsaKey!=nil){
+    //添加Uuid
+    if(self.dataUuid!=nil){
         [req setValue:self.dataUuid forHTTPHeaderField:@"dataUuid"];
-        [req setValue:[RSATool encryptWithPublicKey:rsaKey withData:self.dataKey] forHTTPHeaderField:@"dataKey"];
     }
+    
+    //数据key
+    if(self.dataKey!=nil){
+        NSString* rsaKey = [[FlappyData shareInstance] getRsaPublicKey];
+        if(rsaKey!=nil){
+            [req setValue:[RSATool encryptWithPublicKey:rsaKey withData:self.dataKey] forHTTPHeaderField:@"dataKey"];
+        }else{
+            [req setValue:self.dataKey forHTTPHeaderField:@"dataKey"];
+        }
+    }
+    
+    //增加鉴权
+    NSString* authToken = [[FlappyData shareInstance] getAuthToken];
+    if(authToken!=nil){
+        [req setValue:[Aes128 AES128Encrypt:authToken withKey:self.dataKey] forHTTPHeaderField:@"dataToken"];
+    }
+    
     
     //设置为post请求
     if(self.params==nil){

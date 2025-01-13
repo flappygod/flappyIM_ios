@@ -28,7 +28,10 @@
     [[FlappyIM shareInstance] setPushPlat:@"Apple"];
     
     //初始化
-    [[FlappyIM shareInstance] setup:@"http://116.205.139.93" withUploadUrl:@"http://116.205.139.93"];
+    [[FlappyIM shareInstance] init:@"http://116.205.139.93" assetsUrl:@"http://116.205.139.93"];
+    
+    //开启服务
+    [[FlappyIM shareInstance] startService];
     
     
     //创建登录

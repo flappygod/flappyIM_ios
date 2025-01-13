@@ -301,7 +301,7 @@
 
 //获取当前的推送设置
 -(PushSettings*)getPushSettings{
-    return   [[FlappyData shareInstance] getPushSetting];
+    return  [[FlappyData shareInstance] getPushSetting];
 }
 
 
@@ -349,37 +349,38 @@
     }
 }
 
-
 //初始化
--(void)setup{
-    if(!self.isSetup){
-        //初始化数据库
-        [self setupDataBase];
-        //通知
-        [self setupNotify];
-        //重新连接
-        [self autoLogin];
-        //当前是活跃的
-        self.isForground=true;
-    }
-}
-
-
-//初始化
--(void)setup:(NSString*)serverUrl  withUploadUrl:(NSString*)uploadUrl{
+-(void)init:(NSString*)serverUrl  assetsUrl:(NSString*)assetsUrl{
     //重新设置服务器地址
-    [[FlappyApiConfig shareInstance] resetServer:serverUrl andUploadUrl:uploadUrl];
+    [[FlappyApiConfig shareInstance] resetServer:serverUrl andUploadUrl:assetsUrl];
+}
+
+
+//鉴权
+-(void)auth:(NSString*)token{
+    [[FlappyData shareInstance] saveAuthToken:token];
+}
+
+//开启服务
+-(void)startService{
+    self.isForground=true;
     if(!self.isSetup){
-        //初始化数据库
         [self setupDataBase];
-        //通知
         [self setupNotify];
-        //重新连接
         [self autoLogin];
-        //当前是活跃的
-        self.isForground=true;
+        self.isSetup = true;
     }
 }
+
+//关闭服务
+-(void)stopService{
+    if(self.isSetup){
+        [self stopNotify];
+        [self.flappysocket offline:true];
+        self.isSetup = false;
+    }
+}
+
 
 //设置推送类型
 -(void)setPushType:(NSString*)pushType{
@@ -393,12 +394,12 @@
 
 //设置RSA public key
 -(void)setRsaPublicKey:(NSString*)key{
-    [[FlappyData shareInstance] saveRsaKey:key];
+    [[FlappyData shareInstance] saveRsaPublicKey:key];
 }
 
 //获取RSA public key
 -(NSString*)getRsaPublicKey{
-    return [[FlappyData shareInstance] getRsaKey];
+    return [[FlappyData shareInstance] getRsaPublicKey];
 }
 
 //增加消息的监听
@@ -472,16 +473,17 @@
 
 #pragma  NOTIFY 网络状态监听通知
 -(void)setupNotify{
+    //设置网络检测的站点
+    NSString *remoteHostName = @"www.apple.com";
+    self.hostReachability = [FlappyReachability reachabilityWithHostName:remoteHostName];
+    [self.hostReachability startNotifier];
+    [self updateInterfaceWithReachability:self.hostReachability];
+    
     //监听网络状态变化
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reachabilityChanged:)
                                                  name:kFlappyReachabilityChangedNotification
                                                object:nil];
-    // 设置网络检测的站点
-    NSString *remoteHostName = @"www.baidu.com";
-    self.hostReachability = [FlappyReachability reachabilityWithHostName:remoteHostName];
-    [self.hostReachability startNotifier];
-    [self updateInterfaceWithReachability:self.hostReachability];
     
     //监听是否触发home键挂起程序，（把程序放在后台执行其他操作）
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -494,6 +496,30 @@
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
 }
+
+
+-(void)stopNotify{
+    
+    //停止监听网络变化
+    [self.hostReachability stopNotifier];
+    self.hostReachability = nil;
+    
+    // 移除网络状态变化的通知监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:kFlappyReachabilityChangedNotification
+                                                  object:nil];
+    
+    // 移除程序挂起的通知监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationWillResignActiveNotification
+                                                  object:nil];
+    
+    // 移除程序重新激活的通知监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationDidBecomeActiveNotification
+                                                  object:nil];
+}
+
 
 //监听被home键盘
 -(void)applicationWillResignActive:(NSNotification *)notification{

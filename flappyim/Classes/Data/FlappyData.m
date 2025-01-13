@@ -13,6 +13,8 @@
 
 #define  KEY_USER  @"KEY_USER"
 
+#define  KEY_USER_TOKEN  @"KEY_USER_TOKEN"
+
 #define  KEY_PUSH_TYPE  @"KEY_PUSH_TYPE"
 
 #define  KEY_PUSH_PLAT  @"KEY_PUSH_PLAT"
@@ -21,7 +23,7 @@
 
 #define  KEY_DEVICE_ID  @"KEY_DEVICE_ID"
 
-#define  KEY_RSA_KEY  @"KEY_RSA_KEY"
+#define  KEY_RSA_PUBLIC_KEY  @"KEY_RSA_PUBLIC_KEY"
 
 #define  KEY_PUSHSETTING  @"KEY_PUSHSETTING"
 
@@ -143,13 +145,23 @@
 }
 
 //RSA秘钥
--(void)saveRsaKey:(NSString*)key{
-    UNSaveObject(key, KEY_RSA_KEY);
+-(void)saveRsaPublicKey:(NSString*)key{
+    UNSaveObject(key, KEY_RSA_PUBLIC_KEY);
 }
 
 //获取RSA秘钥
--(NSString*)getRsaKey{
-    return UNGetObject(KEY_RSA_KEY);
+-(NSString*)getRsaPublicKey{
+    return UNGetObject(KEY_RSA_PUBLIC_KEY);
+}
+
+//保存鉴权
+-(void)saveAuthToken:(NSString*)token{
+    UNSaveObject(token, KEY_USER_TOKEN);
+}
+
+//获取鉴权
+-(NSString*)getAuthToken{
+    return UNGetObject(KEY_USER_TOKEN);
 }
 
 @end

@@ -47,11 +47,18 @@ NS_ASSUME_NONNULL_BEGIN
 //单例模式
 + (instancetype)shareInstance;
 
-//初始化
--(void)setup;
-
 //通过服务器地址初始化
--(void)setup:(NSString*)serverUrl  withUploadUrl:(NSString*)uploadUrl;
+-(void)init:(NSString*)serverUrl  assetsUrl:(NSString*)uploadUrl;
+
+//鉴权
+-(void)auth:(NSString*)token;
+
+//开启服务
+-(void)startService;
+
+//关闭服务
+-(void)stopService;
+
 
 //重设用户名和密码
 -(void)resetServer:(NSString*)serverUrl

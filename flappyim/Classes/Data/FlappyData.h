@@ -56,10 +56,16 @@ NS_ASSUME_NONNULL_BEGIN
 -(PushSettings*)getPushSetting;
 
 //RSA秘钥
--(void)saveRsaKey:(NSString*)key;
+-(void)saveRsaPublicKey:(NSString*)key;
 
 //获取RSA秘钥
--(NSString*)getRsaKey;
+-(NSString*)getRsaPublicKey;
+
+//保存鉴权
+-(void)saveAuthToken:(NSString*)token;
+
+//获取鉴权
+-(NSString*)getAuthToken;
 
 
 @end

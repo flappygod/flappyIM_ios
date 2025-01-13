@@ -322,7 +322,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         //推送ID
         info.deviceId=[[FlappyData shareInstance] getDeviceId];
         //设置秘钥
-        NSString* rsaKey = [[FlappyData shareInstance] getRsaKey];
+        NSString* rsaKey = [[FlappyData shareInstance] getRsaPublicKey];
         if(rsaKey!=nil && rsaKey.length!=0){
             info.secret = [RSATool encryptWithPublicKey:rsaKey
                                                withData:self.channelSecret];
