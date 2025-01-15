@@ -271,7 +271,7 @@
     //已经登录的状态
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     [parameters setObject:[[FlappyData shareInstance]getUser].userExtendId forKey:@"userExtendId"];
-    [parameters setObject:DEVICE_PLAT forKey:@"devicePlat"];
+    [parameters setObject:[[FlappyData shareInstance] getDevicePlat] forKey:@"devicePlat"];
     [parameters setObject:[[FlappyData shareInstance] getDeviceId] forKey:@"deviceId"];
     if (pushType) [parameters setObject:pushType forKey:@"pushType"];
     if (pushPlat) [parameters setObject:pushPlat forKey:@"pushPlat"];
@@ -387,15 +387,34 @@
     }
 }
 
+//设置设备类型
+-(void)setDevicePlat:(NSString*)devicePlat{
+    [[FlappyData shareInstance] saveDevicePlat:devicePlat];
+}
+
+//获取设备平台
+-(NSString*)getDevicePlat{
+    return  [[FlappyData shareInstance] getDevicePlat];
+}
 
 //设置推送类型
 -(void)setPushType:(NSString*)pushType{
     [[FlappyData shareInstance] savePushType:pushType];
 }
 
+//获取推送类型
+-(NSString*)getPushType{
+    return  [[FlappyData shareInstance] getPushType];
+}
+
 //设置推送平台
 -(void)setPushPlat:(NSString*)pushPlat{
     [[FlappyData shareInstance] savePushPlat:pushPlat];
+}
+
+//获取推送平台
+-(NSString*)getPushPlat{
+    return  [[FlappyData shareInstance] getPushPlat];
 }
 
 //设置RSA public key
@@ -663,7 +682,7 @@
         NSString *urlString = [FlappyApiConfig shareInstance].URL_login;
         NSDictionary *parameters = @{
             @"userExtendId":userExtendId,
-            @"devicePlat":DEVICE_PLAT,
+            @"devicePlat":[[FlappyData shareInstance] getDevicePlat],
             @"deviceId":[[FlappyData shareInstance] getDeviceId],
             @"pushType":[[FlappyData shareInstance] getPushType],
             @"pushPlat":[[FlappyData shareInstance] getPushPlat],
@@ -782,7 +801,7 @@
         //自动登录
         NSString *urlString = [FlappyApiConfig shareInstance].URL_autoLogin;
         NSDictionary *parameters = @{@"userId":[[FlappyData shareInstance] getUser].userId,
-                                     @"devicePlat":DEVICE_PLAT,
+                                     @"devicePlat":[[FlappyData shareInstance] getDevicePlat],
                                      @"deviceId":[[FlappyData shareInstance] getDeviceId],
                                      @"pushType":[[FlappyData shareInstance] getPushType],
                                      @"pushPlat":[[FlappyData shareInstance] getPushPlat],
@@ -919,7 +938,7 @@
         //请求体，参数（NSDictionary 类型）
         NSString *urlString = [FlappyApiConfig shareInstance].URL_logout;
         NSDictionary *parameters = @{@"userExtendId":[[FlappyData shareInstance]getUser].userExtendId,
-                                     @"devicePlat":DEVICE_PLAT,
+                                     @"devicePlat":[[FlappyData shareInstance] getDevicePlat],
                                      @"deviceId":[[FlappyData shareInstance] getDeviceId]
         };
         //请求数据

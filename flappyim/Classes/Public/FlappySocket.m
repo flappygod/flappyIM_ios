@@ -318,7 +318,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         //用户ID
         info.userId=self.user.userId;
         //类型
-        info.devicePlat=DEVICE_PLAT;
+        info.devicePlat=[[FlappyData shareInstance] getDevicePlat];
         //推送ID
         info.deviceId=[[FlappyData shareInstance] getDeviceId];
         //设置秘钥

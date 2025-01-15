@@ -73,11 +73,23 @@ NS_ASSUME_NONNULL_BEGIN
 //注册设备信息
 -(void)registerDeviceToken:(NSData *)deviceToken;
 
+//设置设备平台
+-(void)setDevicePlat:(NSString*)devicePlat;
+
+//获取设备平台
+-(NSString*)getDevicePlat;
+
 //设置推送类型
 -(void)setPushType:(NSString*)pushType;
 
-//设置当前的平台
+//获取推送类型
+-(NSString*)getPushType;
+
+//设置当前的推送平台
 -(void)setPushPlat:(NSString*)pushPlat;
+
+//获取当前的推送平台
+-(NSString*)getPushPlat;
 
 //设置RsaPublicKey
 -(void)setRsaPublicKey:(NSString*)key;

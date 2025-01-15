@@ -15,6 +15,8 @@
 
 #define  KEY_USER_TOKEN  @"KEY_USER_TOKEN"
 
+#define  KEY_DEVICE_PLAT  @"KEY_DEVICE_PLAT"
+
 #define  KEY_PUSH_TYPE  @"KEY_PUSH_TYPE"
 
 #define  KEY_PUSH_PLAT  @"KEY_PUSH_PLAT"
@@ -27,6 +29,12 @@
 
 #define  KEY_PUSHSETTING  @"KEY_PUSHSETTING"
 
+
+
+
+#define DEFAULT_DEVICE_PLAT @"IOS"
+
+#define DEFAULT_PUSH_PLAT   @"APNS"
 
 
 //数据缓存
@@ -74,6 +82,18 @@
     UNSaveObject(@"", KEY_USER);
 }
 
+
+//设置设备平台
+-(void)saveDevicePlat:(NSString*)devicePlat{
+    UNSaveObject(devicePlat, KEY_DEVICE_PLAT);
+}
+
+//获取设备平台
+-(NSString*)getDevicePlat{
+    NSString* devicePlat = UNGetObject(KEY_DEVICE_PLAT);
+    return  (devicePlat==nil) ? DEFAULT_DEVICE_PLAT : devicePlat;
+}
+
 //保存推送类型
 -(void)savePushType:(NSString*)pushType{
     UNSaveObject(pushType, KEY_PUSH_TYPE);
@@ -93,7 +113,7 @@
 //获取推送类型
 -(NSString*)getPushPlat{
     NSString* pushPlat = UNGetObject(KEY_PUSH_PLAT);
-    return  (pushPlat==nil) ? @"Apple" : pushPlat;
+    return  (pushPlat==nil) ? DEFAULT_PUSH_PLAT : pushPlat;
 }
 
 //保存

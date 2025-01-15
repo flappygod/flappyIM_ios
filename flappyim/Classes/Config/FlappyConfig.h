@@ -8,8 +8,6 @@
 #ifndef FlappyConfig_h
 #define FlappyConfig_h
 
-//当前的设备类型
-#define  DEVICE_PLAT   @"Ios"
 
 //线上服务器
 #define FLAPPY_BASE @"http://139.224.204.128"

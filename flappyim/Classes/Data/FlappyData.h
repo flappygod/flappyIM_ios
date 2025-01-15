@@ -28,6 +28,12 @@ NS_ASSUME_NONNULL_BEGIN
 //清空用户
 -(void)clearUser;
 
+//设置设备平台
+-(void)saveDevicePlat:(NSString*)pushPlat;
+
+//获取设备平台
+-(NSString*)getDevicePlat;
+
 //保存推送类型
 -(void)savePushType:(NSString*)pushType;
 
