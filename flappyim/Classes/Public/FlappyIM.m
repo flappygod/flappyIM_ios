@@ -172,12 +172,12 @@
             //转换为消息体
             self.notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
             //移除
-            UNRemoveObject(@"flappy_message");
+            UNRemoveObject(FlappyNotificationMessage);
         }else{
             //获取消息
             NSString* msg=userInfo[@"message"];
             //保存本地
-            UNSaveObject(msg,@"flappy_message");
+            UNSaveObject(msg,FlappyNotificationMessage);
         }
     }
 }
@@ -345,13 +345,13 @@
     //保留
     _notificationListener=clicked;
     //消息
-    NSString* message=UNGetObject(@"flappy_message");
+    NSString* message=UNGetObject(FlappyNotificationMessage);
     //消息
     if(message!=nil){
         //转换为消息体
         _notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:message]]);
         //移除
-        UNRemoveObject(@"flappy_message");
+        UNRemoveObject(FlappyNotificationMessage);
     }
 }
 

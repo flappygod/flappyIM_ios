@@ -80,4 +80,7 @@
 #define GlobalKey @"Global"
 
 
+#define FlappyNotificationMessage @"FlappyNotificationMessage"
+
+
 #endif /* FlappyConfig_h */
