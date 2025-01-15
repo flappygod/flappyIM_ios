@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)clearUser;
 
 //设置设备平台
--(void)saveDevicePlat:(NSString*)pushPlat;
+-(void)saveDevicePlat:(NSString*)devicePlat;
 
 //获取设备平台
 -(NSString*)getDevicePlat;
