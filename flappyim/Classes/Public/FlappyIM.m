@@ -322,21 +322,15 @@
 
 //设置被踢下线的监听
 -(void)setKickedListener:(__nullable FlappyKickedListener)kickedListener{
-    //保留
     _kickedListener=kickedListener;
-    //查看当前的登录状态
-    ChatUser* user=[[FlappyData shareInstance]getUser];
-    //用户存在，但是登录状态不对，代表已经被踢下线了
-    if(user!=nil&&user.login==false){
-        if(self.kickedListener!=nil){
-            self.kickedListener();
-        }
-    }
 }
 
 //设置被踢下线的监听
 -(void)setKickedOut{
     ChatUser* user=[[FlappyData shareInstance]getUser];
+    if(user==nil||!user.login){
+        return;
+    }
     user.login=false;
     [[FlappyData shareInstance]saveUser:user];
     if(self.kickedListener!=nil){
@@ -1490,7 +1484,7 @@
 //判断当前用户是否登录
 -(Boolean)isLogin{
     //获取当前账户
-    ChatUser* user=[[FlappyData shareInstance]getUser];
+    ChatUser* user=[[FlappyData shareInstance] getUser];
     //如果当前账户不是登录的状态
     if(user==nil||user.login==false){
         return false;
