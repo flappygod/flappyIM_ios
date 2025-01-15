@@ -344,16 +344,20 @@
 -(void)setNotificationClickListener:(__nullable NotificationClickListener)clicked{
     //保留
     _notificationListener=clicked;
+}
+
+
+//检查是否有缓存消息
+-(void)checkNotificationClick{
     //消息
     NSString* message=UNGetObject(FlappyNotificationMessage);
     //消息
     if(message!=nil){
-        //转换为消息体
         _notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:message]]);
-        //移除
         UNRemoveObject(FlappyNotificationMessage);
     }
 }
+
 
 //初始化
 -(void)init:(NSString*)serverUrl  assetsUrl:(NSString*)assetsUrl{
@@ -374,6 +378,7 @@
         [self setupDataBase];
         [self setupNotify];
         [self autoLogin];
+        [self checkNotificationClick];
         self.isSetup = true;
     }
 }
