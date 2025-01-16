@@ -56,7 +56,8 @@
 #define RES_RECEIPT  4
 //更新
 #define RES_UPDATE  5
-
+//被踢下线
+#define RES_KICKED  6
 
 //系统消息动作
 #define SYSTEM_MSG_NOTHING 0

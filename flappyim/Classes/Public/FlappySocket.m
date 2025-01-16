@@ -403,6 +403,9 @@ static  GCDAsyncSocket*  _instanceSocket;
     else if(respones.type==RES_UPDATE){
         [self receiveUpdate: respones];
     }
+    else if(respones.type==RES_KICKED){
+        [self kickedOut: respones];
+    }
 }
 
 
@@ -721,6 +724,10 @@ static  GCDAsyncSocket*  _instanceSocket;
     }
 }
 
+//被踢下线了
+-(void)kickedOut:(FlappyResponse *)respones{
+    [[FlappyIM shareInstance] setKickedOut];
+}
 
 //消息收到状态
 -(void)handleMessageSendArriveState:(ChatMessage*)message{

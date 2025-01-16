@@ -327,35 +327,35 @@
 
 //设置被踢下线的监听
 -(void)setKickedOut{
-    ChatUser* user=[[FlappyData shareInstance]getUser];
-    if(user==nil||!user.login){
-        return;
-    }
-    user.login=false;
-    [[FlappyData shareInstance]saveUser:user];
-    if(self.kickedListener!=nil){
-        self.kickedListener();
-        self.kickedListener=nil;
-    }
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        ChatUser* user = [[FlappyData shareInstance] getUser];
+        if (user == nil || !user.login) {
+            return;
+        }
+        user.login = false;
+        [[FlappyData shareInstance] saveUser:user];
+        if (weakSelf.kickedListener != nil) {
+            weakSelf.kickedListener();
+        }
+    });
 }
 
 
 //收到点击事件时候的通知
 -(void)setNotificationClickListener:(__nullable NotificationClickListener)clicked{
-    //保留
     _notificationListener=clicked;
 }
 
 
 //检查是否有缓存消息
 -(void)checkNotificationClick{
-    //消息
     NSString* message=UNGetObject(FlappyNotificationMessage);
-    //消息
-    if(message!=nil){
-        _notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:message]]);
-        UNRemoveObject(FlappyNotificationMessage);
+    if(message==nil){
+        return;
     }
+    _notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:message]]);
+    UNRemoveObject(FlappyNotificationMessage);
 }
 
 
