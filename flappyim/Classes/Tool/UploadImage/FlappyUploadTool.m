@@ -31,7 +31,7 @@
 
 //上传图片和视频
 - (void)uploadFileBaseModel:(NSString*)urlPath
-                            andModel:(FlappyUploadModel *)model {
+                   andModel:(FlappyUploadModel *)model {
     NSMutableArray* array=[[NSMutableArray alloc]init];
     [array addObject:model];
     [self uploadFilesBaseModel:urlPath andModels:array];
@@ -41,7 +41,17 @@
 
 //上传图片和视频
 - (void)uploadFilesBaseModel:(NSString*)urlPath
-                           andModels:(NSMutableArray *)models {
+                   andModels:(NSMutableArray *)models {
+    
+    if (!urlPath || [urlPath isEqualToString:@""]) {
+        NSLog(@"Error: urlPath is nil or empty");
+        return;
+    }
+    
+    if (!models || models.count == 0) {
+        NSLog(@"Error: models is nil or empty");
+        return;
+    }
     
     //创建AFHTTPSessionManager
     AFHTTPSessionManager *manager = [FlappyUploadTool shareManager];
@@ -67,6 +77,24 @@
         for(int s=0;s<models.count;s++){
             FlappyUploadModel* model=[models objectAtIndex:s];
             
+            if (!model) {
+                NSLog(@"Error: model is nil");
+                continue;
+            }
+            if (!model.path || [model.path isEqualToString:@""]) {
+                NSLog(@"Error: model.path is nil or empty");
+                continue;
+            }
+            if (!model.name || [model.name isEqualToString:@""]) {
+                NSLog(@"Error: model.name is nil or empty");
+                continue;
+            }
+            if (!model.type || [model.type isEqualToString:@""]) {
+                NSLog(@"Error: model.type is nil or empty");
+                continue;
+            }
+            
+            
             //设置mimeType
             NSString *mimeType;
             if ([model.type isEqualToString:@"image"]) {
@@ -74,8 +102,9 @@
                 if([model.path rangeOfString:@"."].location!=NSNotFound){
                     NSString *extension = [model.path componentsSeparatedByString:@"."].lastObject;
                     mimeType = [NSString stringWithFormat:@"image/%@", extension];
-                }else{
-                    //图片默认png
+                }
+                //图片默认png
+                else{
                     NSString *extension = @"png";
                     mimeType = [NSString stringWithFormat:@"image/%@", extension];
                 }
@@ -90,11 +119,14 @@
                 if([model.path hasPrefix:@"file://"]){
                     //其实不需要，切掉前面的
                     NSString* path=[model.path substringWithRange:NSMakeRange(7, model.path.length-7)];
-                    //创建url
                     url=[NSURL fileURLWithPath:path];
                 }else{
                     //创建url
                     url=[NSURL fileURLWithPath:model.path];
+                }
+                if (!url) {
+                    NSLog(@"Error: Invalid file URL for path %@", model.path);
+                    continue;
                 }
                 [formData appendPartWithFileURL:url
                                            name:model.name
@@ -127,15 +159,19 @@
                     url=[NSURL fileURLWithPath:model.path];
                 }
                 
-                [formData appendPartWithFileData:[NSData dataWithContentsOfFile:model.path]
+                NSData *fileData = [NSData dataWithContentsOfFile:model.path];
+                if (!fileData) {
+                    NSLog(@"Error: Failed to read file at path %@", model.path);
+                    //跳过当前模型
+                    continue;
+                }
+                
+                [formData appendPartWithFileData:fileData
                                             name:model.name
                                         fileName:fileName
                                         mimeType:mimeType];
                 
             }
-            
-            
-            
         }
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
@@ -147,7 +183,7 @@
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         //结束
-        if(safeSelf.errorBlock!=nil)
+        if(safeSelf.errorBlock!=nil && error!=nil && error.description!=nil)
         {
             safeSelf.errorBlock([[NSException alloc]initWithName:@"upload error"
                                                           reason:[FlappyStringTool toUnNullStr:error.description]
