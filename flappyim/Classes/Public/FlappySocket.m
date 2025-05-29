@@ -366,11 +366,11 @@ static  GCDAsyncSocket*  _instanceSocket;
         request.msg=[FlappyBaseSession changeToMessage:chatMsg];
         
         
-        //秘钥加密
+        //消息体、秘钥加密
         request.msg.messageContent = [Aes128 AES128Encrypt:chatMsg.messageContent
                                                    withKey:chatMsg.messageSecret];
-        
-        //渠道Channel秘钥加密消息秘钥
+        request.msg.messageReplyMsgContent = [Aes128 AES128Encrypt:chatMsg.messageReplyMsgContent
+                                                           withKey:chatMsg.messageSecret];
         request.msg.messageSecret = [Aes128 AES128Encrypt:chatMsg.messageSecret
                                                   withKey:_channelSecret];
         
@@ -520,17 +520,20 @@ static  GCDAsyncSocket*  _instanceSocket;
             //消息解析
             ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
             
-            //秘钥解析
+            //秘钥解析，及内容解析
             if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0){
                 chatMsg.messageSecret = [Aes128 AES128Decrypt:chatMsg.messageSecret
                                                       withKey:self.channelSecret];
             }
-            
-            //内容解析
             if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0 &&
                chatMsg.messageContent!=nil && chatMsg.messageContent.length!=0){
                 chatMsg.messageContent = [Aes128 AES128Decrypt:chatMsg.messageContent
                                                        withKey:chatMsg.messageSecret];
+            }
+            if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0 &&
+               chatMsg.messageReplyMsgContent!=nil && chatMsg.messageReplyMsgContent.length!=0){
+                chatMsg.messageReplyMsgContent = [Aes128 AES128Decrypt:chatMsg.messageReplyMsgContent
+                                                               withKey:chatMsg.messageSecret];
             }
             
             
@@ -647,17 +650,20 @@ static  GCDAsyncSocket*  _instanceSocket;
         //转换一下
         ChatMessage* chatMsg=[ChatMessage mj_objectWithKeyValues:[message mj_keyValues]];
         
-        //秘钥解析
+        //秘钥解析及内容解析
         if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0){
             chatMsg.messageSecret = [Aes128 AES128Decrypt:chatMsg.messageSecret
                                                   withKey:self.channelSecret];
         }
-        
-        //内容解析
         if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0 &&
            chatMsg.messageContent!=nil && chatMsg.messageContent.length!=0){
             chatMsg.messageContent = [Aes128 AES128Decrypt:chatMsg.messageContent
                                                    withKey:chatMsg.messageSecret];
+        }
+        if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0 &&
+           chatMsg.messageReplyMsgContent!=nil && chatMsg.messageReplyMsgContent.length!=0){
+            chatMsg.messageReplyMsgContent = [Aes128 AES128Decrypt:chatMsg.messageReplyMsgContent
+                                                           withKey:chatMsg.messageSecret];
         }
         
         //修改消息状态

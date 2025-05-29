@@ -97,6 +97,42 @@
     }
 }
 
+//发送文本
+-(ChatMessage*)sendText:(NSString*)text
+            andReplyMsg:(ChatMessage*)replyMsg
+             andSuccess:(FlappySendSuccess)success
+             andFailure:(FlappySendFailure)failure{
+    
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
+    ChatMessage* chatmsg=[[ChatMessage alloc]init];
+    chatmsg.messageId=[FlappyStringTool uuidString];
+    chatmsg.messageSessionId=self.session.sessionId;
+    chatmsg.messageSessionType=self.session.sessionType;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
+    chatmsg.messageType=MSG_TYPE_TEXT;
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageSendState=SEND_STATE_SENDING;
+    
+    [chatmsg setChatText:text];
+    
+    //发送消息
+    if(replyMsg!=nil){
+        [chatmsg setMessageReplyMsgId:replyMsg.messageId];
+        [chatmsg setMessageReplyUserId:replyMsg.messageSendId];
+        [chatmsg setMessageReplyMsgType:replyMsg.messageType];
+        [chatmsg setMessageReplyMsgContent:replyMsg.messageContent];
+    }
+    
+    //发送消息
+    [[FlappySender shareInstance] sendMessage:chatmsg
+                                   andSuccess:success
+                                   andFailure:failure];
+    
+    return chatmsg;
+}
 
 //发送文本
 -(ChatMessage*)sendText:(NSString*)text

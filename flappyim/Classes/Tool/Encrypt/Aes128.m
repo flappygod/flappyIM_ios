@@ -99,6 +99,9 @@
 +(NSString *)AES128Encrypt:(NSString *)text
                    withKey:(NSString *)key
 {
+    if(text==nil||text.length==0){
+        return text;
+    }
     char keyPtr[kCCKeySizeAES128+1];
     memset(keyPtr, 0, sizeof(keyPtr));
     [key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
@@ -134,6 +137,9 @@
 +(NSString *)AES128Decrypt:(NSString *)text
                    withKey:(NSString *)key
 {
+    if(text==nil||text.length==0){
+        return text;
+    }
     char keyPtr[kCCKeySizeAES128 + 1];
     memset(keyPtr, 0, sizeof(keyPtr));
     [key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
