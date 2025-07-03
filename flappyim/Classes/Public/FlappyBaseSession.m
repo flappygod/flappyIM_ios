@@ -27,6 +27,10 @@
     
     msg.messageSessionType=(int32_t)chatmsg.messageSessionType;
     
+    msg.messageSessionOffset=chatmsg.messageSessionOffset;
+    
+    msg.messageTableOffset=chatmsg.messageTableOffset;
+    
     msg.messageSendId=[chatmsg.messageSendId longLongValue];
     
     msg.messageSendExtendId=chatmsg.messageSendExtendId;
@@ -37,13 +41,38 @@
     
     msg.messageType=(int32_t)chatmsg.messageType;
     
-    msg.messageContent=chatmsg.messageContent;
     
-    msg.messageDate=chatmsg.messageDate;
-    
+    ///状态区
     msg.messageSendState=(int32_t)chatmsg.messageSendState;
     
     msg.messageReadState=(int32_t)chatmsg.messageReadState;
+    
+    msg.messagePinState=(int32_t)chatmsg.messagePinState;
+    
+    ///回复区
+    msg.messageReplyMsgId=chatmsg.messageReplyMsgId;
+    
+    msg.messageReplyMsgType=(int32_t)chatmsg.messageReplyMsgType;
+    
+    msg.messageReplyUserId=chatmsg.messageReplyUserId;
+    
+    msg.messageForwardTitle=chatmsg.messageForwardTitle;
+    
+    ///ID区
+    msg.messageRecallUserId=chatmsg.messageRecallUserId;
+    
+    msg.messageAtUserIds=chatmsg.messageAtUserIds;
+    
+    msg.messageReadUserIds=chatmsg.messageReadUserIds;
+    
+    msg.messageDeleteUserIds=chatmsg.messageDeleteUserIds;
+    
+    ///基本
+    msg.messageDate=chatmsg.messageDate;
+    
+    msg.isDelete=(int32_t)chatmsg.isDelete;
+    
+    msg.deleteDate=chatmsg.deleteDate;
     
     return msg;
 }

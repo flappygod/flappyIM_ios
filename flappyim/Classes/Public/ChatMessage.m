@@ -43,6 +43,7 @@
         _messageContent = [result stringForColumn:@"messageContent"];
         _messageSendState = [result intForColumn:@"messageSendState"];
         _messageReadState = [result intForColumn:@"messageReadState"];
+        _messagePinState = [result intForColumn:@"messagePinState"];
         _messageSecret = [result stringForColumn:@"messageSecret"];
         _messageDate = [result stringForColumn:@"messageDate"];
         _messageStamp = [result longForColumn:@"messageStamp"];
@@ -51,6 +52,7 @@
         _messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
         _messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
         _messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
+        _messageForwardTitle = [result stringForColumn:@"messageForwardTitle"];
         _messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
         _messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
         _messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
