@@ -96,6 +96,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) NSInteger messageReadState;
 
+@property(nonatomic,assign) NSInteger messagePinState;
+
 @property(nonatomic,copy)NSString* messageSecret;
 
 @property(nonatomic,copy)NSString* messageDate;
@@ -111,6 +113,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy)NSString* messageReplyMsgContent;
 
 @property(nonatomic,copy)NSString* messageReplyUserId;
+
+@property(nonatomic,copy)NSString* messageForwardTitle;
 
 @property(nonatomic,copy)NSString* messageRecallUserId;
 

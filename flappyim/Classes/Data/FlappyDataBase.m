@@ -57,6 +57,7 @@
     "messageContent TEXT,"
     "messageSendState INTEGER,"
     "messageReadState INTEGER,"
+    "messagePinState INTEGER,"
     "messageSecret TEXT,"
     "isDelete INTEGER,"
     
@@ -64,6 +65,8 @@
     "messageReplyMsgType INTEGER,"
     "messageReplyMsgContent TEXT,"
     "messageReplyUserId TEXT,"
+    
+    "messageForwardTitle TEXT,"
     "messageRecallUserId TEXT,"
     "messageAtUserIds TEXT,"
     "messageReadUserIds TEXT,"
@@ -200,6 +203,7 @@
                            "messageContent,"
                            "messageSendState,"
                            "messageReadState,"
+                           "messagePinState,"
                            "messageSecret,"
                            "messageDate,"
                            "deleteDate,"
@@ -209,11 +213,12 @@
                            "messageReplyMsgType,"
                            "messageReplyMsgContent,"
                            "messageReplyUserId,"
+                           "messageForwardTitle,"
                            "messageRecallUserId,"
                            "messageAtUserIds,"
                            "messageReadUserIds,"
                            "messageDeleteUserIds,"
-                           "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                           "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                        withArgumentsInArray:@[
                 [FlappyStringTool toUnNullStr:msg.messageId],
                 [FlappyStringTool toUnNullStr:msg.messageSessionId],
@@ -277,6 +282,7 @@
                        "messageContent,"
                        "messageSendState,"
                        "messageReadState,"
+                       "messagePinState,"
                        "messageSecret,"
                        "messageDate,"
                        "deleteDate,"
@@ -286,11 +292,12 @@
                        "messageReplyMsgType,"
                        "messageReplyMsgContent,"
                        "messageReplyUserId,"
+                       "messageForwardTitle,"
                        "messageRecallUserId,"
                        "messageAtUserIds,"
                        "messageReadUserIds,"
                        "messageDeleteUserIds,"
-                       "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                       "messageInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                    withArgumentsInArray:@[
             [FlappyStringTool toUnNullStr:msg.messageId],
             [FlappyStringTool toUnNullStr:msg.messageSessionId],
@@ -326,6 +333,94 @@
             NSLog(@"插入或更新消息失败: %@", [db lastErrorMessage]);
         }
         return nil;
+    }];
+}
+
+
+//更新数据
+-(Boolean)updateMessage:(ChatMessage *)msg {
+    return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        BOOL result = [db executeUpdate:@"update message set "
+                       "messageSessionId=?,"
+                       "messageSessionType=?,"
+                       "messageSessionOffset=?,"
+                       "messageTableOffset=?,"
+                       "messageType=?,"
+                       "messageSendId=?,"
+                       "messageSendExtendId=?,"
+                       "messageReceiveId=?,"
+                       "messageReceiveExtendId=?,"
+                       "messageContent=?,"
+                       "messageSendState=?,"
+                       "messageReadState=?,"
+                       "messagePinState=?,"
+                       "messageSecret=?,"
+                       "messageDate=?,"
+                       "deleteDate=?,"
+                       "isDelete=?,"
+                       
+                       "messageReplyMsgId=?,"
+                       "messageReplyMsgType=?,"
+                       "messageReplyMsgContent=?,"
+                       "messageReplyUserId=?,"
+                       "messageForwardTitle=?,"
+                       "messageRecallUserId=?,"
+                       "messageAtUserIds=?,"
+                       "messageReadUserIds=?,"
+                       "messageDeleteUserIds=?"
+                       
+                       " where "
+                       "messageId = ?"
+                       " and "
+                       "messageInsertUser = ?"
+                   withArgumentsInArray:@[
+            [FlappyStringTool toUnNullStr:msg.messageSessionId],
+            [NSNumber numberWithInteger:msg.messageSessionType],
+            [NSNumber numberWithInteger:msg.messageSessionOffset],
+            [NSNumber numberWithInteger:msg.messageTableOffset],
+            [NSNumber numberWithInteger:msg.messageType],
+            [FlappyStringTool toUnNullStr:msg.messageSendId],
+            [FlappyStringTool toUnNullStr:msg.messageSendExtendId],
+            [FlappyStringTool toUnNullStr:msg.messageReceiveId],
+            [FlappyStringTool toUnNullStr:msg.messageReceiveExtendId],
+            [FlappyStringTool toUnNullStr:msg.messageContent],
+            [NSNumber numberWithInteger:msg.messageSendState],
+            [NSNumber numberWithInteger:msg.messageReadState],
+            [NSNumber numberWithInteger:msg.messagePinState],
+            [FlappyStringTool toUnNullStr:msg.messageSecret],
+            [FlappyStringTool toUnNullStr:msg.messageDate],
+            [FlappyStringTool toUnNullStr:msg.deleteDate],
+            [NSNumber numberWithInteger:msg.isDelete],
+            
+            [FlappyStringTool toUnNullStr:msg.messageReplyMsgId],
+            [NSNumber numberWithInteger:msg.messageReplyMsgType],
+            [FlappyStringTool toUnNullStr:msg.messageReplyMsgContent],
+            [FlappyStringTool toUnNullStr:msg.messageReplyUserId],
+            [FlappyStringTool toUnNullStr:msg.messageForwardTitle],
+            [FlappyStringTool toUnNullStr:msg.messageRecallUserId],
+            [FlappyStringTool toUnNullStr:msg.messageAtUserIds],
+            [FlappyStringTool toUnNullStr:msg.messageReadUserIds],
+            [FlappyStringTool toUnNullStr:msg.messageDeleteUserIds],
+            
+            msg.messageId,
+            user.userExtendId
+        ]];
+        return @(result);
+    }] boolValue];
+}
+
+//通过ID获取消息
+-(ChatMessage *)getMessageById:(NSString *)messageID {
+    return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        FMResultSet *result = [db executeQuery:@"select * from message where messageId=? and messageInsertUser=?"
+                          withArgumentsInArray:@[messageID, user.userExtendId]];
+        
+        ChatMessage *msg = nil;
+        if ([result next]) {
+            msg = [[ChatMessage alloc] initWithResult:result];
+        }
+        [result close];
+        return msg;
     }];
 }
 
@@ -727,88 +822,6 @@
     } defaultValue: [[NSMutableArray alloc] init]];
 }
 
-//更新数据
--(Boolean)updateMessage:(ChatMessage *)msg {
-    return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        BOOL result = [db executeUpdate:@"update message set "
-                       "messageSessionId=?,"
-                       "messageSessionType=?,"
-                       "messageSessionOffset=?,"
-                       "messageTableOffset=?,"
-                       "messageType=?,"
-                       "messageSendId=?,"
-                       "messageSendExtendId=?,"
-                       "messageReceiveId=?,"
-                       "messageReceiveExtendId=?,"
-                       "messageContent=?,"
-                       "messageSendState=?,"
-                       "messageReadState=?,"
-                       "messageSecret=?,"
-                       "messageDate=?,"
-                       "deleteDate=?,"
-                       "isDelete=?,"
-                       
-                       "messageReplyMsgId=?,"
-                       "messageReplyMsgType=?,"
-                       "messageReplyMsgContent=?,"
-                       "messageReplyUserId=?,"
-                       "messageRecallUserId=?,"
-                       "messageAtUserIds=?,"
-                       "messageReadUserIds=?,"
-                       "messageDeleteUserIds=?"
-                       
-                       " where "
-                       "messageId = ?"
-                       " and "
-                       "messageInsertUser = ?"
-                   withArgumentsInArray:@[
-            [FlappyStringTool toUnNullStr:msg.messageSessionId],
-            [NSNumber numberWithInteger:msg.messageSessionType],
-            [NSNumber numberWithInteger:msg.messageSessionOffset],
-            [NSNumber numberWithInteger:msg.messageTableOffset],
-            [NSNumber numberWithInteger:msg.messageType],
-            [FlappyStringTool toUnNullStr:msg.messageSendId],
-            [FlappyStringTool toUnNullStr:msg.messageSendExtendId],
-            [FlappyStringTool toUnNullStr:msg.messageReceiveId],
-            [FlappyStringTool toUnNullStr:msg.messageReceiveExtendId],
-            [FlappyStringTool toUnNullStr:msg.messageContent],
-            [NSNumber numberWithInteger:msg.messageSendState],
-            [NSNumber numberWithInteger:msg.messageReadState],
-            [FlappyStringTool toUnNullStr:msg.messageSecret],
-            [FlappyStringTool toUnNullStr:msg.messageDate],
-            [FlappyStringTool toUnNullStr:msg.deleteDate],
-            [NSNumber numberWithInteger:msg.isDelete],
-            
-            [FlappyStringTool toUnNullStr:msg.messageReplyMsgId],
-            [NSNumber numberWithInteger:msg.messageReplyMsgType],
-            [FlappyStringTool toUnNullStr:msg.messageReplyMsgContent],
-            [FlappyStringTool toUnNullStr:msg.messageReplyUserId],
-            [FlappyStringTool toUnNullStr:msg.messageRecallUserId],
-            [FlappyStringTool toUnNullStr:msg.messageAtUserIds],
-            [FlappyStringTool toUnNullStr:msg.messageReadUserIds],
-            [FlappyStringTool toUnNullStr:msg.messageDeleteUserIds],
-            
-            msg.messageId,
-            user.userExtendId
-        ]];
-        return @(result);
-    }] boolValue];
-}
-
-//通过ID获取消息
--(ChatMessage *)getMessageById:(NSString *)messageID {
-    return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        FMResultSet *result = [db executeQuery:@"select * from message where messageId=? and messageInsertUser=?"
-                          withArgumentsInArray:@[messageID, user.userExtendId]];
-        
-        ChatMessage *msg = nil;
-        if ([result next]) {
-            msg = [[ChatMessage alloc] initWithResult:result];
-        }
-        [result close];
-        return msg;
-    }];
-}
 
 //通过会话ID获取最近的一次会话
 -(NSInteger)getSessionOffsetLatest:(NSString *)sessionID {
