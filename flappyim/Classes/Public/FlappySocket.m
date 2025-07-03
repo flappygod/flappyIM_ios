@@ -695,8 +695,8 @@ static  GCDAsyncSocket*  _instanceSocket;
 //接收更新
 -(void)receiveUpdate:(FlappyResponse *)respones{
     //移除
-    if(respones.update!=nil && respones.update.updateId!=nil){
-        [self.updatingArray removeObject:respones.update.updateId];
+    if(respones.update!=nil && respones.update.responseId!=nil){
+        [self.updatingArray removeObject:respones.update.responseId];
     }
     //Session Array
     NSMutableArray* sessions=respones.sessionsArray;
