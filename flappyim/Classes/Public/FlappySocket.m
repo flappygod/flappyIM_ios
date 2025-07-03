@@ -363,17 +363,8 @@ static  GCDAsyncSocket*  _instanceSocket;
         request.type=REQ_MSG;
         
         //消息内容
-        request.msg=[FlappyBaseSession changeToMessage:chatMsg];
-        
-        
-        //消息体、秘钥加密
-        request.msg.messageContent = [Aes128 AES128Encrypt:chatMsg.messageContent
-                                                   withKey:chatMsg.messageSecret];
-        request.msg.messageReplyMsgContent = [Aes128 AES128Encrypt:chatMsg.messageReplyMsgContent
-                                                           withKey:chatMsg.messageSecret];
-        request.msg.messageSecret = [Aes128 AES128Encrypt:chatMsg.messageSecret
-                                                  withKey:_channelSecret];
-        
+        request.msg=[FlappyBaseSession changeToMessage:chatMsg
+                                      andChannelSecret:_channelSecret];
         
         //请求数据，已经GPBComputeRawVarint32SizeForInteger
         NSData* reqData=[request delimitedData];

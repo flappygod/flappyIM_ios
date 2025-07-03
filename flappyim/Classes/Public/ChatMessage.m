@@ -30,34 +30,48 @@
 - (instancetype)initWithResult:(FMResultSet *)result {
     self = [super init];
     if (self) {
+        
+        ///基础ID区
         _messageId = [result stringForColumn:@"messageId"];
         _messageSessionId = [result stringForColumn:@"messageSessionId"];
         _messageSessionType = [result intForColumn:@"messageSessionType"];
         _messageSessionOffset = [result intForColumn:@"messageSessionOffset"];
         _messageTableOffset = [result intForColumn:@"messageTableOffset"];
+        
+        ///发送接收区
         _messageType = [result intForColumn:@"messageType"];
         _messageSendId = [result stringForColumn:@"messageSendId"];
         _messageSendExtendId = [result stringForColumn:@"messageSendExtendId"];
         _messageReceiveId = [result stringForColumn:@"messageReceiveId"];
         _messageReceiveExtendId = [result stringForColumn:@"messageReceiveExtendId"];
-        _messageContent = [result stringForColumn:@"messageContent"];
+        
+        ///消息状态区
         _messageSendState = [result intForColumn:@"messageSendState"];
         _messageReadState = [result intForColumn:@"messageReadState"];
         _messagePinState = [result intForColumn:@"messagePinState"];
-        _messageSecret = [result stringForColumn:@"messageSecret"];
-        _messageDate = [result stringForColumn:@"messageDate"];
         _messageStamp = [result longForColumn:@"messageStamp"];
-        _isDelete = [result intForColumn:@"isDelete"];
+        
+        ///回复区
         _messageReplyMsgId = [result stringForColumn:@"messageReplyMsgId"];
         _messageReplyMsgType = [result intForColumn:@"messageReplyMsgType"];
-        _messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
         _messageReplyUserId = [result stringForColumn:@"messageReplyUserId"];
         _messageForwardTitle = [result stringForColumn:@"messageForwardTitle"];
+        
+        ///操作ID区
         _messageRecallUserId = [result stringForColumn:@"messageRecallUserId"];
         _messageAtUserIds = [result stringForColumn:@"messageAtUserIds"];
         _messageReadUserIds = [result stringForColumn:@"messageReadUserIds"];
         _messageDeleteUserIds = [result stringForColumn:@"messageDeleteUserIds"];
+        
+        ///基础区
+        _messageDate = [result stringForColumn:@"messageDate"];
+        _isDelete = [result intForColumn:@"isDelete"];
         _deleteDate = [result stringForColumn:@"deleteDate"];
+        
+        ///内容区
+        _messageSecret = [result stringForColumn:@"messageSecret"];
+        _messageContent = [result stringForColumn:@"messageContent"];
+        _messageReplyMsgContent = [result stringForColumn:@"messageReplyMsgContent"];
     }
     return self;
 }

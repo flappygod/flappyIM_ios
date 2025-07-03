@@ -13,11 +13,13 @@
 #import "FlappyJsonTool.h"
 #import "FlappyData.h"
 #import "MJExtension.h"
+#import "Aes128.h"
 
 @implementation FlappyBaseSession
 
 //转换为
-+(Message*)changeToMessage:(ChatMessage*)chatmsg{
++(Message*)changeToMessage:(ChatMessage*)chatmsg
+          andChannelSecret:(NSString*) channelSecret{
     
     Message* msg=[[Message alloc]init];
     
@@ -73,6 +75,17 @@
     msg.isDelete=(int32_t)chatmsg.isDelete;
     
     msg.deleteDate=chatmsg.deleteDate;
+    
+    
+    
+    //消息体、秘钥加密
+    msg.messageContent = [Aes128 AES128Encrypt:chatmsg.messageContent
+                                               withKey:chatmsg.messageSecret];
+    msg.messageReplyMsgContent = [Aes128 AES128Encrypt:chatmsg.messageReplyMsgContent
+                                                       withKey:chatmsg.messageSecret];
+    msg.messageSecret = [Aes128 AES128Encrypt:chatmsg.messageSecret
+                                              withKey:channelSecret];
+    
     
     return msg;
 }
