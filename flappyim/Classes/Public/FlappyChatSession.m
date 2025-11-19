@@ -42,8 +42,12 @@
                 return user.userId;
             }
         }
-    }else if(self.session.sessionType==TYPE_GROUP){
+    }
+    else if(self.session.sessionType==TYPE_GROUP){
         return self.session.sessionId;
+    }
+    else if(self.session.sessionType==TYPE_SYSTEM){
+        return @"0";
     }
     return nil;
 }
@@ -58,8 +62,12 @@
                 return user.userExtendId;
             }
         }
-    }else if(self.session.sessionType==TYPE_GROUP){
+    }
+    else if(self.session.sessionType==TYPE_GROUP){
         return self.session.sessionExtendId;
+    }
+    else if(self.session.sessionType==TYPE_SYSTEM){
+        return @"0";
     }
     return nil;
 }
