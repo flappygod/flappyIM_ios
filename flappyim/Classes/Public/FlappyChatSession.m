@@ -617,6 +617,12 @@
     chatmsg.messageReplyMsgType = 0;
     chatmsg.messageReplyMsgContent = @"";
     chatmsg.messageReplyUserId = @"";
+    
+    chatmsg.messageDeleteUserIds = @"";
+    chatmsg.messageRecallUserId = @"";
+    chatmsg.messageReadUserIds = @"";
+    chatmsg.messageDeleteUserIds = @"";
+    
     chatmsg.messageSendState=SEND_STATE_SENDING;
     //发送消息
     [[FlappySender shareInstance] sendMessage:chatmsg
