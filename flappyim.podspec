@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
     s.name             = 'flappyim'
-    s.version          = '3.14.6'
-    s.summary          = 'A im named flappyim'
+    s.version          = '3.14.7'
+    s.summary          = "A lightweight and powerful IM library for iOS."
     
     # This description is used to generate tags and improve search results.
     #   * Think: What does it do? Why did you write it? What is the focus?
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
     #   * Write the description between the DESC delimiters below.
     #   * Finally, don't worry about the indent, CocoaPods strips it!
     
-    s.description      = 'flappyIM  for  IOS'
+    s.description = "FlappyIM is a lightweight and powerful instant messaging library for iOS. It provides robust features for real-time communication, including message delivery, group chats, and more."
     
     s.homepage         = 'https://github.com/flappygod/flappyIM_ios'
     # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
     s.source           = { :git => 'https://github.com/flappygod/flappyIM_ios.git', :tag => s.version.to_s }
     # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
     
-    s.ios.deployment_target = '10.0'
+    s.ios.deployment_target = '12.0'
     
     s.source_files = 'flappyim/Classes/**/*'
     s.public_header_files = 'flappyim/Classes/Public/*.h'
@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
     #   'flappyim' => ['flappyim/Assets/*.png']
     # }
     
-    
+    s.swift_versions = ['5.0', '5.1', '5.2', '5.3', '5.4', '5.5', '5.6']
     # s.public_header_files = 'Pod/Classes/**/*.h'
     # s.frameworks = 'UIKit', 'MapKit'
     # s.dependency 'AFNetworking', '~> 2.3'
@@ -46,5 +46,5 @@ Pod::Spec.new do |s|
     s.dependency 'MJExtension', '~> 3.4.1'
     s.dependency 'Protobuf', '~> 3.29.3'
     s.dependency 'CocoaAsyncSocket', '~> 7.6.5'
-    s.dependency 'FMDB', '~> 2.7.5'
+    s.dependency 'FMDB', '~> 2.7.12'
 end
