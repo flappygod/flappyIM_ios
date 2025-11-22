@@ -173,6 +173,11 @@ NS_ASSUME_NONNULL_BEGIN
                andFailure:(FlappySendFailure)failure;
 
 
+//转发消息到当前会话
+-(ChatMessage*)sendForwardMessage:(ChatMessage*)chatmsg
+                       andSuccess:(FlappySendSuccess)success
+                       andFailure:(FlappySendFailure)failure;
+
 //删除会话消息
 -(ChatMessage*)recallMessageById:(NSString*)messageId
                       andSuccess:(FlappySendSuccess)success

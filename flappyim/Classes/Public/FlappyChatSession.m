@@ -599,6 +599,32 @@
     return chatmsg;
 }
 
+//转发消息
+-(ChatMessage*)sendForwardMessage:(ChatMessage*)chatmsg
+                       andSuccess:(FlappySendSuccess)success
+                       andFailure:(FlappySendFailure)failure{
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
+    chatmsg.messageId=[FlappyStringTool uuidString];
+    chatmsg.messageSessionId=self.session.sessionId;
+    chatmsg.messageSessionType=self.session.sessionType;
+    chatmsg.messageSendId=mine.userId;
+    chatmsg.messageSendExtendId=mine.userExtendId;
+    chatmsg.messageReceiveId=[self getPeerID];
+    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
+    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
+    chatmsg.messageForwardTitle = @"Forward";
+    chatmsg.messageReplyMsgId = @"";
+    chatmsg.messageReplyMsgType = 0;
+    chatmsg.messageReplyMsgContent = @"";
+    chatmsg.messageReplyUserId = @"";
+    chatmsg.messageSendState=SEND_STATE_SENDING;
+    //发送消息
+    [[FlappySender shareInstance] sendMessage:chatmsg
+                                   andSuccess:success
+                                   andFailure:failure];
+    return chatmsg;
+}
+
 //发送已读消息
 -(ChatMessage*)sessionMessageRead:(FlappySendSuccess)success
                        andFailure:(FlappySendFailure)failure{
