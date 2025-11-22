@@ -106,46 +106,33 @@
 }
 
 //发送文本
--(ChatMessage*)sendText:(NSString*)text
-            andReplyMsg:(ChatMessage*)replyMsg
-             andSuccess:(FlappySendSuccess)success
-             andFailure:(FlappySendFailure)failure{
-    
-    ChatUser* mine = [[FlappyData shareInstance] getUser];
-    ChatMessage* chatmsg=[[ChatMessage alloc]init];
-    chatmsg.messageId=[FlappyStringTool uuidString];
-    chatmsg.messageSessionId=self.session.sessionId;
-    chatmsg.messageSessionType=self.session.sessionType;
-    chatmsg.messageSendId=mine.userId;
-    chatmsg.messageSendExtendId=mine.userExtendId;
-    chatmsg.messageReceiveId=[self getPeerID];
-    chatmsg.messageReceiveExtendId=[self getPeerExtendID];
-    chatmsg.messageType=MSG_TYPE_TEXT;
-    chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
-    chatmsg.messageSendState=SEND_STATE_SENDING;
-    
-    [chatmsg setChatText:text];
-    
-    //发送消息
-    if(replyMsg!=nil){
-        [chatmsg setMessageReplyMsgId:replyMsg.messageId];
-        [chatmsg setMessageReplyUserId:replyMsg.messageSendId];
-        [chatmsg setMessageReplyMsgType:replyMsg.messageType];
-        [chatmsg setMessageReplyMsgContent:replyMsg.messageContent];
+-(void)setMessageReply:(nullable ChatMessage*)replyMsg
+            forMessage:(ChatMessage*)message{
+    if(replyMsg==nil){
+        return;
     }
-    
-    //发送消息
-    [[FlappySender shareInstance] sendMessage:chatmsg
-                                   andSuccess:success
-                                   andFailure:failure];
-    
-    return chatmsg;
+    [message setMessageReplyMsgId:replyMsg.messageId];
+    [message setMessageReplyUserId:replyMsg.messageSendId];
+    [message setMessageReplyMsgType:replyMsg.messageType];
+    [message setMessageReplyMsgContent:replyMsg.messageContent];
 }
+
 
 //发送文本
 -(ChatMessage*)sendText:(NSString*)text
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure{
+    return [self sendText:text
+              andReplyMsg:nil
+               andSuccess:success
+               andFailure:failure];
+}
+
+//发送文本
+-(ChatMessage*)sendText:(NSString*)text
+            andReplyMsg:(nullable ChatMessage*)replyMsg
+             andSuccess:(FlappySendSuccess)success
+             andFailure:(FlappySendFailure)failure{
     
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -157,9 +144,14 @@
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_TEXT;
-    [chatmsg setChatText:text];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
+    
+    [chatmsg setChatText:text];
+    
+    //设置回复消息
+    [self setMessageReply: replyMsg
+               forMessage:chatmsg];
     
     //发送消息
     [[FlappySender shareInstance] sendMessage:chatmsg
@@ -169,8 +161,20 @@
     return chatmsg;
 }
 
+//发送本地图片
+-(ChatMessage*)sendLocalImage:(NSString*)path
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure{
+    return [self sendLocalImage:path
+                    andReplyMsg:nil
+                     andSuccess:success
+                     andFailure:failure];
+}
+
+
 //发送本地的图片
 -(ChatMessage*)sendLocalImage:(NSString*)path
+                  andReplyMsg:(nullable ChatMessage*)replyMsg
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure{
     
@@ -193,6 +197,10 @@
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
     
+    //设置回复消息
+    [self setMessageReply:replyMsg
+               forMessage:chatmsg];
+    
     [[FlappySender shareInstance] uploadImageAndSend:chatmsg
                                           andSuccess:success
                                           andFailure:failure];
@@ -200,8 +208,20 @@
     
 }
 
+
 //发送图片
 -(ChatMessage*)sendImage:(ChatImage*)image
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure{
+    return  [self sendImage:image
+                andReplyMsg:nil
+                 andSuccess:success
+                 andFailure:failure];
+}
+
+//发送图片
+-(ChatMessage*)sendImage:(ChatImage*)image
+             andReplyMsg:(nullable ChatMessage*)replyMsg
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
     
@@ -220,15 +240,30 @@
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
     
+    //设置回复消息
+    [self setMessageReply:replyMsg
+               forMessage:chatmsg];
+    
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
     return chatmsg;
 }
 
+//发送本地的图片
+-(ChatMessage*)sendLocalVoice:(NSString*)path
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure{
+    return [self sendLocalVoice:path
+                    andReplyMsg:nil
+                     andSuccess:success
+                     andFailure:failure];
+}
+
 
 //发送本地的图片
 -(ChatMessage*)sendLocalVoice:(NSString*)path
+                  andReplyMsg:(nullable ChatMessage*)replyMsg
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure{
     
@@ -249,6 +284,10 @@
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
     
+    //设置回复消息
+    [self setMessageReply:replyMsg
+               forMessage:chatmsg];
+    
     [[FlappySender shareInstance] uploadVoiceAndSend:chatmsg
                                           andSuccess:success
                                           andFailure:failure];
@@ -258,6 +297,17 @@
 
 //发送语音
 -(ChatMessage*)sendVoice:(ChatVoice*)voice
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure{
+    return  [self sendVoice:voice
+                andReplyMsg:nil
+                 andSuccess:success
+                 andFailure:failure];
+}
+
+//发送语音
+-(ChatMessage*)sendVoice:(ChatVoice*)voice
+             andReplyMsg:(nullable ChatMessage*)replyMsg
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
     ChatUser* mine = [[FlappyData shareInstance] getUser];
@@ -274,6 +324,10 @@
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
     
+    //设置回复消息
+    [self setMessageReply:replyMsg
+               forMessage:chatmsg];
+    
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
@@ -283,6 +337,17 @@
 
 //发送位置信息
 -(ChatMessage*)sendLocation:(ChatLocation*)location
+                 andSuccess:(FlappySendSuccess)success
+                 andFailure:(FlappySendFailure)failure{
+    return  [self sendLocation:location
+                   andReplyMsg:nil
+                    andSuccess:success
+                    andFailure:failure];
+}
+
+//发送位置信息
+-(ChatMessage*)sendLocation:(ChatLocation*)location
+                andReplyMsg:(nullable ChatMessage*)replyMsg
                  andSuccess:(FlappySendSuccess)success
                  andFailure:(FlappySendFailure)failure{
     
@@ -300,15 +365,30 @@
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
     
+    //设置回复消息
+    [self setMessageReply:replyMsg
+               forMessage:chatmsg];
+    
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
     return chatmsg;
 }
 
+//发送本地video
+-(ChatMessage*)sendLocalVideo:(NSString*)path
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure{
+    return [self sendLocalVideo:path
+                    andReplyMsg:nil
+                     andSuccess:success
+                     andFailure:failure];
+}
+
 
 //发送本地短视频
 -(ChatMessage*)sendLocalVideo:(NSString*)path
+                  andReplyMsg:(nullable ChatMessage*)replyMsg
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure{
     
@@ -331,15 +411,30 @@
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
     
+    //设置回复消息
+    [self setMessageReply:replyMsg
+               forMessage:chatmsg];
+    
     [[FlappySender shareInstance] uploadVideoAndSend:chatmsg
                                           andSuccess:success
                                           andFailure:failure];
     return chatmsg;
 }
 
+//发送视频
+-(ChatMessage*)sendVideo:(ChatVideo*)video
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure{
+    return  [self sendVideo:video
+                andReplyMsg:nil
+                 andSuccess:success
+                 andFailure:failure];
+}
+
 
 //发送视频
 -(ChatMessage*)sendVideo:(ChatVideo*)video
+             andReplyMsg:(nullable ChatMessage*)replyMsg
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
     
@@ -357,16 +452,33 @@
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
     
+    //设置回复消息
+    [self setMessageReply:replyMsg
+               forMessage:chatmsg];
+    
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
     return chatmsg;
 }
 
+//发送文件
+-(ChatMessage*)sendLocalFile:(NSString*)path
+                     andName:(NSString*)name
+                  andSuccess:(FlappySendSuccess)success
+                  andFailure:(FlappySendFailure)failure{
+    return [self sendLocalFile:path
+                       andName:name
+                   andReplyMsg:nil
+                    andSuccess:success
+                    andFailure:failure];
+}
+
 
 //发送文件
 -(ChatMessage*)sendLocalFile:(NSString*)path
                      andName:(NSString*)name
+                 andReplyMsg:(nullable ChatMessage*)replyMsg
                   andSuccess:(FlappySendSuccess)success
                   andFailure:(FlappySendFailure)failure{
     
@@ -391,15 +503,30 @@
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
     
+    //设置回复消息
+    [self setMessageReply:replyMsg
+               forMessage:chatmsg];
+    
     [[FlappySender shareInstance] uploadFileAndSend:chatmsg
                                          andSuccess:success
                                          andFailure:failure];
     return chatmsg;
 }
 
+//发送文件
+-(ChatMessage*)sendFile:(ChatFile*)file
+             andSuccess:(FlappySendSuccess)success
+             andFailure:(FlappySendFailure)failure{
+    return  [self sendFile:file
+               andReplyMsg:nil
+                andSuccess:success
+                andFailure:failure];
+}
+
 
 //发送文件
 -(ChatMessage*)sendFile:(ChatFile*)file
+            andReplyMsg:(nullable ChatMessage*)replyMsg
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure{
     
@@ -418,6 +545,10 @@
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
     
+    //设置回复消息
+    [self setMessageReply:replyMsg
+               forMessage:chatmsg];
+    
     [[FlappySender shareInstance] sendMessage:chatmsg
                                    andSuccess:success
                                    andFailure:failure];
@@ -427,6 +558,18 @@
 
 //发送自定义
 -(ChatMessage*)sendCustom:(NSString*)text
+               andSuccess:(FlappySendSuccess)success
+               andFailure:(FlappySendFailure)failure{
+    return [self sendCustom:text
+                andReplyMsg:nil
+                 andSuccess:success
+                 andFailure:failure];
+}
+
+
+//发送自定义
+-(ChatMessage*)sendCustom:(NSString*)text
+              andReplyMsg:(nullable ChatMessage*)replyMsg
                andSuccess:(FlappySendSuccess)success
                andFailure:(FlappySendFailure)failure{
     
@@ -443,6 +586,10 @@
     [chatmsg setChatCustom:text];
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
+    
+    //设置回复消息
+    [self setMessageReply:replyMsg
+               forMessage:chatmsg];
     
     //发送消息
     [[FlappySender shareInstance] sendMessage:chatmsg

@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //发送文本
 -(ChatMessage*)sendText:(NSString*)text
-            andReplyMsg:(ChatMessage*)replyMsg
+            andReplyMsg:(nullable ChatMessage*)replyMsg
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure;
 
@@ -55,14 +55,33 @@ NS_ASSUME_NONNULL_BEGIN
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure;
 
+
+//发送本地图片
+-(ChatMessage*)sendLocalImage:(NSString*)path
+                  andReplyMsg:(nullable ChatMessage*)replyMsg
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure;
+
 //发送图片
 -(ChatMessage*)sendImage:(ChatImage*)image
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure;
+
+//发送图片
+-(ChatMessage*)sendImage:(ChatImage*)image
+             andReplyMsg:(nullable ChatMessage*)replyMsg
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure;
 
 
 //发送本地的图片
 -(ChatMessage*)sendLocalVoice:(NSString*)path
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure;
+
+//发送本地的图片
+-(ChatMessage*)sendLocalVoice:(NSString*)path
+                  andReplyMsg:(nullable ChatMessage*)replyMsg
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure;
 
@@ -73,10 +92,30 @@ NS_ASSUME_NONNULL_BEGIN
               andFailure:(FlappySendFailure)failure;
 
 
+//发送语音
+-(ChatMessage*)sendVoice:(ChatVoice*)voice
+             andReplyMsg:(nullable ChatMessage*)replyMsg
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure;
+
+
 //发送位置
 -(ChatMessage*)sendLocation:(ChatLocation*)location
                  andSuccess:(FlappySendSuccess)success
                  andFailure:(FlappySendFailure)failure;
+
+//发送位置信息
+-(ChatMessage*)sendLocation:(ChatLocation*)location
+                andReplyMsg:(nullable ChatMessage*)replyMsg
+                 andSuccess:(FlappySendSuccess)success
+                 andFailure:(FlappySendFailure)failure;
+
+
+//发送本地短视频
+-(ChatMessage*)sendLocalVideo:(NSString*)path
+                  andReplyMsg:(nullable ChatMessage*)replyMsg
+                   andSuccess:(FlappySendSuccess)success
+                   andFailure:(FlappySendFailure)failure;
 
 
 //发送视频
@@ -90,6 +129,12 @@ NS_ASSUME_NONNULL_BEGIN
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure;
 
+//发送视频
+-(ChatMessage*)sendVideo:(ChatVideo*)video
+             andReplyMsg:(nullable ChatMessage*)replyMsg
+              andSuccess:(FlappySendSuccess)success
+              andFailure:(FlappySendFailure)failure;
+
 
 //发送文件
 -(ChatMessage*)sendLocalFile:(NSString*)file
@@ -97,15 +142,33 @@ NS_ASSUME_NONNULL_BEGIN
                   andSuccess:(FlappySendSuccess)success
                   andFailure:(FlappySendFailure)failure;
 
+//发送文件
+-(ChatMessage*)sendLocalFile:(NSString*)path
+                     andName:(NSString*)name
+                 andReplyMsg:(nullable ChatMessage*)replyMsg
+                  andSuccess:(FlappySendSuccess)success
+                  andFailure:(FlappySendFailure)failure;
 
 //发送文件
 -(ChatMessage*)sendFile:(ChatFile*)file
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure;
 
+//发送文件
+-(ChatMessage*)sendFile:(ChatFile*)file
+            andReplyMsg:(nullable ChatMessage*)replyMsg
+             andSuccess:(FlappySendSuccess)success
+             andFailure:(FlappySendFailure)failure;
+
 
 //发送自定义
 -(ChatMessage*)sendCustom:(NSString*)text
+               andSuccess:(FlappySendSuccess)success
+               andFailure:(FlappySendFailure)failure;
+
+//发送自定义
+-(ChatMessage*)sendCustom:(NSString*)text
+              andReplyMsg:(nullable ChatMessage*)replyMsg
                andSuccess:(FlappySendSuccess)success
                andFailure:(FlappySendFailure)failure;
 
