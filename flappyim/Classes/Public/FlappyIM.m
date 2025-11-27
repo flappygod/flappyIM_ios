@@ -1109,8 +1109,8 @@
     NSString *urlString = [FlappyApiConfig shareInstance].URL_createGroupSession;
     
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"userExtendIds":jsonStr,
-                                 @"createUserId":[[FlappyData shareInstance]getUser].userId,
+    NSDictionary *parameters = @{@"createUserId":[[FlappyData shareInstance]getUser].userId,
+                                 @"userExtendIds":jsonStr,
                                  @"sessionExtendId":sessionExtendId,
                                  @"sessionName":sessionName
     };
