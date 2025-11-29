@@ -1098,19 +1098,19 @@
         failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
     }
-    //转换为data
-    NSData *usersData=[NSJSONSerialization dataWithJSONObject:userExtendIds
-                                                      options:NSJSONWritingPrettyPrinted
-                                                        error:nil];
+    
     //转换为字符串
-    NSString *jsonStr=[[NSString alloc]initWithData:usersData
-                                           encoding:NSUTF8StringEncoding];
+    NSData *userExtendIdData=[NSJSONSerialization dataWithJSONObject:userExtendIds
+                                                             options:NSJSONWritingPrettyPrinted
+                                                               error:nil];
+    NSString *userExtendIdDataStr=[[NSString alloc]initWithData:userExtendIdData
+                                                       encoding:NSUTF8StringEncoding];
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_createGroupSession;
     
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"createUserId":[[FlappyData shareInstance]getUser].userId,
-                                 @"userExtendIds":jsonStr,
+                                 @"userExtendIds":userExtendIdDataStr,
                                  @"sessionExtendId":sessionExtendId,
                                  @"sessionName":sessionName
     };
@@ -1383,10 +1383,53 @@
     }];
 }
 
+//添加用户到群组
+-(void)addUsersToSession:(NSArray*)userExtendIds
+     withSessionExtendID:(NSString*)sessionExtendId
+              andSuccess:(FlappySuccess)success
+              andFailure:(FlappyFailure)failure{
+    //为空直接出错
+    if([[FlappyData shareInstance]getUser]==nil){
+        //返回没有登录
+        failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
+        return ;
+    }
+    
+    //创建群组会话
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_addUserToSession;
+    
+    //转换为字符串
+    NSData *userExtendIdData=[NSJSONSerialization dataWithJSONObject:userExtendIds
+                                                             options:NSJSONWritingPrettyPrinted
+                                                               error:nil];
+    NSString *userExtendIdDataStr=[[NSString alloc]initWithData:userExtendIdData
+                                                       encoding:NSUTF8StringEncoding];
+    
+    
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"sessionExtendId":sessionExtendId,
+                                 @"userExtendIds":userExtendIdDataStr};
+    //请求数据
+    [FlappyApiRequest postRequest:urlString
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+        //获取model
+        ChatSessionData* model=[ChatSessionData mj_objectWithKeyValues:data];
+        //创建session
+        FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+        //数据
+        session.session=model;
+        //成功
+        success(session);
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
+}
 
 //添加用户到群组
 -(void)addUserToSession:(NSString*)userExtendId
-            withGroupID:(NSString*)sessionExtendId
+    withSessionExtendID:(NSString*)sessionExtendId
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -1421,7 +1464,7 @@
 
 //删除会话
 -(void)delUserInSession:(NSString*)userExtendId
-            withGroupID:(NSString*)sessionExtendId
+    withSessionExtendID:(NSString*)sessionExtendId
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure{
     //为空直接出错

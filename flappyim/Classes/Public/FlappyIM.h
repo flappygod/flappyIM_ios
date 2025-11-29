@@ -162,9 +162,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //创建群组会话
--(void)createGroupSession:(NSArray*)users
-              withSessionExtendId:(NSString*)groupID
-            withSessionName:(NSString*)groupName
+-(void)createGroupSession:(NSArray*)userExtendIds
+      withSessionExtendId:(NSString*)sessionExtendId
+          withSessionName:(NSString*)sessionName
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure;
 
@@ -185,17 +185,22 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)getUserSessionList:(FlappySuccess)success
                andFailure:(FlappyFailure)failure;
 
+//添加用户到群组
+-(void)addUsersToSession:(NSArray*)userExtendIds
+     withSessionExtendID:(NSString*)sessionExtendId
+              andSuccess:(FlappySuccess)success
+              andFailure:(FlappyFailure)failure;
 
 //添加用户到群组
--(void)addUserToSession:(NSString*)userId
-            withGroupID:(NSString*)groupId
+-(void)addUserToSession:(NSString*)userExtendId
+    withSessionExtendID:(NSString*)sessionExtendId
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure;
 
 
 //删除群组中的某个用户
--(void)delUserInSession:(NSString*)userId
-            withGroupID:(NSString*)groupId
+-(void)delUserInSession:(NSString*)userExtendId
+    withSessionExtendID:(NSString*)sessionExtendId
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure;
 
