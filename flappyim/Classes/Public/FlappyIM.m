@@ -1396,7 +1396,7 @@
     }
     
     //创建群组会话
-    NSString *urlString = [FlappyApiConfig shareInstance].URL_addUserToSession;
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_addUsersToSession;
     
     //转换为字符串
     NSData *userExtendIdData=[NSJSONSerialization dataWithJSONObject:userExtendIds

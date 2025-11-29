@@ -54,6 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString* URL_getUserSessionList;
 //添加用户到会话
 @property(nonatomic,copy) NSString* URL_addUserToSession;
+//添加用户到会话
+@property(nonatomic,copy) NSString* URL_addUsersToSession;
 //删除会话中的用户
 @property(nonatomic,copy) NSString* URL_delUserInSession;
 

@@ -107,6 +107,9 @@
     //添加用户到会话
     self.URL_addUserToSession =[NSString stringWithFormat:@"%@/api/addUserToSession",self.BaseUrl];
     
+    //添加用户到会话
+    self.URL_addUsersToSession =[NSString stringWithFormat:@"%@/api/addUsersToSession",self.BaseUrl];
+    
     //删除会话中的用户
     self.URL_delUserInSession= [NSString stringWithFormat:@"%@/api/delUserInSession",self.BaseUrl];
     
