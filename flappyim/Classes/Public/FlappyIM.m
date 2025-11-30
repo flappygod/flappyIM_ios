@@ -888,6 +888,10 @@
         formerUser.userData=newUser.userData;
         [[FlappyData shareInstance] saveUser:formerUser];
         
+        
+        //自动登录的情况下，赋值设置latest
+        newUser.latest = formerUser.latest;
+        
         //如果当前有正在连接的socket,先下线了
         if(self.flappysocket!=nil){
             [self.flappysocket offline:true];

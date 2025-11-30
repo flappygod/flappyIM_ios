@@ -317,6 +317,8 @@ static  GCDAsyncSocket*  _instanceSocket;
         ReqLogin* info=[[ReqLogin alloc]init];
         //用户ID
         info.userId=self.user.userId;
+        //如果是登录，那么必然没有latest这个值，如果是自动登录autoLoginNetty中已经设置了latest，这里直接取用
+        info.latest=self.user.latest;
         //类型
         info.devicePlat=[[FlappyData shareInstance] getDevicePlat];
         //推送ID
@@ -330,10 +332,6 @@ static  GCDAsyncSocket*  _instanceSocket;
         //没有设置就用当前的
         else{
             info.secret = self.channelSecret;
-        }
-        //登录信息
-        if([[FlappyData shareInstance] getUser]!=nil){
-            info.latest=[[FlappyData shareInstance] getUser].latest;
         }
         //连接到服务器开始请求登录
         FlappyRequest* request=[[FlappyRequest alloc]init];
@@ -489,7 +487,7 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 
 //接收完成登录消息
--(void)receiveLogin:(FlappyResponse *)respones{
+-(void)receiveLogin:(FlappyResponse *)response{
     
     //登录成功后保存推送类型，保存用户所有的会话列表
     @try {
@@ -502,8 +500,8 @@ static  GCDAsyncSocket*  _instanceSocket;
         //保存用户登录数据
         [[FlappyData shareInstance] saveUser:self.user];
         
-        //转换消息
-        NSMutableArray* array=respones.msgArray;
+        //转换消息(解码消息)
+        NSMutableArray* array=response.msgArray;
         NSMutableArray* receiveMessageList=[[NSMutableArray alloc]init];
         for(long s=0;s<array.count;s++){
             Message* message=[array objectAtIndex:s];
@@ -526,39 +524,10 @@ static  GCDAsyncSocket*  _instanceSocket;
                 chatMsg.messageReplyMsgContent = [Aes128 AES128Decrypt:chatMsg.messageReplyMsgContent
                                                                withKey:chatMsg.messageSecret];
             }
-            
-            
             [receiveMessageList addObject:chatMsg];
         }
         
-        //会话插入
-        id sessionsData=self.loginData[@"sessions"];
-        if(sessionsData!=nil && [sessionsData isKindOfClass:[NSArray class]]){
-            NSArray* sessionsArray = sessionsData;
-            //修改session
-            NSMutableArray* sessions=[[NSMutableArray alloc]init];
-            //遍历
-            for(int s=0;s<sessionsArray.count;s++){
-                NSDictionary* dic=[sessionsArray objectAtIndex:s];
-                ChatSessionData* data=[ChatSessionData  mj_objectWithKeyValues:dic];
-                [sessions addObject:data];
-            }
-            //插入会话数据
-            [[FlappyDataBase shareInstance] insertSessions:sessions];
-            
-            //通知会话来了
-            [[FlappySender shareInstance] notifySessionReceiveList:sessions];
-            
-            //如果sessions不为空代表是登录，如果是登录的情况下，所有会话是已经同步的，所以不需要过多的处理
-            for(long s=0;s<receiveMessageList.count;s++){
-                ChatMessage* chatMsg=[receiveMessageList objectAtIndex:s];
-                if(chatMsg.messageType == MSG_TYPE_SYSTEM || chatMsg.messageType == MSG_TYPE_ACTION){
-                    chatMsg.messageReadState=1;
-                }
-            }
-        }
-        
-        //进行排序
+        //消息排序
         [receiveMessageList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             ChatMessage* one=obj1;
             ChatMessage* two=obj2;
@@ -568,8 +537,38 @@ static  GCDAsyncSocket*  _instanceSocket;
             return NSOrderedAscending;
         }];
         
+        //登录获取需要更新的会话信息
+        NSMutableArray* sessionsProtocArray=response.sessionsArray;
+        NSMutableArray* sessions=[[NSMutableArray alloc]init];
+        //如果存在需要更新的会话
+        if(sessionsProtocArray!=nil&&sessionsProtocArray.count>0){
+            for(int x=0;x<sessionsProtocArray.count;x++){
+                Session* memSession=[sessionsProtocArray objectAtIndex:x];
+                ChatSessionData* data=[ChatSessionData mj_objectWithKeyValues:[memSession mj_keyValues]];
+                [sessions addObject:data];
+            }
+            
+            //插入会话数据
+            [[FlappyDataBase shareInstance] insertSessions:sessions];
+            
+            //通知会话来了
+            [[FlappySender shareInstance] notifySessionReceiveList:sessions];
+            
+            //如果Session的信息已经更新了，那么MSG_TYPE_ACTION和MSG_TYPE_SYSTEM就无需再进行多余的更新操作
+            for(int i=0;i<sessions.count;i++){
+                for(long s=0;s<receiveMessageList.count;s++){
+                    ChatSessionData* session=[sessions objectAtIndex:i];
+                    ChatMessage* chatMsg=[receiveMessageList objectAtIndex:s];
+                    if((chatMsg.messageType == MSG_TYPE_SYSTEM || chatMsg.messageType == MSG_TYPE_ACTION)
+                       &&[session.sessionId isEqualToString:chatMsg.messageSessionId]){
+                        chatMsg.messageReadState=1;
+                    }
+                }
+            }
+        }
         
-        NSMutableSet *sessionIdSet = [[NSMutableSet alloc] init];
+        
+        NSMutableSet *notifySessionIdList = [[NSMutableSet alloc] init];
         //登录的时候插入的消息必然是新收到的消息
         for(long s=0;s<receiveMessageList.count;s++){
             //获取消息
@@ -583,12 +582,12 @@ static  GCDAsyncSocket*  _instanceSocket;
             //发送成功
             [[FlappySender shareInstance] handleSendSuccessCallback:chatMsg];
             //会话ID
-            [sessionIdSet addObject:chatMsg.messageSessionId];
+            [notifySessionIdList addObject:chatMsg.messageSessionId];
         }
         
-        //session array
+        //会话Array
         NSMutableArray* sessionArray = [[NSMutableArray alloc] init];
-        for(NSString *sessionId in sessionIdSet){
+        for(NSString *sessionId in notifySessionIdList){
             ChatSessionData* sessionData = [[FlappyDataBase shareInstance] getUserSessionByID:sessionId];
             if(sessionData!=nil){
                 [sessionArray addObject:sessionData];
@@ -690,27 +689,27 @@ static  GCDAsyncSocket*  _instanceSocket;
         [self.updatingArray removeObject:respones.update.responseId];
     }
     //Session Array
-    NSMutableArray* sessions=respones.sessionsArray;
+    NSMutableArray* sessionsProtocArray=respones.sessionsArray;
     //返回的session
-    if(sessions!=nil&&sessions.count>0){
+    if(sessionsProtocArray!=nil&&sessionsProtocArray.count>0){
         //遍历
-        for(int x=0;x<sessions.count;x++){
+        for(int x=0;x<sessionsProtocArray.count;x++){
             //获取会话
-            Session* memSession=[sessions objectAtIndex:x];
+            Session* memSession=[sessionsProtocArray objectAtIndex:x];
             //创建
-            ChatSessionData* data=[ChatSessionData mj_objectWithKeyValues:[memSession mj_keyValues]];
+            ChatSessionData* session=[ChatSessionData mj_objectWithKeyValues:[memSession mj_keyValues]];
             //插入消息
-            [[FlappyDataBase shareInstance] insertSession:data];
+            [[FlappyDataBase shareInstance] insertSession:session];
             //会话更新了
-            [[FlappySender shareInstance] notifySessionReceive:data];
+            [[FlappySender shareInstance] notifySessionReceive:session];
             //消息列表
-            NSMutableArray* messages=[[FlappyDataBase shareInstance] getNotActionSystemMessageBySessionId:data.sessionId];
+            NSMutableArray* messages=[[FlappyDataBase shareInstance] getNotActionSystemMessageBySessionId:session.sessionId];
             //遍历更新
             for(int w=0;w<messages.count;w++){
                 //消息
                 ChatMessage* msg=[messages objectAtIndex:w];
                 //判断会话时间戳
-                if(data.sessionStamp>=[msg getChatSystem].sysTime.longLongValue){
+                if(session.sessionStamp>=[msg getChatSystem].sysTime.longLongValue){
                     //更新消息设置
                     msg.messageReadState=1;
                     //插入消息
