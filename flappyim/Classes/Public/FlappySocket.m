@@ -439,18 +439,17 @@ static  GCDAsyncSocket*  _instanceSocket;
                 [actionUpdateSessionAll addObject:message];
                 break;
             }
-                ///需要会话全量更新
+                ///需要会话启用
             case SYSTEM_MSG_SESSION_ENABLE:
             {
                 NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(ChatMessage *evaluatedObject, NSDictionary *bindings) {
                     return ![evaluatedObject.messageSessionId isEqualToString:message.messageSessionId];
                 }];
                 [actionUpdateSessionDisable filterUsingPredicate:predicate];
-                
                 [actionUpdateSessionEnable addObject:message];
                 break;
             }
-                ///需要会话全量更新
+                ///需要会话禁用
             case SYSTEM_MSG_SESSION_DISABLE:
             {
                 NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(ChatMessage *evaluatedObject, NSDictionary *bindings) {
@@ -460,7 +459,7 @@ static  GCDAsyncSocket*  _instanceSocket;
                 [actionUpdateSessionDisable addObject:message];
                 break;
             }
-                ///需要会话全量更新
+                ///需要会话删除
             case SYSTEM_MSG_SESSION_DELETE:
             {
                 [actionUpdateSessionDelete addObject:message];
