@@ -41,6 +41,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) long sessionStamp;
 
+@property(nonatomic,assign) NSInteger isEnable;
+
 @property(nonatomic,assign) NSInteger isDelete;
 
 @property(nonatomic,copy) NSString* deleteDate;

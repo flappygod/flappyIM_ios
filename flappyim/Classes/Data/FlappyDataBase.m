@@ -89,6 +89,7 @@
     "sessionStamp INTEGER,"
     "sessionCreateDate TEXT,"
     "sessionCreateUser TEXT,"
+    "sessionEnable INTEGER,"
     "sessionDeleted INTEGER,"
     "sessionDeletedDate TEXT,"
     "sessionInsertUser TEXT,"
@@ -519,9 +520,10 @@
                            "sessionStamp,"
                            "sessionCreateDate,"
                            "sessionCreateUser,"
+                           "sessionEnable,"
                            "sessionDeleted,"
                            "sessionDeletedDate,"
-                           "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                           "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                        withArgumentsInArray:@[
                 [FlappyStringTool toUnNullStr:data.sessionId],
                 [FlappyStringTool toUnNullStr:data.sessionExtendId],
@@ -533,6 +535,7 @@
                 [NSNumber numberWithLong:data.sessionStamp],
                 [FlappyStringTool toUnNullStr:data.sessionCreateDate],
                 [FlappyStringTool toUnNullStr:data.sessionCreateUser],
+                [NSNumber numberWithInteger:data.isEnable],
                 [NSNumber numberWithInteger:data.isDelete],
                 [FlappyStringTool toUnNullStr:data.deleteDate],
                 user.userExtendId
@@ -581,6 +584,7 @@
             msg.sessionStamp = [result longForColumn:@"sessionStamp"];
             msg.sessionCreateDate = [result stringForColumn:@"sessionCreateDate"];
             msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
+            msg.isEnable = [result intForColumn:@"sessionEnable"];
             msg.isDelete = [result intForColumn:@"sessionDeleted"];
             msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
             msg.unReadMessageCount = [self getUnReadSessionMessageCountBySessionId:msg.sessionId];
@@ -608,9 +612,10 @@
                        "sessionStamp,"
                        "sessionCreateDate,"
                        "sessionCreateUser,"
+                       "sessionEnable,"
                        "sessionDeleted,"
                        "sessionDeletedDate,"
-                       "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                       "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                    withArgumentsInArray:@[
             [FlappyStringTool toUnNullStr:data.sessionId],
             [FlappyStringTool toUnNullStr:data.sessionExtendId],
@@ -622,6 +627,7 @@
             [NSNumber numberWithLong:data.sessionStamp],
             [FlappyStringTool toUnNullStr:data.sessionCreateDate],
             [FlappyStringTool toUnNullStr:data.sessionCreateUser],
+            [NSNumber numberWithInteger:data.isEnable],
             [NSNumber numberWithInteger:data.isDelete],
             [FlappyStringTool toUnNullStr:data.deleteDate],
             user.userExtendId
@@ -670,6 +676,7 @@
             msg.sessionStamp = [result longForColumn:@"sessionStamp"];
             msg.sessionCreateDate = [result stringForColumn:@"sessionCreateDate"];
             msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
+            msg.isEnable = [result intForColumn:@"sessionEnable"];
             msg.isDelete = [result intForColumn:@"sessionDeleted"];
             msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
             msg.unReadMessageCount = [self getUnReadSessionMessageCountBySessionId:msg.sessionId];
@@ -700,6 +707,7 @@
             msg.sessionStamp = [result longForColumn:@"sessionStamp"];
             msg.sessionCreateDate = [result stringForColumn:@"sessionCreateDate"];
             msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
+            msg.isEnable = [result intForColumn:@"sessionEnable"];
             msg.isDelete = [result intForColumn:@"sessionDeleted"];
             msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
             msg.unReadMessageCount = [self getUnReadSessionMessageCountBySessionId:msg.sessionId];
@@ -1272,7 +1280,6 @@
     NSMutableArray *arrayAdd = [FlappyStringTool splitStr:message.messageDeleteUserIds withSeprate:@","];
     [arrayAdd addObject:userId];
     message.messageDeleteUserIds = [FlappyStringTool joinStr:arrayAdd withSeprate:@","];
-    
     message.messageReadState = 1;
     [self insertMessage:message];
 }

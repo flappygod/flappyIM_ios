@@ -421,20 +421,20 @@ static  GCDAsyncSocket*  _instanceSocket;
         ChatMessage* message=[array objectAtIndex:s];
         //消息
         ChatSystem* chatSystem=[message getChatSystem];
-        //消息
+        //仅仅只是系统消息
         if(chatSystem.sysAction ==SYSTEM_MSG_NOTHING ){
             message.messageReadState = 1;
             [[FlappyDataBase shareInstance] insertMessage:message];
         }
-        //会话
+        //需要更新所有的会话信息
         if(chatSystem.sysAction ==SYSTEM_MSG_UPDATE_SESSION ){
             [actionUpdateSessionAll addObject:message];
         }
-        //更新用户信息
+        //需要更新某些用户信息
         if(chatSystem.sysAction ==SYSTEM_MSG_UPDATE_MEMBER ){
             [actionUpdateSessionMember addObject:message];
         }
-        //用户加入是自己也全量更新
+        //用户加入是自己也全量更新，如果是其他人加入那么就是单独更新
         if(chatSystem.sysAction ==SYSTEM_MSG_ADD_MEMBER ){
             NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[message getChatSystem].sysData];
             ChatSessionMember* member = [ChatSessionMember mj_objectWithKeyValues:dic];
@@ -455,12 +455,15 @@ static  GCDAsyncSocket*  _instanceSocket;
             }
         }
     }
+    ///会话更新
     if(actionUpdateSessionAll.count>0){
         [self updateSessionAll:actionUpdateSessionAll];
     }
+    ///用户信息更新
     if(actionUpdateSessionMember.count>0){
         [self updateSessionMemberUpdate:actionUpdateSessionMember];
     }
+    ///用户永久的删除了某个会话
     if(actionUpdateSessionMemberDel.count>0){
         [self updateSessionDeleteSelf:actionUpdateSessionMemberDel];
     }
