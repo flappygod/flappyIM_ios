@@ -40,6 +40,10 @@ NS_ASSUME_NONNULL_BEGIN
 //获取用户的指定会话
 -(ChatSessionData*)getUserSessionByID:(NSString*)sessionId;
 
+//获取用户的会话(用户仅包含自己)
+-(ChatSessionData*) getUserSessionOnlyCurrentUserById:(NSString*)sessionId
+                                            andUserId:(NSString*)userId;
+
 //删除用户的会话
 -(Boolean)deleteUserSession:(NSString*)sessionId;
 

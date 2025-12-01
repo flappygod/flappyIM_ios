@@ -654,6 +654,44 @@
     }] boolValue];
 }
 
+//获取用户的会话(用户仅包含自己)
+-(ChatSessionData*) getUserSessionOnlyCurrentUserById:(NSString*)sessionId
+                                            andUserId:(NSString*)userId{
+    return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        FMResultSet *result = [db executeQuery:@"select * from session where sessionInsertUser=? and sessionId=?"
+                          withArgumentsInArray:@[
+            user.userExtendId,
+            sessionId
+        ]];
+        
+        ChatSessionData *msg = nil;
+        if ([result next]) {
+            msg = [ChatSessionData new];
+            msg.sessionId = [result stringForColumn:@"sessionId"];
+            msg.sessionExtendId = [result stringForColumn:@"sessionExtendId"];
+            msg.sessionType = [result intForColumn:@"sessionType"];
+            msg.sessionInfo = [result stringForColumn:@"sessionInfo"];
+            msg.sessionName = [result stringForColumn:@"sessionName"];
+            msg.sessionImage = [result stringForColumn:@"sessionImage"];
+            msg.sessionOffset = [result stringForColumn:@"sessionOffset"];
+            msg.sessionStamp = [result longForColumn:@"sessionStamp"];
+            msg.sessionCreateDate = [result stringForColumn:@"sessionCreateDate"];
+            msg.sessionCreateUser = [result stringForColumn:@"sessionCreateUser"];
+            msg.isEnable = [result intForColumn:@"sessionEnable"];
+            msg.isDelete = [result intForColumn:@"sessionDeleted"];
+            msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
+            msg.unReadMessageCount = [self getUnReadSessionMessageCountBySessionId:msg.sessionId];
+            msg.isDeleteTemp = [self getIsDeleteTemp:msg.sessionId];
+            NSMutableArray* array = [[NSMutableArray alloc] init];
+            [array addObject:[self getSessionMember:sessionId andMemberId:userId]];
+            msg.users = array;
+        }
+        [result close];
+        return msg;
+    }];
+}
+
+
 //获取用户的会话
 -(ChatSessionData *)getUserSessionByID:(NSString *)sessionId {
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {

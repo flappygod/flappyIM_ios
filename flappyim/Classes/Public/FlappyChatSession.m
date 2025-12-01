@@ -31,6 +31,37 @@
     return self;
 }
 
+//设置消息的监听
+-(void)addMessageListener:(FlappyMessageListener*)listener{
+    //添加ID
+    [_messageListeners addObject:listener];
+    [[FlappyIM shareInstance] addMsgListener:listener
+                               withSessionID:self.session.sessionId];
+}
+
+//清除某个监听
+-(void)removeMessageListener:(FlappyMessageListener*)listener{
+    //添加ID
+    [_messageListeners removeObject:listener];
+    [[FlappyIM shareInstance] removeMsgListener:listener
+                                  withSessionID:self.session.sessionId];
+}
+
+//销毁的时候清除监听
+-(void)dealloc{
+    [self clearListeners];
+}
+
+//清空监听
+-(void)clearListeners{
+    //移除添加的监听
+    if(_messageListeners!=nil&&_messageListeners.count>0){
+        for(int s=0;s<_messageListeners.count;s++){
+            [[FlappyIM shareInstance] removeMsgListener:[_messageListeners objectAtIndex:s]
+                                          withSessionID:self.session.sessionId];
+        }
+    }
+}
 
 //获取对方的ID
 -(NSString*)getPeerID{
@@ -72,37 +103,32 @@
     return nil;
 }
 
-
-//设置消息的监听
--(void)addMessageListener:(FlappyMessageListener*)listener{
-    //添加ID
-    [_messageListeners addObject:listener];
-    [[FlappyIM shareInstance] addMsgListener:listener
-                               withSessionID:self.session.sessionId];
-}
-
-//清除某个监听
--(void)removeMessageListener:(FlappyMessageListener*)listener{
-    //添加ID
-    [_messageListeners removeObject:listener];
-    [[FlappyIM shareInstance] removeMsgListener:listener
-                                  withSessionID:self.session.sessionId];
-}
-
-//销毁的时候清除监听
--(void)dealloc{
-    [self clearListeners];
-}
-
-//清空监听
--(void)clearListeners{
-    //移除添加的监听
-    if(_messageListeners!=nil&&_messageListeners.count>0){
-        for(int s=0;s<_messageListeners.count;s++){
-            [[FlappyIM shareInstance] removeMsgListener:[_messageListeners objectAtIndex:s]
-                                          withSessionID:self.session.sessionId];
+//检查是否可以发送
+-(Boolean)checkMsgCantSend:(FlappySendFailure)failure{
+    
+    ///获取当前会话的状态，只包含自己的user
+    ChatUser* mine = [[FlappyData shareInstance] getUser];
+    ChatSessionData* currentData = [[FlappyDataBase shareInstance] getUserSessionOnlyCurrentUserById:self.session.sessionId
+                                                                                           andUserId:mine.userId];
+    ///用户已经离开了
+    if(currentData.users.count > 0){
+        ChatSessionMember* user =[currentData.users objectAtIndex:0];
+        if([user.userId isEqualToString:mine.userId] && user.isLeave == 1){
+            failure(nil,[NSError errorWithDomain:@"User leaved" code:0 userInfo:nil],RESULT_SESSION_MEMBER_UNABLE);
+            return true;
         }
     }
+    ///不可用了
+    if(currentData.isEnable == 0){
+        failure(nil,[NSError errorWithDomain:@"Session unable" code:0 userInfo:nil],RESULT_SESSION_UNABLE);
+        return true;
+    }
+    ///已经删除了
+    if(currentData.isDelete == 1){
+        failure(nil,[NSError errorWithDomain:@"Session deleted" code:0 userInfo:nil],RESULT_SESSION_DELETED);
+        return true;
+    }
+    return false;
 }
 
 //发送文本
@@ -133,6 +159,11 @@
             andReplyMsg:(nullable ChatMessage*)replyMsg
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure{
+    
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
     
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -177,7 +208,10 @@
                   andReplyMsg:(nullable ChatMessage*)replyMsg
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure{
-    
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
     
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -224,7 +258,10 @@
              andReplyMsg:(nullable ChatMessage*)replyMsg
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
-    
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
     //消息
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -266,7 +303,10 @@
                   andReplyMsg:(nullable ChatMessage*)replyMsg
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure{
-    
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     chatmsg.messageId=[FlappyStringTool uuidString];
@@ -310,6 +350,10 @@
              andReplyMsg:(nullable ChatMessage*)replyMsg
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     chatmsg.messageId=[FlappyStringTool uuidString];
@@ -350,7 +394,10 @@
                 andReplyMsg:(nullable ChatMessage*)replyMsg
                  andSuccess:(FlappySendSuccess)success
                  andFailure:(FlappySendFailure)failure{
-    
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     chatmsg.messageId=[FlappyStringTool uuidString];
@@ -391,7 +438,10 @@
                   andReplyMsg:(nullable ChatMessage*)replyMsg
                    andSuccess:(FlappySendSuccess)success
                    andFailure:(FlappySendFailure)failure{
-    
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
     
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -437,7 +487,10 @@
              andReplyMsg:(nullable ChatMessage*)replyMsg
               andSuccess:(FlappySendSuccess)success
               andFailure:(FlappySendFailure)failure{
-    
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
     chatmsg.messageId=[FlappyStringTool uuidString];
@@ -482,6 +535,10 @@
                   andSuccess:(FlappySendSuccess)success
                   andFailure:(FlappySendFailure)failure{
     
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
     
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     
@@ -529,7 +586,10 @@
             andReplyMsg:(nullable ChatMessage*)replyMsg
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure{
-    
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
     
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -572,6 +632,10 @@
               andReplyMsg:(nullable ChatMessage*)replyMsg
                andSuccess:(FlappySendSuccess)success
                andFailure:(FlappySendFailure)failure{
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
     
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     ChatMessage* chatmsg=[[ChatMessage alloc]init];
@@ -603,6 +667,12 @@
 -(ChatMessage*)sendForwardMessage:(ChatMessage*)chatmsg
                        andSuccess:(FlappySendSuccess)success
                        andFailure:(FlappySendFailure)failure{
+    
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return nil;
+    }
+    
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     chatmsg.messageId=[FlappyStringTool uuidString];
     chatmsg.messageSessionId=self.session.sessionId;
@@ -881,6 +951,12 @@
 -(void)resendMessage:(ChatMessage*)chatmsg
           andSuccess:(FlappySendSuccess)success
           andFailure:(FlappySendFailure)failure{
+    
+    //不能发送
+    if([self checkMsgCantSend:failure]){
+        return;
+    }
+    
     //重新发送文本消息
     if(chatmsg.messageType==MSG_TYPE_TEXT){
         [[FlappySender shareInstance] sendMessage:chatmsg

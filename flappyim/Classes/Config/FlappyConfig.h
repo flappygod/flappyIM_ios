@@ -28,7 +28,14 @@
 //上传失败
 #define  RESULT_PARSE_ERROR   6
 //没有数据
-#define  RESULT_DATABASE_ERROR   7
+#define  RESULT_DATABASE_ERROR  7
+
+//会话用户被禁用
+#define RESULT_SESSION_MEMBER_UNABLE 8
+//会话被禁用
+#define RESULT_SESSION_UNABLE  9
+//会话被删除
+#define RESULT_SESSION_DELETED  10
 
 
 //登录消息
