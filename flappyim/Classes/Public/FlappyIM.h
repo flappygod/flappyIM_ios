@@ -205,6 +205,18 @@ NS_ASSUME_NONNULL_BEGIN
              andFailure:(FlappyFailure)failure;
 
 
+//启用/禁用会话
+-(void)setSession:(NSString*)sessionExtendId
+       withEnable:(NSString*)enable
+       andSuccess:(FlappySuccess)success
+       andFailure:(FlappyFailure)failure;
+
+
+//删除会话
+-(void)deleteSession:(NSString*)sessionExtendId
+          andSuccess:(FlappySuccess)success
+          andFailure:(FlappyFailure)failure;
+
 //搜索文本消息
 -(NSMutableArray *)searchTextMessage:(NSString*)text
                         andSessionId:(NSString*)sessionId

@@ -1432,7 +1432,7 @@
     }];
 }
 
-//添加用户到群组
+//添加用户到会话
 -(void)addUserToSession:(NSString*)userExtendId
     withSessionExtendID:(NSString*)sessionExtendId
              andSuccess:(FlappySuccess)success
@@ -1468,7 +1468,7 @@
     }];
 }
 
-//删除会话
+//删除会话用户
 -(void)delUserInSession:(NSString*)userExtendId
     withSessionExtendID:(NSString*)sessionExtendId
              andSuccess:(FlappySuccess)success
@@ -1503,6 +1503,79 @@
         failure(error,code);
     }];
 }
+
+
+//启用/禁用会话
+-(void)setSession:(NSString*)sessionExtendId
+       withEnable:(NSString*)enable
+       andSuccess:(FlappySuccess)success
+       andFailure:(FlappyFailure)failure{
+    //为空直接出错
+    if([[FlappyData shareInstance]getUser]==nil){
+        //返回没有登录
+        failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
+        return ;
+    }
+    
+    //启用/禁用会话
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_setSessionEnable;
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"currentUserExtendId":[[FlappyData shareInstance]getUser].userExtendId,
+                                 @"sessionExtendId":sessionExtendId,
+                                 @"enable":enable};
+    //请求数据
+    [FlappyApiRequest postRequest:urlString
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+        //获取model
+        ChatSessionData* model=[ChatSessionData mj_objectWithKeyValues:data];
+        //创建session
+        FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+        //数据
+        session.session=model;
+        //成功
+        success(session);
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
+}
+
+
+//删除会话
+-(void)deleteSession:(NSString*)sessionExtendId
+          andSuccess:(FlappySuccess)success
+          andFailure:(FlappyFailure)failure{
+    //为空直接出错
+    if([[FlappyData shareInstance]getUser]==nil){
+        //返回没有登录
+        failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
+        return ;
+    }
+    
+    //删除会话
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_deleteSession;
+    //请求体，参数（NSDictionary 类型）
+    NSDictionary *parameters = @{@"currentUserExtendId":[[FlappyData shareInstance]getUser].userExtendId,
+                                 @"sessionExtendId":sessionExtendId};
+    //请求数据
+    [FlappyApiRequest postRequest:urlString
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+        //获取model
+        ChatSessionData* model=[ChatSessionData mj_objectWithKeyValues:data];
+        //创建session
+        FlappyChatSession* session=[FlappyChatSession mj_objectWithKeyValues:data];
+        //数据
+        session.session=model;
+        //成功
+        success(session);
+    } withFailure:^(NSError * error, NSInteger code) {
+        //登录失败，清空回调
+        failure(error,code);
+    }];
+}
+
 
 //搜索文本消息
 -(NSMutableArray *)searchTextMessage:(NSString*)text

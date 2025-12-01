@@ -113,6 +113,11 @@
     //删除会话中的用户
     self.URL_delUserInSession= [NSString stringWithFormat:@"%@/api/delUserInSession",self.BaseUrl];
     
+    //启用/禁用会话
+    self.URL_setSessionEnable= [NSString stringWithFormat:@"%@/api/setSessionEnable",self.BaseUrl];
+    
+    //删除会话
+    self.URL_deleteSession= [NSString stringWithFormat:@"%@/api/deleteSession",self.BaseUrl];
     
 }
 
