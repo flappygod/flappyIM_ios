@@ -1411,7 +1411,8 @@
     
     
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"sessionExtendId":sessionExtendId,
+    NSDictionary *parameters = @{@"currentUserExtendId":[[FlappyData shareInstance]getUser].userExtendId,
+                                 @"sessionExtendId":sessionExtendId,
                                  @"userExtendIds":userExtendIdDataStr};
     //请求数据
     [FlappyApiRequest postRequest:urlString
@@ -1446,7 +1447,8 @@
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_addUserToSession;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"sessionExtendId":sessionExtendId,
+    NSDictionary *parameters = @{@"currentUserExtendId":[[FlappyData shareInstance]getUser].userExtendId,
+                                 @"sessionExtendId":sessionExtendId,
                                  @"userExtendId":userExtendId};
     //请求数据
     [FlappyApiRequest postRequest:urlString
@@ -1481,7 +1483,8 @@
     //创建群组会话
     NSString *urlString = [FlappyApiConfig shareInstance].URL_delUserInSession;
     //请求体，参数（NSDictionary 类型）
-    NSDictionary *parameters = @{@"sessionExtendId":sessionExtendId,
+    NSDictionary *parameters = @{@"currentUserExtendId":[[FlappyData shareInstance]getUser].userExtendId,
+                                 @"sessionExtendId":sessionExtendId,
                                  @"userExtendId":userExtendId};
     //请求数据
     [FlappyApiRequest postRequest:urlString
