@@ -523,6 +523,7 @@ typedef struct ResponseUpdate__storage_ {
 @dynamic sessionStamp;
 @dynamic sessionCreateDate;
 @dynamic sessionCreateUser;
+@dynamic isEnable;
 @dynamic isDelete;
 @dynamic deleteDate;
 @dynamic users;
@@ -530,6 +531,7 @@ typedef struct ResponseUpdate__storage_ {
 typedef struct Session__storage_ {
   uint32_t _has_storage_[1];
   int32_t sessionType;
+  int32_t isEnable;
   int32_t isDelete;
   NSString *sessionExtendId;
   NSString *sessionInfo;
@@ -642,10 +644,19 @@ typedef struct Session__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
+        .name = "isEnable",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Session_FieldNumber_IsEnable,
+        .hasIndex = 10,
+        .offset = (uint32_t)offsetof(Session__storage_, isEnable),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt32,
+      },
+      {
         .name = "isDelete",
         .dataTypeSpecific.clazz = Nil,
         .number = Session_FieldNumber_IsDelete,
-        .hasIndex = 10,
+        .hasIndex = 11,
         .offset = (uint32_t)offsetof(Session__storage_, isDelete),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt32,
@@ -654,7 +665,7 @@ typedef struct Session__storage_ {
         .name = "deleteDate",
         .dataTypeSpecific.clazz = Nil,
         .number = Session_FieldNumber_DeleteDate,
-        .hasIndex = 11,
+        .hasIndex = 12,
         .offset = (uint32_t)offsetof(Session__storage_, deleteDate),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -663,7 +674,7 @@ typedef struct Session__storage_ {
         .name = "users",
         .dataTypeSpecific.clazz = Nil,
         .number = Session_FieldNumber_Users,
-        .hasIndex = 12,
+        .hasIndex = 13,
         .offset = (uint32_t)offsetof(Session__storage_, users),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -679,7 +690,7 @@ typedef struct Session__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown | GPBDescriptorInitializationFlag_ClosedEnumSupportKnown)];
     #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
       static const char *extraTextFormatInfo =
-        "\014\001\t\000\002\017\000\003\013\000\004\013\000\005\013\000\006\014\000\007\r\000\010\014\000\t\021\000\n\021\000\013\010\000\014\n\000";
+        "\r\001\t\000\002\017\000\003\013\000\004\013\000\005\013\000\006\014\000\007\r\000\010\014\000\t\021\000\n\021\000\013\010\000\014\010\000\r\n\000";
       [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
     #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG

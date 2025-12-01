@@ -233,9 +233,10 @@ typedef GPB_ENUM(Session_FieldNumber) {
   Session_FieldNumber_SessionStamp = 8,
   Session_FieldNumber_SessionCreateDate = 9,
   Session_FieldNumber_SessionCreateUser = 10,
-  Session_FieldNumber_IsDelete = 11,
-  Session_FieldNumber_DeleteDate = 12,
-  Session_FieldNumber_Users = 13,
+  Session_FieldNumber_IsEnable = 11,
+  Session_FieldNumber_IsDelete = 12,
+  Session_FieldNumber_DeleteDate = 13,
+  Session_FieldNumber_Users = 14,
 };
 
 /**
@@ -272,6 +273,9 @@ GPB_FINAL @interface Session : GPBMessage
 
 /** 会话创建用户 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *sessionCreateUser;
+
+/** 是否有效 */
+@property(nonatomic, readwrite) int32_t isEnable;
 
 /** 是否删除 */
 @property(nonatomic, readwrite) int32_t isDelete;
