@@ -218,9 +218,8 @@ NS_ASSUME_NONNULL_BEGIN
                         andFailure:(FlappySendFailure)failure;
 
 //删除会话
--(ChatMessage*)sessionDelete:(Boolean)permanent
-                  andSuccess:(FlappySendSuccess)success
-                  andFailure:(FlappySendFailure)failure;
+-(ChatMessage*)deleteSessionTemporary:(FlappySendSuccess)success
+                           andFailure:(FlappySendFailure)failure;
 
 //获取当前最近的一条消息
 -(ChatMessage*)getLatestMessage;

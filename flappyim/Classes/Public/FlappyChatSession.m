@@ -751,9 +751,8 @@
 
 
 //删除会话
--(ChatMessage*)sessionDelete:(Boolean)permanent
-                  andSuccess:(FlappySendSuccess)success
-                  andFailure:(FlappySendFailure)failure{
+-(ChatMessage*)deleteSessionTemporary:(FlappySendSuccess)success
+                           andFailure:(FlappySendFailure)failure{
     ChatUser* mine = [[FlappyData shareInstance] getUser];
     
     //创建阅读的消息
