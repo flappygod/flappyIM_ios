@@ -43,6 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 //删除用户的会话
 -(Boolean)deleteUserSession:(NSString*)sessionId;
 
+//设置会话是否可用
+-(Boolean)setUserSession:(NSString *)sessionId
+                isEnable:(NSInteger)enable;
+
 //插入单条消息
 -(void)insertMessage:(ChatMessage*)msg;
 

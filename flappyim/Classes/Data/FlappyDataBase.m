@@ -728,6 +728,16 @@
     }] boolValue];
 }
 
+//删除用户的会话
+-(Boolean)setUserSession:(NSString *)sessionId
+                isEnable:(NSInteger)enable{
+    return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        BOOL flag = [db executeUpdate:@"update session set sessionEnable = ? where sessionId=? and sessionInsertUser=?"
+                 withArgumentsInArray:@[@(enable),sessionId, user.userExtendId]];
+        return @(flag);
+    }] boolValue];
+}
+
 //插入会话的用户
 -(Boolean)insertSessionMember:(ChatSessionMember *)member {
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
@@ -1242,13 +1252,6 @@
                 [self updateSessionDeleteTemp:userId andSessionId:sessionId andSessionOffset:sessionOffset];
                 break;
             }
-            case ACTION_TYPE_SESSION_DELETE_PERMANENT: {
-                NSString *userId = action.actionIds[0];
-                NSString *sessionId = action.actionIds[1];
-                NSString *sessionOffset = action.actionIds[2];
-                [self updateSessionDeletePermanent:userId andSessionId:sessionId andSessionOffset:sessionOffset];
-                break;
-            }
         }
         [self updateMessageReadByMsgId:msg.messageId];
         return nil;
@@ -1367,13 +1370,5 @@
     }
 }
 
-//更新删除
--(void)updateSessionDeletePermanent:(NSString *)userId andSessionId:(NSString *)sessionId andSessionOffset:(NSString *)sessionOffset {
-    ChatSessionData *session = [self getUserSessionByID:sessionId];
-    if (session != nil) {
-        session.isDelete = 1;
-        [self insertSession:session];
-    }
-}
 
 @end

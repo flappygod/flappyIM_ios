@@ -773,7 +773,7 @@
     
     //消息
     ChatAction* action=[[ChatAction alloc]init];
-    action.actionType=permanent ? ACTION_TYPE_SESSION_DELETE_PERMANENT:ACTION_TYPE_SESSION_DELETE_TEMP;
+    action.actionType=ACTION_TYPE_SESSION_DELETE_TEMP;
     action.actionIds=@[
         mine.userId,
         self.session.sessionId,

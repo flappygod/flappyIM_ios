@@ -59,16 +59,27 @@
 //被踢下线
 #define RES_KICKED  6
 
+
 //系统消息动作
-#define SYSTEM_MSG_NOTHING 0
-//更新会话
-#define SYSTEM_MSG_UPDATE_SESSION 1
+#define SYSTEM_MSG_NOTICE 0
+
+
 //更新用户
-#define SYSTEM_MSG_UPDATE_MEMBER 2
+#define SYSTEM_MSG_MEMBER_UPDATE 1
 //删除用户
-#define SYSTEM_MSG_DELETE_MEMBER 3
+#define SYSTEM_MSG_MEMBER_DELETE 2
 //添加用户
-#define SYSTEM_MSG_ADD_MEMBER 4
+#define SYSTEM_MSG_MEMBER_ADD 3
+
+
+//更新会话
+#define SYSTEM_MSG_SESSION_UPDATE 11
+//更新会话
+#define SYSTEM_MSG_SESSION_ENABLE 12
+//更新会话
+#define SYSTEM_MSG_SESSION_DISABLE 13
+//更新会话
+#define SYSTEM_MSG_SESSION_DELETE 14
 
 
 //更新信息

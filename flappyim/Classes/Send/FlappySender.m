@@ -694,8 +694,7 @@
             break;
         }
             //会话更新
-        case ACTION_TYPE_SESSION_DELETE_TEMP:
-        case ACTION_TYPE_SESSION_DELETE_PERMANENT:{
+        case ACTION_TYPE_SESSION_DELETE_TEMP:{
             ChatSessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:chatAction.actionIds[1]];
             [self notifySessionDelete:session];
             break;
