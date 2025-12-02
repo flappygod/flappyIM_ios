@@ -690,7 +690,7 @@
         case ACTION_TYPE_SESSION_MUTE:
         case ACTION_TYPE_SESSION_PIN:{
             ChatSessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:chatAction.actionIds[1]];
-            [self notifySessionReceive:session];
+            [self notifySessionUpdate:session];
             break;
         }
             //会话更新
