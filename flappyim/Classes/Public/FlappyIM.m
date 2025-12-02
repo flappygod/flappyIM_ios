@@ -170,7 +170,7 @@
             //获取消息
             NSString* msg=userInfo[@"message"];
             //转换为消息体
-            self.notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:msg]]);
+            self.notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool jsonStrToObject:msg]]);
             //移除
             UNRemoveObject(FlappyNotificationMessage);
         }else{
@@ -354,7 +354,7 @@
     if(message==nil){
         return;
     }
-    _notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool JSONStringToDictionary:message]]);
+    _notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool jsonStrToObject:message]]);
     UNRemoveObject(FlappyNotificationMessage);
 }
 

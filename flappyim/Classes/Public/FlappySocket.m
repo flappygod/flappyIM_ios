@@ -468,7 +468,7 @@ static  GCDAsyncSocket*  _instanceSocket;
                 ///添加用户
             case SYSTEM_MSG_MEMBER_ADD:
             {
-                NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[message getChatSystem].sysData];
+                NSDictionary* dic=[FlappyJsonTool jsonStrToObject:[message getChatSystem].sysData];
                 ChatSessionMember* member = [ChatSessionMember mj_objectWithKeyValues:dic];
                 if([member.userId isEqualToString: user.userId]){
                     [actionUpdateSessionAll addObject:message];
@@ -835,34 +835,40 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 //会话所有数据更新
 -(void)updateSessionAll:(NSMutableArray*)array{
-    //开始写数据了
+    
+    //需要更新的ID
+    NSMutableSet* requestUpdateArray = [[NSMutableSet alloc] init];
+    
+    //获取需要更新的array
     for(ChatMessage* msg in array){
-        //UpdateID
         NSString* updateId = msg.messageSessionId;
-        if([self.updatingArray containsObject:updateId]){
-            continue;;
+        if(![self.updatingArray containsObject:updateId]){
+            [requestUpdateArray addObject:updateId];
         }
-        [self.updatingArray addObject:updateId];
-        //创建update
-        ReqUpdate* reqUpdate=[[ReqUpdate alloc]init];
-        //ID
-        reqUpdate.updateId = updateId;
-        //更新类型
-        reqUpdate.updateType=UPDATE_SESSION_ALL;
-        //更新请求
-        FlappyRequest* req=[[FlappyRequest alloc]init];
-        //更新内容
-        req.update=reqUpdate;
-        //请求更新
-        req.type=REQ_UPDATE;
-        //请求数据，已经GPBComputeRawVarint32SizeForInteger
-        NSData* reqData=[req delimitedData];
-        //写入请求数据
-        @try {
-            [self.socket writeData:reqData withTimeout:-1 tag:0];
-        } @catch (NSException *exception) {
-            NSLog(@"%@",exception.description);
-        }
+    }
+    
+    //添加进入所有的
+    [self.updatingArray addObjectsFromArray:[requestUpdateArray allObjects]];
+    
+    //创建update
+    ReqUpdate* reqUpdate=[[ReqUpdate alloc]init];
+    //ID
+    reqUpdate.updateId = [FlappyJsonTool jsonObjectToJsonStr:[requestUpdateArray allObjects]];
+    //更新类型
+    reqUpdate.updateType=REQ_UPDATE_SESSION_BATCH;
+    //更新请求
+    FlappyRequest* req=[[FlappyRequest alloc]init];
+    //更新内容
+    req.update=reqUpdate;
+    //请求更新
+    req.type=REQ_UPDATE;
+    //请求数据，已经GPBComputeRawVarint32SizeForInteger
+    NSData* reqData=[req delimitedData];
+    //写入请求数据
+    @try {
+        [self.socket writeData:reqData withTimeout:-1 tag:0];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception.description);
     }
 }
 
@@ -872,7 +878,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     //开始写数据了
     for(ChatMessage* msg in array){
         //获取更新的数据
-        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:[msg getChatSystem].sysData];
+        NSDictionary* dic=[FlappyJsonTool jsonStrToObject:[msg getChatSystem].sysData];
         ChatSessionMember* member = [ChatSessionMember mj_objectWithKeyValues:dic];
         [[FlappyDataBase shareInstance] insertSessionMember:member];
         

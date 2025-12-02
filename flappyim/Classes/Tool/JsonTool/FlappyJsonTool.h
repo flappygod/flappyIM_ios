@@ -12,21 +12,14 @@
 
 
 /*************************
- 字典转换为jsonstring
+对象转换为jsonstring
  *************************/
-+(NSString*)DicToJSONString:(id)dictonary;
++(NSString*)jsonObjectToJsonStr:(id)dictonary;
+
 /*************************
- 字典转换为jsonstring保留空格等
+ jsonstring转换为对象
  *************************/
-+(NSString*)DicToJSONStringHasBlank:(id)dictonary;
-/*************************
- json转换为jsonstring
- *************************/
-+(NSString*)JSONObjectToJSONString:(id)json;
-/*************************
- jsonstring转换为数据字典
- *************************/
-+(id)JSONStringToDictionary:(NSString*)json;
++(id)jsonStrToObject:(NSString*)json;
 
 
 @end

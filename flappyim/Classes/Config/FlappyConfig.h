@@ -90,7 +90,7 @@
 
 
 //更新信息
-#define UPDATE_SESSION_ALL 1
+#define REQ_UPDATE_SESSION_BATCH 1
 
 
 //全局

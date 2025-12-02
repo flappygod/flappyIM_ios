@@ -69,7 +69,7 @@
     }
     NSString* str=UNGetObject(KEY_USER);
     if(str!=nil){
-        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:str];
+        NSDictionary* dic=[FlappyJsonTool jsonStrToObject:str];
         _cachedUser=[ChatUser mj_objectWithKeyValues:dic];
         return _cachedUser;
     }
@@ -157,7 +157,7 @@
 -(PushSettings*)getPushSetting{
     NSString* str=UNGetObject(KEY_PUSHSETTING);
     if(str!=nil){
-        NSDictionary* dic=[FlappyJsonTool JSONStringToDictionary:str];
+        NSDictionary* dic=[FlappyJsonTool jsonStrToObject:str];
         PushSettings* ret=[PushSettings mj_objectWithKeyValues:dic];
         return ret;
     }

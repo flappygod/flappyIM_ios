@@ -87,7 +87,7 @@ static NSString *dataKey = nil;
     req.dataKey=dataKey;
     //请求成功的回调
     req.successBlock=^(NSString*  data){
-        NSDictionary* responseObject=[FlappyJsonTool JSONStringToDictionary:data];
+        NSDictionary* responseObject=[FlappyJsonTool jsonStrToObject:data];
         //请求成功
         if(responseObject!=nil&&[responseObject[@"code"] integerValue]==RESULT_SUCCESS){
             //数据请求成功
@@ -130,7 +130,7 @@ static NSString *dataKey = nil;
     req.dataKey=dataKey;
     //请求成功的回调
     req.successBlock=^(NSString*  data){
-        NSDictionary* responseObject=[FlappyJsonTool JSONStringToDictionary:data];
+        NSDictionary* responseObject=[FlappyJsonTool jsonStrToObject:data];
         //请求成功
         if(responseObject!=nil&&[responseObject[@"code"] integerValue]==RESULT_SUCCESS){
             //数据请求成功

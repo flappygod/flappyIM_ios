@@ -12,11 +12,11 @@
 
 
 
-+(NSString*)DicToJSONString:(id)dictonary{
++(NSString*)jsonObjectToJsonStr:(id)dictonary{
     //如果可以转为JSon
     if ([NSJSONSerialization isValidJSONObject:dictonary]){
+        //创造一个json从Data, NSJSONWritingPrettyPrinted指定的JSON数据产的空白，使输出更具可读性。
         NSError *error;
-        // 创造一个json从Data, NSJSONWritingPrettyPrinted指定的JSON数据产的空白，使输出更具可读性。
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictonary options:0 error:&error];
         NSString *json =[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         return [json stringByReplacingOccurrencesOfString:@"\n" withString:@""];
@@ -26,47 +26,27 @@
 }
 
 
-+(NSString*)DicToJSONStringHasBlank:(id)dictonary{
-    //如果可以转为JSon
-    if ([NSJSONSerialization isValidJSONObject:dictonary]){
-        NSError *error;
-        // 创造一个json从Data, NSJSONWritingPrettyPrinted指定的JSON数据产的空白，使输出更具可读性。
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictonary options:0 error:&error];
-        NSString *json =[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        return [json stringByReplacingOccurrencesOfString:@"\n" withString:@""];
++(id)jsonStrToObject:(NSString *)json {
+    if (!json || ![json isKindOfClass:[NSString class]]) {
+        NSLog(@"Invalid input: JSON string is nil or not a string.");
+        return nil;
     }
-    //返回一个空的
-    return nil;
-}
-
-+(NSString*)JSONObjectToJSONString:(id)json{
-    //如果可以转为JSon
-    if ([NSJSONSerialization isValidJSONObject:json]){
-        NSError *error;
-        // 创造一个json从Data, NSJSONWritingPrettyPrinted指定的JSON数据产的空白，使输出更具可读性。
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:0 error:&error];
-        NSString *json =[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        
-        return [json stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-        
-    }
-    //返回一个空的
-    return nil;
-}
-
-+(id)JSONStringToDictionary:(NSString*)json{
-    id response;
+    id response = nil;
     @try {
-        //如果可以转为JSon
-        NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
-        if (data!=nil) {
-            NSError *error=nil;
-            response =[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-            //返回一个空的
+        //将字符串转换为NSData
+        NSData *data = [json dataUsingEncoding:NSUTF8StringEncoding];
+        if (data) {
+            NSError *error = nil;
+            response = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            if (error) {
+                NSLog(@"JSON parsing error: %@", error.localizedDescription);
+            }
+        } else {
+            NSLog(@"Failed to convert JSON string to NSData.");
         }
     }
     @catch (NSException *exception) {
-        NSLog(@"%@",exception.description);
+        NSLog(@"Exception occurred while parsing JSON: %@", exception.description);
     }
     return response;
 }
