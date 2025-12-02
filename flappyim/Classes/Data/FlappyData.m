@@ -58,7 +58,7 @@
 //保存用户
 -(void)saveUser:(ChatUser*)user{
     _cachedUser=user;
-    NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[user mj_keyValues]];
+    NSString*  str=[FlappyJsonTool jsonObjectToJsonStr:[user mj_keyValues]];
     UNSaveObject(str, KEY_USER);
 }
 
@@ -149,7 +149,7 @@
     update.routePushType = (setting.routePushType == nil ? update.routePushType:setting.routePushType);
     update.routePushPlat = (setting.routePushPlat == nil ? update.routePushPlat:setting.routePushPlat);
     update.routePushId = (setting.routePushId == nil ? update.routePushId:setting.routePushId);
-    NSString*  str=[FlappyJsonTool JSONObjectToJSONString:[update mj_keyValues]];
+    NSString*  str=[FlappyJsonTool jsonObjectToJsonStr:[update mj_keyValues]];
     UNSaveObject(str, KEY_PUSHSETTING);
 }
 

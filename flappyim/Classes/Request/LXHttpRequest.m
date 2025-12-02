@@ -119,7 +119,7 @@
     if(self.params==nil){
         self.params = [[NSMutableDictionary alloc]init];
     }
-    NSString *requestBodyStr = [FlappyJsonTool JSONObjectToJSONString:self.params];
+    NSString *requestBodyStr = [FlappyJsonTool jsonObjectToJsonStr:self.params];
     //加密
     if(self.dataKey!=nil){
         requestBodyStr = [Aes128 AES128Encrypt:requestBodyStr withKey:self.dataKey];
