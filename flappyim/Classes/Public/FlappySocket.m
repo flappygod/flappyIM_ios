@@ -735,12 +735,10 @@ static  GCDAsyncSocket*  _instanceSocket;
 
 //接收更新
 -(void)receiveUpdate:(FlappyResponse *)respones{
-    //移除
-    if(respones.update!=nil && respones.update.responseId!=nil){
-        [self.updatingArray removeObject:respones.update.responseId];
-    }
-    //Session Array
+    //更新的列表
     NSMutableArray* sessionsProtocArray=respones.sessionsArray;
+    //转换
+    NSMutableArray* sessionArray=[[NSMutableArray alloc] init];
     //返回的session
     if(sessionsProtocArray!=nil&&sessionsProtocArray.count>0){
         //遍历
@@ -751,8 +749,8 @@ static  GCDAsyncSocket*  _instanceSocket;
             ChatSessionData* session=[ChatSessionData mj_objectWithKeyValues:[memSession mj_keyValues]];
             //插入消息
             [[FlappyDataBase shareInstance] insertSession:session];
-            //会话更新了
-            [[FlappySender shareInstance] notifySessionReceive:session];
+            //添加进入
+            [sessionArray addObject:session];
             //消息列表
             NSMutableArray* messages=[[FlappyDataBase shareInstance] getNotActionSystemMessageBySessionId:session.sessionId];
             //遍历更新
@@ -769,6 +767,14 @@ static  GCDAsyncSocket*  _instanceSocket;
             }
         }
     }
+    //会话更新了
+    [[FlappySender shareInstance] notifySessionUpdateList:sessionArray];
+    //移除不必要的
+    if(respones.update!=nil && respones.update.responseId!=nil){
+        NSArray*  updateIdsArray =[FlappyJsonTool jsonStrToObject:respones.update.responseId];
+        [self.updatingArray removeObjectsInArray:updateIdsArray];
+    }
+    
 }
 
 //被踢下线了
