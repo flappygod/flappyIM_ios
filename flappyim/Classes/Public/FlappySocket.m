@@ -636,7 +636,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         
         //获取接收的会话数据列表
         NSMutableArray<ChatSessionData*>* receiveArray = [self getSessionDataListByIds:receiveSessionIds];
-        [[FlappySender shareInstance] notifyMessageReceiveList:receiveArray];
+        [[FlappySender shareInstance] notifySessionReceiveList:receiveArray];
         
         //获取更新的会话数据列表
         NSMutableArray<ChatSessionData*>* updateArray = [self getSessionDataListByIds:[notifySessionIdList allObjects]];
