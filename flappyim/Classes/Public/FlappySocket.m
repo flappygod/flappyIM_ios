@@ -605,13 +605,14 @@ static  GCDAsyncSocket*  _instanceSocket;
             [[FlappySender shareInstance] notifySessionReceiveList:sessions];
             
             //如果Session的信息已经更新了，那么MSG_TYPE_ACTION和MSG_TYPE_SYSTEM就无需再进行多余的更新操作
-            for(int i=0;i<sessions.count;i++){
-                for(long s=0;s<receiveMessageList.count;s++){
+            for(long s=0;s<receiveMessageList.count;s++){
+                for(long i=0;i<sessions.count;i++){
                     ChatSessionData* session=[sessions objectAtIndex:i];
                     ChatMessage* chatMsg=[receiveMessageList objectAtIndex:s];
                     if((chatMsg.messageType == MSG_TYPE_SYSTEM || chatMsg.messageType == MSG_TYPE_ACTION)
                        &&[session.sessionId isEqualToString:chatMsg.messageSessionId]){
                         chatMsg.messageReadState=1;
+                        break;
                     }
                 }
             }
