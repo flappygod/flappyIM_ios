@@ -773,7 +773,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         }
     }
     //会话更新了
-    [[FlappySender shareInstance] notifySessionUpdateList:sessionArray];
+    [[FlappySender shareInstance] notifyMessageReceiveList:sessionArray];
     //移除不必要的
     if(respones.update!=nil && respones.update.responseId!=nil){
         NSArray*  updateIdsArray =[FlappyJsonTool jsonStrToObject:respones.update.responseId];
