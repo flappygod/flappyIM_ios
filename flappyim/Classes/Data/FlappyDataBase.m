@@ -1348,7 +1348,7 @@
 //更新消息已读
 -(void)updateMessageReadByMsgId:(NSString *)messageId{
     [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        [db executeUpdate:@"update message set messageReadState=1 where messageInsertUser=? and messageId!=?"
+        [db executeUpdate:@"update message set messageReadState=1 where messageInsertUser=? and messageId=?"
      withArgumentsInArray:@[
             user.userExtendId,
             messageId,
