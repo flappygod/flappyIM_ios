@@ -899,7 +899,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         
         //会话用户更新
         ChatSessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSessionId];
-        [[FlappySender shareInstance] notifySessionReceive:session];
+        [[FlappySender shareInstance] notifySessionUpdate:session];
     }
 }
 
