@@ -683,7 +683,10 @@
             msg.unReadMessageCount = [self getUnReadSessionMessageCountBySessionId:msg.sessionId];
             msg.isDeleteTemp = [self getIsDeleteTemp:msg.sessionId];
             NSMutableArray* array = [[NSMutableArray alloc] init];
-            [array addObject:[self getSessionMember:sessionId andMemberId:userId]];
+            ChatSessionMember* member = [self getSessionMember:sessionId andMemberId:userId];
+            if(member!=nil){
+                [array addObject:member];
+            }
             msg.users = array;
         }
         [result close];
