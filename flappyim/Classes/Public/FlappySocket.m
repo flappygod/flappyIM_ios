@@ -590,21 +590,18 @@ static  GCDAsyncSocket*  _instanceSocket;
         //登录获取需要更新的会话信息
         NSMutableArray* sessionsProtocArray=response.sessionsArray;
         NSMutableArray* sessions=[[NSMutableArray alloc]init];
+        NSMutableArray* receiveSessionIds=[[NSMutableArray alloc]init];
+        
         //如果存在需要更新的会话
+        //如果Session的信息已经更新了，那么MSG_TYPE_ACTION和MSG_TYPE_SYSTEM就无需再进行多余的更新操作
         if(sessionsProtocArray!=nil&&sessionsProtocArray.count>0){
             for(int x=0;x<sessionsProtocArray.count;x++){
                 Session* memSession=[sessionsProtocArray objectAtIndex:x];
                 ChatSessionData* data=[ChatSessionData mj_objectWithKeyValues:[memSession mj_keyValues]];
                 [sessions addObject:data];
+                [receiveSessionIds addObject:data.sessionId];
             }
-            
-            //插入会话数据
             [[FlappyDataBase shareInstance] insertSessions:sessions];
-            
-            //通知会话来了
-            [[FlappySender shareInstance] notifySessionReceiveList:sessions];
-            
-            //如果Session的信息已经更新了，那么MSG_TYPE_ACTION和MSG_TYPE_SYSTEM就无需再进行多余的更新操作
             for(long s=0;s<receiveMessageList.count;s++){
                 for(long i=0;i<sessions.count;i++){
                     ChatSessionData* session=[sessions objectAtIndex:i];
@@ -636,18 +633,14 @@ static  GCDAsyncSocket*  _instanceSocket;
             [notifySessionIdList addObject:chatMsg.messageSessionId];
         }
         
-        //会话Array
-        NSMutableArray* sessionArray = [[NSMutableArray alloc] init];
-        for(NSString *sessionId in notifySessionIdList){
-            ChatSessionData* sessionData = [[FlappyDataBase shareInstance] getUserSessionByID:sessionId];
-            if(sessionData!=nil){
-                [sessionArray addObject:sessionData];
-            }
-        }
         
+        //获取接收的会话数据列表
+        NSMutableArray<ChatSessionData*>* receiveArray = [self getSessionDataListByIds:receiveSessionIds];
+        [[FlappySender shareInstance] notifyMessageReceiveList:receiveArray];
         
-        //消息列表被接收到
-        [[FlappySender shareInstance] notifySessionUpdateList:sessionArray];
+        //获取更新的会话数据列表
+        NSMutableArray<ChatSessionData*>* updateArray = [self getSessionDataListByIds:[notifySessionIdList allObjects]];
+        [[FlappySender shareInstance] notifySessionUpdateList:updateArray];
         
         
         //消息列表被接收到
@@ -676,6 +669,18 @@ static  GCDAsyncSocket*  _instanceSocket;
     } @catch (NSException *exception) {
         NSLog(@"FlappyIM:%@",exception.description);
     }
+}
+
+// 通用方法：根据 sessionId 列表获取会话数据列表
+- (NSMutableArray<ChatSessionData*>*)getSessionDataListByIds:(NSArray<NSString*>*)sessionIdList {
+    NSMutableArray<ChatSessionData*>*sessionDataList = [[NSMutableArray alloc] init];
+    for (NSString *sessionId in sessionIdList) {
+        ChatSessionData *sessionData = [[FlappyDataBase shareInstance] getUserSessionByID:sessionId];
+        if (sessionData != nil) {
+            [sessionDataList addObject:sessionData];
+        }
+    }
+    return sessionDataList;
 }
 
 
