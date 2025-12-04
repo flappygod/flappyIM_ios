@@ -165,6 +165,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)createGroupSession:(NSArray*)userExtendIds
       withSessionExtendId:(NSString*)sessionExtendId
           withSessionName:(NSString*)sessionName
+         withSessionImage:(nullable NSString*)sessionImage
+          withSessionInfo:(nullable NSString*)sessionInfo
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure;
 

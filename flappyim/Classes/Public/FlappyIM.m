@@ -1088,25 +1088,26 @@
 }
 
 
-
-
 //创建群组会话
 -(void)createGroupSession:(NSArray*)userExtendIds
       withSessionExtendId:(NSString*)sessionExtendId
           withSessionName:(NSString*)sessionName
+         withSessionImage:(nullable NSString*)sessionImage
+          withSessionInfo:(nullable NSString*)sessionInfo
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure{
     
     //为空直接出错
     if([[FlappyData shareInstance]getUser]==nil){
         failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
-        return ;
+        return;
     }
     
     //转换为字符串
     NSData *userExtendIdData=[NSJSONSerialization dataWithJSONObject:userExtendIds
                                                              options:NSJSONWritingPrettyPrinted
                                                                error:nil];
+    //用户的外部ID
     NSString *userExtendIdDataStr=[[NSString alloc]initWithData:userExtendIdData
                                                        encoding:NSUTF8StringEncoding];
     //创建群组会话
@@ -1116,8 +1117,11 @@
     NSDictionary *parameters = @{@"createUserId":[[FlappyData shareInstance]getUser].userId,
                                  @"userExtendIds":userExtendIdDataStr,
                                  @"sessionExtendId":sessionExtendId,
-                                 @"sessionName":sessionName
+                                 @"sessionName":sessionName,
+                                 @"sessionImage": sessionImage ?: @"",
+                                 @"sessionInfo": sessionInfo ?: @""
     };
+    
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
