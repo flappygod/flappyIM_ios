@@ -1154,7 +1154,8 @@
     
     //动态构建请求参数
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    parameters[@"sessionId"] = sessionId; // sessionId 是必传参数
+    //sessionId 是必传参数
+    parameters[@"sessionId"] = sessionId;
     
     //只有当可选参数不为 nil 时，才添加到请求参数中
     if (sessionName) {
