@@ -974,29 +974,22 @@
         
         //当前用户
         ChatSessionMember* sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
+        FMResultSet *result = [db executeQuery:@"SELECT * FROM message WHERE messageSessionId=? AND messageReadState=0 AND messageAtUserIds LIKE ? AND messageSessionOffset>? AND messageInsertUser=? AND messageType!=? AND isDelete!=1 ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ?"
+                          withArgumentsInArray:@[
+            sessionID,
+            [NSString stringWithFormat:@"%%%@%%", sessionMember.userId],
+            [NSNumber numberWithInteger:sessionMember != nil ? sessionMember.sessionMemberLatestDelete : 0],
+            user.userExtendId,
+            @(MSG_TYPE_ACTION),
+            [NSNumber numberWithInteger:size]
+        ]];
         
-        FMResultSet *result = nil;
         NSMutableArray *listArray = [[NSMutableArray alloc] init];
-        @try {
-            result = [db executeQuery:@"SELECT * FROM message WHERE messageSessionId=? AND messageReadState=0 AND messageAtUserIds LIKE ? AND messageSessionOffset>? AND messageInsertUser=? AND messageType!=? AND isDelete!=1 ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ?"
-                  withArgumentsInArray:@[
-                      sessionID,
-                      [NSString stringWithFormat:@"%%%@%%", sessionMember.userId],
-                      [NSNumber numberWithInteger:sessionMember != nil ? sessionMember.sessionMemberLatestDelete : 0],
-                      user.userExtendId,
-                      @(MSG_TYPE_ACTION),
-                      [NSNumber numberWithInteger:size]
-                  ]];
-            
-            while ([result next]) {
-                ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
-                [listArray addObject:msg];
-            }
-        } @finally {
-            if (result) {
-                [result close];
-            }
+        while ([result next]) {
+            ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
+            [listArray addObject:msg];
         }
+        [result close];
         return listArray;
         
     } defaultValue: [[NSMutableArray alloc] init]];
@@ -1008,42 +1001,30 @@
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         
         //当前用户
-        ChatSessionMember *sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
-
-        //查询比当前消息小的 stamp 的消息而且 messageTableOffset 相等的
+        ChatSessionMember* sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
+        
+        //查询比当前消息小的stamp的消息而且messageTableOffset相等的
         ChatMessage *msg = [self getMessageById:messageId];
-
-        FMResultSet *result = nil;
+        
+        //获取消息
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and (messageTableOffset < ? or (messageTableOffset = ? and messageStamp < ?)) and messageSessionOffset>? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit ?"
+                          withArgumentsInArray:@[
+            sessionID,
+            [NSNumber numberWithInteger:msg.messageTableOffset],
+            [NSNumber numberWithInteger:msg.messageTableOffset],
+            [NSNumber numberWithInteger:msg.messageStamp],
+            [NSNumber numberWithInteger:sessionMember!=nil ? sessionMember.sessionMemberLatestDelete : 0],
+            user.userExtendId,
+            @(MSG_TYPE_ACTION),
+            [NSNumber numberWithInteger:size]
+        ]];
         NSMutableArray *listArray = [[NSMutableArray alloc] init];
-
-        @try {
-            //获取消息
-            result = [db executeQuery:@"SELECT * FROM message WHERE messageSessionId=? AND (messageTableOffset < ? OR (messageTableOffset = ? AND messageStamp < ?)) AND messageSessionOffset>? AND messageInsertUser=? AND messageType!=? AND isDelete!=1 ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ?"
-                  withArgumentsInArray:@[
-                      sessionID,
-                      [NSNumber numberWithInteger:msg.messageTableOffset],
-                      [NSNumber numberWithInteger:msg.messageTableOffset],
-                      [NSNumber numberWithInteger:msg.messageStamp],
-                      [NSNumber numberWithInteger:sessionMember != nil ? sessionMember.sessionMemberLatestDelete : 0],
-                      user.userExtendId,
-                      @(MSG_TYPE_ACTION),
-                      [NSNumber numberWithInteger:size]
-                  ]];
-
-            //遍历结果集
-            while ([result next]) {
-                ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
-                [listArray addObject:msg];
-            }
-        } @catch (NSException *exception) {
-            //捕获异常并打印日志
-            NSLog(@"Exception occurred while querying messages: %@", exception);
-        } @finally {
-            //确保结果集被关闭
-            if (result) {
-                [result close];
-            }
+        while ([result next]) {
+            ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
+            [listArray addObject:msg];
         }
+        [result close];
+        
         return listArray;
     } defaultValue: [[NSMutableArray alloc] init]];
 }
