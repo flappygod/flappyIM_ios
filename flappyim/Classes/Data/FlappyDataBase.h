@@ -81,6 +81,10 @@ NS_ASSUME_NONNULL_BEGIN
 //获取没有处理的系统消息
 -(NSMutableArray*)getNotActionSystemMessage;
 
+//获取未读的at我的消息
+-(NSMutableArray*)getUnReadAtMessages:(NSString*)sessionID
+                             withSize:(NSInteger)size;
+
 //通过sessionID，获取之前的
 -(NSMutableArray*)getSessionFormerMessages:(NSString*)sessionID
                             withMessageID:(NSString*)messageId

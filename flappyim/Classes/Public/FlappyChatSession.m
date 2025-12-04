@@ -1033,6 +1033,14 @@
 }
 
 
+//获取未读的at我的消息
+-(NSMutableArray*)getUnReadAtMessages:(NSInteger)size{
+    NSMutableArray* arr=[[FlappyDataBase shareInstance]
+                         getUnReadAtMessages:self.session.sessionId
+                         withSize:size];
+    return arr;
+}
+
 //获取某条信息之前的消息
 -(NSMutableArray*)getFormerMessages:(NSString*)messageID
                            withSize:(NSInteger)size{
