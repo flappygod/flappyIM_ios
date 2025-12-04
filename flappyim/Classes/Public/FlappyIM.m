@@ -959,7 +959,6 @@
             success(data);
             [safeSelf logoutNetty];
         } withFailure:^(NSError * error, NSInteger code) {
-            //登录失败，清空回调
             failure(error,code);
         }];
     }
@@ -1017,7 +1016,6 @@
         session.session=model;
         success(session);
     } withFailure:^(NSError * error, NSInteger code) {
-        //登录失败，清空回调
         failure(error,code);
     }];
 }
@@ -1082,7 +1080,6 @@
         session.session=model;
         success(session);
     } withFailure:^(NSError * error, NSInteger code) {
-        //登录失败，清空回调
         failure(error,code);
     }];
 }
@@ -1132,10 +1129,55 @@
         session.session=model;
         success(session);
     } withFailure:^(NSError * error, NSInteger code) {
-        //登录失败，清空回调
         failure(error,code);
     }];
     
+}
+
+
+//更新会话信息
+-(void)updateSessionData:(NSString*)sessionId
+         withSessionName:(nullable NSString*)sessionName
+        withSessionImage:(nullable NSString*)sessionImage
+         withSessionInfo:(nullable NSString*)sessionInfo
+              andSuccess:(FlappySuccess)success
+              andFailure:(FlappyFailure)failure{
+    
+    //为空直接出错
+    if ([[FlappyData shareInstance] getUser] == nil) {
+        failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil], RESULT_NOTLOGIN);
+        return;
+    }
+    
+    //创建群组会话
+    NSString *urlString = [FlappyApiConfig shareInstance].URL_updateSessionData;
+    
+    //动态构建请求参数
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    parameters[@"sessionId"] = sessionId; // sessionId 是必传参数
+    
+    //只有当可选参数不为 nil 时，才添加到请求参数中
+    if (sessionName) {
+        parameters[@"sessionName"] = sessionName;
+    }
+    if (sessionImage) {
+        parameters[@"sessionImage"] = sessionImage;
+    }
+    if (sessionInfo) {
+        parameters[@"sessionInfo"] = sessionInfo;
+    }
+    
+    //请求数据
+    [FlappyApiRequest postRequest:urlString
+                   withParameters:parameters
+                      withSuccess:^(id data) {
+        ChatSessionData *model = [ChatSessionData mj_objectWithKeyValues:data];
+        FlappyChatSession *session = [[FlappyChatSession alloc] init];
+        session.session = model;
+        success(session);
+    } withFailure:^(NSError *error, NSInteger code) {
+        failure(error, code);
+    }];
 }
 
 
@@ -1193,7 +1235,6 @@
         //成功
         success(session);
     } withFailure:^(NSError * error, NSInteger code) {
-        //登录失败，清空回调
         failure(error,code);
     }];
 }
@@ -1251,7 +1292,6 @@
         //成功
         success(session);
     } withFailure:^(NSError * error, NSInteger code) {
-        //登录失败，清空回调
         failure(error,code);
     }];
 }
@@ -1386,7 +1426,6 @@
         //成功
         success(ret);
     } withFailure:^(NSError *error, NSInteger code) {
-        //登录失败，清空回调
         failure(error, code);
     }];
 }
@@ -1433,7 +1472,7 @@
         //成功
         success(session);
     } withFailure:^(NSError * error, NSInteger code) {
-        //登录失败，清空回调
+        
         failure(error,code);
     }];
 }
@@ -1471,7 +1510,7 @@
         //成功
         success(session);
     } withFailure:^(NSError * error, NSInteger code) {
-        //登录失败，清空回调
+        
         failure(error,code);
     }];
 }
@@ -1509,7 +1548,7 @@
         //成功
         success(session);
     } withFailure:^(NSError * error, NSInteger code) {
-        //登录失败，清空回调
+        
         failure(error,code);
     }];
 }
@@ -1548,7 +1587,7 @@
         //成功
         success(session);
     } withFailure:^(NSError * error, NSInteger code) {
-        //登录失败，清空回调
+        
         failure(error,code);
     }];
 }
@@ -1585,7 +1624,7 @@
         //成功
         success(session);
     } withFailure:^(NSError * error, NSInteger code) {
-        //登录失败，清空回调
+        
         failure(error,code);
     }];
 }

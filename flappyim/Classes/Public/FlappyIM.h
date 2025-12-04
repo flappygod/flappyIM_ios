@@ -170,6 +170,14 @@ NS_ASSUME_NONNULL_BEGIN
                andSuccess:(FlappySuccess)success
                andFailure:(FlappyFailure)failure;
 
+//更新会话信息
+-(void)updateSessionData:(NSString*)sessionId
+         withSessionName:(nullable NSString*)sessionName
+        withSessionImage:(nullable NSString*)sessionImage
+         withSessionInfo:(nullable NSString*)sessionInfo
+              andSuccess:(FlappySuccess)success
+              andFailure:(FlappyFailure)failure;
+
 
 //通过sessionID获取
 -(void)getSessionById:(NSString*)sessionId

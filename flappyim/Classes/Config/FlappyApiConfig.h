@@ -46,6 +46,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString* URL_getSingleSession;
 //创建群聊
 @property(nonatomic,copy) NSString* URL_createGroupSession;
+//更新会话信息
+@property(nonatomic,copy) NSString* URL_updateSessionData;
 //获取会话
 @property(nonatomic,copy) NSString* URL_getSessionByExtendId;
 //获取会话

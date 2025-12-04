@@ -95,6 +95,9 @@
     //创建多人会话
     self.URL_createGroupSession= [NSString stringWithFormat:@"%@/api/createGroupSession",self.BaseUrl];
     
+    //更新会话数据
+    self.URL_updateSessionData= [NSString stringWithFormat:@"%@/api/updateSessionData",self.BaseUrl];
+    
     //通过sessionExtendID获取会话
     self.URL_getSessionByExtendId =[NSString stringWithFormat:@"%@/api/getSessionByExtendId",self.BaseUrl];
     
