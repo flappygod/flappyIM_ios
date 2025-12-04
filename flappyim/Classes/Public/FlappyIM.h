@@ -198,7 +198,7 @@ NS_ASSUME_NONNULL_BEGIN
 //添加用户到群组
 -(void)addUsersToSession:(NSArray*)userExtendIds
      withSessionExtendID:(NSString*)sessionExtendId
-              withReason:(NSArray*)reasons
+             withReasons:(NSArray*)reasons
               andSuccess:(FlappySuccess)success
               andFailure:(FlappyFailure)failure;
 

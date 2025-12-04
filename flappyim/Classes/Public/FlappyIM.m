@@ -1434,7 +1434,7 @@
 //添加用户到群组
 -(void)addUsersToSession:(NSArray*)userExtendIds
      withSessionExtendID:(NSString*)sessionExtendId
-              withReason:(NSArray*)reasons
+             withReasons:(NSArray*)reasons
               andSuccess:(FlappySuccess)success
               andFailure:(FlappyFailure)failure{
     //为空直接出错
