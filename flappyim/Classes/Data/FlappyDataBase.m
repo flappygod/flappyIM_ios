@@ -598,7 +598,46 @@
 }
 
 //插入单条会话,如果存在就更新
--(Boolean)insertSession:(ChatSessionData *)data {
+-(Boolean)insertSession:(ChatSession*)data {
+    return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        [db beginTransaction];
+        BOOL result = [db executeUpdate:@"INSERT OR REPLACE INTO session("
+                       "sessionId,"
+                       "sessionExtendId,"
+                       "sessionType,"
+                       "sessionInfo,"
+                       "sessionName,"
+                       "sessionImage,"
+                       "sessionOffset,"
+                       "sessionStamp,"
+                       "sessionCreateDate,"
+                       "sessionCreateUser,"
+                       "sessionEnable,"
+                       "sessionDeleted,"
+                       "sessionDeletedDate,"
+                       "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                   withArgumentsInArray:@[
+            [FlappyStringTool toUnNullStr:data.sessionId],
+            [FlappyStringTool toUnNullStr:data.sessionExtendId],
+            [NSNumber numberWithInteger:data.sessionType],
+            [FlappyStringTool toUnNullStr:data.sessionInfo],
+            [FlappyStringTool toUnNullStr:data.sessionName],
+            [FlappyStringTool toUnNullStr:data.sessionImage],
+            [FlappyStringTool toUnNullStr:data.sessionOffset],
+            [NSNumber numberWithLong:data.sessionStamp],
+            [FlappyStringTool toUnNullStr:data.sessionCreateDate],
+            [FlappyStringTool toUnNullStr:data.sessionCreateUser],
+            [NSNumber numberWithInteger:data.isEnable],
+            [NSNumber numberWithInteger:data.isDelete],
+            [FlappyStringTool toUnNullStr:data.deleteDate],
+            user.userExtendId
+        ]];
+        return @(result);
+    }] boolValue];
+}
+
+//插入单条会话,如果存在就更新
+-(Boolean)insertSessionData:(ChatSessionData *)data {
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         [db beginTransaction];
         BOOL result = [db executeUpdate:@"INSERT OR REPLACE INTO session("

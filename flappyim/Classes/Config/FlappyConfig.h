@@ -81,12 +81,14 @@
 
 //更新会话
 #define SYSTEM_MSG_SESSION_UPDATE 11
-//更新会话
+//会话Enable
 #define SYSTEM_MSG_SESSION_ENABLE 12
-//更新会话
+//会话Disable
 #define SYSTEM_MSG_SESSION_DISABLE 13
-//更新会话
+//完全删除会话
 #define SYSTEM_MSG_SESSION_DELETE 14
+//更新单条会话(仅会话信息，不包含人员信息)
+#define SYSTEM_MSG_SESSION_UPDATE_INFO 15
 
 
 //更新信息

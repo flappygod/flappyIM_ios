@@ -23,7 +23,10 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)clearSendingMessage;
 
 //插入单条会话
--(Boolean)insertSession:(ChatSessionData*)data;
+-(Boolean)insertSession:(ChatSession*)data;
+
+//插入单条会话(包含人员)
+-(Boolean)insertSessionData:(ChatSessionData*)data;
 
 //插入多条会话
 -(Boolean)insertSessions:(NSMutableArray*)array;

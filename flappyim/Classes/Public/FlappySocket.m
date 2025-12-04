@@ -412,6 +412,7 @@ static  GCDAsyncSocket*  _instanceSocket;
     
     //数据信息拆分
     NSMutableArray* actionUpdateSessionAll = [[NSMutableArray alloc] init];
+    NSMutableArray* actionUpdateSessionInfo = [[NSMutableArray alloc] init];
     NSMutableArray* actionUpdateSessionMember = [[NSMutableArray alloc] init];
     NSMutableArray* actionUpdateSessionEnable = [[NSMutableArray alloc] init];
     NSMutableArray* actionUpdateSessionDisable = [[NSMutableArray alloc] init];
@@ -437,6 +438,11 @@ static  GCDAsyncSocket*  _instanceSocket;
             case SYSTEM_MSG_SESSION_UPDATE:
             {
                 [actionUpdateSessionAll addObject:message];
+                break;
+            }
+            case SYSTEM_MSG_SESSION_UPDATE_INFO:
+            {
+                [actionUpdateSessionInfo addObject:message];
                 break;
             }
                 ///需要会话启用
@@ -497,6 +503,10 @@ static  GCDAsyncSocket*  _instanceSocket;
     ///会话更新
     if(actionUpdateSessionAll.count>0){
         [self updateSessionAll:actionUpdateSessionAll];
+    }
+    ///会话更新
+    if(actionUpdateSessionInfo.count>0){
+        [self updateSessionInfo:actionUpdateSessionInfo];
     }
     ///用户信息更新
     if(actionUpdateSessionMember.count>0){
@@ -753,7 +763,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             //创建
             ChatSessionData* session=[ChatSessionData mj_objectWithKeyValues:[memSession mj_keyValues]];
             //插入消息
-            [[FlappyDataBase shareInstance] insertSession:session];
+            [[FlappyDataBase shareInstance] insertSessionData:session];
             //添加进入
             [sessionArray addObject:session];
             //消息列表
@@ -880,6 +890,25 @@ static  GCDAsyncSocket*  _instanceSocket;
         [self.socket writeData:reqData withTimeout:-1 tag:0];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception.description);
+    }
+}
+
+//会话更新信息
+-(void)updateSessionInfo:(NSMutableArray*)array{
+    //开始写数据了
+    for(ChatMessage* msg in array){
+        //获取更新的数据
+        NSDictionary* dic=[FlappyJsonTool jsonStrToObject:[msg getChatSystem].sysData];
+        ChatSession* update = [ChatSession mj_objectWithKeyValues:dic];
+        [[FlappyDataBase shareInstance] insertSession:update];
+        
+        //设置消息已读，不再继续处理
+        msg.messageReadState = 1;
+        [[FlappyDataBase shareInstance] updateMessage:msg];
+        
+        //会话用户更新
+        ChatSessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:msg.messageSessionId];
+        [[FlappySender shareInstance] notifySessionUpdate:session];
     }
 }
 
