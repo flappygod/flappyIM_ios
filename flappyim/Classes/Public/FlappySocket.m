@@ -440,6 +440,7 @@ static  GCDAsyncSocket*  _instanceSocket;
                 [actionUpdateSessionAll addObject:message];
                 break;
             }
+                ///需要会话信息更新
             case SYSTEM_MSG_SESSION_UPDATE_INFO:
             {
                 [actionUpdateSessionInfo addObject:message];
