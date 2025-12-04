@@ -188,12 +188,14 @@ NS_ASSUME_NONNULL_BEGIN
 //添加用户到群组
 -(void)addUsersToSession:(NSArray*)userExtendIds
      withSessionExtendID:(NSString*)sessionExtendId
+              withReason:(nullable NSString*)reason
               andSuccess:(FlappySuccess)success
               andFailure:(FlappyFailure)failure;
 
 //添加用户到群组
 -(void)addUserToSession:(NSString*)userExtendId
     withSessionExtendID:(NSString*)sessionExtendId
+             withReason:(nullable NSString*)reason
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure;
 
@@ -201,6 +203,7 @@ NS_ASSUME_NONNULL_BEGIN
 //删除群组中的某个用户
 -(void)delUserInSession:(NSString*)userExtendId
     withSessionExtendID:(NSString*)sessionExtendId
+             withReason:(nullable NSString*)reason
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure;
 
@@ -208,12 +211,14 @@ NS_ASSUME_NONNULL_BEGIN
 //启用/禁用会话
 -(void)setSession:(NSString*)sessionExtendId
        withEnable:(NSString*)enable
+       withReason:(nullable NSString*)reason
        andSuccess:(FlappySuccess)success
        andFailure:(FlappyFailure)failure;
 
 
 //删除会话
 -(void)deleteSession:(NSString*)sessionExtendId
+          withReason:(nullable NSString*)reason
           andSuccess:(FlappySuccess)success
           andFailure:(FlappyFailure)failure;
 

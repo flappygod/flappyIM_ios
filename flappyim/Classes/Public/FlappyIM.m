@@ -1390,6 +1390,7 @@
 //添加用户到群组
 -(void)addUsersToSession:(NSArray*)userExtendIds
      withSessionExtendID:(NSString*)sessionExtendId
+              withReason:(nullable NSString*)reason
               andSuccess:(FlappySuccess)success
               andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -1413,7 +1414,8 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"currentUserExtendId":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"sessionExtendId":sessionExtendId,
-                                 @"userExtendIds":userExtendIdDataStr};
+                                 @"userExtendIds":userExtendIdDataStr,
+                                 @"reason": reason ?: @""};
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
@@ -1435,6 +1437,7 @@
 //添加用户到会话
 -(void)addUserToSession:(NSString*)userExtendId
     withSessionExtendID:(NSString*)sessionExtendId
+             withReason:(nullable NSString*)reason
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -1449,7 +1452,8 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"currentUserExtendId":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"sessionExtendId":sessionExtendId,
-                                 @"userExtendId":userExtendId};
+                                 @"userExtendId":userExtendId,
+                                 @"reason": reason ?: @""};
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
@@ -1471,6 +1475,7 @@
 //删除会话用户
 -(void)delUserInSession:(NSString*)userExtendId
     withSessionExtendID:(NSString*)sessionExtendId
+             withReason:(nullable NSString*)reason
              andSuccess:(FlappySuccess)success
              andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -1485,7 +1490,8 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"currentUserExtendId":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"sessionExtendId":sessionExtendId,
-                                 @"userExtendId":userExtendId};
+                                 @"userExtendId":userExtendId,
+                                 @"reason": reason ?: @""};
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
@@ -1508,6 +1514,7 @@
 //启用/禁用会话
 -(void)setSession:(NSString*)sessionExtendId
        withEnable:(NSString*)enable
+       withReason:(nullable NSString*)reason
        andSuccess:(FlappySuccess)success
        andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -1522,7 +1529,8 @@
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"currentUserExtendId":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"sessionExtendId":sessionExtendId,
-                                 @"enable":enable};
+                                 @"enable":enable,
+                                 @"reason": reason ?: @""};
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
@@ -1544,6 +1552,7 @@
 
 //删除会话
 -(void)deleteSession:(NSString*)sessionExtendId
+          withReason:(nullable NSString*)reason
           andSuccess:(FlappySuccess)success
           andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -1557,7 +1566,8 @@
     NSString *urlString = [FlappyApiConfig shareInstance].URL_deleteSession;
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"currentUserExtendId":[[FlappyData shareInstance]getUser].userExtendId,
-                                 @"sessionExtendId":sessionExtendId};
+                                 @"sessionExtendId":sessionExtendId,
+                                 @"reason": reason ?: @""};
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters

@@ -42,9 +42,15 @@ NS_ASSUME_NONNULL_BEGIN
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure;
 
+//发送文本
+-(ChatMessage*)sendText:(NSString*)text
+           andAtUserIds:(nullable NSArray<NSString*>*)userIds
+             andSuccess:(FlappySendSuccess)success
+             andFailure:(FlappySendFailure)failure;
 
 //发送文本
 -(ChatMessage*)sendText:(NSString*)text
+           andAtUserIds:(nullable NSArray<NSString*>*)userIds
             andReplyMsg:(nullable ChatMessage*)replyMsg
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure;

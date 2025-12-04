@@ -143,12 +143,12 @@
     [message setMessageReplyMsgContent:replyMsg.messageContent];
 }
 
-
 //发送文本
 -(ChatMessage*)sendText:(NSString*)text
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure{
     return [self sendText:text
+             andAtUserIds:nil
               andReplyMsg:nil
                andSuccess:success
                andFailure:failure];
@@ -156,7 +156,20 @@
 
 //发送文本
 -(ChatMessage*)sendText:(NSString*)text
-            andReplyMsg:(nullable ChatMessage*)replyMsg
+           andAtUserIds:(nullable NSArray<NSString*>*)userIds
+             andSuccess:(FlappySendSuccess)success
+             andFailure:(FlappySendFailure)failure{
+    return [self sendText:text
+             andAtUserIds:(NSArray*)userIds
+              andReplyMsg:nil
+               andSuccess:success
+               andFailure:failure];
+}
+
+//发送文本
+-(ChatMessage*)sendText:(NSString*)text
+          andAtUserIds:(nullable NSArray<NSString*>*)userIds
+           andReplyMsg:(nullable ChatMessage*)replyMsg
              andSuccess:(FlappySendSuccess)success
              andFailure:(FlappySendFailure)failure{
     
@@ -177,7 +190,9 @@
     chatmsg.messageType=MSG_TYPE_TEXT;
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
-    
+    if(userIds!=nil && userIds.count>0){
+        chatmsg.messageAtUserIds = [userIds componentsJoinedByString:@","];
+    }
     [chatmsg setChatText:text];
     
     //设置回复消息
