@@ -1136,7 +1136,7 @@
 
 
 //更新会话信息
--(void)updateSessionData:(NSString*)sessionId
+-(void)updateSessionData:(NSString*)sessionExtendId
          withSessionName:(nullable NSString*)sessionName
         withSessionImage:(nullable NSString*)sessionImage
          withSessionInfo:(nullable NSString*)sessionInfo
@@ -1155,7 +1155,7 @@
     //动态构建请求参数
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     //sessionId 是必传参数
-    parameters[@"sessionId"] = sessionId;
+    parameters[@"sessionExtendId"] = sessionExtendId;
     
     //只有当可选参数不为 nil 时，才添加到请求参数中
     if (sessionName) {

@@ -171,7 +171,7 @@ NS_ASSUME_NONNULL_BEGIN
                andFailure:(FlappyFailure)failure;
 
 //更新会话信息
--(void)updateSessionData:(NSString*)sessionId
+-(void)updateSessionData:(NSString*)sessionExtendId
          withSessionName:(nullable NSString*)sessionName
         withSessionImage:(nullable NSString*)sessionImage
          withSessionInfo:(nullable NSString*)sessionInfo
