@@ -1434,7 +1434,7 @@
 //添加用户到群组
 -(void)addUsersToSession:(NSArray*)userExtendIds
      withSessionExtendID:(NSString*)sessionExtendId
-              withReason:(nullable NSString*)reason
+              withReason:(NSArray*)reasons
               andSuccess:(FlappySuccess)success
               andFailure:(FlappyFailure)failure{
     //为空直接出错
@@ -1442,6 +1442,10 @@
         //返回没有登录
         failure([NSError errorWithDomain:@"Not login" code:0 userInfo:nil],RESULT_NOTLOGIN);
         return ;
+    }
+    
+    if (!reasons) {
+        reasons = @[]; // 默认值为空数组
     }
     
     //创建群组会话
@@ -1455,11 +1459,19 @@
                                                        encoding:NSUTF8StringEncoding];
     
     
+    //转换为字符串
+    NSData *reasonsData=[NSJSONSerialization dataWithJSONObject:reasons
+                                                        options:NSJSONWritingPrettyPrinted
+                                                          error:nil];
+    NSString *reasonsStr=[[NSString alloc]initWithData:reasonsData
+                                              encoding:NSUTF8StringEncoding];
+    
+    
     //请求体，参数（NSDictionary 类型）
     NSDictionary *parameters = @{@"currentUserExtendId":[[FlappyData shareInstance]getUser].userExtendId,
                                  @"sessionExtendId":sessionExtendId,
                                  @"userExtendIds":userExtendIdDataStr,
-                                 @"reason": reason ?: @""};
+                                 @"reasons": reasonsStr};
     //请求数据
     [FlappyApiRequest postRequest:urlString
                    withParameters:parameters
