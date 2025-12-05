@@ -897,6 +897,56 @@
     }];
 }
 
+//获取不在活跃会话中的成员列表
+- (NSMutableArray*)getSyncNotActiveMember:(NSArray*)activeSessionIds {
+    return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        //构建SQL查询条件
+        NSMutableString *whereClause = [NSMutableString string];
+        //添加sessionInsertUser参数
+        NSMutableArray *arguments = [NSMutableArray arrayWithObject:user.userExtendId];
+
+        if (activeSessionIds.count > 0) {
+            [whereClause appendString:@" AND sessionId NOT IN ("];
+            for (int i = 0; i < activeSessionIds.count; i++) {
+                [whereClause appendString:@"?"];
+                if (i < activeSessionIds.count - 1) {
+                    [whereClause appendString:@", "];
+                }
+                [arguments addObject:activeSessionIds[i]];
+            }
+            [whereClause appendString:@")"];
+        }
+        //构建完整的查询语句
+        NSString *query = [NSString stringWithFormat:@"SELECT * FROM session_member WHERE sessionInsertUser = ? AND isLeave != 1%@", whereClause];
+        //执行查询
+        FMResultSet *result = [db executeQuery:query withArgumentsInArray:arguments];
+        NSMutableArray *memberList = [[NSMutableArray alloc] init];
+        while ([result next]) {
+            ChatSessionMember *member = [ChatSessionMember new];
+            member.userId = [result stringForColumn:@"userId"];
+            member.userExtendId = [result stringForColumn:@"userExtendId"];
+            member.userName = [result stringForColumn:@"userName"];
+            member.userAvatar = [result stringForColumn:@"userAvatar"];
+            member.userData = [result stringForColumn:@"userData"];
+            member.userCreateDate = [result stringForColumn:@"userCreateDate"];
+            member.userLoginDate = [result stringForColumn:@"userLoginDate"];
+            member.sessionId = [result stringForColumn:@"sessionId"];
+            member.sessionMemberLatestRead = [result longForColumn:@"sessionMemberLatestRead"];
+            member.sessionMemberLatestDelete = [result longForColumn:@"sessionMemberLatestDelete"];
+            member.sessionMemberMarkName = [result stringForColumn:@"sessionMemberMarkName"];
+            member.sessionMemberType = [result intForColumn:@"sessionMemberType"];
+            member.sessionMemberMute = [result intForColumn:@"sessionMemberMute"];
+            member.sessionMemberPinned = [result intForColumn:@"sessionMemberPinned"];
+            member.sessionJoinDate = [result stringForColumn:@"sessionJoinDate"];
+            member.sessionLeaveDate = [result stringForColumn:@"sessionLeaveDate"];
+            member.isLeave = [result intForColumn:@"isLeave"];
+            [memberList addObject:member];
+        }
+        [result close];
+        return memberList;
+    } defaultValue:[[NSMutableArray alloc] init]];
+}
+
 //获取会话ID的用户列表
 -(NSMutableArray *)getSessionMemberList:(NSString *)sessionId {
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {

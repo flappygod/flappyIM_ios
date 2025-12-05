@@ -81,6 +81,9 @@ NS_ASSUME_NONNULL_BEGIN
 //获取没有处理的系统消息
 -(NSMutableArray*)getNotActionSystemMessage;
 
+//获取不活跃的用户
+-(NSMutableArray*)getSyncNotActiveMember:(NSArray<NSString*>*)activeSessionIds;
+
 //获取未读的at我的消息
 -(NSMutableArray*)getUnReadAtMessages:(NSString*)sessionID
                              withSize:(NSInteger)size;

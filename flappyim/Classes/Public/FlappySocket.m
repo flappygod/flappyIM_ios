@@ -547,6 +547,20 @@ static  GCDAsyncSocket*  _instanceSocket;
 }
 
 
+//同步活跃的会话
+-(void)syncActiveSessions:(NSArray*)activeSessionIds{
+    NSMutableArray* members = [[FlappyDataBase shareInstance] getSyncNotActiveMember:activeSessionIds];
+    NSMutableArray* sessions = [[NSMutableArray alloc] init];
+    for(ChatSessionMember*member in members){
+        member.isLeave = 1;
+        [[FlappyDataBase shareInstance] insertSessionMember:member];
+        ChatSessionData* session = [[FlappyDataBase shareInstance] getUserSessionByID:member.sessionId];
+        [sessions addObject:session];
+    }
+    [[FlappySender shareInstance] notifySessionUpdateList:sessions];
+}
+
+
 //接收完成登录消息
 -(void)receiveLogin:(FlappyResponse *)response{
     
@@ -677,6 +691,8 @@ static  GCDAsyncSocket*  _instanceSocket;
         //检查之前是否有消息再消息栈中而且没有发送成功
         [self checkCachedMessagesToSend];
         
+        //同步活跃的会话
+        [self syncActiveSessions:response.activeSessionIdsArray];
     } @catch (NSException *exception) {
         NSLog(@"FlappyIM:%@",exception.description);
     }

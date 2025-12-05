@@ -375,6 +375,7 @@ typedef struct ReqReceipt__storage_ {
 @dynamic type;
 @dynamic msgArray, msgArray_Count;
 @dynamic sessionsArray, sessionsArray_Count;
+@dynamic activeSessionIdsArray, activeSessionIdsArray_Count;
 @dynamic hasUpdate, update;
 
 typedef struct FlappyResponse__storage_ {
@@ -382,6 +383,7 @@ typedef struct FlappyResponse__storage_ {
   int32_t type;
   NSMutableArray *msgArray;
   NSMutableArray *sessionsArray;
+  NSMutableArray *activeSessionIdsArray;
   ResponseUpdate *update;
 } FlappyResponse__storage_;
 
@@ -420,6 +422,15 @@ typedef struct FlappyResponse__storage_ {
         .dataType = GPBDataTypeMessage,
       },
       {
+        .name = "activeSessionIdsArray",
+        .dataTypeSpecific.clazz = Nil,
+        .number = FlappyResponse_FieldNumber_ActiveSessionIdsArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(FlappyResponse__storage_, activeSessionIdsArray),
+        .flags = (GPBFieldFlags)(GPBFieldRepeated | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "update",
         .dataTypeSpecific.clazz = GPBObjCClass(ResponseUpdate),
         .number = FlappyResponse_FieldNumber_Update,
@@ -437,6 +448,11 @@ typedef struct FlappyResponse__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(FlappyResponse__storage_)
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown | GPBDescriptorInitializationFlag_ClosedEnumSupportKnown)];
+    #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+      static const char *extraTextFormatInfo =
+        "\001\004\000activeSessionIds\000";
+      [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+    #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
