@@ -905,7 +905,7 @@
         //添加sessionInsertUser参数
         NSMutableArray *arguments = [NSMutableArray arrayWithObject:user.userExtendId];
 
-        if (activeSessionIds.count > 0) {
+        if (activeSessionIds && [activeSessionIds isKindOfClass:[NSArray class]] && activeSessionIds.count > 0) {
             [whereClause appendString:@" AND sessionId NOT IN ("];
             for (int i = 0; i < activeSessionIds.count; i++) {
                 [whereClause appendString:@"?"];
