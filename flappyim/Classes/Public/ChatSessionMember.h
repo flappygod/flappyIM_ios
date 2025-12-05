@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) NSInteger sessionMemberLatestDelete;
 //标记名称
 @property(nonatomic,copy) NSString* sessionMemberMarkName;
+//会话用户角色
+@property(nonatomic,assign) NSInteger sessionMemberType;
 //会话免打扰
 @property(nonatomic,assign) NSInteger sessionMemberMute;
 //会话置顶
