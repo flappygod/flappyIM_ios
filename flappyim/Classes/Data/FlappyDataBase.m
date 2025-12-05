@@ -903,7 +903,9 @@
         //构建SQL查询条件
         NSMutableString *whereClause = [NSMutableString string];
         //添加sessionInsertUser参数
-        NSMutableArray *arguments = [NSMutableArray arrayWithObject:user.userExtendId];
+        NSMutableArray *arguments = [[NSMutableArray alloc] init];
+        [arguments addObject:user.userExtendId];
+        [arguments addObject:user.userId];
 
         if (activeSessionIds && [activeSessionIds isKindOfClass:[NSArray class]] && activeSessionIds.count > 0) {
             [whereClause appendString:@" AND sessionId NOT IN ("];
@@ -917,7 +919,7 @@
             [whereClause appendString:@")"];
         }
         //构建完整的查询语句
-        NSString *query = [NSString stringWithFormat:@"SELECT * FROM session_member WHERE sessionInsertUser = ? AND isLeave != 1%@", whereClause];
+        NSString *query = [NSString stringWithFormat:@"select * from session_member where sessionInsertUser = ? and userId = ? and isLeave != 1%@", whereClause];
         //执行查询
         FMResultSet *result = [db executeQuery:query withArgumentsInArray:arguments];
         NSMutableArray *memberList = [[NSMutableArray alloc] init];
