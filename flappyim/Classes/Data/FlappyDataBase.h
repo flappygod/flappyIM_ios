@@ -84,9 +84,15 @@ NS_ASSUME_NONNULL_BEGIN
 //获取不活跃的用户
 -(NSMutableArray*)getSyncNotActiveMember:(NSArray<NSString*>*)activeSessionIds;
 
+
+- (NSMutableArray *)getAllAtMeMessages:(NSString *)sessionID
+                            incluedAll:(BOOL)includeAll
+                                  page:(NSInteger)page
+                                  size:(NSInteger)size;
 //获取未读的at我的消息
--(NSMutableArray*)getUnReadAtMessages:(NSString*)sessionID
-                             withSize:(NSInteger)size;
+-(NSMutableArray*)getUnReadAtMeMessages:(NSString*)sessionID
+                             incluedAll:(Boolean)includeAll
+                               withSize:(NSInteger)size;
 
 //通过sessionID，获取之前的
 -(NSMutableArray*)getSessionFormerMessages:(NSString*)sessionID

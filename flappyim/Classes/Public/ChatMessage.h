@@ -63,6 +63,9 @@ NS_ASSUME_NONNULL_BEGIN
 #define ACTION_TYPE_SESSION_DELETE_TEMP  6
 
 
+#define MESSAGE_AT_ALL  @"all"
+
+
 
 //会话的消息
 @interface ChatMessage : NSObject

@@ -906,7 +906,7 @@
         NSMutableArray *arguments = [[NSMutableArray alloc] init];
         [arguments addObject:user.userExtendId];
         [arguments addObject:user.userId];
-
+        
         if (activeSessionIds && [activeSessionIds isKindOfClass:[NSArray class]] && activeSessionIds.count > 0) {
             [whereClause appendString:@" AND sessionId NOT IN ("];
             for (int i = 0; i < activeSessionIds.count; i++) {
@@ -1024,23 +1024,110 @@
     }];
 }
 
+
+
+// 获取所有 @ 我的消息（支持分页）
+- (NSMutableArray *)getAllAtMeMessages:(NSString *)sessionID
+                            incluedAll:(BOOL)includeAll
+                                  page:(NSInteger)page
+                                  size:(NSInteger)size {
+    return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        //当前用户
+        ChatSessionMember *sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
+        //构建 SQL 查询
+        NSMutableString *query = [NSMutableString stringWithString:
+                                  @"SELECT * FROM message WHERE messageSessionId=? AND messageSessionOffset>? AND messageInsertUser=? AND messageType!=? AND isDelete!=1"];
+        //如果 includeAll 为 YES，则增加对 "all" 的判断
+        if (includeAll) {
+            [query appendString:@" AND (messageAtUserIds LIKE ? OR messageAtUserIds LIKE ?)"];
+        } else {
+            [query appendString:@" AND messageAtUserIds LIKE ?"];
+        }
+        [query appendString:@" ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ? OFFSET ?"];
+        //构建参数列表
+        NSMutableArray *arguments = [NSMutableArray array];
+        //对应 messageSessionId=?
+        [arguments addObject:sessionID];
+        //对应 messageSessionOffset>?
+        [arguments addObject:@(sessionMember != nil ? sessionMember.sessionMemberLatestDelete : 0)];
+        //对应 messageInsertUser=?
+        [arguments addObject:user.userExtendId];
+        //对应 messageType!=?
+        [arguments addObject:@(MSG_TYPE_ACTION)];
+        
+        if (includeAll) {
+            //针对当前用户的 @
+            [arguments addObject:[NSString stringWithFormat:@"%%%@%%", sessionMember.userId]];
+            
+            //针对 "all" 的 @
+            [arguments addObject:[NSString stringWithFormat:@"%%%@%%", MESSAGE_AT_ALL]];
+        } else {
+            //仅针对当前用户的 @
+            [arguments addObject:[NSString stringWithFormat:@"%%%@%%", sessionMember.userId]];
+        }
+        //对应 LIMIT ?
+        [arguments addObject:@(size)];
+        //对应 OFFSET ?
+        [arguments addObject:@((page - 1) * size)];
+        //执行查询
+        FMResultSet *result = [db executeQuery:query withArgumentsInArray:arguments];
+        //转换结果为数组
+        NSMutableArray *listArray = [[NSMutableArray alloc] init];
+        while ([result next]) {
+            ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
+            [listArray addObject:msg];
+        }
+        [result close];
+        
+        return listArray;
+        
+    } defaultValue:[[NSMutableArray alloc] init]];
+}
+
+
 //获取未读的at我的消息
--(NSMutableArray*)getUnReadAtMessages:(NSString*)sessionID
-                             withSize:(NSInteger)size{
+-(NSMutableArray*)getUnReadAtMeMessages:(NSString*)sessionID
+                             incluedAll:(Boolean)includeAll
+                               withSize:(NSInteger)size{
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         
         //当前用户
-        ChatSessionMember* sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
-        FMResultSet *result = [db executeQuery:@"SELECT * FROM message WHERE messageSessionId=? AND messageReadState=0 AND messageAtUserIds LIKE ? AND messageSessionOffset>? AND messageInsertUser=? AND messageType!=? AND isDelete!=1 ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ?"
-                          withArgumentsInArray:@[
-            sessionID,
-            [NSString stringWithFormat:@"%%%@%%", sessionMember.userId],
-            [NSNumber numberWithInteger:sessionMember != nil ? sessionMember.sessionMemberLatestDelete : 0],
-            user.userExtendId,
-            @(MSG_TYPE_ACTION),
-            [NSNumber numberWithInteger:size]
-        ]];
+        ChatSessionMember *sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
+        //构建 SQL 查询
+        NSMutableString *query = [NSMutableString stringWithString:
+                                  @"SELECT * FROM message WHERE messageSessionId=? AND messageReadState=0 AND messageSessionOffset>? AND messageInsertUser=? AND messageType!=? AND isDelete!=1"];
+        //如果 includeAll 为 YES，则增加对 "all" 的判断
+        if (includeAll) {
+            [query appendString:@" AND (messageAtUserIds LIKE ? OR messageAtUserIds LIKE ?)"];
+        } else {
+            [query appendString:@" AND messageAtUserIds LIKE ?"];
+        }
+        [query appendString:@" ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ?"];
         
+        //构建参数列表
+        NSMutableArray *arguments = [NSMutableArray array];
+        //对应 messageSessionId=?
+        [arguments addObject:sessionID];
+        //对应 messageSessionOffset>?
+        [arguments addObject:@(sessionMember != nil ? sessionMember.sessionMemberLatestDelete : 0)];
+        //对应 messageInsertUser=?
+        [arguments addObject:user.userExtendId];
+        //对应 messageType!=?
+        [arguments addObject:@(MSG_TYPE_ACTION)];
+        if (includeAll) {
+            //针对当前用户的 @
+            [arguments addObject:[NSString stringWithFormat:@"%%%@%%", sessionMember.userId]];
+            //针对 "all" 的 @
+            [arguments addObject:[NSString stringWithFormat:@"%%%@%%", MESSAGE_AT_ALL]];
+        } else {
+            //仅针对当前用户的 @
+            [arguments addObject:[NSString stringWithFormat:@"%%%@%%", sessionMember.userId]];
+        }
+        //对应 LIMIT ?
+        [arguments addObject:@(size)];
+        //执行查询
+        FMResultSet *result = [db executeQuery:query withArgumentsInArray:arguments];
+        //转换结果为数组
         NSMutableArray *listArray = [[NSMutableArray alloc] init];
         while ([result next]) {
             ChatMessage *msg = [[ChatMessage alloc] initWithResult:result];
@@ -1048,8 +1135,7 @@
         }
         [result close];
         return listArray;
-        
-    } defaultValue: [[NSMutableArray alloc] init]];
+    } defaultValue:[[NSMutableArray alloc] init]];
 }
 
 
