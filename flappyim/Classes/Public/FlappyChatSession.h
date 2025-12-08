@@ -238,8 +238,7 @@ NS_ASSUME_NONNULL_BEGIN
                            withSize:(NSInteger)size;
 
 //获取所有@我的消息（支持分页）
-- (NSMutableArray *)getAllAtMeMessages:(NSString *)sessionID
-                            incluedAll:(BOOL)includeAll
+- (NSMutableArray *)getAllAtMeMessages:(BOOL)includeAll
                                   page:(NSInteger)page
                                   size:(NSInteger)size;
 
