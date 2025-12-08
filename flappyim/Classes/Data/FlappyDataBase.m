@@ -1606,9 +1606,9 @@
 //更新消息已读
 -(void)updateMessageRead:(NSString *)userId andSessionId:(NSString *)sessionId andTableSeq:(NSString *)tableOffset {
     [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        [db executeUpdate:@"update message set messageReadState=1, messageReadUserIds = IFNULL(messageReadUserIds, '') || CASE WHEN messageReadUserIds IS NULL OR messageReadUserIds = '' THEN '' ELSE ',' END || ?  where messageInsertUser=? and messageSendId!=? and messageSessionId=? and messageTableOffset<=? and messageType NOT IN (?, ?, ?)"
+        [db executeUpdate:@"UPDATE message SET messageReadState = 1, messageReadUserIds = IFNULL(messageReadUserIds, '') || CASE WHEN messageReadUserIds IS NULL OR messageReadUserIds = '' THEN '' ELSE ',' END || ? WHERE messageInsertUser = ? AND messageSendId != ? AND messageSessionId = ? AND messageTableOffset <= ? AND messageType NOT IN (?, ?, ?) AND (messageReadUserIds IS NULL OR messageReadUserIds NOT LIKE ?)"
      withArgumentsInArray:@[
-            userId,
+            userId, // 要追加的 userId
             user.userExtendId,
             userId,
             sessionId,
@@ -1616,6 +1616,8 @@
             @(MSG_TYPE_SYSTEM),
             @(MSG_TYPE_ACTION),
             @(MSG_TYPE_READ_RECEIPT),
+            //NOT LIKE 条件，避免重复
+            [NSString stringWithFormat:@"%%%@%%", userId]
         ]];
         return nil;
     }];
