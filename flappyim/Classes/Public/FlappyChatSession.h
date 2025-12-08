@@ -237,9 +237,15 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSMutableArray*)getFormerMessages:(NSString*)messageID
                            withSize:(NSInteger)size;
 
+//获取所有@我的消息（支持分页）
+- (NSMutableArray *)getAllAtMeMessages:(NSString *)sessionID
+                            incluedAll:(BOOL)includeAll
+                                  page:(NSInteger)page
+                                  size:(NSInteger)size;
 
 //获取未读的at我的消息
--(NSMutableArray*)getUnReadAtMessages:(NSInteger)size;
+-(NSMutableArray*)getUnReadAtMeMessages:(Boolean)includeAll
+                               withSize:(NSInteger)size;
 
 //获取某条信息之后的消息
 -(NSMutableArray*)getNewerMessages:(NSString*)messageID

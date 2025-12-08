@@ -1032,11 +1032,25 @@
     return message;
 }
 
+//获取所有@我的消息（支持分页）
+- (NSMutableArray *)getAllAtMeMessages:(NSString *)sessionID
+                            incluedAll:(BOOL)includeAll
+                                  page:(NSInteger)page
+                                  size:(NSInteger)size{
+    NSMutableArray* arr=[[FlappyDataBase shareInstance]
+                         getAllAtMeMessages:self.session.sessionId
+                         incluedAll:true
+                         page:page
+                         size:size];
+    return arr;
+}
 
 //获取未读的at我的消息
--(NSMutableArray*)getUnReadAtMessages:(NSInteger)size{
+-(NSMutableArray*)getUnReadAtMeMessages:(Boolean)includeAll
+                               withSize:(NSInteger)size{
     NSMutableArray* arr=[[FlappyDataBase shareInstance]
-                         getUnReadAtMessages:self.session.sessionId
+                         getUnReadAtMeMessages:self.session.sessionId
+                         incluedAll:true
                          withSize:size];
     return arr;
 }
