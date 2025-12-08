@@ -756,7 +756,7 @@
 
 //通知消息发送
 -(void)notifyMessageSendInsert:(ChatMessage*)msg{
-    if(msg==nil || msg.messageType == MSG_TYPE_ACTION){
+    if(msg==nil || msg.messageType == MSG_TYPE_ACTION || msg.messageType == MSG_TYPE_READ_RECEIPT){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -781,7 +781,7 @@
     
     //使用谓词过滤数组
     NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(ChatMessage *msg, NSDictionary *bindings) {
-        return msg.messageType != MSG_TYPE_ACTION;
+        return msg.messageType != MSG_TYPE_ACTION &&  msg.messageType != MSG_TYPE_READ_RECEIPT;
     }];
     NSArray *chatMessageList = [msgList filteredArrayUsingPredicate:predicate];
     if (chatMessageList.count == 0) {
@@ -821,7 +821,7 @@
 
 //通知消息接收
 -(void)notifyMessageReceive:(ChatMessage*)msg{
-    if(msg==nil || msg.messageType == MSG_TYPE_ACTION){
+    if(msg==nil || msg.messageType == MSG_TYPE_ACTION || msg.messageType == MSG_TYPE_READ_RECEIPT){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -840,7 +840,7 @@
 
 //通知消息失败
 -(void)notifyMessageFailure:(ChatMessage*)msg{
-    if(msg==nil || msg.messageType == MSG_TYPE_ACTION){
+    if(msg==nil || msg.messageType == MSG_TYPE_ACTION || msg.messageType == MSG_TYPE_READ_RECEIPT){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -858,7 +858,7 @@
 
 //通知有新的消息
 -(void)notifyMessageDelete:(ChatMessage*)msg{
-    if(msg==nil || msg.messageType == MSG_TYPE_ACTION){
+    if(msg==nil || msg.messageType == MSG_TYPE_ACTION || msg.messageType == MSG_TYPE_READ_RECEIPT){
         return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
