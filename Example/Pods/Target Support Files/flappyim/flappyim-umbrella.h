@@ -15,6 +15,7 @@
 #import "ChatImage.h"
 #import "ChatLocation.h"
 #import "ChatMessage.h"
+#import "ChatReadReceipt.h"
 #import "ChatSession.h"
 #import "ChatSessionData.h"
 #import "ChatSessionMember.h"

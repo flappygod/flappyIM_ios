@@ -66,8 +66,10 @@
 -(void)handleSendFailureAllCallback;
 
 //消息已读回执和删除回执,对方的阅读消息存在的时候才会执行
--(void)handleMessageAction:(ChatMessage*)message;
+-(void)handleMessageReceipt:(ChatMessage*)message;
 
+//消息更新，会话更新
+-(void)handleMessageAction:(ChatMessage*)message;
 
 //通知消息插入
 -(void)notifyMessageSendInsert:(ChatMessage*)msg;

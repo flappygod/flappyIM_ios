@@ -60,6 +60,9 @@ NS_ASSUME_NONNULL_BEGIN
 //插入消息列表
 -(void)insertMessages:(NSMutableArray*)array;
 
+//处理消息回执
+-(void)handleMessageReadReceipt:(ChatMessage *)msg;
+
 //处理消息Action更新操作
 -(void)handleActionMessageUpdate:(ChatMessage*)msg;
 

@@ -650,7 +650,9 @@ static  GCDAsyncSocket*  _instanceSocket;
             [self handleMessageSendArriveState:chatMsg];
             //保存消息
             [[FlappyDataBase shareInstance] insertMessage:chatMsg];
-            //通知事件消息
+            //消息回执
+            [[FlappySender shareInstance] handleMessageReceipt:chatMsg];
+            //动作消息
             [[FlappySender shareInstance] handleMessageAction:chatMsg];
             //发送成功
             [[FlappySender shareInstance] handleSendSuccessCallback:chatMsg];
@@ -743,9 +745,11 @@ static  GCDAsyncSocket*  _instanceSocket;
         [self handleMessageSendArriveState:chatMsg];
         //添加数据
         [[FlappyDataBase shareInstance] insertMessage:chatMsg];
-        //通知事件消息
+        //消息回执
+        [[FlappySender shareInstance] handleMessageReceipt:chatMsg];
+        //动作消息
         [[FlappySender shareInstance] handleMessageAction:chatMsg];
-        //消息发送成功
+        //成功回调
         [[FlappySender shareInstance] handleSendSuccessCallback:chatMsg];
         //通知接收到消息
         [[FlappySender shareInstance] notifyMessageReceive:chatMsg];

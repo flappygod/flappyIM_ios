@@ -91,6 +91,22 @@
     return nil;
 }
 
+
+//设置|获取回执
+-(void)setReadReceipt:(ChatReadReceipt*)receipt{
+    if(receipt!=nil){
+        _messageContent = [FlappyJsonTool jsonObjectToJsonStr:[receipt mj_keyValues]];
+    }
+}
+-(ChatReadReceipt*)getReadReceipt{
+    if(_messageContent!=nil&&self.messageType==MSG_TYPE_READ_RECEIPT){
+        NSDictionary* dic=[FlappyJsonTool jsonStrToObject:_messageContent];
+        return [ChatReadReceipt mj_objectWithKeyValues:dic];
+    }
+    return nil;
+}
+
+
 //设置|获取动作
 -(void)setChatAction:(ChatAction*)chatAction{
     if(chatAction!=nil){

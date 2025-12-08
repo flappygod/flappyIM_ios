@@ -15,6 +15,7 @@
 #import "ChatVideo.h"
 #import "ChatFile.h"
 #import "FlappyIM.h"
+#import "ChatReadReceipt.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

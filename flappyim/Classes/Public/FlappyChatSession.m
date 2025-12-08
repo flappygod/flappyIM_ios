@@ -741,14 +741,13 @@
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
     chatmsg.messageType=MSG_TYPE_ACTION;
     
-    ChatAction* action=[[ChatAction alloc]init];
-    action.actionType=ACTION_TYPE_SESSION_READ;
-    action.actionIds=@[
-        mine.userId,
-        self.session.sessionId,
-        [NSString stringWithFormat:@"%ld",[self getLatestMessage].messageTableOffset]
-    ];
-    [chatmsg setChatAction:action];
+    //回执消息
+    ChatReadReceipt* receipt = [[ChatReadReceipt alloc] init];
+    receipt.userId = mine.userId;
+    receipt.sessionId = self.session.sessionId;
+    receipt.readOffset = [NSString stringWithFormat:@"%ld",[self getLatestMessage].messageTableOffset];
+    [chatmsg setReadReceipt:receipt];
+    
     chatmsg.messageDate=[FlappyDateTool formatNorMalTimeStrFromDate:[NSDate new]];
     chatmsg.messageSendState=SEND_STATE_SENDING;
     

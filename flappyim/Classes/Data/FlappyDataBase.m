@@ -480,7 +480,7 @@
 //获取未读消息的数量
 -(int)getUnReadSessionMessageCountBySessionId:(NSString *)sessionId {
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        FMResultSet *results = [db executeQuery:@"SELECT COUNT(*) FROM message WHERE messageInsertUser=? and messageSessionId=? and messageSendId!=? and messageReadState=0 and (messageRecallUserId is null or messageRecallUserId == '') and (messageDeleteUserIds not like ?) and messageType!=? and messageType!=?"
+        FMResultSet *results = [db executeQuery:@"SELECT COUNT(*) FROM message WHERE messageInsertUser=? and messageSessionId=? and messageSendId!=? and messageReadState=0 and (messageRecallUserId is null or messageRecallUserId == '') and (messageDeleteUserIds not like ?) and messageType not in (?,?,?)"
                            withArgumentsInArray:@[
             user.userExtendId,
             sessionId,
@@ -488,6 +488,7 @@
             [NSString stringWithFormat:@"%%%@%%",user.userId],
             @(MSG_TYPE_SYSTEM),
             @(MSG_TYPE_ACTION),
+            @(MSG_TYPE_READ_RECEIPT),
         ]];
         int count = 0;
         if ([results next]) {
@@ -506,11 +507,12 @@
         long latestSessionOffsetDelete = 0;
         
         //获取最近消息
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit 1"
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageType not in (?,?) and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit 1"
                           withArgumentsInArray:@[
             sessionId,
             user.userExtendId,
-            @(MSG_TYPE_ACTION)
+            @(MSG_TYPE_ACTION),
+            @(MSG_TYPE_READ_RECEIPT)
         ]];
         if ([result next]) {
             latestSessionOffset = [result intForColumn:@"messageSessionOffset"];
@@ -729,7 +731,7 @@
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         // 调用公共方法插入或更新单个会话
         BOOL result = [self insertOrUpdateSessionData:data inDatabase:db withUser:user];
-        return @(YES);
+        return @(result);
     } defaultValue:@(NO) useTransaction:YES] boolValue];
 }
 
@@ -1034,11 +1036,12 @@
 //通过会话ID获取最近的一次会话
 -(NSInteger)getSessionOffsetLatest:(NSString *)sessionID {
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageType!=? and messageSendState in (1,2,3,4) order by messageTableOffset desc,messageStamp desc limit 1"
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageType not in (?,?) and messageSendState in (1,2,3,4) order by messageTableOffset desc,messageStamp desc limit 1"
                           withArgumentsInArray:@[
             sessionID,
             user.userExtendId,
-            @(MSG_TYPE_ACTION)
+            @(MSG_TYPE_ACTION),
+            @(MSG_TYPE_READ_RECEIPT)
         ]];
         
         NSInteger offset = 0;
@@ -1056,12 +1059,13 @@
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         //当前用户
         ChatSessionMember* sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageSessionOffset>? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit 1"
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and messageInsertUser=? and messageSessionOffset>? and messageType not in (?,?) and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit 1"
                           withArgumentsInArray:@[
             sessionID,
             user.userExtendId,
             [NSNumber numberWithInteger:sessionMember!=nil ? sessionMember.sessionMemberLatestDelete : 0],
-            @(MSG_TYPE_ACTION)
+            @(MSG_TYPE_ACTION),
+            @(MSG_TYPE_READ_RECEIPT)
         ]];
         
         ChatMessage *msg = nil;
@@ -1085,7 +1089,7 @@
         ChatSessionMember *sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
         //构建 SQL 查询
         NSMutableString *query = [NSMutableString stringWithString:
-                                  @"SELECT * FROM message WHERE messageSessionId=? AND messageSessionOffset>? AND messageInsertUser=? AND messageType!=? AND isDelete!=1"];
+                                  @"SELECT * FROM message WHERE messageSessionId=? AND messageSessionOffset>? AND messageInsertUser=? AND messageType not in (?,?) AND isDelete!=1"];
         //如果 includeAll 为 YES，则增加对 "all" 的判断
         if (includeAll) {
             [query appendString:@" AND (messageAtUserIds LIKE ? OR messageAtUserIds LIKE ?)"];
@@ -1103,6 +1107,7 @@
         [arguments addObject:user.userExtendId];
         //对应 messageType!=?
         [arguments addObject:@(MSG_TYPE_ACTION)];
+        [arguments addObject:@(MSG_TYPE_READ_RECEIPT)];
         
         if (includeAll) {
             //针对当前用户的 @
@@ -1144,7 +1149,7 @@
         ChatSessionMember *sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
         //构建 SQL 查询
         NSMutableString *query = [NSMutableString stringWithString:
-                                  @"SELECT * FROM message WHERE messageSessionId=? AND messageReadState=0 AND messageSessionOffset>? AND messageInsertUser=? AND messageType!=? AND isDelete!=1"];
+                                  @"SELECT * FROM message WHERE messageSessionId=? AND messageReadState=0 AND messageSessionOffset>? AND messageInsertUser=? AND messageType not in (?,?) AND isDelete!=1"];
         //如果 includeAll 为 YES，则增加对 "all" 的判断
         if (includeAll) {
             [query appendString:@" AND (messageAtUserIds LIKE ? OR messageAtUserIds LIKE ?)"];
@@ -1163,6 +1168,7 @@
         [arguments addObject:user.userExtendId];
         //对应 messageType!=?
         [arguments addObject:@(MSG_TYPE_ACTION)];
+        [arguments addObject:@(MSG_TYPE_READ_RECEIPT)];
         if (includeAll) {
             //针对当前用户的 @
             [arguments addObject:[NSString stringWithFormat:@"%%%@%%", sessionMember.userId]];
@@ -1199,7 +1205,7 @@
         ChatMessage *msg = [self getMessageById:messageId];
         
         //获取消息
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and (messageTableOffset < ? or (messageTableOffset = ? and messageStamp < ?)) and messageSessionOffset>? and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit ?"
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and (messageTableOffset < ? or (messageTableOffset = ? and messageStamp < ?)) and messageSessionOffset>? and messageInsertUser=? and messageType not in (?,?) and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit ?"
                           withArgumentsInArray:@[
             sessionID,
             [NSNumber numberWithInteger:msg.messageTableOffset],
@@ -1208,6 +1214,7 @@
             [NSNumber numberWithInteger:sessionMember!=nil ? sessionMember.sessionMemberLatestDelete : 0],
             user.userExtendId,
             @(MSG_TYPE_ACTION),
+            @(MSG_TYPE_READ_RECEIPT),
             [NSNumber numberWithInteger:size]
         ]];
         NSMutableArray *listArray = [[NSMutableArray alloc] init];
@@ -1230,7 +1237,7 @@
         ChatMessage *msg = [self getMessageById:messageId];
         
         //获取消息
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and (messageTableOffset > ? or (messageTableOffset = ? and messageStamp > ?)) and messageInsertUser=? and messageType!=? and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit ?"
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and (messageTableOffset > ? or (messageTableOffset = ? and messageStamp > ?)) and messageInsertUser=? and messageType not in (?,?) and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit ?"
                           withArgumentsInArray:@[
             sessionID,
             [NSNumber numberWithInteger:msg.messageTableOffset],
@@ -1238,6 +1245,7 @@
             [NSNumber numberWithInteger:msg.messageStamp],
             user.userExtendId,
             @(MSG_TYPE_ACTION),
+            @(MSG_TYPE_READ_RECEIPT),
             [NSNumber numberWithInteger:size]
         ]];
         NSMutableArray *listArray = [[NSMutableArray alloc] init];
@@ -1502,6 +1510,23 @@
     } defaultValue: [[NSMutableArray alloc] init]];
 }
 
+//处理消息阅读回执
+-(void)handleMessageReadReceipt:(ChatMessage *)msg {
+    [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        if (msg.messageType != MSG_TYPE_READ_RECEIPT) {
+            return nil;
+        }
+        ChatReadReceipt *receipt = [msg getReadReceipt];
+        NSString *sessionId = receipt.sessionId;
+        NSString *userId = receipt.userId;
+        NSString *tableOffset = receipt.readOffset;
+        [self updateMessageRead:userId andSessionId:sessionId andTableSeq:tableOffset];
+        [self updateSessionMemberLatestRead:userId andSessionId:sessionId andTableSeq:tableOffset];
+        [self updateMessageReadByMsgId:msg.messageId];
+        return nil;
+    }];
+}
+
 //处理动作消息插入
 -(void)handleActionMessageUpdate:(ChatMessage *)msg {
     [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
@@ -1520,14 +1545,6 @@
                 NSString *userId = action.actionIds[0];
                 NSString *messageId = action.actionIds[2];
                 [self updateMessageDelete:userId andMessageId:messageId];
-                break;
-            }
-            case ACTION_TYPE_SESSION_READ: {
-                NSString *userId = action.actionIds[0];
-                NSString *sessionId = action.actionIds[1];
-                NSString *tableOffset = action.actionIds[2];
-                [self updateMessageRead:userId andSessionId:sessionId andTableSeq:tableOffset];
-                [self updateSessionMemberLatestRead:userId andSessionId:sessionId andTableSeq:tableOffset];
                 break;
             }
             case ACTION_TYPE_SESSION_MUTE: {
@@ -1589,7 +1606,7 @@
 //更新消息已读
 -(void)updateMessageRead:(NSString *)userId andSessionId:(NSString *)sessionId andTableSeq:(NSString *)tableOffset {
     [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        [db executeUpdate:@"update message set messageReadState=1, messageReadUserIds = IFNULL(messageReadUserIds, '') || CASE WHEN messageReadUserIds IS NULL OR messageReadUserIds = '' THEN '' ELSE ',' END || ?  where messageInsertUser=? and messageSendId!=? and messageSessionId=? and messageTableOffset<=? and messageType NOT IN (?, ?)"
+        [db executeUpdate:@"update message set messageReadState=1, messageReadUserIds = IFNULL(messageReadUserIds, '') || CASE WHEN messageReadUserIds IS NULL OR messageReadUserIds = '' THEN '' ELSE ',' END || ?  where messageInsertUser=? and messageSendId!=? and messageSessionId=? and messageTableOffset<=? and messageType NOT IN (?, ?, ?)"
      withArgumentsInArray:@[
             userId,
             user.userExtendId,
@@ -1598,6 +1615,7 @@
             tableOffset,
             @(MSG_TYPE_SYSTEM),
             @(MSG_TYPE_ACTION),
+            @(MSG_TYPE_READ_RECEIPT),
         ]];
         return nil;
     }];

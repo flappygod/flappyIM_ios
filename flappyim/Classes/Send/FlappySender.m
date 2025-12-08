@@ -655,6 +655,29 @@
 
 
 //消息已读回执和删除回执,对方的阅读消息存在的时候才会执行
+-(void)handleMessageReceipt:(ChatMessage*)message{
+    if(message==nil || message.messageType != MSG_TYPE_READ_RECEIPT || message.messageReadState == 1){
+        return;
+    }
+    [[FlappyDataBase shareInstance] handleMessageReadReceipt:message];
+    ChatUser* user=[[FlappyData shareInstance] getUser];
+    //自己读的
+    ChatReadReceipt* receipt = [message getReadReceipt];
+    if([user.userId isEqualToString:receipt.userId]){
+        [self notifyMessageSelfRead:receipt.sessionId
+                        andReaderId:receipt.userId
+                   andTableSequecne:receipt.readOffset];
+    }
+    //其他人读的
+    else{
+        [self notifyMessageOtherRead:receipt.sessionId
+                         andReaderId:receipt.userId
+                    andTableSequecne:receipt.readOffset];
+    }
+}
+
+
+//消息更新，会话更新
 -(void)handleMessageAction:(ChatMessage*)message{
     if(message==nil || message.messageType != MSG_TYPE_ACTION || message.messageReadState == 1){
         return;
@@ -667,23 +690,6 @@
         case ACTION_TYPE_MSG_RECALL:{
             ChatMessage* message = [[FlappyDataBase shareInstance] getMessageById:chatAction.actionIds[2]];
             [self notifyMessageDelete:message];
-            break;
-        }
-            //会话阅读
-        case ACTION_TYPE_SESSION_READ:{
-            ChatUser* user=[[FlappyData shareInstance] getUser];
-            //自己读的
-            if([user.userId isEqualToString:chatAction.actionIds[0]]){
-                [self notifyMessageSelfRead:chatAction.actionIds[1]
-                                andReaderId:chatAction.actionIds[0]
-                           andTableSequecne:chatAction.actionIds[2]];
-            }
-            //其他人读的
-            else{
-                [self notifyMessageOtherRead:chatAction.actionIds[1]
-                                 andReaderId:chatAction.actionIds[0]
-                            andTableSequecne:chatAction.actionIds[2]];
-            }
             break;
         }
             //会话更新

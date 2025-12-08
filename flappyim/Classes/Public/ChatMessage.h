@@ -13,6 +13,7 @@
 #import "ChatVoice.h"
 #import "ChatVideo.h"
 #import "ChatFile.h"
+#import "ChatReadReceipt.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -47,20 +48,21 @@ NS_ASSUME_NONNULL_BEGIN
 //动作类消息
 #define MSG_TYPE_ACTION  8
 
+//动作类消息
+#define MSG_TYPE_READ_RECEIPT  20
+
 
 
 //撤回消息
 #define ACTION_TYPE_MSG_RECALL  1
 //删除消息
 #define ACTION_TYPE_MSG_DELETE  2
-//会话已读
-#define ACTION_TYPE_SESSION_READ  3
 //会话静音
-#define ACTION_TYPE_SESSION_MUTE  4
+#define ACTION_TYPE_SESSION_MUTE  3
 //会话置顶
-#define ACTION_TYPE_SESSION_PIN  5
+#define ACTION_TYPE_SESSION_PIN  4
 //会话删除临时
-#define ACTION_TYPE_SESSION_DELETE_TEMP  6
+#define ACTION_TYPE_SESSION_DELETE_TEMP  5
 
 
 #define MESSAGE_AT_ALL  @"all"
@@ -162,6 +164,11 @@ NS_ASSUME_NONNULL_BEGIN
 //文件
 -(void)setChatFile:(ChatFile*)chatFile;
 -(ChatFile*)getChatFile;
+
+
+//设置|获取回执
+-(void)setReadReceipt:(ChatReadReceipt*)receipt;
+-(ChatReadReceipt*)getReadReceipt;
 
 //动作
 -(void)setChatAction:(ChatAction*)chatFile;

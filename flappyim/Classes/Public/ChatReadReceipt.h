@@ -11,6 +11,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ChatReadReceipt : NSObject
 
+
+@property(nonatomic,copy) NSString* userId;
+
+@property(nonatomic,copy) NSString* sessionId;
+
+@property(nonatomic,copy) NSString* readOffset;
+
+
 @end
 
 NS_ASSUME_NONNULL_END
