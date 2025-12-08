@@ -739,7 +739,7 @@
     chatmsg.messageSendExtendId=mine.userExtendId;
     chatmsg.messageReceiveId=[self getPeerID];
     chatmsg.messageReceiveExtendId=[self getPeerExtendID];
-    chatmsg.messageType=MSG_TYPE_ACTION;
+    chatmsg.messageType=MSG_TYPE_READ_RECEIPT;
     
     //回执消息
     ChatReadReceipt* receipt = [[ChatReadReceipt alloc] init];
