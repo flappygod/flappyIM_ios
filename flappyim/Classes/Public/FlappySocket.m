@@ -780,7 +780,7 @@ static  GCDAsyncSocket*  _instanceSocket;
             //创建
             ChatSessionData* session=[ChatSessionData mj_objectWithKeyValues:[memSession mj_keyValues]];
             //插入消息
-            [[FlappyDataBase shareInstance] insertSessionData:session];
+            [[FlappyDataBase shareInstance] insertSession:session];
             //添加进入
             [sessionArray addObject:session];
             //消息列表
@@ -917,7 +917,7 @@ static  GCDAsyncSocket*  _instanceSocket;
         //获取更新的数据
         NSDictionary* dic=[FlappyJsonTool jsonStrToObject:[msg getChatSystem].sysData];
         ChatSession* update = [ChatSession mj_objectWithKeyValues:dic];
-        [[FlappyDataBase shareInstance] insertSession:update];
+        [[FlappyDataBase shareInstance] insertSessionInfo:update];
         
         //设置消息已读，不再继续处理
         msg.messageReadState = 1;

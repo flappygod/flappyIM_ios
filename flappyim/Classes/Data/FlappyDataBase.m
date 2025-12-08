@@ -152,23 +152,57 @@
     }
 }
 
-//通用的数据库操作模板方法
+//通用的数据库操作模板方法，默认不使用事务
 - (id)executeDbOperation:(id (^)(FMDatabase *db, ChatUser *user))operation {
-    return [self executeDbOperation:operation defaultValue:nil];
+    return [self executeDbOperation:operation defaultValue:nil useTransaction:NO];
 }
 
-
-//通用的数据库操作模板方法
+//通用的数据库操作模板方法，支持默认值，默认不使用事务
 - (id)executeDbOperation:(id (^)(FMDatabase *db, ChatUser *user))operation
-            defaultValue:(id)defaultValue{
+            defaultValue:(id)defaultValue {
+    return [self executeDbOperation:operation defaultValue:defaultValue useTransaction:NO];
+}
+
+//通用的数据库操作模板方法，支持事务开启参数
+- (id)executeDbOperation:(id (^)(FMDatabase *db, ChatUser *user))operation
+            defaultValue:(id)defaultValue
+          useTransaction:(BOOL)useTransaction {
+    //打开数据库连接
     [self openDB];
+    //获取当前登录用户
     ChatUser *user = [[FlappyData shareInstance] getUser];
     id result = nil;
+    
+    //如果用户存在，执行数据库操作
     if (user != nil) {
-        result = operation(database, user);
+        @try {
+            //如果启用事务，则开启事务
+            if (useTransaction) {
+                [database beginTransaction];
+            }
+            //执行具体的数据库操作
+            result = operation(database, user);
+            //如果启用事务，则提交事务
+            if (useTransaction) {
+                [database commit];
+            }
+        } @catch (NSException *exception) {
+            //如果启用事务，则回滚事务
+            if (useTransaction) {
+                [database rollback];
+            }
+            //打印异常日志，便于调试
+            NSLog(@"Database operation failed: %@", exception);
+        } @finally {
+            //关闭数据库连接
+            [self closeDB];
+        }
+    } else {
+        //如果用户不存在，直接关闭数据库
+        [self closeDB];
     }
-    [self closeDB];
-    return result==nil ? defaultValue:result;
+    //返回结果，如果为 nil，则返回默认值
+    return result == nil ? defaultValue : result;
 }
 
 
@@ -187,10 +221,12 @@
         return;
     }
     [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        [db beginTransaction];
         for (ChatMessage *msg in array) {
+            //更新会话偏移量
             [self updateSessionOffset:msg.messageSessionId andSessionOffset:msg.messageSessionOffset];
+            //获取消息的前一条记录
             ChatMessage *fomerMsg = [self getMessageById:msg.messageId];
+            //插入或更新消息
             BOOL result = [db executeUpdate:@"INSERT OR REPLACE INTO message("
                            "messageId,"
                            "messageSessionId,"
@@ -254,16 +290,14 @@
                 
                 user.userExtendId
             ]];
-            
+            //如果插入或更新失败，返回 nil 并中止操作
             if (!result) {
                 NSLog(@"插入或更新消息失败: %@", [db lastErrorMessage]);
-                [db rollback];
                 return nil;
             }
         }
-        [db commit];
-        return nil;
-    }];
+        return @(YES);
+    } defaultValue:@(NO) useTransaction:YES];
 }
 
 //插入消息
@@ -491,9 +525,6 @@
         }
         [result close];
         
-        
-        
-        
         Boolean flag = (latestSessionOffsetDelete >= latestSessionOffset && latestSessionOffset != 0);
         return @(flag);
         
@@ -501,71 +532,6 @@
 }
 
 
-// 插入多条会话，如果存在就更新
--(Boolean)insertSessions:(NSMutableArray *)array {
-    if (array == nil || array.count == 0) {
-        return true;
-    }
-    return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        [db beginTransaction];
-        Boolean totalSuccess = true;
-        for (ChatSessionData *data in array) {
-            BOOL result = [db executeUpdate:@"INSERT OR REPLACE INTO session("
-                           "sessionId,"
-                           "sessionExtendId,"
-                           "sessionType,"
-                           "sessionInfo,"
-                           "sessionName,"
-                           "sessionImage,"
-                           "sessionOffset,"
-                           "sessionStamp,"
-                           "sessionCreateDate,"
-                           "sessionCreateUser,"
-                           "sessionEnable,"
-                           "sessionDeleted,"
-                           "sessionDeletedDate,"
-                           "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                       withArgumentsInArray:@[
-                [FlappyStringTool toUnNullStr:data.sessionId],
-                [FlappyStringTool toUnNullStr:data.sessionExtendId],
-                [NSNumber numberWithInteger:data.sessionType],
-                [FlappyStringTool toUnNullStr:data.sessionInfo],
-                [FlappyStringTool toUnNullStr:data.sessionName],
-                [FlappyStringTool toUnNullStr:data.sessionImage],
-                [FlappyStringTool toUnNullStr:data.sessionOffset],
-                [NSNumber numberWithLong:data.sessionStamp],
-                [FlappyStringTool toUnNullStr:data.sessionCreateDate],
-                [FlappyStringTool toUnNullStr:data.sessionCreateUser],
-                [NSNumber numberWithInteger:data.isEnable],
-                [NSNumber numberWithInteger:data.isDelete],
-                [FlappyStringTool toUnNullStr:data.deleteDate],
-                user.userExtendId
-            ]];
-            
-            if (data.users != nil) {
-                for (ChatSessionMember *member in data.users) {
-                    BOOL memberResult = [self insertSessionMember:member];
-                    if (!memberResult) {
-                        totalSuccess = false;
-                        break;
-                    }
-                }
-            }
-            
-            if (!result) {
-                totalSuccess = false;
-                break;
-            }
-        }
-        
-        if (totalSuccess) {
-            [db commit];
-        } else {
-            [db rollback];
-        }
-        return @(totalSuccess);
-    }] boolValue];
-}
 
 //获取用户的会话
 -(NSMutableArray *)getUserSessions:(NSString *)userExtendID {
@@ -599,7 +565,7 @@
 }
 
 //插入单条会话,如果存在就更新
--(Boolean)insertSession:(ChatSession*)data {
+-(Boolean)insertSessionInfo:(ChatSession*)data {
     return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
         [db beginTransaction];
         BOOL result = [db executeUpdate:@"INSERT OR REPLACE INTO session("
@@ -637,61 +603,144 @@
     }] boolValue];
 }
 
-//插入单条会话,如果存在就更新
--(Boolean)insertSessionData:(ChatSessionData *)data {
-    return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        [db beginTransaction];
-        BOOL result = [db executeUpdate:@"INSERT OR REPLACE INTO session("
-                       "sessionId,"
-                       "sessionExtendId,"
-                       "sessionType,"
-                       "sessionInfo,"
-                       "sessionName,"
-                       "sessionImage,"
-                       "sessionOffset,"
-                       "sessionStamp,"
-                       "sessionCreateDate,"
-                       "sessionCreateUser,"
-                       "sessionEnable,"
-                       "sessionDeleted,"
-                       "sessionDeletedDate,"
-                       "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                   withArgumentsInArray:@[
-            [FlappyStringTool toUnNullStr:data.sessionId],
-            [FlappyStringTool toUnNullStr:data.sessionExtendId],
-            [NSNumber numberWithInteger:data.sessionType],
-            [FlappyStringTool toUnNullStr:data.sessionInfo],
-            [FlappyStringTool toUnNullStr:data.sessionName],
-            [FlappyStringTool toUnNullStr:data.sessionImage],
-            [FlappyStringTool toUnNullStr:data.sessionOffset],
-            [NSNumber numberWithLong:data.sessionStamp],
-            [FlappyStringTool toUnNullStr:data.sessionCreateDate],
-            [FlappyStringTool toUnNullStr:data.sessionCreateUser],
-            [NSNumber numberWithInteger:data.isEnable],
-            [NSNumber numberWithInteger:data.isDelete],
-            [FlappyStringTool toUnNullStr:data.deleteDate],
-            user.userExtendId
-        ]];
+
+- (BOOL)insertOrUpdateSessionData:(ChatSessionData *)data
+                       inDatabase:(FMDatabase *)db
+                         withUser:(ChatUser *)user {
+    BOOL result = [db executeUpdate:@"INSERT OR REPLACE INTO session("
+                   "sessionId,"
+                   "sessionExtendId,"
+                   "sessionType,"
+                   "sessionInfo,"
+                   "sessionName,"
+                   "sessionImage,"
+                   "sessionOffset,"
+                   "sessionStamp,"
+                   "sessionCreateDate,"
+                   "sessionCreateUser,"
+                   "sessionEnable,"
+                   "sessionDeleted,"
+                   "sessionDeletedDate,"
+                   "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+               withArgumentsInArray:@[
+        [FlappyStringTool toUnNullStr:data.sessionId],
+        [FlappyStringTool toUnNullStr:data.sessionExtendId],
+        [NSNumber numberWithInteger:data.sessionType],
+        [FlappyStringTool toUnNullStr:data.sessionInfo],
+        [FlappyStringTool toUnNullStr:data.sessionName],
+        [FlappyStringTool toUnNullStr:data.sessionImage],
+        [FlappyStringTool toUnNullStr:data.sessionOffset],
+        [NSNumber numberWithLong:data.sessionStamp],
+        [FlappyStringTool toUnNullStr:data.sessionCreateDate],
+        [FlappyStringTool toUnNullStr:data.sessionCreateUser],
+        [NSNumber numberWithInteger:data.isEnable],
+        [NSNumber numberWithInteger:data.isDelete],
+        [FlappyStringTool toUnNullStr:data.deleteDate],
+        user.userExtendId
+    ]];
+    
+    //如果会话用户不为空
+    if (data.users != nil && data.users.count > 0) {
         
-        Boolean totalSuccess = result;
+        //获取当前会话的所有用户 ID
+        NSMutableArray<NSString *> *currentUserIds = [NSMutableArray array];
+        for (ChatSessionMember *member in data.users) {
+            [currentUserIds addObject:[FlappyStringTool toUnNullStr:member.userId]];
+        }
         
-        if (data.users != nil) {
-            for (ChatSessionMember *member in data.users) {
-                BOOL memberResult = [self insertSessionMember:member];
-                if (!memberResult) {
-                    totalSuccess = false;
-                    break;
+        //查询数据库中该会话的所有用户 ID（根据 sessionId 和 sessionInsertUser 筛选）
+        NSMutableArray<NSString *> *existingUserIds = [NSMutableArray array];
+        FMResultSet *resultSet = [db executeQuery:@"SELECT userId FROM session_member WHERE sessionId = ? AND sessionInsertUser = ?",
+                                  [FlappyStringTool toUnNullStr:data.sessionId],
+                                  user.userExtendId];
+        while ([resultSet next]) {
+            [existingUserIds addObject:[resultSet stringForColumn:@"userId"]];
+        }
+        [resultSet close];
+        
+        //找出需要更新的用户 ID
+        NSMutableArray<NSString *> *usersToMarkAsLeft = [existingUserIds mutableCopy];
+        [usersToMarkAsLeft removeObjectsInArray:currentUserIds];
+        
+        //将这些用户的 isLeave 字段置为 true
+        if (usersToMarkAsLeft.count > 0) {
+            NSMutableString *placeholders = [NSMutableString string];
+            for (NSInteger i = 0; i < usersToMarkAsLeft.count; i++) {
+                [placeholders appendString:@"?"];
+                if (i < usersToMarkAsLeft.count - 1) {
+                    [placeholders appendString:@","];
                 }
             }
+            NSString *sql = [NSString stringWithFormat:@"UPDATE session_member SET isLeave = 1 WHERE sessionId = ? AND sessionInsertUser = ? AND userId IN (%@)", placeholders];
+            NSMutableArray *args = [NSMutableArray arrayWithObjects:[FlappyStringTool toUnNullStr:data.sessionId], user.userExtendId, nil];
+            [args addObjectsFromArray:usersToMarkAsLeft];
+            [db executeUpdate:sql withArgumentsInArray:args];
         }
         
-        if (totalSuccess) {
-            [db commit];
-        } else {
-            [db rollback];
+        //插入或更新当前会话的用户
+        for (ChatSessionMember *member in data.users) {
+            [db executeUpdate:@"INSERT OR REPLACE INTO session_member("
+             "userId,"
+             "userExtendId,"
+             "userName,"
+             "userAvatar,"
+             "userData,"
+             "userCreateDate,"
+             "userLoginDate,"
+             "sessionId,"
+             "sessionMemberLatestRead,"
+             "sessionMemberLatestDelete,"
+             "sessionMemberMarkName,"
+             "sessionMemberType,"
+             "sessionMemberMute,"
+             "sessionMemberPinned,"
+             "sessionJoinDate,"
+             "sessionLeaveDate,"
+             "isLeave,"
+             "sessionInsertUser) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+         withArgumentsInArray:@[
+                [FlappyStringTool toUnNullStr:member.userId],
+                [FlappyStringTool toUnNullStr:member.userExtendId],
+                [FlappyStringTool toUnNullStr:member.userName],
+                [FlappyStringTool toUnNullStr:member.userAvatar],
+                [FlappyStringTool toUnNullStr:member.userData],
+                [FlappyStringTool toUnNullStr:member.userCreateDate],
+                [FlappyStringTool toUnNullStr:member.userLoginDate],
+                [FlappyStringTool toUnNullStr:member.sessionId],
+                [NSNumber numberWithInteger:member.sessionMemberLatestRead],
+                [NSNumber numberWithInteger:member.sessionMemberLatestDelete],
+                [FlappyStringTool toUnNullStr:member.sessionMemberMarkName],
+                [NSNumber numberWithInteger:member.sessionMemberType],
+                [NSNumber numberWithInteger:member.sessionMemberMute],
+                [NSNumber numberWithInteger:member.sessionMemberPinned],
+                [FlappyStringTool toUnNullStr:member.sessionJoinDate],
+                [FlappyStringTool toUnNullStr:member.sessionLeaveDate],
+                [NSNumber numberWithInteger:member.isLeave],
+                user.userExtendId
+            ]];
         }
-        return @(totalSuccess);
-    }] boolValue];
+    }
+    return result;
+}
+
+
+// 插入单条会话，如果存在就更新
+- (Boolean)insertSession:(ChatSessionData *)data {
+    return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        // 调用公共方法插入或更新单个会话
+        BOOL result = [self insertOrUpdateSessionData:data inDatabase:db withUser:user];
+        return @(YES);
+    } defaultValue:@(NO) useTransaction:YES] boolValue];
+}
+
+//插入多个会话
+-(Boolean)insertSessions:(NSMutableArray<ChatSessionData *> *)array {
+    return [[self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
+        for (ChatSessionData *data in array) {
+            [self insertOrUpdateSessionData:data inDatabase:db withUser:user];
+        }
+        return @(YES);
+    } defaultValue:@(NO) useTransaction:YES] boolValue];
 }
 
 //获取用户的会话(用户仅包含自己)
