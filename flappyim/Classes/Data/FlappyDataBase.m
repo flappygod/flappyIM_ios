@@ -1089,8 +1089,8 @@
         ChatSessionMember *sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
         //构建 SQL 查询
         NSMutableString *query = [NSMutableString stringWithString:
-                                  @"SELECT * FROM message WHERE messageSessionId=? AND messageSessionOffset>? AND messageInsertUser=? AND messageType not in (?,?) AND isDelete!=1"];
-        //如果 includeAll 为 YES，则增加对 "all" 的判断
+                                  @"SELECT * FROM message WHERE messageSessionId=?  AND messageSendId != ? AND messageSessionOffset>? AND messageInsertUser=? AND messageType not in (?,?) AND isDelete!=1"];
+        //如果 includeAll为YES，则增加对"all"的判断
         if (includeAll) {
             [query appendString:@" AND (messageAtUserIds LIKE ? OR messageAtUserIds LIKE ?)"];
         } else {
@@ -1101,12 +1101,15 @@
         NSMutableArray *arguments = [NSMutableArray array];
         //对应 messageSessionId=?
         [arguments addObject:sessionID];
+        //对应 messageSessionId=?
+        [arguments addObject:user.userId];
         //对应 messageSessionOffset>?
         [arguments addObject:@(sessionMember != nil ? sessionMember.sessionMemberLatestDelete : 0)];
         //对应 messageInsertUser=?
         [arguments addObject:user.userExtendId];
-        //对应 messageType!=?
+        //动作消息排除
         [arguments addObject:@(MSG_TYPE_ACTION)];
+        //回执消息排除
         [arguments addObject:@(MSG_TYPE_READ_RECEIPT)];
         
         if (includeAll) {
@@ -1149,8 +1152,8 @@
         ChatSessionMember *sessionMember = [self getSessionMember:sessionID andMemberId:user.userId];
         //构建 SQL 查询
         NSMutableString *query = [NSMutableString stringWithString:
-                                  @"SELECT * FROM message WHERE messageSessionId=? AND messageReadState=0 AND messageSessionOffset>? AND messageInsertUser=? AND messageType not in (?,?) AND isDelete!=1"];
-        //如果 includeAll 为 YES，则增加对 "all" 的判断
+                                  @"SELECT * FROM message WHERE messageSessionId=? AND messageSendId != ? AND messageReadState=0 AND messageSessionOffset>? AND messageInsertUser=? AND messageType not in (?,?) AND isDelete!=1"];
+        //如果includeAll为YES，则增加对"all"的判断
         if (includeAll) {
             [query appendString:@" AND (messageAtUserIds LIKE ? OR messageAtUserIds LIKE ?)"];
         } else {
@@ -1162,12 +1165,15 @@
         NSMutableArray *arguments = [NSMutableArray array];
         //对应 messageSessionId=?
         [arguments addObject:sessionID];
+        //对应 messageSessionId=?
+        [arguments addObject:user.userId];
         //对应 messageSessionOffset>?
         [arguments addObject:@(sessionMember != nil ? sessionMember.sessionMemberLatestDelete : 0)];
         //对应 messageInsertUser=?
         [arguments addObject:user.userExtendId];
-        //对应 messageType!=?
+        //动作消息排除
         [arguments addObject:@(MSG_TYPE_ACTION)];
+        //回执消息排除
         [arguments addObject:@(MSG_TYPE_READ_RECEIPT)];
         if (includeAll) {
             //针对当前用户的 @
