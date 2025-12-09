@@ -1096,7 +1096,7 @@
         } else {
             [query appendString:@" AND messageAtUserIds LIKE ?"];
         }
-        [query appendString:@" ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ? OFFSET ?"];
+        [query appendString:@" ORDER BY messageTableOffset ASC, messageStamp ASC LIMIT ? OFFSET ?"];
         //构建参数列表
         NSMutableArray *arguments = [NSMutableArray array];
         //对应 messageSessionId=?
@@ -1159,7 +1159,7 @@
         } else {
             [query appendString:@" AND messageAtUserIds LIKE ?"];
         }
-        [query appendString:@" ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ?"];
+        [query appendString:@" ORDER BY messageTableOffset ASC, messageStamp ASC LIMIT ?"];
         
         //构建参数列表
         NSMutableArray *arguments = [NSMutableArray array];
