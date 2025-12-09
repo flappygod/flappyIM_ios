@@ -1003,7 +1003,7 @@
 //获取会话ID的用户列表
 -(NSMutableArray *)getSessionMemberList:(NSString *)sessionId {
     return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        FMResultSet *result = [db executeQuery:@"select * from session_member where sessionInsertUser=? and sessionId=?"
+        FMResultSet *result = [db executeQuery:@"select * from session_member where sessionInsertUser=? and sessionId=? order by sessionJoinDate asc"
                           withArgumentsInArray:@[user.userExtendId, sessionId]];
         NSMutableArray *memberList = [[NSMutableArray alloc] init];
         while ([result next]) {
