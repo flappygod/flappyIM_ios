@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name             = 'flappyim'
-    s.version          = '3.16.3'
+    s.version          = '3.16.4'
     s.summary          = "A lightweight and powerful IM library for iOS."
     
     # This description is used to generate tags and improve search results.

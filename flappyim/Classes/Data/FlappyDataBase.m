@@ -1243,7 +1243,7 @@
         ChatMessage *msg = [self getMessageById:messageId];
         
         //获取消息
-        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and (messageTableOffset > ? or (messageTableOffset = ? and messageStamp > ?)) and messageInsertUser=? and messageType not in (?,?) and isDelete!=1 order by messageTableOffset desc,messageStamp desc limit ?"
+        FMResultSet *result = [db executeQuery:@"select * from message where messageSessionId=? and (messageTableOffset > ? or (messageTableOffset = ? and messageStamp > ?)) and messageInsertUser=? and messageType not in (?,?) and isDelete!=1 order by messageTableOffset asc,messageStamp asc limit ?"
                           withArgumentsInArray:@[
             sessionID,
             [NSNumber numberWithInteger:msg.messageTableOffset],
@@ -1261,7 +1261,11 @@
         }
         [result close];
         
-        return listArray;
+        //使用ReverseObjectEnumerator
+        NSArray *formerArray = [[listArray reverseObjectEnumerator] allObjects];
+        NSMutableArray *reversedArray = [NSMutableArray arrayWithArray:formerArray];
+        
+        return reversedArray;
     } defaultValue: [[NSMutableArray alloc] init]];
 }
 
