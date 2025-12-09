@@ -558,12 +558,12 @@
             msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
             msg.unReadMessageCount = [self getUnReadSessionMessageCountBySessionId:msg.sessionId];
             msg.isDeleteTemp = [self getIsDeleteTemp:msg.sessionId];
-            msg.users = [self getSessionMemberList:msg.sessionId];
+            msg.users = [self getSessionMemberList:user andSessionId:msg.sessionId];
             [retSessions addObject:msg];
         }
         [result close];
         return retSessions;
-    } defaultValue: [[NSMutableArray alloc] init]];
+    } defaultValue: [[NSMutableArray alloc] init] useTransaction:true];
 }
 
 //插入单条会话,如果存在就更新
@@ -813,11 +813,11 @@
             msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
             msg.unReadMessageCount = [self getUnReadSessionMessageCountBySessionId:msg.sessionId];
             msg.isDeleteTemp = [self getIsDeleteTemp:msg.sessionId];
-            msg.users = [self getSessionMemberList:msg.sessionId];
+            msg.users = [self getSessionMemberList:user andSessionId:msg.sessionId];
         }
         [result close];
         return msg;
-    }];
+    } defaultValue:nil useTransaction:NO];
 }
 
 //获取用户的会话
@@ -844,11 +844,11 @@
             msg.deleteDate = [result stringForColumn:@"sessionDeletedDate"];
             msg.unReadMessageCount = [self getUnReadSessionMessageCountBySessionId:msg.sessionId];
             msg.isDeleteTemp = [self getIsDeleteTemp:msg.sessionId];
-            msg.users = [self getSessionMemberList:msg.sessionId];
+            msg.users = [self getSessionMemberList:user andSessionId:msg.sessionId];
         }
         [result close];
         return msg;
-    }];
+    } defaultValue:nil useTransaction:NO];
 }
 
 //删除用户的会话
@@ -1001,35 +1001,34 @@
 }
 
 //获取会话ID的用户列表
--(NSMutableArray *)getSessionMemberList:(NSString *)sessionId {
-    return [self executeDbOperation:^id(FMDatabase *db, ChatUser *user) {
-        FMResultSet *result = [db executeQuery:@"select * from session_member where sessionInsertUser=? and sessionId=? order by sessionJoinDate asc"
-                          withArgumentsInArray:@[user.userExtendId, sessionId]];
-        NSMutableArray *memberList = [[NSMutableArray alloc] init];
-        while ([result next]) {
-            ChatSessionMember *member = [ChatSessionMember new];
-            member.userId = [result stringForColumn:@"userId"];
-            member.userExtendId = [result stringForColumn:@"userExtendId"];
-            member.userName = [result stringForColumn:@"userName"];
-            member.userAvatar = [result stringForColumn:@"userAvatar"];
-            member.userData = [result stringForColumn:@"userData"];
-            member.userCreateDate = [result stringForColumn:@"userCreateDate"];
-            member.userLoginDate = [result stringForColumn:@"userLoginDate"];
-            member.sessionId = [result stringForColumn:@"sessionId"];
-            member.sessionMemberLatestRead = [result longForColumn:@"sessionMemberLatestRead"];
-            member.sessionMemberLatestDelete = [result longForColumn:@"sessionMemberLatestDelete"];
-            member.sessionMemberMarkName = [result stringForColumn:@"sessionMemberMarkName"];
-            member.sessionMemberType = [result intForColumn:@"sessionMemberType"];
-            member.sessionMemberMute = [result intForColumn:@"sessionMemberMute"];
-            member.sessionMemberPinned = [result intForColumn:@"sessionMemberPinned"];
-            member.sessionJoinDate = [result stringForColumn:@"sessionJoinDate"];
-            member.sessionLeaveDate = [result stringForColumn:@"sessionLeaveDate"];
-            member.isLeave = [result intForColumn:@"isLeave"];
-            [memberList addObject:member];
-        }
-        [result close];
-        return memberList;
-    } defaultValue: [[NSMutableArray alloc] init]];
+-(NSMutableArray *)getSessionMemberList:(ChatUser*)user
+                           andSessionId:(NSString *)sessionId {
+    FMResultSet *result = [database executeQuery:@"select * from session_member where sessionInsertUser=? and sessionId=? order by sessionJoinDate asc"
+                            withArgumentsInArray:@[user.userExtendId, sessionId]];
+    NSMutableArray *memberList = [[NSMutableArray alloc] init];
+    while ([result next]) {
+        ChatSessionMember *member = [ChatSessionMember new];
+        member.userId = [result stringForColumn:@"userId"];
+        member.userExtendId = [result stringForColumn:@"userExtendId"];
+        member.userName = [result stringForColumn:@"userName"];
+        member.userAvatar = [result stringForColumn:@"userAvatar"];
+        member.userData = [result stringForColumn:@"userData"];
+        member.userCreateDate = [result stringForColumn:@"userCreateDate"];
+        member.userLoginDate = [result stringForColumn:@"userLoginDate"];
+        member.sessionId = [result stringForColumn:@"sessionId"];
+        member.sessionMemberLatestRead = [result longForColumn:@"sessionMemberLatestRead"];
+        member.sessionMemberLatestDelete = [result longForColumn:@"sessionMemberLatestDelete"];
+        member.sessionMemberMarkName = [result stringForColumn:@"sessionMemberMarkName"];
+        member.sessionMemberType = [result intForColumn:@"sessionMemberType"];
+        member.sessionMemberMute = [result intForColumn:@"sessionMemberMute"];
+        member.sessionMemberPinned = [result intForColumn:@"sessionMemberPinned"];
+        member.sessionJoinDate = [result stringForColumn:@"sessionJoinDate"];
+        member.sessionLeaveDate = [result stringForColumn:@"sessionLeaveDate"];
+        member.isLeave = [result intForColumn:@"isLeave"];
+        [memberList addObject:member];
+    }
+    [result close];
+    return memberList;
 }
 
 
