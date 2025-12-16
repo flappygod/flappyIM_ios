@@ -169,8 +169,16 @@
         if(self.notificationListener!=nil){
             //获取消息
             NSString* msg=userInfo[@"message"];
+            
+            //获取消息体
+            ChatMessage* chatMsg =[ChatMessage mj_objectWithKeyValues:[FlappyJsonTool jsonStrToObject:msg]];
+            if(chatMsg.messageSecret!=nil && chatMsg.messageSecret.length!=0 &&
+               chatMsg.messageReplyMsgContent!=nil && chatMsg.messageReplyMsgContent.length!=0){
+                chatMsg.messageReplyMsgContent = [Aes128 AES128Decrypt:chatMsg.messageReplyMsgContent
+                                                               withKey:chatMsg.messageSecret];
+            }
             //转换为消息体
-            self.notificationListener([ChatMessage mj_objectWithKeyValues:[FlappyJsonTool jsonStrToObject:msg]]);
+            self.notificationListener(chatMsg);
             //移除
             UNRemoveObject(FlappyNotificationMessage);
         }else{
